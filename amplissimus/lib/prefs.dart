@@ -30,6 +30,7 @@ class Prefs {
   static void loadCurrentDesignMode() {
     bool tempBool = preferences.getBool('is_dark_mode');
     ampLog(ctx: 'Prefs', message: 'recognized isDarkMode = $tempBool');
+    if(tempBool == null) tempBool = false;
     if(tempBool) {
       if(AmpColors.isDarkMode) return;
       AmpColors.changeMode();

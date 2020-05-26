@@ -21,7 +21,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 50), () {
       Animations.changeScreenEaseOutBack(new MyApp(), context);
     });
   }
@@ -30,9 +30,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AmpColors.blankBlack,
-      body: Center(
-        child: Text('Initializing...', style: TextStyle(color: AmpColors.blankWhite, fontSize: 30)),
-      )
     );
   }
 
@@ -99,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: AmpColors.colorBackground,
         splashColor: AmpColors.colorForeground,
         onPressed: _incrementCounter,
-        icon: Icon(Icons.add),
-        label: Text('Zählen'),
+        icon: Icon(Icons.add, color: AmpColors.colorForeground,),
+        label: Text('Zählen', style: widget.textStyle,),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
