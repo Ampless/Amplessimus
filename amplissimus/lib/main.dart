@@ -1,12 +1,8 @@
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dsbapi.dart';
-import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
-import 'package:amplissimus/screens/settings.dart';
 import 'package:amplissimus/values.dart';
-import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() {
@@ -38,11 +34,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       backgroundColor: AmpColors.blankBlack,
     );
   }
-
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -113,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
                   AmpColors.changeMode();
-                  Animations.changeScreenNoAnimation(new Settings(), context);
+                  Animations.changeScreenNoAnimation(new MyApp(), context);
                 },
                 child: Center(
                   child: Column(
@@ -139,6 +133,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           children: containers,
         ),
         bottomSheet: TabBar(
+          indicatorColor: AmpColors.blankBlack,
+          labelColor: AmpColors.blankBlack,
           tabs: <Widget>[
             new Tab(
               icon: Icon(Icons.home),
@@ -151,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
+          elevation: 0,
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
           onPressed: _incrementCounter,
