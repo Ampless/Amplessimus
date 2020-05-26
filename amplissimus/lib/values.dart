@@ -1,3 +1,4 @@
+import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,11 +16,13 @@ class AmpColors {
   static void changeMode() {
     if(isDarkMode) {
       isDarkMode = false;
+      ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
       colorForeground = blankBlack;
       colorBackground = blankWhite;
       Prefs.saveCurrentDesignMode(isDarkMode);
     } else {
       isDarkMode = true;
+      ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
       colorForeground = blankWhite;
       colorBackground = blankBlack;
       Prefs.saveCurrentDesignMode(isDarkMode);

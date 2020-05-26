@@ -13,12 +13,13 @@ class Prefs {
 
   static void loadVariables() {
     loadCounter();
+    loadCurrentDesignMode();
   }
 
   static void loadCounter() {
     counter = preferences.getInt('counter');
     if(counter == null) counter = 0;
-    ampLog(ctx: 'Prefs', message: 'assigned counter amount of $counter');
+    ampLog(ctx: 'Prefs', message: 'saved counter = $counter');
   }
 
   static void saveCounter(int saveCounter) {
@@ -28,6 +29,7 @@ class Prefs {
 
   static void loadCurrentDesignMode() {
     bool tempBool = preferences.getBool('is_dark_mode');
+    ampLog(ctx: 'Prefs', message: 'recognized isDarkMode = $tempBool');
     if(tempBool) {
       if(AmpColors.isDarkMode) return;
       AmpColors.changeMode();
@@ -39,6 +41,7 @@ class Prefs {
 
   static void saveCurrentDesignMode(bool isDarkMode) {
     preferences.setBool('is_dark_mode', isDarkMode);
+    ampLog(ctx: 'Prefs', message: 'saved isDarkMode = $isDarkMode');
   }
 }
 

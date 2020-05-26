@@ -4,7 +4,38 @@ import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(SplashScreen());
+}
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Prefs.loadPrefs();
+    return MaterialApp(home: SplashScreenPage());
+  }
+}
+class SplashScreenPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {return SplashScreenPageState();}
+}
+class SplashScreenPageState extends State<SplashScreenPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 1), () {
+      Animations.changeScreenEaseOutBack(new MyApp(), context);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AmpColors.blankBlack,
+      body: Center(
+        child: Text('Initializing...', style: TextStyle(color: AmpColors.blankWhite, fontSize: 30)),
+      )
+    );
+  }
+
 }
 
 class MyApp extends StatelessWidget {
@@ -45,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Prefs.loadPrefs();
+    
     _counter = Prefs.counter;
     return Scaffold(
       backgroundColor: AmpColors.colorBackground,
