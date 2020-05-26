@@ -29,7 +29,7 @@ class DsbAccount {
 
   DsbAccount(this.username, this.password);
 
-  String getData() async {
+  Future<String> getData() async {
     String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
     String uuid = new Uuid().v4();
     String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
