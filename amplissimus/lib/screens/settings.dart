@@ -1,4 +1,5 @@
 import 'package:amplissimus/animations.dart';
+import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/main.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
@@ -69,6 +70,7 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   void onNavBarTap(int index) {
+    ampLog(ctx: 'BottomNav', message: 'Tapped on item $index');
     if(index == 1) return;
     Animations.changeScreenNoAnimation(new MyApp(), context);
   }

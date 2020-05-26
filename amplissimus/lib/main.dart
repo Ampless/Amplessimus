@@ -112,9 +112,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
   void onNavBarTap(int index) {
+    ampLog(ctx: 'BottomNav', message: 'Tapped on item $index');
     if(index == 0) return;
     Animations.changeScreenNoAnimation(new Settings(), context);
-    ampLog(ctx: 'BottomNav', message: null);
   }
 }
 
