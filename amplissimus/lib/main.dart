@@ -134,21 +134,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         body: TabBarView(
           children: containers,
         ),
-        bottomSheet: TabBar(
-
-          indicatorColor: AmpColors.blankBlack,
-          labelColor: AmpColors.blankBlack,
-          tabs: <Widget>[
-            new Tab(
-              icon: Icon(Icons.home),
-              text: 'Start',
-            ),
-            new Tab(
-              icon: Icon(Icons.settings),
-              text: 'Einstellungen',
-            )
-          ],
-        ),
         floatingActionButton: FloatingActionButton.extended(
           elevation: 0,
           backgroundColor: AmpColors.colorBackground,
@@ -156,6 +141,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           onPressed: _incrementCounter,
           icon: Icon(Icons.add, color: AmpColors.colorForeground,),
           label: Text('Zählen', style: widget.textStyle,),
+        ),
+        bottomNavigationBar: SizedBox(
+          height: 55,
+          child: TabBar(
+            indicatorColor: AmpColors.colorForeground,
+            labelColor: AmpColors.colorForeground,
+            tabs: <Widget>[
+              new Tab(
+                icon: Icon(Icons.home),
+                text: 'Start',
+              ),
+              new Tab(
+                icon: Icon(Icons.settings),
+                text: 'Einstellungen',
+              )
+            ],
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       )
