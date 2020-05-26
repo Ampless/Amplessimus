@@ -47,8 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Prefs.loadPrefs();
     _counter = Prefs.counter;
     return Scaffold(
+      backgroundColor: AmpColors.colorBackground,
       appBar: AppBar(
-        title: Text(widget.title, style: TextStyle(color: Colors.black)),
+        title: Text(widget.title, style: TextStyle(color: AmpColors.colorForeground)),
         backgroundColor: Colors.transparent,
         bottomOpacity: 0.0,
         elevation: 0.0,
@@ -60,20 +61,17 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Text('You have pushed the button this many times:', style: TextStyle(color: AmpColors.colorForeground)),
+            Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AmpColors.colorBackground,
+        splashColor: AmpColors.colorForeground,
         onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        icon: Icon(Icons.add),
+        label: Text('Zählen'),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
