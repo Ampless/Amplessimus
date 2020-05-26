@@ -1,3 +1,4 @@
+import 'package:amplissimus/prefs.dart';
 import 'package:flutter/cupertino.dart';
 
 class AmpStrings {
@@ -16,10 +17,12 @@ class AmpColors {
       isDarkMode = false;
       colorForeground = blankBlack;
       colorBackground = blankWhite;
+      Prefs.saveCurrentDesignMode(isDarkMode);
     } else {
       isDarkMode = true;
       colorForeground = blankWhite;
       colorBackground = blankBlack;
+      Prefs.saveCurrentDesignMode(isDarkMode);
     }
   }
 }

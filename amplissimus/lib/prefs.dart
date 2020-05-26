@@ -1,4 +1,5 @@
 import 'package:amplissimus/logging.dart';
+import 'package:amplissimus/values.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
@@ -23,6 +24,21 @@ class Prefs {
   static void saveCounter(int saveCounter) {
     counter = saveCounter;
     preferences.setInt('counter', counter);
+  }
+
+  static void loadCurrentDesignMode() {
+    bool tempBool = preferences.getBool('is_dark_mode');
+    if(tempBool) {
+      if(AmpColors.isDarkMode) return;
+      AmpColors.changeMode();
+    } else {
+      if(!AmpColors.isDarkMode) return;
+      AmpColors.changeMode();
+    }
+  }
+
+  static void saveCurrentDesignMode(bool isDarkMode) {
+    preferences.setBool('is_dark_mode', isDarkMode);
   }
 }
 
