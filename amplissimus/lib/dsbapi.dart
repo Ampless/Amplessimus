@@ -45,7 +45,7 @@ Map<String, String> dsbFindUrls(String json) {
   return map;
 }
 
-String dsbGetString() {
-  
+Future<String> dsbGetString() async {
+  return "";
 }
 
