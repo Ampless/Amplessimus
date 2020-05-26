@@ -12,14 +12,6 @@ const String DSB_OS_VERSION = "28 8.0";
 const String DSB_LANGUAGE = "de";
 const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData';
 
-enum DsbRequesttype {
-  unknown,
-  data,
-  mail,
-  feedback,
-  subjects,
-}
-
 String removeLastChars(String s, int n) {
   return s.substring(0, s.length - n);
 }
@@ -51,5 +43,9 @@ Map<String, String> dsbFindUrls(String json) {
   for (var plan in jsonDecode(json)['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
     map[plan['Title']] = plan['Childs']['Detail'];
   return map;
+}
+
+String dsbGetString() {
+  
 }
 
