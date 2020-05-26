@@ -10,6 +10,7 @@ class AmpStrings {
 class AmpColors {
   static Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
   static Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
+  static Color blankGrey = Color.fromRGBO(127, 127, 127, 1);
   static Color colorBackground = blankBlack;
   static Color colorForeground = blankWhite;
   static bool isDarkMode = true;

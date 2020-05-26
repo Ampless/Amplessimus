@@ -1,7 +1,10 @@
 import 'package:amplissimus/animations.dart';
+import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
+import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -39,13 +42,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AmpStrings.appTitle,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+    return WillPopScope(
+      child: MaterialApp(
+        title: AmpStrings.appTitle,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+      ), 
+      onWillPop: () {
+        Animations.changeScreenNoAnimation(new MyApp(), context);
+        return new Future(() => false);
+      },
     );
   }
 }
@@ -73,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
     _counter = Prefs.counter;
     return Scaffold(
       backgroundColor: AmpColors.colorBackground,
@@ -84,9 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('You have pushed the button this many times:', style: widget.textStyle),
             Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
             RaisedButton(
-              onPressed: () {
-                AmpColors.changeMode();
-                Animations.changeScreenEaseOutBack(new MyApp(), context);
+              onPressed: () async {
+                var dsbacc = new DsbAccount('', '');
+                Animations.changeScreenEaseOutBack(Klasse(await dsbacc.getData()), context);
               }
             ),
           ],
@@ -98,7 +106,27 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         icon: Icon(Icons.add, color: AmpColors.colorForeground,),
         label: Text('Zählen', style: widget.textStyle,),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      bottomNavigationBar: Widgets.bottomNavMenu(index: 0, onTapFunction: onNavBarTap), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+  void onNavBarTap(int index) {
+    if(index == 0) return;
+    Animations.changeScreenNoAnimation(new MyApp(), context);
+  }
+}
+
+class Klasse extends StatelessWidget {
+  String resp;
+  Klasse(this.resp);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+          child: Container(
+            child: Text(resp))),
+    );
+  }
+
 }
