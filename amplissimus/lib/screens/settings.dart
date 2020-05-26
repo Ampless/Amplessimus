@@ -37,25 +37,27 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AmpColors.blankBlack,
+      backgroundColor: AmpColors.colorBackground,
       body: Container(
         child: GridView.count(
           crossAxisCount: 2,
           children: <Widget>[
             Card(
+              elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
               color: AmpColors.colorBackground,
               child: InkWell(
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
-                  
+                  AmpColors.changeMode();
+                  Animations.changeScreenNoAnimation(new Settings(), context);
                 },
                 child: Center(
                   child: Column(
                     children: <Widget>[
                       Padding(padding: EdgeInsets.all(24)),
                       Icon(MdiIcons.lightbulbOn, size: 50, color: AmpColors.colorForeground,),
-                      Divider(height: 20,),
+                      Padding(padding: EdgeInsets.all(10)),
                       Text('Toogle Dark Mode', style: widget.textStyle,)
                     ],
                   ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class Widgets {
   static Widget bottomNavMenu({@required int index, @required Function onTapFunction}) {
     return BottomNavigationBar(
+      elevation: 0,
       backgroundColor: AmpColors.colorBackground,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
