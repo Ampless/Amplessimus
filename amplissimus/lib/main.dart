@@ -1,4 +1,5 @@
 import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,12 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: AmpStrings.appTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: AmpStrings.appTitle),
     );
   }
 }
@@ -47,7 +48,13 @@ class _MyHomePageState extends State<MyHomePage> {
     _counter = Prefs.counter;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        iconTheme: IconThemeData(
+          color: Colors.black
+        ),
       ),
       body: Center(
         child: Column(
