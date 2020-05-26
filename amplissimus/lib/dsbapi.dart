@@ -23,6 +23,11 @@ String removeLastChars(String s, int n) {
   return s.substring(0, s.length - n);
 }
 
+String responseToString(Response r) {
+  print(r.headers);
+  print(r.body);
+}
+
 class DsbAccount {
   String username;
   String password;
