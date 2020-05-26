@@ -21,7 +21,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       Animations.changeScreenEaseOutBack(new MyApp(), context);
     });
   }
@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
             RaisedButton(
               onPressed: () {
-                Prefs.saveCurrentDesignMode(!AmpColors.isDarkMode);
+                AmpColors.changeMode();
                 Animations.changeScreenEaseOutBack(new MyApp(), context);
               }
             ),
