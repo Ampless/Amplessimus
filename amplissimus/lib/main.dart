@@ -1,6 +1,8 @@
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dsbapi.dart';
+import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/screens/settings.dart';
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
@@ -93,14 +95,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
             RaisedButton(
               onPressed: () async {
-                var dsbacc = new DsbAccount('', '');
-                Animations.changeScreenEaseOutBack(Klasse(await dsbacc.getData()), context);
+                AmpColors.changeMode();
+                Animations.changeScreenEaseOutBack(new MyApp(), context);
               }
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        focusColor: AmpColors.colorForeground,
         backgroundColor: AmpColors.colorBackground,
         splashColor: AmpColors.colorForeground,
         onPressed: _incrementCounter,
@@ -112,7 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void onNavBarTap(int index) {
     if(index == 0) return;
-    Animations.changeScreenNoAnimation(new MyApp(), context);
+    Animations.changeScreenNoAnimation(new Settings(), context);
+    ampLog(ctx: 'BottomNav', message: null);
   }
 }
 
