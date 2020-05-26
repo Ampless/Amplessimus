@@ -24,8 +24,7 @@ String removeLastChars(String s, int n) {
 }
 
 String responseToString(Response r) {
-  print(r.headers);
-  print(r.body);
+  return r.headers.toString() + '\r\n' + r.body;
 }
 
 class DsbAccount {
