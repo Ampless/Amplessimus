@@ -3,6 +3,7 @@ import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -25,7 +26,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () {
-      Animations.changeScreenEaseOutBack(new MyApp(), context);
+      Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
     });
   }
 
@@ -38,6 +39,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({this.initialIndex});
+  int initialIndex = 0;
   @override
   Widget build(BuildContext context) {
     ampLog(ctx: 'MyApp', message: 'Building Main Page');
@@ -48,10 +51,11 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+        home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground), 
+          initialIndex: initialIndex,),
       ), 
       onWillPop: () {
-        Animations.changeScreenNoAnimation(new MyApp(), context);
+        Animations.changeScreenNoAnimation(this, context);
         return new Future(() => false);
       },
     );
@@ -59,14 +63,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.textStyle}) : super(key: key);
+  MyHomePage({Key key, this.title, @required this.textStyle, this.initialIndex}) : super(key: key);
+  int initialIndex = 0;
   final String title;
   TextStyle textStyle;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> {
   int _counter = Prefs.counter;
 
   void _incrementCounter() {
@@ -106,21 +111,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
               color: AmpColors.colorBackground,
               child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
                   AmpColors.changeMode();
-                  Animations.changeScreenNoAnimation(new MyApp(), context);
+                  Animations.changeScreenNoAnimation(new MyApp(initialIndex: 1,), context);
                 },
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.all(24)),
-                      Icon(MdiIcons.lightbulbOn, size: 50, color: AmpColors.colorForeground,),
-                      Padding(padding: EdgeInsets.all(10)),
-                      Text('Toogle Dark Mode', style: widget.textStyle,)
-                    ],
-                  ),
-                ),
+                child: toggleDarkModeWidget(AmpColors.isDarkMode),
               ),
             ),
           ],
@@ -128,13 +126,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       )
     ];
     _counter = Prefs.counter;
-    return DefaultTabController(length: 2, 
+    return DefaultTabController(length: 2, initialIndex: widget.initialIndex,
       child: Scaffold(
         backgroundColor: AmpColors.colorBackground,
         body: TabBarView(
+          physics: ClampingScrollPhysics(),
           children: containers,
         ),
         floatingActionButton: FloatingActionButton.extended(
+          hoverColor: AmpColors.colorForeground,
           elevation: 0,
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
@@ -162,6 +162,31 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       )
     );
+  }
+  Widget toggleDarkModeWidget(bool isDarkMode) {
+    if(isDarkMode) {
+      return Center(
+        child: Column(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.all(24)),
+            Icon(MdiIcons.lightbulbOn, size: 50, color: AmpColors.colorForeground,),
+            Padding(padding: EdgeInsets.all(10)),
+            Text('Licht an', style: widget.textStyle,)
+          ],
+        ),
+      );
+    } else {
+      return Center(
+        child: Column(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.all(24)),
+            Icon(MdiIcons.lightbulbOnOutline, size: 50, color: AmpColors.colorForeground,),
+            Padding(padding: EdgeInsets.all(10)),
+            Text('Licht aus', style: widget.textStyle,)
+          ],
+        ),
+      );
+    }
   }
 }
 
