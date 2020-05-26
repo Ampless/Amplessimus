@@ -8,8 +8,8 @@ class AmpStrings {
 class AmpColors {
   static Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
   static Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
-  static Color colorBackground = Color.fromRGBO(0, 0, 0, 1);
-  static Color colorForeground = Color.fromRGBO(255, 255, 255, 1);
+  static Color colorBackground = blankBlack;
+  static Color colorForeground = blankWhite;
   static bool isDarkMode = true;
   static void changeMode() {
     if(isDarkMode) {
