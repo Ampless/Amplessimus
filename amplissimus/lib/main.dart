@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 onPressed: () async {
-                  Animations.changeScreenEaseOutBack(Klasse(await dsbGetString()), context);
+                  Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
                 }
               ),
             ],
@@ -191,15 +191,15 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Klasse extends StatelessWidget {
-  String resp;
-  Klasse(this.resp);
+  Container container;
+  Klasse(this.container);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-          child: Container(
-            child: Text(resp))),
+          child: container,
+      )
     );
   }
 
