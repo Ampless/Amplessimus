@@ -41,7 +41,7 @@ class DsbAccount {
 Map<String, String> dsbFindUrls(String json) {
   Map<String, String> map = HashMap<String, String>();
   for (var plan in jsonDecode(json)['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
-    map[plan['Title']] = plan['Childs']['Detail'];
+    map[plan['Title']] = plan['Childs'][0]['Detail'];
   return map;
 }
 
