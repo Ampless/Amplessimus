@@ -95,7 +95,7 @@ Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String
   return map;
 }
 
-Future<Widget> dsbGetWidget() async {
+Future<Container> dsbGetWidget() async {
   return null;
 }
 
