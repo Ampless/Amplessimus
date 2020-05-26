@@ -95,15 +95,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
             RaisedButton(
               onPressed: () async {
-                AmpColors.changeMode();
-                Animations.changeScreenEaseOutBack(new MyApp(), context);
+                Animations.changeScreenEaseOutBack(Klasse(await dsbGetString()), context);
               }
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        focusColor: AmpColors.colorForeground,
         backgroundColor: AmpColors.colorBackground,
         splashColor: AmpColors.colorForeground,
         onPressed: _incrementCounter,

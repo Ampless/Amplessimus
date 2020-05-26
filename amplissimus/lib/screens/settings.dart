@@ -45,7 +45,6 @@ class SettingsPageState extends State<SettingsPage> {
               shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
               color: AmpColors.colorBackground,
               child: InkWell(
-                
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
                   
