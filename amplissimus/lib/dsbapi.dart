@@ -38,8 +38,7 @@ class DsbAccount {
     String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
     String uuid = new Uuid().v4();
     String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
-    base64.encode(gzip.encode(utf8.encode(json)));
-    Response res = await post(DSB_WEBSERVICE, body: '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json; charset=utf8")]));
+    Response res = await post(DSB_WEBSERVICE, body: '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
     return res;
   }
 }
