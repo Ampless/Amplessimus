@@ -34,12 +34,15 @@ class DsbAccount {
 
   DsbAccount(this.username, this.password);
 
-  Future<Response> getData() async {
+  Future<String> getData() async {
     String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
     String uuid = new Uuid().v4();
     String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
     Response res = await post(DSB_WEBSERVICE, body: '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
-    return res;
+    var json_response = jsonDecode(res);
+    assert(json_response[0] is Map);
+    assert(json_response[0].containsKey('d'));
+    return utf8.decode(gzip.decode(base64.decode(json_response[0]['d'])));
   }
 }
 

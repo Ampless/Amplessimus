@@ -34,7 +34,7 @@ void main() async {
   //});
 
   try {
-    print(responseToString(await DsbAccount(stdin.readLineSync(), stdin.readLineSync()).getData()));
+    print(await DsbAccount(stdin.readLineSync(), stdin.readLineSync()).getData());
   } catch (e) {
     print(e);
   }
