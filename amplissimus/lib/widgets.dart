@@ -10,7 +10,6 @@ class Widgets {
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           title: Text('Start'),
-          
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.school),

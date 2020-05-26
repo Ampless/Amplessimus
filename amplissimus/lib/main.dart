@@ -7,6 +7,7 @@ import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -69,9 +70,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   int _counter = 0;
-
 
   void _incrementCounter() {
     setState(() {
@@ -84,37 +84,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _counter = Prefs.counter;
-    return Scaffold(
-      backgroundColor: AmpColors.colorBackground,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    List<Widget> containers = [
+      Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('You have pushed the button this many times:', style: widget.textStyle),
+              Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
+              RaisedButton(
+                onPressed: () async {
+                  Animations.changeScreenEaseOutBack(Klasse(await dsbGetString()), context);
+                }
+              ),
+            ],
+          ),
+        ),
+      ),
+      Container(
+        child: GridView.count(
+          crossAxisCount: 2,
           children: <Widget>[
-            Text('You have pushed the button this many times:', style: widget.textStyle),
-            Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
-            RaisedButton(
-              onPressed: () async {
-                Animations.changeScreenEaseOutBack(Klasse(await dsbGetString()), context);
-              }
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+              color: AmpColors.colorBackground,
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                onTap: () {
+                  AmpColors.changeMode();
+                  Animations.changeScreenNoAnimation(new Settings(), context);
+                },
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.all(24)),
+                      Icon(MdiIcons.lightbulbOn, size: 50, color: AmpColors.colorForeground,),
+                      Padding(padding: EdgeInsets.all(10)),
+                      Text('Toogle Dark Mode', style: widget.textStyle,)
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
+      )
+    ];
+    _counter = Prefs.counter;
+    return DefaultTabController(length: 2, 
+      child: Scaffold(
         backgroundColor: AmpColors.colorBackground,
-        splashColor: AmpColors.colorForeground,
-        onPressed: _incrementCounter,
-        icon: Icon(Icons.add, color: AmpColors.colorForeground,),
-        label: Text('Zählen', style: widget.textStyle,),
-      ),
-      bottomNavigationBar: Widgets.bottomNavMenu(index: 0, onTapFunction: onNavBarTap), // This trailing comma makes auto-formatting nicer for build methods.
+        body: TabBarView(
+          children: containers,
+        ),
+        bottomSheet: TabBar(
+          tabs: <Widget>[
+            new Tab(
+              icon: Icon(Icons.home),
+              text: 'Start',
+            ),
+            new Tab(
+              icon: Icon(Icons.settings),
+              text: 'Einstellungen',
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: AmpColors.colorBackground,
+          splashColor: AmpColors.colorForeground,
+          onPressed: _incrementCounter,
+          icon: Icon(Icons.add, color: AmpColors.colorForeground,),
+          label: Text('Zählen', style: widget.textStyle,),
+        ),
+      )
     );
-  }
-  void onNavBarTap(int index) {
-    ampLog(ctx: 'BottomNav', message: 'Tapped on item $index');
-    if(index == 0) return;
-    Animations.changeScreenNoAnimation(new Settings(), context);
   }
 }
 

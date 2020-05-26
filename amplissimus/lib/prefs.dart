@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Prefs {
   static int counter = 0;
   static SharedPreferences preferences;
+  static String username;
+  static String password;
 
   static void loadPrefs() async {
     preferences = await SharedPreferences.getInstance();
