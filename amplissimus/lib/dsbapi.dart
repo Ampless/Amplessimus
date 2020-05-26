@@ -40,10 +40,7 @@ class DsbAccount {
     String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
     Response res = await post(DSB_WEBSERVICE, body: '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
     var jsonResponse = jsonDecode(res.body);
-    for(var j in jsonResponse) {
-      print(j.runtimeType);
-      print(j);
-    }
+    jsonResponse.forEach((k, v) { print(k); print(v); });
     assert(jsonResponse[0] is Map);
     assert(jsonResponse[0].containsKey('d'));
     return utf8.decode(gzip.decode(base64.decode(jsonResponse[0]['d'])));
