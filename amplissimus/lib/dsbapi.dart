@@ -9,7 +9,7 @@ const String DSB_DEVICE = "SM-G935F";
 const String DSB_VERSION = "2.5.9";
 const String DSB_OS_VERSION = "28 8.0";
 const String DSB_LANGUAGE = "de";
-const String DSB_WEBSERVICE = 'http://www.dsbmobile.de/JsonHandlerWeb.ashx/GetData';
+const String DSB_WEBSERVICE = 'https://www.dsbmobile.de/JsonHandlerWeb.ashx/GetData';
 
 enum DsbRequesttype {
   unknown,
