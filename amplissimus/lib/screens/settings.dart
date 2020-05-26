@@ -1,9 +1,11 @@
 import 'package:amplissimus/animations.dart';
+import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/main.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -15,7 +17,7 @@ class Settings extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+        home: SettingsPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
       ), 
       onWillPop: () {
         Animations.changeScreenNoAnimation(new MyApp(), context);
@@ -25,6 +27,9 @@ class Settings extends StatelessWidget {
   }
 }
 class SettingsPage extends StatefulWidget {
+  SettingsPage({this.title, this.textStyle});
+  TextStyle textStyle;
+  final String title;
   @override
   State<StatefulWidget> createState() {return SettingsPageState();}
 }
@@ -33,12 +38,39 @@ class SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AmpColors.blankBlack,
-      body: Center(),
+      body: Container(
+        child: GridView.count(
+          crossAxisCount: 2,
+          children: <Widget>[
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+              color: AmpColors.colorBackground,
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                onTap: () {
+                  
+                },
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.all(24)),
+                      Icon(MdiIcons.lightbulbOn, size: 50, color: AmpColors.colorForeground,),
+                      Divider(height: 20,),
+                      Text('Toogle Dark Mode', style: widget.textStyle,)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+          ),
+      ),
       bottomNavigationBar: Widgets.bottomNavMenu(index: 1, onTapFunction: onNavBarTap),
     );
   }
 
   void onNavBarTap(int index) {
+    ampLog(ctx: 'BottomNav', message: 'Tapped on item $index');
     if(index == 1) return;
     Animations.changeScreenNoAnimation(new MyApp(), context);
   }
