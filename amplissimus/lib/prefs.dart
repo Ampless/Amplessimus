@@ -21,7 +21,7 @@ class Prefs {
   static void loadCounter() {
     counter = preferences.getInt('counter');
     if(counter == null) counter = 0;
-    ampLog(ctx: 'Prefs', message: 'saved counter = $counter');
+    ampLog(ctx: 'Prefs', message: 'loaded counter = $counter');
   }
 
   static void saveCounter(int saveCounter) {
