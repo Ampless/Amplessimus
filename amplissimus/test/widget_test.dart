@@ -11,9 +11,11 @@ import 'dart:io';
 //import 'package:flutter_test/flutter_test.dart';
 //import 'package:amplissimus/main.dart';
 
+import 'package:http/http.dart';
+
 import '../lib/dsbapi.dart';
 
-void main() {
+void main() async {
   //testWidgets('Counter increments smoke test', (WidgetTester tester) async {
   //  // Build our app and trigger a frame.
   //  await tester.pumpWidget(MyApp());
@@ -32,7 +34,7 @@ void main() {
   //});
 
   try {
-    print(DsbAccount(stdin.readLineSync(), stdin.readLineSync()).getData());
+    print(responseToString(await new DsbAccount(stdin.readLineSync(), stdin.readLineSync()).getData()));
   } catch (e) {
     print(e);
   }
