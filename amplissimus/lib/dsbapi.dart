@@ -95,7 +95,55 @@ Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String
   return map;
 }
 
+Table dsbGetTable(String title, List<DsbSubstitution> subs) {
+  List<TableRow> rows = [
+    TableRow(children: [ Text(title) ]),
+    TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ])
+  ];
+  for(DsbSubstitution sub in subs) {
+    rows.add(TableRow(children: [
+      Text(sub.affectedClass),
+      Text(sub.hour),
+      Text(sub.teacher),
+      Text(sub.subject),
+      Text(sub.notes)
+    ]));
+  }
+  return Table(
+    //border: TableBorder(
+    //  bottom: BorderSide(width: 2),
+    //  left: BorderSide(width: 2),
+    //  right: BorderSide(width: 2),
+    //  top: BorderSide(width: 2),
+    //  horizontalInside: BorderSide(width: 2),
+    //  verticalInside: BorderSide(width: 2)
+    //),
+    children: [
+      TableRow(children: [Text('ehre'),Text('ehre'),Text('Ehre')]),
+      TableRow(children: [Text('unehre'),Text('unehrE'),Text('Unehre')])
+    ]
+  );
+}
+
+List<Table> dsbGetTables(Map<String, List<DsbSubstitution>> allSubs) {
+  List<Table> tables = [];
+  allSubs.forEach((title, subs) {
+    tables.add(dsbGetTable(title, subs));
+  });
+  return tables;
+}
+
+Table joinTables(List<Table> tables) {
+  if(tables.length == 0) return Table();
+  List<TableRow> rows = [];
+  for(Table t in tables) {
+    rows.addAll(t.children);
+  }
+  return Table(border: tables[0].border, children: rows);
+}
+
 Future<Container> dsbGetWidget() async {
-  return null;
+  return Container(
+  );
 }
 
