@@ -3,7 +3,6 @@ import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -63,10 +62,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.textStyle, this.initialIndex}) : super(key: key);
-  int initialIndex = 0;
+  MyHomePage({Key key, this.title, @required this.textStyle, @required this.initialIndex}) : super(key: key);
+  final int initialIndex;
   final String title;
-  TextStyle textStyle;
+  final TextStyle textStyle;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -163,30 +162,18 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
   }
+
   Widget toggleDarkModeWidget(bool isDarkMode) {
-    if(isDarkMode) {
-      return Center(
-        child: Column(
-          children: <Widget>[
-            Padding(padding: EdgeInsets.all(24)),
-            Icon(MdiIcons.lightbulbOn, size: 50, color: AmpColors.colorForeground,),
-            Padding(padding: EdgeInsets.all(10)),
-            Text('Licht an', style: widget.textStyle,)
-          ],
-        ),
-      );
-    } else {
-      return Center(
-        child: Column(
-          children: <Widget>[
-            Padding(padding: EdgeInsets.all(24)),
-            Icon(MdiIcons.lightbulbOnOutline, size: 50, color: AmpColors.colorForeground,),
-            Padding(padding: EdgeInsets.all(10)),
-            Text('Licht aus', style: widget.textStyle,)
-          ],
-        ),
-      );
-    }
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(isDarkMode ? MdiIcons.lightbulbOn : MdiIcons.lightbulbOnOutline, size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text(isDarkMode ? 'Licht an' : 'Licht aus', style: widget.textStyle,)
+        ],
+      ),
+    );
   }
 }
 
