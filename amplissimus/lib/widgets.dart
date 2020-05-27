@@ -110,6 +110,7 @@ class Widgets {
                 if (!condA || !condB) return;
                 Prefs.saveCredentials(usernameInputFormController.text.toString().trim(), 
                   usernameInputFormController.text.toString().trim());
+                Navigator.of(context).pop();
               },
               child: Text('Speichern'),
             ),

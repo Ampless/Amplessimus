@@ -55,7 +55,7 @@ class Prefs {
       username = '';
       password = '';
     }
-    ampLog(ctx: 'Prefs', message: 'loaded username = $username - password = $password');
+    ampLog(ctx: 'Prefs', message: 'loaded username = "$username" - password = "$password"');
   }
 
   static void saveCredentials(String tempUsername, String tempPassword) {
