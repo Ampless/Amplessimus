@@ -146,15 +146,15 @@ class Widgets {
   static void showInputSelectCurrentClass(BuildContext context) {
     final gradeInputFormKey = GlobalKey<FormFieldState>();
     final charInputFormKey = GlobalKey<FormFieldState>();
-    final gradeInputFormController = TextEditingController(text: Prefs.username);
-    final charInputFormController = TextEditingController(text: Prefs.password);
+    final gradeInputFormController = TextEditingController();
+    final charInputFormController = TextEditingController();
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
           title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
-          backgroundColor: AmpColors.colorForeground,
+          backgroundColor: AmpColors.colorBackground,
           content: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -163,7 +163,7 @@ class Widgets {
                   style: TextStyle(color: AmpColors.colorForeground),
                   controller: gradeInputFormController,
                   key: gradeInputFormKey,
-                  validator: textFieldValidator,
+                  validator: gradeFieldValidator,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
                     labelStyle: TextStyle(color: AmpColors.colorForeground),
@@ -171,12 +171,43 @@ class Widgets {
                       borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    labelText: 'Passwort',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Stufe',
                     fillColor: AmpColors.colorForeground,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(color: AmpColors.colorForeground),
-                    )
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(6)),
+              Flexible(
+                child: TextFormField(
+                  style: TextStyle(color: AmpColors.colorForeground),
+                  controller: charInputFormController,
+                  key: charInputFormKey,
+                  validator: letterFieldValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: AmpColors.colorForeground),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Buchstabe',
+                    fillColor: AmpColors.colorForeground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AmpColors.colorForeground),
+                    ),
                   ),
                 ),
               ),
@@ -191,6 +222,9 @@ class Widgets {
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
+                bool condA = gradeInputFormKey.currentState.validate();
+                bool condB = charInputFormKey.currentState.validate();
+                if(!condA || !condB) return;
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
@@ -199,6 +233,20 @@ class Widgets {
         );
       },
     );
+  }
+
+  static String gradeFieldValidator(String value) {
+    List<String> grades = ['5','6','7','8','9','10','11','12','13'];
+    if(value.trim().isEmpty) return 'Feld ist leer!';
+    if(!grades.contains(value.trim())) return 'Keine Zahl von 5 bis 13!';
+    return null;
+  }
+
+  static String letterFieldValidator(String value) {
+    List<String> letters = ['a','b','c','d','e','f','q'];
+    if(value.trim().isEmpty) return 'Feld ist leer!';
+    if(!letters.contains(value.trim())) return 'Ungültige Eingabe!';
+    return null;
   }
 
   static String textFieldValidator(String value) {

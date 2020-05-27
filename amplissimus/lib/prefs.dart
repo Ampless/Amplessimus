@@ -7,7 +7,8 @@ class Prefs {
   static SharedPreferences preferences;
   static String username = '';
   static String password = '';
-  static String grade = '5A';
+  static String grade = '5';
+  static String char = 'a';
 
   static void loadPrefs() async {
     preferences = await SharedPreferences.getInstance();
@@ -18,6 +19,7 @@ class Prefs {
     loadCounter();
     loadCurrentDesignMode();
     loadCredentials();
+    loadClass();
   }
 
   static void loadCounter() {
@@ -67,6 +69,22 @@ class Prefs {
     preferences.setString('password_dsb', password);
     ampLog(ctx: 'Prefs', message: 'saved username = "$username"');
     ampLog(ctx: 'Prefs', message: 'saved password = "$password"');
+  }
+
+  static void loadClass() {
+    String tempGrade = preferences.getString('grade');
+    String tempChar = preferences.getString('char');
+    if(tempGrade == null || tempChar == null) {
+      tempGrade = '';
+      tempChar = '';
+    }
+    grade = tempGrade;
+    char = tempChar;
+  }
+
+  static void saveClass(String grade, String char) {
+    preferences.setString('grade', grade.toLowerCase());
+    preferences.setString('char', char.toLowerCase());
   }
 }
 
