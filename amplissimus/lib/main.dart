@@ -36,7 +36,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     Future.delayed(Duration(milliseconds: 10), () {
       videoController.play();
       ampLog(ctx: 'SplashScreen', message: 'playing video');
-      Future.delayed(Duration(milliseconds: 1050), () {
+      Future.delayed(Duration(milliseconds: 1000), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
     });
