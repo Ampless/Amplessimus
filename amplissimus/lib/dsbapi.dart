@@ -56,16 +56,27 @@ class DsbAccount {
 
 class DsbSubstitution {
   String affectedClass;
-  String hour;
+  List<int> hours;
   String teacher;
   String subject;
   String notes;
   bool isFree;
 
-  DsbSubstitution(this.affectedClass, this.hour, this.teacher, this.subject, this.notes, this.isFree);
+  DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
+  static List<int> parseIntsFromString(String s) {
+    List<int> i = [];
+    for(String t in s.split(RegExp('[ -]+')))
+      if(t.length != 0)
+        i.add(int.parse(t));
+    return i;
+  }
+
+  static DsbSubstitution fromStrings(String affectedClass, String hour, String teacher, String subject, String notes) {
+    return DsbSubstitution(affectedClass, parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
+  }
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
-    return DsbSubstitution(ihu(affectedClass), ihu(hour), ihu(teacher), ihu(subject), ihu(notes), ihu(teacher).contains('---'));
+    return fromStrings(ihu(affectedClass), ihu(hour), ihu(teacher), ihu(subject), ihu(notes));
   }
   static DsbSubstitution fromElementArray(List<dom.Element> elements) {
     return fromElements(elements[0], elements[1], elements[2], elements[3], elements[4]);
@@ -76,7 +87,7 @@ class DsbSubstitution {
   }
 
   String toString() {
-    return "['$affectedClass', '$hour', '$teacher', '$subject', '$notes', '$isFree']";
+    return "['$affectedClass', '$hours', '$teacher', '$subject', '$notes', '$isFree']";
   }
 }
 
@@ -127,6 +138,28 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
   return map;
 }
 
+const int INT_MIN = -9007199254740992;
+const int INT_MAX =  9007199254740992;
+
+int max(List<int> i) {
+  int j = INT_MIN;
+  for(int k in i)
+    if(j < k)
+      j = k;
+  return j;
+}
+
+List<DsbSubstitution> dsbSortByHour(List<DsbSubstitution> subs) {
+  subs.sort((a, b) => max(a.hours).compareTo(max(b.hours)));
+  return subs;
+}
+
+Map<String, List<DsbSubstitution>> dsbSortAllByHour(Map<String, List<DsbSubstitution>> allSubs) {
+  Map<String, List<DsbSubstitution>> map = {};
+  allSubs.forEach((key, value) { map[key] = dsbSortByHour(value); });
+  return map;
+}
+
 Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
   ampLog(ctx: 'DSB', message: 'Generating table...');
   List<TableRow> rows = [ TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]) ];
@@ -137,7 +170,7 @@ Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
     for(DsbSubstitution sub in subs)
       rows.add(TableRow(children: [
         Text(sub.affectedClass),
-        Text(sub.hour),
+        Text(sub.hours.toString()),
         Text(sub.teacher),
         Text(sub.subject),
         Text(sub.notes)
@@ -153,6 +186,6 @@ Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
 }
 
 Future<Widget> dsbGetWidget() async {
-  return dsbGetTable(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), '06', 'c'));
+  return dsbGetTable(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), '06', 'c')));
 }
 
