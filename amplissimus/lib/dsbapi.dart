@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:amplissimus/logging.dart';
+import 'package:amplissimus/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
@@ -21,14 +22,18 @@ String removeLastChars(String s, int n) {
   return s.substring(0, s.length - n);
 }
 
-Future<http.Response> httpPost(String url, dynamic body, {Map<String, String> headers}) {
+Future<http.Response> httpPost(String url, dynamic body, {Map<String, String> headers}) async {
   ampLog(ctx: 'DSBHTTP', message: 'Posting to "$url" with headers "$headers": $body');
-  return http.post(url, body: body, headers: headers);
+  http.Response res = await http.post(url, body: body, headers: headers);
+  ampLog(ctx: 'DSBHTTP', message: 'Got POST-Response with status code ${res.statusCode}: ${res.body}');
+  return res;
 }
 
-Future<http.Response> httpGet(String url) {
+Future<http.Response> httpGet(String url) async {
   ampLog(ctx: 'DSBHTTP', message: 'Getting from "$url"...');
-  return http.get(url);
+  http.Response res = await http.get(url);
+  ampLog(ctx: 'DSBHTTP', message: 'Got GET-Response with status code ${res.statusCode}: ${res.body}');
+  return res;
 }
 
 class DsbAccount {
@@ -74,9 +79,11 @@ class DsbSubstitution {
   }
 }
 
-Future<Map<String, String>> dsbGetHtml(String json) async {
+Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   Map<String, String> map = HashMap<String, String>();
-  for (var plan in jsonDecode(json)['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
+  var json = jsonDecode(jsontext);
+  if(json['Resultcode'] != 0) throw json['ResultStatusInfo'];
+  for (var plan in json['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
     map[plan['Title']] = (await httpGet(plan['Childs'][0]['Detail'])).body;
   return map;
 }
@@ -119,8 +126,8 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
   return map;
 }
 
-Table dsbGetTable(String title, List<DsbSubstitution> subs) {
-  ampLog(ctx: 'DSBAcc', message: 'creating dsbtable');
+List<TableRow> dsbGetTableRows(String title, List<DsbSubstitution> subs) {
+  ampLog(ctx: 'DSB', message: 'Generating table rows...');
   List<TableRow> rows = [
     TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]),
     TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]),
@@ -136,37 +143,33 @@ Table dsbGetTable(String title, List<DsbSubstitution> subs) {
       Text(sub.notes)
     ]));
   }
+  return rows;
+}
+
+List<TableRow> dsbGetRows(Map<String, List<DsbSubstitution>> allSubs) {
+  List<TableRow> rows = [];
+  allSubs.forEach((title, subs) {
+    rows.addAll(dsbGetTableRows(title, subs));
+  });
+  return rows;
+}
+
+Table joinTableRows(List<TableRow> rows) {
+  ampLog(ctx: "DSB", message: "Building table...");
   return Table(
-    //border: TableBorder(
-    //  bottom: BorderSide(width: 2),
-    //  left: BorderSide(width: 2),
-    //  right: BorderSide(width: 2),
-    //  top: BorderSide(width: 2),
-    //  horizontalInside: BorderSide(width: 2),
-    //  verticalInside: BorderSide(width: 2)
-    //),
+    border: TableBorder(
+      bottom: BorderSide(width: 2),
+      left: BorderSide(width: 2),
+      right: BorderSide(width: 2),
+      top: BorderSide(width: 2),
+      horizontalInside: BorderSide(width: 2),
+      verticalInside: BorderSide(width: 2)
+    ),
     children: rows
   );
 }
 
-List<Table> dsbGetTables(Map<String, List<DsbSubstitution>> allSubs) {
-  List<Table> tables = [];
-  allSubs.forEach((title, subs) {
-    tables.add(dsbGetTable(title, subs));
-  });
-  return tables;
-}
-
-Table joinTables(List<Table> tables) {
-  if(tables.length == 0) return Table();
-  List<TableRow> rows = [];
-  for(Table t in tables) {
-    rows.addAll(t.children);
-  }
-  return Table(border: tables[0].border, children: rows);
-}
-
 Future<Widget> dsbGetWidget() async {
-  return joinTables(dsbGetTables(dsbSearchClass(await dsbGetAllSubs('158681', '***'), '06', 'c')));
+  return joinTableRows(dsbGetRows(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), '06', 'c')));
 }
 
