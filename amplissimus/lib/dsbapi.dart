@@ -60,11 +60,12 @@ class DsbSubstitution {
   String teacher;
   String subject;
   String notes;
+  bool isFree;
 
-  DsbSubstitution(this.affectedClass, this.hour, this.teacher, this.subject, this.notes);
+  DsbSubstitution(this.affectedClass, this.hour, this.teacher, this.subject, this.notes, this.isFree);
 
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
-    return DsbSubstitution(ihu(affectedClass), ihu(hour), ihu(teacher), ihu(subject), ihu(notes));
+    return DsbSubstitution(ihu(affectedClass), ihu(hour), ihu(teacher), ihu(subject), ihu(notes), ihu(teacher).contains('---'));
   }
   static DsbSubstitution fromElementArray(List<dom.Element> elements) {
     return fromElements(elements[0], elements[1], elements[2], elements[3], elements[4]);
@@ -75,7 +76,7 @@ class DsbSubstitution {
   }
 
   String toString() {
-    return "['$affectedClass', '$hour', '$teacher', '$subject', '$notes']";
+    return "['$affectedClass', '$hour', '$teacher', '$subject', '$notes', '$isFree']";
   }
 }
 
@@ -126,8 +127,8 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
   return map;
 }
 
-List<TableRow> dsbGetRows(Map<String, List<DsbSubstitution>> allSubs) {
-  ampLog(ctx: 'DSB', message: 'Generating table rows...');
+Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
+  ampLog(ctx: 'DSB', message: 'Generating table...');
   List<TableRow> rows = [ TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]) ];
   allSubs.forEach((title, subs) {
     rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
@@ -142,11 +143,6 @@ List<TableRow> dsbGetRows(Map<String, List<DsbSubstitution>> allSubs) {
         Text(sub.notes)
       ]));
   });
-  return rows;
-}
-
-Table joinTableRows(List<TableRow> rows) {
-  ampLog(ctx: "DSB", message: "Building table...");
   return Table(
     border: TableBorder(
       horizontalInside: BorderSide(width: 1),
@@ -157,6 +153,6 @@ Table joinTableRows(List<TableRow> rows) {
 }
 
 Future<Widget> dsbGetWidget() async {
-  return joinTableRows(dsbGetRows(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), '06', 'c')));
+  return dsbGetTable(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), '06', 'c'));
 }
 
