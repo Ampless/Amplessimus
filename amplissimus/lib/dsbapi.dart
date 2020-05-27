@@ -128,9 +128,7 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
 
 List<TableRow> dsbGetRows(Map<String, List<DsbSubstitution>> allSubs) {
   ampLog(ctx: 'DSB', message: 'Generating table rows...');
-  List<TableRow> rows = [];
-  rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
-  rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
+  List<TableRow> rows = [ TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]) ];
   allSubs.forEach((title, subs) {
     rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
     rows.add(TableRow(children: [ Text(title), Container(), Container(), Container(), Container() ]));
@@ -151,12 +149,8 @@ Table joinTableRows(List<TableRow> rows) {
   ampLog(ctx: "DSB", message: "Building table...");
   return Table(
     border: TableBorder(
-      bottom: BorderSide(width: 2),
-      left: BorderSide(width: 2),
-      right: BorderSide(width: 2),
-      top: BorderSide(width: 2),
-      horizontalInside: BorderSide(width: 2),
-      verticalInside: BorderSide(width: 2)
+      horizontalInside: BorderSide(width: 1),
+      verticalInside: BorderSide(width: 1)
     ),
     children: rows
   );
