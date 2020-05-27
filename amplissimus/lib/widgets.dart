@@ -1,3 +1,4 @@
+import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -107,6 +108,8 @@ class Widgets {
                 bool condA = passwordInputFormKey.currentState.validate();
                 bool condB = usernameInputFormKey.currentState.validate();
                 if (!condA || !condB) return;
+                Prefs.saveCredentials(usernameInputFormController.text.toString().trim(), 
+                  usernameInputFormController.text.toString().trim());
               },
               child: Text('Speichern'),
             ),

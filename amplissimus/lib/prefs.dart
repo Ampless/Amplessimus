@@ -16,6 +16,7 @@ class Prefs {
   static void loadVariables() {
     loadCounter();
     loadCurrentDesignMode();
+    loadCredentials();
   }
 
   static void loadCounter() {
@@ -45,6 +46,24 @@ class Prefs {
   static void saveCurrentDesignMode(bool isDarkMode) {
     preferences.setBool('is_dark_mode', isDarkMode);
     ampLog(ctx: 'Prefs', message: 'saved isDarkMode = $isDarkMode');
+  }
+
+  static void loadCredentials() {
+    username = preferences.getString('username_dsb');
+    password = preferences.getString('password_dsb');
+    if(username == null || password == null) {
+      username = '';
+      password = '';
+    }
+    ampLog(ctx: 'Prefs', message: 'loaded username = $username - password = $password');
+  }
+
+  static void saveCredentials(String tempUsername, String tempPassword) {
+    username = tempUsername;
+    password = tempPassword;
+    preferences.setString('username_dsb', username);
+    preferences.setString('username_dsb', password);
+    ampLog(ctx: 'Prefs', message: 'saved username = $username - password = $password');
   }
 }
 
