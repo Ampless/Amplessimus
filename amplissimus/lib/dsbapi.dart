@@ -21,8 +21,14 @@ String removeLastChars(String s, int n) {
   return s.substring(0, s.length - n);
 }
 
-String responseToString(http.Response r) {
-  return 'Request: \r\n\r\n' + r.request.headers.toString() + '\r\n\r\n' + r.headers.toString() + '\r\n\r\n' + r.body;
+Future<http.Response> httpPost(String url, dynamic body, {Map<String, String> headers}) {
+  ampLog(ctx: 'DSBHTTP', message: 'Posting to "$url" with headers "$headers": $body');
+  return http.post(url, body: body, headers: headers);
+}
+
+Future<http.Response> httpGet(String url) {
+  ampLog(ctx: 'DSBHTTP', message: 'Getting from "$url"...');
+  return http.get(url);
 }
 
 class DsbAccount {
@@ -35,7 +41,7 @@ class DsbAccount {
     String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
     String uuid = new Uuid().v4();
     String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
-    http.Response res = await http.post(DSB_WEBSERVICE, body: '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
+    http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
     var jsonResponse = jsonDecode(res.body);
     assert(jsonResponse is Map);
     assert(jsonResponse.containsKey('d'));
@@ -60,7 +66,7 @@ class DsbSubstitution {
   }
 
   static String ihu(dom.Element e) {
-    return HtmlUnescape().convert(e.innerHtml);
+    return HtmlUnescape().convert(e.innerHtml).replaceAll(RegExp(r'</?.+?>', caseSensitive: false), '');
   }
 
   String toString() {
@@ -71,7 +77,7 @@ class DsbSubstitution {
 Future<Map<String, String>> dsbGetHtml(String json) async {
   Map<String, String> map = HashMap<String, String>();
   for (var plan in jsonDecode(json)['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
-    map[plan['Title']] = (await http.get(plan['Childs'][0]['Detail'])).body;
+    map[plan['Title']] = (await httpGet(plan['Childs'][0]['Detail'])).body;
   return map;
 }
 
@@ -96,10 +102,29 @@ Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String
   return map;
 }
 
+Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstitution>> allSubs, String stage, String letter) {
+  stage = stage.toLowerCase();
+  letter = letter.toLowerCase();
+  Map<String, List<DsbSubstitution>> map = {};
+  allSubs.forEach((key, value) {
+    List<DsbSubstitution> subs = [];
+    for(DsbSubstitution sub in value) {
+      String affClass = sub.affectedClass.toLowerCase();
+      if(affClass.contains(stage) && affClass.contains(letter)) {
+        subs.add(sub);
+      }
+    }
+    map[key] = subs;
+  });
+  return map;
+}
+
 Table dsbGetTable(String title, List<DsbSubstitution> subs) {
   ampLog(ctx: 'DSBAcc', message: 'creating dsbtable');
   List<TableRow> rows = [
-    TableRow(children: [ Text(title) ]),
+    TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]),
+    TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]),
+    TableRow(children: [ Text(title), Container(), Container(), Container(), Container() ]),
     TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ])
   ];
   for(DsbSubstitution sub in subs) {
@@ -142,6 +167,6 @@ Table joinTables(List<Table> tables) {
 }
 
 Future<Widget> dsbGetWidget() async {
-  return Table();
+  return joinTables(dsbGetTables(dsbSearchClass(await dsbGetAllSubs('158681', '***'), '06', 'c')));
 }
 
