@@ -42,8 +42,8 @@ class Widgets {
     double dialogHeight = 140;
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
-    final usernameInputFormController = TextEditingController();
-    final passwordInputFormController = TextEditingController();
+    final usernameInputFormController = TextEditingController(text: Prefs.username);
+    final passwordInputFormController = TextEditingController(text: Prefs.password);
     showDialog(
       context: context,
       barrierDismissible: true,
