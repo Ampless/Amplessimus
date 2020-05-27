@@ -35,11 +35,9 @@ class Prefs {
     ampLog(ctx: 'Prefs', message: 'recognized isDarkMode = $tempBool');
     if(tempBool == null) tempBool = false;
     if(tempBool) {
-      if(AmpColors.isDarkMode) return;
-      AmpColors.changeMode();
+      if(!AmpColors.isDarkMode) AmpColors.changeMode();
     } else {
-      if(!AmpColors.isDarkMode) return;
-      AmpColors.changeMode();
+      if(AmpColors.isDarkMode) AmpColors.changeMode();
     }
   }
 
