@@ -62,6 +62,10 @@ class Widgets {
                     borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   labelStyle: TextStyle(color: AmpColors.colorForeground),
                   labelText: 'Benutzername',
                   fillColor: AmpColors.colorForeground,
