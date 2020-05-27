@@ -7,6 +7,7 @@ class Prefs {
   static SharedPreferences preferences;
   static String username = '';
   static String password = '';
+  static String grade = '5A';
 
   static void loadPrefs() async {
     preferences = await SharedPreferences.getInstance();
