@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:amplissimus/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
@@ -96,6 +97,7 @@ Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String
 }
 
 Table dsbGetTable(String title, List<DsbSubstitution> subs) {
+  ampLog(ctx: 'DSBAcc', message: 'creating dsbtable');
   List<TableRow> rows = [
     TableRow(children: [ Text(title) ]),
     TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ])

@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 onPressed: () async {
-                  Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
+                  Animations.changeScreenEaseOutBack(Klasse(dsbGetTable('Test', new List<DsbSubstitution>())), context);
                 }
               ),
             ],
@@ -124,7 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       )
     ];
-    _counter = Prefs.counter;
     return DefaultTabController(length: 2, initialIndex: widget.initialIndex,
       child: Scaffold(
         backgroundColor: AmpColors.colorBackground,
@@ -178,14 +177,14 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Klasse extends StatelessWidget {
-  Container container;
-  Klasse(this.container);
+  Widget displayWidget;
+  Klasse(this.displayWidget);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-          child: container,
+          child: displayWidget,
       )
     );
   }
