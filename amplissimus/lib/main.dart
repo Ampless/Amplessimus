@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 onPressed: () async {
-                  Animations.changeScreenEaseOutBack(Klasse(dsbGetTable('Test', new List<DsbSubstitution>())), context);
+                  Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
                 }
               ),
             ],
