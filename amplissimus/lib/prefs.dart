@@ -55,7 +55,8 @@ class Prefs {
       username = '';
       password = '';
     }
-    ampLog(ctx: 'Prefs', message: 'loaded username = "$username" - password = "$password"');
+    ampLog(ctx: 'Prefs', message: 'loaded username = "$username"');
+    ampLog(ctx: 'Prefs', message: 'loaded password = "$password"');
   }
 
   static void saveCredentials(String tempUsername, String tempPassword) {
@@ -63,7 +64,8 @@ class Prefs {
     password = tempPassword;
     preferences.setString('username_dsb', username);
     preferences.setString('username_dsb', password);
-    ampLog(ctx: 'Prefs', message: 'saved username = $username - password = $password');
+    ampLog(ctx: 'Prefs', message: 'saved username = "$username"');
+    ampLog(ctx: 'Prefs', message: 'saved username = "$password"');
   }
 }
 
