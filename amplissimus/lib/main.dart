@@ -5,7 +5,7 @@ import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:video_player/video_player.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -22,18 +22,34 @@ class SplashScreenPage extends StatefulWidget {
   State<StatefulWidget> createState() {return SplashScreenPageState();}
 }
 class SplashScreenPageState extends State<SplashScreenPage> {
+  VideoPlayerController videoController = VideoPlayerController.asset('assets/videos/amplissimus.mp4');
+
+  @override
+  void dispose() {
+    videoController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 50), () {
-      Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
+    Future.delayed(Duration(milliseconds: 10), () {
+      videoController.play();
+      ampLog(ctx: 'SplashScreen', message: 'playing video');
+      Future.delayed(Duration(milliseconds: 1050), () {
+        Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    videoController.initialize();
     return Scaffold(
-      backgroundColor: AmpColors.blankBlack,
+      body: Center(
+        child: AspectRatio(aspectRatio: 16/9, child: VideoPlayer(videoController)),
+      ),
+      backgroundColor: Color.fromRGBO(210, 210, 210, 1),
     );
   }
 }
@@ -72,8 +88,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String currentSelectedDropdownClass = '5';
-  String currentSelectedDropdownChar = 'A';
+  
   int _counter = Prefs.counter;
 
   void _incrementCounter() {
@@ -101,6 +116,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
                 }
               ),
+              ListTile(
+                title: Text('3.Stunde Sport', style: widget.textStyle),
+                subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
+              ),
+              Divider(color: AmpColors.colorForeground,),
+              ListTile(
+                title: Text('3.Stunde Sport', style: widget.textStyle),
+                subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
+              ),
+              Divider(color: AmpColors.colorForeground,),
+              ListTile(
+                title: Text('3.Stunde Sport', style: widget.textStyle),
+                subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
+              ),
+              Divider(color: AmpColors.colorForeground,),
             ],
           ),
         ),
@@ -147,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
-                  showInputSelectCurrentClass(context);
+                  Widgets.showInputSelectCurrentClass(context);
                 },
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
@@ -195,55 +225,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  void showInputSelectCurrentClass(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
-          backgroundColor: AmpColors.colorBackground,
-          content: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              DropdownButton<String>(
-                underline: Container(
-                  height: 2,
-                  color: AmpColors.colorForeground,
-                ),
-                items: <String>['5','6','7','8','9','10','11','12','13'].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    currentSelectedDropdownClass = value;
-                  });
-                },
-              )
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () => {Navigator.of(context).pop()},
-              child: Text('Abbrechen'),
-            ),
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Speichern'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  List<String> classes = ['5','6','7','8','9','10','11','12','13',];
+  String currentSelectedDropdownClassValue = '5';
+  String currentSelectedDropdownCharValue = 'A';
 }
 
 class Klasse extends StatelessWidget {

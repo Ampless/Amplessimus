@@ -61,7 +61,7 @@ class AmpColors {
     } else {
       isDarkMode = true;
       ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
-      materialColor = primaryWhite;
+      
       colorForeground = blankWhite;
       colorBackground = blankBlack;
       Prefs.saveCurrentDesignMode(isDarkMode);

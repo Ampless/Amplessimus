@@ -90,6 +90,10 @@ class Widgets {
                     borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   labelText: 'Passwort',
                   fillColor: AmpColors.colorForeground,
                   border: OutlineInputBorder(
@@ -125,6 +129,7 @@ class Widgets {
   }
 
   static Widget setCurrentClassWidget(bool isDarkMode, TextStyle textStyle) {
+    
     return Center(
       child: Column(
         children: <Widget>[
@@ -135,6 +140,64 @@ class Widgets {
           Text('Klasse auswählen',style: textStyle,)
         ],
       ),
+    );
+  }
+  
+  static void showInputSelectCurrentClass(BuildContext context) {
+    final gradeInputFormKey = GlobalKey<FormFieldState>();
+    final charInputFormKey = GlobalKey<FormFieldState>();
+    final gradeInputFormController = TextEditingController(text: Prefs.username);
+    final charInputFormController = TextEditingController(text: Prefs.password);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorForeground,
+          content: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Flexible(
+                child: TextFormField(
+                  style: TextStyle(color: AmpColors.colorForeground),
+                  controller: gradeInputFormController,
+                  key: gradeInputFormKey,
+                  validator: textFieldValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: AmpColors.colorForeground),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Passwort',
+                    fillColor: AmpColors.colorForeground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AmpColors.colorForeground),
+                    )
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => {Navigator.of(context).pop()},
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
     );
   }
 
