@@ -120,10 +120,7 @@ Table dsbGetTable(String title, List<DsbSubstitution> subs) {
     //  horizontalInside: BorderSide(width: 2),
     //  verticalInside: BorderSide(width: 2)
     //),
-    children: [
-      TableRow(children: [Text('ehre'),Text('ehre'),Text('Ehre')]),
-      TableRow(children: [Text('unehre'),Text('unehrE'),Text('Unehre')])
-    ]
+    children: rows
   );
 }
 
@@ -144,8 +141,7 @@ Table joinTables(List<Table> tables) {
   return Table(border: tables[0].border, children: rows);
 }
 
-Future<Container> dsbGetWidget() async {
-  return Container(
-  );
+Future<Widget> dsbGetWidget() async {
+  return Table();
 }
 
