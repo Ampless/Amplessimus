@@ -72,6 +72,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String currentSelectedDropdownClass = '5';
+  String currentSelectedDropdownChar = 'A';
   int _counter = Prefs.counter;
 
   void _incrementCounter() {
@@ -136,13 +138,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
             ),
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+              color: AmpColors.colorBackground,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                onTap: () {
+                  showInputSelectCurrentClass(context);
+                },
+                child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
+              ),
+            ),
           ],
         ),
       )
     ];
     return DefaultTabController(length: 2, initialIndex: widget.initialIndex,
       child: SafeArea(
-        
         child: Scaffold(
           backgroundColor: AmpColors.colorBackground,
           body: TabBarView(
@@ -178,12 +193,57 @@ class _MyHomePageState extends State<MyHomePage> {
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         )
       ),
-
-      
     );
   }
 
-  
+  void showInputSelectCurrentClass(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorBackground,
+          content: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              DropdownButton<String>(
+                underline: Container(
+                  height: 2,
+                  color: AmpColors.colorForeground,
+                ),
+                items: <String>['5','6','7','8','9','10','11','12','13'].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    currentSelectedDropdownClass = value;
+                  });
+                },
+              )
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => {Navigator.of(context).pop()},
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class Klasse extends StatelessWidget {

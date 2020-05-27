@@ -48,6 +48,7 @@ class Widgets {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
+          title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
           backgroundColor: AmpColors.colorBackground,
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -123,8 +124,24 @@ class Widgets {
     );
   }
 
+  static Widget setCurrentClassWidget(bool isDarkMode, TextStyle textStyle) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(isDarkMode ? MdiIcons.school : MdiIcons.schoolOutline,
+              size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text('Klasse auswählen',style: textStyle,)
+        ],
+      ),
+    );
+  }
+
   static String textFieldValidator(String value) {
     if (value.trim().isEmpty) return 'Feld ist leer!';
     return null;
   }
+
+
 }
