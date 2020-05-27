@@ -93,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text('You have pushed the button this many times:', style: widget.textStyle),
               Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
+                child: Text('chrissx sucht hart'),
                 onPressed: () async {
                   Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
                 }
