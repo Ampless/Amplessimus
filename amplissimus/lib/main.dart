@@ -48,8 +48,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primarySwatch: Colors.red,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          primaryColor: AmpColors.colorBackground,
+          accentColor: AmpColors.colorForeground,
         ),
         home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground), 
           initialIndex: initialIndex,),
