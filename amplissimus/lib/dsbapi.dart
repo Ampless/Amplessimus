@@ -126,30 +126,23 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
   return map;
 }
 
-List<TableRow> dsbGetTableRows(String title, List<DsbSubstitution> subs) {
-  ampLog(ctx: 'DSB', message: 'Generating table rows...');
-  List<TableRow> rows = [
-    TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]),
-    TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]),
-    TableRow(children: [ Text(title), Container(), Container(), Container(), Container() ]),
-    TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ])
-  ];
-  for(DsbSubstitution sub in subs) {
-    rows.add(TableRow(children: [
-      Text(sub.affectedClass),
-      Text(sub.hour),
-      Text(sub.teacher),
-      Text(sub.subject),
-      Text(sub.notes)
-    ]));
-  }
-  return rows;
-}
-
 List<TableRow> dsbGetRows(Map<String, List<DsbSubstitution>> allSubs) {
+  ampLog(ctx: 'DSB', message: 'Generating table rows...');
   List<TableRow> rows = [];
+  rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
+  rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
   allSubs.forEach((title, subs) {
-    rows.addAll(dsbGetTableRows(title, subs));
+    rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
+    rows.add(TableRow(children: [ Text(title), Container(), Container(), Container(), Container() ]));
+    rows.add(TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ]));
+    for(DsbSubstitution sub in subs)
+      rows.add(TableRow(children: [
+        Text(sub.affectedClass),
+        Text(sub.hour),
+        Text(sub.teacher),
+        Text(sub.subject),
+        Text(sub.notes)
+      ]));
   });
   return rows;
 }
