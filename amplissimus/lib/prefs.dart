@@ -65,7 +65,7 @@ class Prefs {
     preferences.setString('username_dsb', username);
     preferences.setString('username_dsb', password);
     ampLog(ctx: 'Prefs', message: 'saved username = "$username"');
-    ampLog(ctx: 'Prefs', message: 'saved username = "$password"');
+    ampLog(ctx: 'Prefs', message: 'saved password = "$password"');
   }
 }
 
