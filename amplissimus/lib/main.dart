@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
   int initialIndex = 0;
   @override
   Widget build(BuildContext context) {
+    Prefs.loadPrefs();
     ampLog(ctx: 'MyApp', message: 'Building Main Page');
     return WillPopScope(
       child: MaterialApp(

@@ -47,12 +47,14 @@ class Prefs {
   }
 
   static void loadCredentials() {
-    username = preferences.getString('username_dsb');
-    password = preferences.getString('password_dsb');
-    if(username == null || password == null) {
-      username = '';
-      password = '';
+    String tempUsername = preferences.getString('username_dsb');
+    String tempPassword = preferences.getString('password_dsb');
+    if(tempUsername == null || tempPassword == null) {
+      tempUsername = '';
+      tempPassword = '';
     }
+    username = tempUsername;
+    password = tempPassword;
     ampLog(ctx: 'Prefs', message: 'loaded username = "$username"');
     ampLog(ctx: 'Prefs', message: 'loaded password = "$password"');
   }
@@ -61,7 +63,7 @@ class Prefs {
     username = tempUsername;
     password = tempPassword;
     preferences.setString('username_dsb', username);
-    preferences.setString('username_dsb', password);
+    preferences.setString('password_dsb', password);
     ampLog(ctx: 'Prefs', message: 'saved username = "$username"');
     ampLog(ctx: 'Prefs', message: 'saved password = "$password"');
   }

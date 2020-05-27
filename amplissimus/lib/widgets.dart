@@ -39,7 +39,6 @@ class Widgets {
   }
 
   static void showInputEntryCredentials(BuildContext context) {
-    double dialogHeight = 140;
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
     final usernameInputFormController = TextEditingController(text: Prefs.username);
