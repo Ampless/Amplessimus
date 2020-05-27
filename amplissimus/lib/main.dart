@@ -3,6 +3,7 @@ import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
 import 'package:amplissimus/values.dart';
+import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: AmpColors.materialColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground), 
@@ -118,7 +119,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   AmpColors.changeMode();
                   Animations.changeScreenNoAnimation(new MyApp(initialIndex: 1,), context);
                 },
-                child: toggleDarkModeWidget(AmpColors.isDarkMode),
+                child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, widget.textStyle),
+              ),
+            ),
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+              color: AmpColors.colorBackground,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                onTap: () {
+                  Widgets.showInputEntryCredentials(context);
+                },
+                child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
             ),
           ],
@@ -163,18 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget toggleDarkModeWidget(bool isDarkMode) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Padding(padding: EdgeInsets.all(24)),
-          Icon(isDarkMode ? MdiIcons.lightbulbOn : MdiIcons.lightbulbOnOutline, size: 50, color: AmpColors.colorForeground),
-          Padding(padding: EdgeInsets.all(10)),
-          Text(isDarkMode ? 'Licht an' : 'Licht aus', style: widget.textStyle,)
-        ],
-      ),
-    );
-  }
+  
 }
 
 class Klasse extends StatelessWidget {
