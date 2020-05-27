@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          primarySwatch: Colors.red,
+          primarySwatch: AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground), 
@@ -141,40 +141,45 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     ];
     return DefaultTabController(length: 2, initialIndex: widget.initialIndex,
-      child: Scaffold(
-        backgroundColor: AmpColors.colorBackground,
-        body: TabBarView(
-          physics: ClampingScrollPhysics(),
-          children: containers,
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          hoverColor: AmpColors.colorForeground,
-          elevation: 0,
+      child: SafeArea(
+        
+        child: Scaffold(
           backgroundColor: AmpColors.colorBackground,
-          splashColor: AmpColors.colorForeground,
-          onPressed: _incrementCounter,
-          icon: Icon(Icons.add, color: AmpColors.colorForeground,),
-          label: Text('Zählen', style: widget.textStyle,),
-        ),
-        bottomNavigationBar: SizedBox(
-          height: 55,
-          child: TabBar(
-            indicatorColor: AmpColors.colorForeground,
-            labelColor: AmpColors.colorForeground,
-            tabs: <Widget>[
-              new Tab(
-                icon: Icon(Icons.home),
-                text: 'Start',
-              ),
-              new Tab(
-                icon: Icon(Icons.settings),
-                text: 'Einstellungen',
-              )
-            ],
+          body: TabBarView(
+            physics: ClampingScrollPhysics(),
+            children: containers,
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      )
+          floatingActionButton: FloatingActionButton.extended(
+            hoverColor: AmpColors.colorForeground,
+            elevation: 0,
+            backgroundColor: AmpColors.colorBackground,
+            splashColor: AmpColors.colorForeground,
+            onPressed: _incrementCounter,
+            icon: Icon(Icons.add, color: AmpColors.colorForeground,),
+            label: Text('Zählen', style: widget.textStyle,),
+          ),
+          bottomNavigationBar: SizedBox(
+            height: 55,
+            child: TabBar(
+              indicatorColor: AmpColors.colorForeground,
+              labelColor: AmpColors.colorForeground,
+              tabs: <Widget>[
+                new Tab(
+                  icon: Icon(Icons.home),
+                  text: 'Start',
+                ),
+                new Tab(
+                  icon: Icon(Icons.settings),
+                  text: 'Einstellungen',
+                )
+              ],
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        )
+      ),
+
+      
     );
   }
 
