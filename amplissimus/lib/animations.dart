@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Animations {
   static void changeScreenNoAnimation(Object object, BuildContext context) {
-    ampLog(ctx: 'ScreenSwitch', message: 'Switched screen without animation within 1ms');
+    ampInfo(ctx: 'ScreenSwitch', message: 'Switching screen without animation within 1ms');
     Navigator.push(
       context,
       PageRouteBuilder(
@@ -23,7 +23,7 @@ class Animations {
     );
   }
   static void changeScreenEaseOutBack(Object object, BuildContext context) {
-    ampLog(ctx: 'ScreenSwitch', message: 'Switched screen with EaseOutBack animation within 200ms');
+    ampInfo(ctx: 'ScreenSwitch', message: 'Switching screen with EaseOutBack animation within 200ms');
     Navigator.push(
       context,
       PageRouteBuilder(

@@ -25,7 +25,7 @@ class Prefs {
   static void loadCounter() {
     counter = preferences.getInt('counter');
     if(counter == null) counter = 0;
-    ampLog(ctx: 'Prefs', message: 'loaded counter = $counter');
+    ampInfo(ctx: 'Prefs', message: 'loaded counter = $counter');
   }
 
   static void saveCounter(int saveCounter) {
@@ -35,7 +35,7 @@ class Prefs {
 
   static void loadCurrentDesignMode() {
     bool tempBool = preferences.getBool('is_dark_mode');
-    ampLog(ctx: 'Prefs', message: 'recognized isDarkMode = $tempBool');
+    ampInfo(ctx: 'Prefs', message: 'recognized isDarkMode = $tempBool');
     if(tempBool == null) return;
     if(tempBool) {
       if(!AmpColors.isDarkMode) AmpColors.changeMode();
@@ -46,7 +46,7 @@ class Prefs {
 
   static void saveCurrentDesignMode(bool isDarkMode) {
     preferences.setBool('is_dark_mode', isDarkMode);
-    ampLog(ctx: 'Prefs', message: 'saved isDarkMode = $isDarkMode');
+    ampInfo(ctx: 'Prefs', message: 'saved isDarkMode = $isDarkMode');
   }
 
   static void loadCredentials() {
@@ -58,8 +58,8 @@ class Prefs {
     }
     username = tempUsername;
     password = tempPassword;
-    ampLog(ctx: 'Prefs', message: 'loaded username = "$username"');
-    ampLog(ctx: 'Prefs', message: 'loaded password = "$password"');
+    ampInfo(ctx: 'Prefs', message: 'loaded username = "$username"');
+    ampInfo(ctx: 'Prefs', message: 'loaded password = "$password"');
   }
 
   static void saveCredentials(String tempUsername, String tempPassword) {
@@ -67,8 +67,8 @@ class Prefs {
     password = tempPassword;
     preferences.setString('username_dsb', username);
     preferences.setString('password_dsb', password);
-    ampLog(ctx: 'Prefs', message: 'saved username_dsb = "$username"');
-    ampLog(ctx: 'Prefs', message: 'saved password_dsb = "$password"');
+    ampInfo(ctx: 'Prefs', message: 'saved username_dsb = "$username"');
+    ampInfo(ctx: 'Prefs', message: 'saved password_dsb = "$password"');
   }
 
   static void loadClass() {
@@ -80,8 +80,8 @@ class Prefs {
     }
     grade = tempGrade;
     char = tempChar;
-    ampLog(ctx: 'Prefs', message: 'loaded grade = "$grade"');
-    ampLog(ctx: 'Prefs', message: 'loaded char = "$char"');
+    ampInfo(ctx: 'Prefs', message: 'loaded grade = "$grade"');
+    ampInfo(ctx: 'Prefs', message: 'loaded char = "$char"');
   }
 
   static void saveClass(String tempGrade, String tempChar) {
@@ -89,8 +89,8 @@ class Prefs {
     char = tempChar;
     preferences.setString('grade', grade);
     preferences.setString('char', char);
-    ampLog(ctx: 'Prefs', message: 'saved grade = "$grade"');
-    ampLog(ctx: 'Prefs', message: 'saved char = "$char"');
+    ampInfo(ctx: 'Prefs', message: 'saved grade = "$grade"');
+    ampInfo(ctx: 'Prefs', message: 'saved char = "$char"');
   }
 
   static void clear() {
@@ -100,7 +100,7 @@ class Prefs {
     grade = '';
     char = '';
     counter = 0;
-    ampLog(ctx: 'Prefs', message: 'Cleared SharedPreferences');
+    ampInfo(ctx: 'Prefs', message: 'Cleared SharedPreferences');
   }
 }
 

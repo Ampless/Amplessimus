@@ -52,7 +52,7 @@ class AmpColors {
   static bool isDarkMode = true;
   static void changeMode() {
     isDarkMode = !isDarkMode;
-    ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
+    ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
     Prefs.saveCurrentDesignMode(isDarkMode);
     if(!isDarkMode) {
       materialColor = primaryBlack;

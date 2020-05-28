@@ -10,18 +10,14 @@ String formatTime(DateTime time) {
   return '$h:$m:$s';
 }
 
-void ampLog({@required String ctx, @required Object message}) {
-  print('[${formatTime(DateTime.now())}][$ctx] $message');
-}
-
 void ampErr({@required String ctx, @required Object message}) {
-  ampLog(ctx: 'Error][' + ctx, message: message);
+  print('[${formatTime(DateTime.now())}][Error][$ctx] $message');
 }
 
 void ampWarn({@required String ctx, @required Object message}) {
-  ampLog(ctx: 'Warning][' + ctx, message: message);
+  print('[${formatTime(DateTime.now())}][Warning][$ctx] $message');
 }
 
 void ampInfo({@required String ctx, @required Object message}) {
-  ampLog(ctx: 'Info][' + ctx, message: message);
+  print('[${formatTime(DateTime.now())}][Info][$ctx] $message');
 }

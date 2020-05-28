@@ -13,7 +13,7 @@ void main() {
 List<DsbPlan> subsitutionsList = new List();
 void loadSubstitustions() async {
   subsitutionsList = dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char);
-  ampLog(ctx: 'subs', message: subsitutionsList);
+  ampInfo(ctx: 'subs', message: subsitutionsList);
 }
 class SplashScreen extends StatelessWidget {
   @override
@@ -44,7 +44,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
-    ampLog(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
+    ampInfo(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
   int initialIndex = 0;
   @override
   Widget build(BuildContext context) {
-    ampLog(ctx: 'MyApp', message: 'Building Main Page');
+    ampInfo(ctx: 'MyApp', message: 'Building Main Page');
     return WillPopScope(
       child: MaterialApp(
         title: AmpStrings.appTitle,
