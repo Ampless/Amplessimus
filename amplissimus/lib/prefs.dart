@@ -87,8 +87,8 @@ class Prefs {
   static void saveClass(String tempGrade, String tempChar) {
     grade = tempGrade;
     char = tempChar;
-    preferences.setString('grade', username);
-    preferences.setString('char', password);
+    preferences.setString('grade', grade);
+    preferences.setString('char', char);
     ampLog(ctx: 'Prefs', message: 'saved grade = "$grade"');
     ampLog(ctx: 'Prefs', message: 'saved char = "$char"');
   }
