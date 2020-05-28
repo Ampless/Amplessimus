@@ -104,33 +104,36 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> containers = [
       Container(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('You have pushed the button this many times:', style: widget.textStyle),
-              Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
-              RaisedButton(
-                child: Text('chrissx sucht hart'),
-                onPressed: () async {
-                  Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
-                }
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('You have pushed the button this many times:', style: widget.textStyle),
+                  Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
+                  RaisedButton(
+                    child: Text('chrissx sucht hart'),
+                    onPressed: () async {
+                      Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
+                    }
+                  ),
+                  Card(
+                    color: AmpColors.colorBackground,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: AmpColors.colorForeground, width: 2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Flexible(
+                      child: ListTile(
+                        title: Text('3.Stunde Sport', style: widget.textStyle),
+                        subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
+                      ),
+                    ),
+                  ),
+                  
+                ],
               ),
-              ListTile(
-                title: Text('3.Stunde Sport', style: widget.textStyle),
-                subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
-              ),
-              Divider(color: AmpColors.colorForeground,),
-              ListTile(
-                title: Text('3.Stunde Sport', style: widget.textStyle),
-                subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
-              ),
-              Divider(color: AmpColors.colorForeground,),
-              ListTile(
-                title: Text('3.Stunde Sport', style: widget.textStyle),
-                subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
-              ),
-              Divider(color: AmpColors.colorForeground,),
-            ],
+            ),
           ),
         ),
       ),

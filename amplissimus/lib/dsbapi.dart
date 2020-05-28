@@ -94,7 +94,7 @@ class DsbSubstitution {
 Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   Map<String, String> map = HashMap<String, String>();
   var json = jsonDecode(jsontext);
-  if(json['Resultcode'] != 0) throw json['ResultStatusInfo'];
+  if(json['Resultcode'] != null) throw json['ResultStatusInfo'];
   for (var plan in json['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
     map[plan['Title']] = (await httpGet(plan['Childs'][0]['Detail'])).body;
   return map;
