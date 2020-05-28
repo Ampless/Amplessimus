@@ -62,7 +62,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
 
 class MyApp extends StatelessWidget {
   MyApp({@required this.initialIndex});
-  int initialIndex = 0;
+  final int initialIndex;
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'MyApp', message: 'Building Main Page');
@@ -236,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Klasse extends StatelessWidget {
-  Widget displayWidget;
+  final Widget displayWidget;
   Klasse(this.displayWidget);
   @override
   Widget build(BuildContext context) {

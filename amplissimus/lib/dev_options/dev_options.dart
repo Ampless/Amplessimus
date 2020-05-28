@@ -19,8 +19,8 @@ class DevOptionsScreen extends StatelessWidget {
 }
 class DevOptionsScreenPage extends StatefulWidget {
   DevOptionsScreenPage({this.title, this.textStyle});
-  String title;
-  TextStyle textStyle;
+  final String title;
+  final TextStyle textStyle;
   @override
   State<StatefulWidget> createState() {return DevOptionsScreenPageState();}
 }
