@@ -146,8 +146,8 @@ class Widgets {
   static void showInputSelectCurrentClass(BuildContext context) {
     final gradeInputFormKey = GlobalKey<FormFieldState>();
     final charInputFormKey = GlobalKey<FormFieldState>();
-    final gradeInputFormController = TextEditingController();
-    final charInputFormController = TextEditingController();
+    final gradeInputFormController = TextEditingController(text: Prefs.grade);
+    final charInputFormController = TextEditingController(text: Prefs.char.toUpperCase());
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -225,6 +225,7 @@ class Widgets {
                 bool condA = gradeInputFormKey.currentState.validate();
                 bool condB = charInputFormKey.currentState.validate();
                 if(!condA || !condB) return;
+                Prefs.saveClass(gradeInputFormController.text.trim(), charInputFormController.text.trim().toLowerCase());
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
@@ -245,7 +246,7 @@ class Widgets {
   static String letterFieldValidator(String value) {
     List<String> letters = ['a','b','c','d','e','f','q'];
     if(value.trim().isEmpty) return 'Feld ist leer!';
-    if(!letters.contains(value.trim())) return 'Ungültige Eingabe!';
+    if(!letters.contains(value.trim().toLowerCase())) return 'Ungültige Eingabe!';
     return null;
   }
 

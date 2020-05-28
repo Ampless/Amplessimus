@@ -67,8 +67,8 @@ class Prefs {
     password = tempPassword;
     preferences.setString('username_dsb', username);
     preferences.setString('password_dsb', password);
-    ampLog(ctx: 'Prefs', message: 'saved username = "$username"');
-    ampLog(ctx: 'Prefs', message: 'saved password = "$password"');
+    ampLog(ctx: 'Prefs', message: 'saved username_dsb = "$username"');
+    ampLog(ctx: 'Prefs', message: 'saved password_dsb = "$password"');
   }
 
   static void loadClass() {
@@ -80,11 +80,15 @@ class Prefs {
     }
     grade = tempGrade;
     char = tempChar;
+    ampLog(ctx: 'Prefs', message: 'loaded grade = "$grade"');
+    ampLog(ctx: 'Prefs', message: 'loaded char = "$char"');
   }
 
   static void saveClass(String grade, String char) {
     preferences.setString('grade', grade.toLowerCase());
     preferences.setString('char', char.toLowerCase());
+    ampLog(ctx: 'Prefs', message: 'saved grade = "$grade"');
+    ampLog(ctx: 'Prefs', message: 'saved char = "$char"');
   }
 }
 

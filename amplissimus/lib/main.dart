@@ -25,11 +25,11 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 50), () {
+    Future.delayed(Duration(milliseconds: 400), () {
       setState(() {
         backgroundColor = AmpColors.colorBackground;
       });
-      Future.delayed(Duration(milliseconds: 700), () {
+      Future.delayed(Duration(milliseconds: 650), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
     });
@@ -37,6 +37,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
+    ampLog(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
