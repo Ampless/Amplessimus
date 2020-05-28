@@ -84,11 +84,19 @@ class Prefs {
     ampLog(ctx: 'Prefs', message: 'loaded char = "$char"');
   }
 
-  static void saveClass(String grade, String char) {
-    preferences.setString('grade', grade.toLowerCase());
-    preferences.setString('char', char.toLowerCase());
+  static void saveClass(String tempGrade, String tempChar) {
+    grade = tempGrade;
+    char = tempChar;
+    preferences.setString('grade', username);
+    preferences.setString('char', password);
     ampLog(ctx: 'Prefs', message: 'saved grade = "$grade"');
     ampLog(ctx: 'Prefs', message: 'saved char = "$char"');
+  }
+
+  static void clear() {
+    preferences.clear();
+    ampLog(ctx: 'Prefs', message: 'Cleared SharedPreferences');
+    Prefs.loadPrefs();
   }
 }
 

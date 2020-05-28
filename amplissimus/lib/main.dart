@@ -1,4 +1,5 @@
 import 'package:amplissimus/animations.dart';
+import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart';
@@ -178,6 +179,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   Widgets.showInputSelectCurrentClass(context);
                 },
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
+              ),
+            ),
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+              color: AmpColors.colorBackground,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                onTap: () {
+                  Animations.changeScreenEaseOutBack(DevOptionsScreen(), context);
+                },
+                child: Widgets.developerOptionsWidget(widget.textStyle),
               ),
             ),
           ],

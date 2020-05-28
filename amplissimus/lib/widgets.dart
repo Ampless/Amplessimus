@@ -225,7 +225,8 @@ class Widgets {
                 bool condA = gradeInputFormKey.currentState.validate();
                 bool condB = charInputFormKey.currentState.validate();
                 if(!condA || !condB) return;
-                Prefs.saveClass(gradeInputFormController.text.trim(), charInputFormController.text.trim().toLowerCase());
+                Prefs.saveClass(gradeInputFormController.text.toString().trim(), 
+                  charInputFormController.text.toString().trim().toLowerCase());
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
@@ -255,5 +256,18 @@ class Widgets {
     return null;
   }
 
+  static Widget developerOptionsWidget(TextStyle textStyle) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(MdiIcons.codeBrackets,
+              size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text('Entwickleroptionen',style: textStyle,),
+        ],
+      ),
+    );
+  }
 
 }
