@@ -217,8 +217,8 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   for(DsbPlan plan in plans) {
     for(DsbSubstitution sub in plan.subs) {
       widgets.add(ListTile(
-        title: Text(sub.title()),
-        subtitle: Text(sub.subtitle()),
+        title: Text(sub.title(), style: TextStyle(color: AmpColors.colorForeground)),
+        subtitle: Text(sub.subtitle(), style: TextStyle(color: AmpColors.colorForeground)),
       ));
       widgets.add(Divider(color: AmpColors.colorForeground));
     }
@@ -235,11 +235,14 @@ String errorString(dynamic e) {
   return e.toString();
 }
 
+Widget dsbWidget = Container();
+
 Future<Widget> dsbGetWidget() async {
   try {
-    return dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
+    dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
-    return Text('\r\n\r\n${errorString(e)}');
+    dsbWidget = Text('\r\n\r\n${errorString(e)}');
   }
+  return dsbWidget;
 }
 
