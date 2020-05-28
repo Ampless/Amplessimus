@@ -51,20 +51,17 @@ class AmpColors {
   static Color colorForeground = blankWhite;
   static bool isDarkMode = true;
   static void changeMode() {
-    if(isDarkMode) {
-      isDarkMode = false;
-      ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
+    isDarkMode = !isDarkMode;
+    ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
+    Prefs.saveCurrentDesignMode(isDarkMode);
+    if(!isDarkMode) {
       materialColor = primaryBlack;
       colorForeground = blankBlack;
       colorBackground = blankWhite;
-      Prefs.saveCurrentDesignMode(isDarkMode);
     } else {
-      isDarkMode = true;
-      ampLog(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
       
       colorForeground = blankWhite;
       colorBackground = blankBlack;
-      Prefs.saveCurrentDesignMode(isDarkMode);
     }
   }
   
