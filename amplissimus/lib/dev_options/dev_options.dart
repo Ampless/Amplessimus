@@ -51,7 +51,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
                     actions: <Widget>[
                       FlatButton(
                         textColor: AmpColors.colorForeground,
-                        onPressed: () {
+                        onPressed: () { 
                           Navigator.of(context).pop();
                         }, 
                         child: Text('Abbrechen')
@@ -63,7 +63,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
                           Navigator.of(context).pop();
                           Animations.changeScreenEaseOutBack(MyApp(initialIndex: 0,), context);
                         }, 
-                        child: Text('Bestätigen')
+                        child: Text('Bestätigen'),
                       ),
                     ],
                   );
