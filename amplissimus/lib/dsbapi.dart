@@ -11,6 +11,8 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
+import 'values.dart';
+
 const String DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
 const String DSB_DEVICE = "SM-G935F";
 const String DSB_VERSION = "2.5.9";
@@ -82,15 +84,36 @@ class DsbSubstitution {
   String toString() {
     return "['$affectedClass', '$hours', '$teacher', '$subject', '$notes', '$isFree']";
   }
+
+  String title() {
+    String hour;
+    for(int h in hours)
+      if(hour == null)
+        hour = h.toString();
+      else
+        hour += '-$h';
+    return '$hour. Stunde $subject';
+  }
+
+  String subtitle() {
+    if(isFree)
+      return hours.length == 1 ? 'Freistunde' : 'Freistunden';
+    else
+      return teacher;
+  }
 }
 
 class DsbPlan {
   String title;
   List<DsbSubstitution> subs;
 
-  DsbPlan(title, subs);
+  DsbPlan(this.title, this.subs);
 
   String get realTitle => title.replaceFirst('Vertretung_M_', '');
+
+  String toString() {
+    return '$title: $subs';
+  }
 }
 
 Future<Map<String, String>> dsbGetHtml(String jsontext) async {
@@ -187,9 +210,25 @@ Table dsbGetTable(List<DsbPlan> plans) {
   );
 }
 
+Widget dsbGetGoodList(List<DsbPlan> plans) {
+  List<Widget> widgets = [];
+  DsbPlan plan = plans[1];
+  for(DsbSubstitution sub in plan.subs) {
+    widgets.add(ListTile(
+      title: Text(sub.title()),
+      subtitle: Text(sub.subtitle()),
+    ));
+    widgets.add(Divider(color: AmpColors.colorForeground));
+  }
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: widgets
+  );
+}
+
 Future<Widget> dsbGetWidget() async {
   try {
-    return dsbGetTable(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
+    return dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
     if(e is Exception)
       return Text('\r\n\r\n$e\r\n${(e as Error).stackTrace}');
