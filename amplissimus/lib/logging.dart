@@ -1,9 +1,17 @@
-
 import 'package:flutter/material.dart';
 
+String formatTime(DateTime time) {
+  String s = time.second.toString(),
+         m = time.minute.toString(),
+         h = time.hour.toString();
+  if(s.length == 1) s = '0' + s;
+  if(m.length == 1) m = '0' + s;
+  if(h.length == 1) h = '0' + h;
+  return '$h:$m:$s';
+}
+
 void ampLog({@required String ctx, @required Object message}) {
-  var now = DateTime.now();
-  print('[${now.hour}:${now.minute}:${now.second}][$ctx] $message');
+  print('[${formatTime(DateTime.now())}][$ctx] $message');
 }
 
 void ampErr({@required String ctx, @required Object message}) {
