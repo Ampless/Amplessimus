@@ -25,16 +25,16 @@ String removeLastChars(String s, int n) {
 }
 
 Future<http.Response> httpPost(String url, dynamic body, {Map<String, String> headers}) async {
-  ampInfo(ctx: 'DSBHTTP', message: 'Posting to "$url" with headers "$headers": $body');
+  ampInfo(ctx: 'DSB][HTTP', message: 'Posting to "$url" with headers "$headers": $body');
   http.Response res = await http.post(url, body: body, headers: headers);
-  ampInfo(ctx: 'DSBHTTP', message: 'Got POST-Response with status code ${res.statusCode}: ${res.body}');
+  ampInfo(ctx: 'DSB][HTTP', message: 'Got POST-Response with status code ${res.statusCode}.');
   return res;
 }
 
 Future<http.Response> httpGet(String url) async {
-  ampInfo(ctx: 'DSBHTTP', message: 'Getting from "$url"...');
+  ampInfo(ctx: 'DSB][HTTP', message: 'Getting from "$url"...');
   http.Response res = await http.get(url);
-  ampInfo(ctx: 'DSBHTTP', message: 'Got GET-Response with status code ${res.statusCode}: ${res.body}');
+  ampInfo(ctx: 'DSB][HTTP', message: 'Got GET-Response with status code ${res.statusCode}.');
   return res;
 }
 
@@ -131,16 +131,17 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
   Map<String, String> htmls = await dsbGetHtml(json);
   htmls.forEach((title, body) {
     try {
+      ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
       List<dom.Element> html = HtmlParser(body).parse()
-                           .children[0].children[1].children[1]
-                           .children[2].children[0].children[0].children;
+                               .children[0].children[1].children[1]
+                               .children[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++) {
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
       }
       plans.add(DsbPlan(title, subs));
     } catch (e) {
-      ampErr(ctx: 'DSB', message: e);
+      ampErr(ctx: 'DSB', message: errorString(e));
       plans.add(DsbPlan(title, []));
     }
   });
@@ -211,14 +212,16 @@ Table dsbGetTable(List<DsbPlan> plans) {
 }
 
 Widget dsbGetGoodList(List<DsbPlan> plans) {
+  ampInfo(ctx: 'DSB', message: plans);
   List<Widget> widgets = [];
-  DsbPlan plan = plans[1];
-  for(DsbSubstitution sub in plan.subs) {
-    widgets.add(ListTile(
-      title: Text(sub.title()),
-      subtitle: Text(sub.subtitle()),
-    ));
-    widgets.add(Divider(color: AmpColors.colorForeground));
+  for(DsbPlan plan in plans) {
+    for(DsbSubstitution sub in plan.subs) {
+      widgets.add(ListTile(
+        title: Text(sub.title()),
+        subtitle: Text(sub.subtitle()),
+      ));
+      widgets.add(Divider(color: AmpColors.colorForeground));
+    }
   }
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -226,13 +229,17 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   );
 }
 
+String errorString(dynamic e) {
+  if(e is Error)
+    return '$e\r\n${e.stackTrace}';
+  return e.toString();
+}
+
 Future<Widget> dsbGetWidget() async {
   try {
     return dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
-    if(e is Exception)
-      return Text('\r\n\r\n$e\r\n${(e as Error).stackTrace}');
-    return Text('\r\n\r\n$e');
+    return Text('\r\n\r\n${errorString(e)}');
   }
 }
 
