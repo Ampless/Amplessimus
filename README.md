@@ -1,2 +1,2 @@
 # AmplissimusApp
-this will be some app - we dont know yet
+This is an alternative to the 'DSBMobile' app.
