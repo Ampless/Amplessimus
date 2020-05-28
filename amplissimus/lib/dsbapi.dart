@@ -23,35 +23,28 @@ String removeLastChars(String s, int n) {
 }
 
 Future<http.Response> httpPost(String url, dynamic body, {Map<String, String> headers}) async {
-  ampLog(ctx: 'DSBHTTP', message: 'Posting to "$url" with headers "$headers": $body');
+  ampInfo(ctx: 'DSBHTTP', message: 'Posting to "$url" with headers "$headers": $body');
   http.Response res = await http.post(url, body: body, headers: headers);
-  ampLog(ctx: 'DSBHTTP', message: 'Got POST-Response with status code ${res.statusCode}: ${res.body}');
+  ampInfo(ctx: 'DSBHTTP', message: 'Got POST-Response with status code ${res.statusCode}: ${res.body}');
   return res;
 }
 
 Future<http.Response> httpGet(String url) async {
-  ampLog(ctx: 'DSBHTTP', message: 'Getting from "$url"...');
+  ampInfo(ctx: 'DSBHTTP', message: 'Getting from "$url"...');
   http.Response res = await http.get(url);
-  ampLog(ctx: 'DSBHTTP', message: 'Got GET-Response with status code ${res.statusCode}: ${res.body}');
+  ampInfo(ctx: 'DSBHTTP', message: 'Got GET-Response with status code ${res.statusCode}: ${res.body}');
   return res;
 }
 
-class DsbAccount {
-  String username;
-  String password;
-
-  DsbAccount(this.username, this.password);
-
-  Future<String> getData() async {
-    String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
-    String uuid = new Uuid().v4();
-    String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
-    http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
-    var jsonResponse = jsonDecode(res.body);
-    assert(jsonResponse is Map);
-    assert(jsonResponse.containsKey('d'));
-    return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
-  }
+Future<String> getData(String username, String password) async {
+  String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
+  String uuid = new Uuid().v4();
+  String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
+  http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
+  var jsonResponse = jsonDecode(res.body);
+  assert(jsonResponse is Map);
+  assert(jsonResponse.containsKey('d'));
+  return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
 }
 
 class DsbSubstitution {
@@ -100,23 +93,24 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   return map;
 }
 
-List<DsbSubstitution> dsbGetSubs(String body) {
-  List<dom.Element> html = HtmlParser(body).parse()
-                       .children[0].children[1].children[1]
-                       .children[2].children[0].children[0].children;
-  List<DsbSubstitution> subs = [];
-  for(int i = 1; i < html.length; i++) {
-    subs.add(DsbSubstitution.fromElementArray(html[i].children));
-  }
-  return subs;
-}
-
 Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String password) async {
   Map<String, List<DsbSubstitution>> map = new HashMap<String, List<DsbSubstitution>>();
-  String json = await DsbAccount(username, password).getData();
+  String json = await getData(username, password);
   Map<String, String> htmls = await dsbGetHtml(json);
-  htmls.forEach((title, url) {
-    map[title] = dsbGetSubs(url);
+  htmls.forEach((title, body) {
+    try {
+      List<dom.Element> html = HtmlParser(body).parse()
+                           .children[0].children[1].children[1]
+                           .children[2].children[0].children[0].children;
+      List<DsbSubstitution> subs = [];
+      for(int i = 1; i < html.length; i++) {
+        subs.add(DsbSubstitution.fromElementArray(html[i].children));
+      }
+      map[title] = subs;
+    } catch (e) {
+      ampErr(ctx: 'DSB', message: e);
+      map[title] = [];
+    }
   });
   return map;
 }
@@ -128,8 +122,8 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
   allSubs.forEach((key, value) {
     List<DsbSubstitution> subs = [];
     for(DsbSubstitution sub in value) {
-      String affClass = sub.affectedClass.toLowerCase();
-      if(affClass.contains(stage) && affClass.contains(letter)) {
+      String c = sub.affectedClass.toLowerCase();
+      if(c.contains(stage) && c.contains(letter)) {
         subs.add(sub);
       }
     }
@@ -138,11 +132,9 @@ Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstituti
   return map;
 }
 
-const int INT_MIN = -9007199254740992;
-const int INT_MAX =  9007199254740992;
-
 int max(List<int> i) {
-  int j = INT_MIN;
+  if(i.length == 0) return null;
+  int j = i[0];
   for(int k in i)
     if(j < k)
       j = k;
@@ -156,12 +148,14 @@ List<DsbSubstitution> dsbSortByHour(List<DsbSubstitution> subs) {
 
 Map<String, List<DsbSubstitution>> dsbSortAllByHour(Map<String, List<DsbSubstitution>> allSubs) {
   Map<String, List<DsbSubstitution>> map = {};
-  allSubs.forEach((key, value) { map[key] = dsbSortByHour(value); });
+  allSubs.forEach((key, value) {
+    map[key] = dsbSortByHour(value);
+  });
   return map;
 }
 
 Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
-  ampLog(ctx: 'DSB', message: 'Generating table...');
+  ampInfo(ctx: 'DSB', message: 'Generating table...');
   List<TableRow> rows = [ TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]) ];
   allSubs.forEach((title, subs) {
     rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
@@ -186,6 +180,6 @@ Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
 }
 
 Future<Widget> dsbGetWidget() async {
-  return dsbGetTable(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), '06', 'c')));
+  return dsbGetTable(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
 }
 
