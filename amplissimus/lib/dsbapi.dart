@@ -85,7 +85,7 @@ class DsbSubstitution {
 }
 
 class DsbPlan {
-  String titl = '';
+  String title = '';
   List<DsbSubstitution> subs = [];
 
   DsbPlan(title, subs);
