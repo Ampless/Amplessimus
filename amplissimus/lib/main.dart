@@ -130,7 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         side: BorderSide(color: AmpColors.colorForeground, width: 2),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Flexible(
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
@@ -145,6 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   child: Flexible(
                                     child: ListView.separated(
+                                      shrinkWrap: true,
                                       itemBuilder: (context, index2) {
                                         return ListTile(
                                           title: Text(
@@ -155,7 +155,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         );
                                       }, 
-                                      separatorBuilder: null, 
+                                      separatorBuilder: (context, index) {
+                                        return Divider(color: AmpColors.colorForeground, height: 2,);
+                                      },
                                       itemCount: subsitutionsList[index].subs.length,
                                     )
                                   ),
@@ -165,7 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           },
                           itemCount: subsitutionsList.length,
                         ),
-                      ),
                     ),
                   ],
                 ),
