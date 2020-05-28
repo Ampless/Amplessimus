@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(SplashScreen());
 }
+List<DsbPlan> subsitutionsList = new List();
+void loadSubstitustions() async {
+  subsitutionsList = dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char);
+}
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 400), () {
+      if(Prefs.password != '' && Prefs.username != '') loadSubstitustions();
       setState(() {
         backgroundColor = AmpColors.colorBackground;
       });
@@ -101,40 +106,73 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     List<Widget> containers = [
       Container(
         child: Center(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('You have pushed the button this many times:', style: widget.textStyle),
-                  Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
-                  RaisedButton(
-                    child: Text('chrissx sucht hart'),
-                    onPressed: () async {
-                      Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
-                    }
-                  ),
-                  Card(
-                    color: AmpColors.colorBackground,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: AmpColors.colorForeground, width: 2),
-                      borderRadius: BorderRadius.circular(8),
+          child: Flexible(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('You have pushed the button this many times:', style: widget.textStyle),
+                    Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
+                    RaisedButton(
+                      child: Text('chrissx sucht hart'),
+                      onPressed: () async {
+                        Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
+                      }
                     ),
-                    child: Flexible(
-                      child: ListTile(
-                        title: Text('3.Stunde Sport', style: widget.textStyle),
-                        subtitle: Text('Vertretung durch Juppi_S', style: widget.textStyle),
+                    Card(
+                      color: AmpColors.colorBackground,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: AmpColors.colorForeground, width: 2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: <Widget>[
+                                Text(subsitutionsList[index].title),
+                                Card(
+                                  color: AmpColors.colorBackground,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(color: AmpColors.colorForeground, width: 2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Flexible(
+                                    child: ListView.separated(
+                                      itemBuilder: (context, index2) {
+                                        return ListTile(
+                                          title: Text(
+                                            '${subsitutionsList[index].subs[index2].hours}.Stunde ${subsitutionsList[index].subs[index2].subject}'
+                                          ),
+                                          subtitle: Text(
+                                            'Hi'
+                                          ),
+                                        );
+                                      }, 
+                                      separatorBuilder: null, 
+                                      itemCount: subsitutionsList[index].subs.length,
+                                    )
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          itemCount: subsitutionsList.length,
+                        ),
                       ),
                     ),
-                  ),
-                  
-                ],
+                  ],
+                ),
               ),
             ),
           ),
+          
         ),
       ),
       Container(
