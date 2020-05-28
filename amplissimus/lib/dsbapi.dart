@@ -84,6 +84,15 @@ class DsbSubstitution {
   }
 }
 
+class DsbPlan {
+  String title;
+  List<DsbSubstitution> subs;
+
+  DsbPlan(title, subs);
+
+  String get realTitle => title.replaceFirst('Vertretung_M_', '');
+}
+
 Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   Map<String, String> map = HashMap<String, String>();
   var json = jsonDecode(jsontext);
@@ -93,8 +102,8 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   return map;
 }
 
-Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String password) async {
-  Map<String, List<DsbSubstitution>> map = new HashMap<String, List<DsbSubstitution>>();
+Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
+  List<DsbPlan> plans = [];
   String json = await getData(username, password);
   Map<String, String> htmls = await dsbGetHtml(json);
   htmls.forEach((title, body) {
@@ -106,30 +115,30 @@ Future<Map<String, List<DsbSubstitution>>> dsbGetAllSubs(String username, String
       for(int i = 1; i < html.length; i++) {
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
       }
-      map[title] = subs;
+      plans.add(DsbPlan(title, subs));
     } catch (e) {
       ampErr(ctx: 'DSB', message: e);
-      map[title] = [];
+      plans.add(DsbPlan(title, []));
     }
   });
-  return map;
+  return plans;
 }
 
-Map<String, List<DsbSubstitution>> dsbSearchClass(Map<String, List<DsbSubstitution>> allSubs, String stage, String letter) {
+List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String letter) {
   stage = stage.toLowerCase();
   letter = letter.toLowerCase();
-  Map<String, List<DsbSubstitution>> map = {};
-  allSubs.forEach((key, value) {
+  List<DsbPlan> newPlans = [];
+  for(DsbPlan plan in plans) {
     List<DsbSubstitution> subs = [];
-    for(DsbSubstitution sub in value) {
+    for(DsbSubstitution sub in plan.subs) {
       String c = sub.affectedClass.toLowerCase();
       if(c.contains(stage) && c.contains(letter)) {
         subs.add(sub);
       }
     }
-    map[key] = subs;
-  });
-  return map;
+    newPlans.add(DsbPlan(plan.title, subs));
+  }
+  return newPlans;
 }
 
 int max(List<int> i) {
@@ -146,22 +155,21 @@ List<DsbSubstitution> dsbSortByHour(List<DsbSubstitution> subs) {
   return subs;
 }
 
-Map<String, List<DsbSubstitution>> dsbSortAllByHour(Map<String, List<DsbSubstitution>> allSubs) {
-  Map<String, List<DsbSubstitution>> map = {};
-  allSubs.forEach((key, value) {
-    map[key] = dsbSortByHour(value);
-  });
-  return map;
+List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
+  List<DsbPlan> newPlans = [];
+  for(DsbPlan plan in plans)
+    newPlans.add(DsbPlan(plan.title, dsbSortByHour(plan.subs)));
+  return newPlans;
 }
 
-Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
+Table dsbGetTable(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: 'Generating table...');
   List<TableRow> rows = [ TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]) ];
-  allSubs.forEach((title, subs) {
+  for(DsbPlan plan in plans) {
     rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
-    rows.add(TableRow(children: [ Text(title), Container(), Container(), Container(), Container() ]));
+    rows.add(TableRow(children: [ Text(plan.title), Container(), Container(), Container(), Container() ]));
     rows.add(TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ]));
-    for(DsbSubstitution sub in subs)
+    for(DsbSubstitution sub in plan.subs)
       rows.add(TableRow(children: [
         Text(sub.affectedClass),
         Text(sub.hours.toString()),
@@ -169,7 +177,7 @@ Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
         Text(sub.subject),
         Text(sub.notes)
       ]));
-  });
+  }
   return Table(
     border: TableBorder(
       horizontalInside: BorderSide(width: 1),
@@ -180,6 +188,12 @@ Table dsbGetTable(Map<String, List<DsbSubstitution>> allSubs) {
 }
 
 Future<Widget> dsbGetWidget() async {
-  return dsbGetTable(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
+  try {
+    return dsbGetTable(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
+  } catch (e) {
+    if(e is Exception)
+      return Text('\r\n\r\n$e\r\n${(e as Error).stackTrace}');
+    return Text('\r\n\r\n$e');
+  }
 }
 
