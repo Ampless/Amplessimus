@@ -111,11 +111,19 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> containers = [
       Container(
         child: Flexible(
-          child: ListView(
-            children: <Widget>[
-              Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),)
-            ],
-          ),
+          child: Center(
+            child: ListView(
+              children: <Widget>[
+                Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
+                RaisedButton(
+                  child: Text('Häsch dini Ovo hüt scho ka?'),
+                  onPressed: () async {
+                    Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
+                  },
+                )
+              ],
+            ),
+          )
         ),
       ),
       Container(
