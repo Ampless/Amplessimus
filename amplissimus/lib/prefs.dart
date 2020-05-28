@@ -36,7 +36,7 @@ class Prefs {
   static void loadCurrentDesignMode() {
     bool tempBool = preferences.getBool('is_dark_mode');
     ampLog(ctx: 'Prefs', message: 'recognized isDarkMode = $tempBool');
-    if(tempBool == null) tempBool = false;
+    if(tempBool == null) return;
     if(tempBool) {
       if(!AmpColors.isDarkMode) AmpColors.changeMode();
     } else {
@@ -95,8 +95,12 @@ class Prefs {
 
   static void clear() {
     preferences.clear();
+    username = '';
+    password = '';
+    grade = '';
+    char = '';
+    counter = 0;
     ampLog(ctx: 'Prefs', message: 'Cleared SharedPreferences');
-    Prefs.loadPrefs();
   }
 }
 

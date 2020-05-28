@@ -55,7 +55,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({this.initialIndex});
+  MyApp({@required this.initialIndex});
   int initialIndex = 0;
   @override
   Widget build(BuildContext context) {
