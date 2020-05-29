@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 
 const String DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
 const String DSB_DEVICE = "SM-G950F";
-const String DSB_VERSION = "3.0.18";
+const String DSB_VERSION = "2.5.9";
 const String DSB_OS_VERSION = "29 10.0";
 const String DSB_LANGUAGE = "de";
 const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData';
@@ -258,7 +258,7 @@ Future<Widget> dsbGetWidget(Function f) async {
   try {
     dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
-    dsbWidget = Text('${errorString(e)}', style: TextStyle(color: AmpColors.colorForeground));
+    dsbWidget = Text('\r\n\r\n${errorString(e)}', style: TextStyle(color: AmpColors.colorForeground));
   }
   if(f != null) f();
   return dsbWidget;
