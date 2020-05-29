@@ -102,6 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
       Prefs.saveCounter(++Prefs.counter);
     });
   }
+  void reloadLocalDsbWidget() async {
+    loadDsbWidget();
+    Future.delayed(Duration(milliseconds: 1000), () {
+      setState(() {
+        localDsbWidget = dsbWidget;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +209,10 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
-            onPressed: _incrementCounter,
+            onPressed: () {
+              _incrementCounter;
+              reloadLocalDsbWidget();
+            },
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
           ),
