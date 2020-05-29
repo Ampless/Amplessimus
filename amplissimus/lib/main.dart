@@ -7,6 +7,8 @@ import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 
+import 'dsbapi.dart';
+
 void main() {
   runApp(SplashScreen());
 }
@@ -107,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
+    if(dsbWidget is Container) dsbGetWidget(() => setState(() => {}));
     List<Widget> containers = [
       Container(
         child: Flexible(
@@ -118,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 RaisedButton(
                   child: Text('Häsch dini Ovo hüt scho ka?'),
                   onPressed: () async {
-                    Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget()), context);
+                    Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget(null)), context);
                   },
                 ),
                 dsbWidget
@@ -242,9 +244,10 @@ class Klasse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AmpColors.colorBackground,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-          child: displayWidget,
+        child: displayWidget,
       )
     );
   }
