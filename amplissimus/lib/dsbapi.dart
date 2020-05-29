@@ -38,17 +38,6 @@ Future<http.Response> httpGet(String url) async {
   return res;
 }
 
-Future<String> getData(String username, String password) async {
-  String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
-  String uuid = new Uuid().v4();
-  String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
-  http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
-  var jsonResponse = jsonDecode(res.body);
-  assert(jsonResponse is Map);
-  assert(jsonResponse.containsKey('d'));
-  return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
-}
-
 class DsbSubstitution {
   String affectedClass;
   List<int> hours;
@@ -116,23 +105,54 @@ class DsbPlan {
   }
 }
 
-Future<Map<String, String>> dsbGetHtml(String jsontext) async {
-  Map<String, String> map = HashMap<String, String>();
+Future<String> getData(String username, String password) async {
+  String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
+  String uuid = new Uuid().v4();
+  String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"$uuid","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
+  http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
+  var jsonResponse = jsonDecode(res.body);
+  assert(jsonResponse is Map);
+  assert(jsonResponse.containsKey('d'));
+  return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
+}
+
+Map<String, Future<http.Response>> dsbGetHtml(String jsontext) {
+  Map<String, Future<http.Response>> map = {};
   var json = jsonDecode(jsontext);
+  assert(json is Map);
+  assert(json.containsKey('Resultcode'));
+  assert(json.containsKey('ResultStatusInfo'));
   if(json['Resultcode'] != 0) throw json['ResultStatusInfo'];
-  for (var plan in json['ResultMenuItems'][0]['Childs'][0]['Root']['Childs'])
-    map[plan['Title']] = (await httpGet(plan['Childs'][0]['Detail'])).body;
+  assert(json.containsKey('ResultMenuItems'));
+  json = json['ResultMenuItems'];
+  assert(json is List);
+  assert(json.length > 0);
+  json = json[0];
+  assert(json is Map);
+  assert(json.containsKey('Childs'));
+  json = json['Childs'];
+  assert(json is List);
+  assert(json.length > 0);
+  json = json[0];
+  assert(json is Map);
+  assert(json.containsKey('Root'));
+  json = json['Root'];
+  assert(json is Map);
+  assert(json.containsKey('Childs'));
+  for (var plan in json['Childs'])
+    map[plan['Title']] = httpGet(plan['Childs'][0]['Detail']);
   return map;
 }
 
 Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
   List<DsbPlan> plans = [];
   String json = await getData(username, password);
-  Map<String, String> htmls = await dsbGetHtml(json);
-  htmls.forEach((title, body) {
+  var htmls = dsbGetHtml(json);
+  for(var title in htmls.keys) {
+    var res = htmls[title];
     try {
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser(body).parse()
+      List<dom.Element> html = HtmlParser((await res).body).parse()
                                .children[0].children[1].children[1]
                                .children[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];
@@ -144,7 +164,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       ampErr(ctx: 'DSB', message: errorString(e));
       plans.add(DsbPlan(title, []));
     }
-  });
+  }
   return plans;
 }
 
