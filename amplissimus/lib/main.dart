@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 RaisedButton(
                   child: Text('Häsch dini Ovo hüt scho ka?'),
                   onPressed: () async {
-                    Animations.changeScreenEaseOutBack(Klasse(await dsbGetWidget(null)), context);
+                    Animations.changeScreenEaseOutBack(NiceFullScreenScrollView(await dsbGetWidget(null)), context);
                   },
                 ),
                 dsbWidget
@@ -238,9 +238,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String currentSelectedDropdownCharValue = 'A';
 }
 
-class Klasse extends StatelessWidget {
+class NiceFullScreenScrollView extends StatelessWidget {
   final Widget displayWidget;
-  Klasse(this.displayWidget);
+  NiceFullScreenScrollView(this.displayWidget);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
