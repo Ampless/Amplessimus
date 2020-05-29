@@ -12,11 +12,6 @@ import 'dsbapi.dart';
 void main() {
   runApp(SplashScreen());
 }
-List<DsbPlan> subsitutionsList = new List();
-void loadSubstitustions() async {
-  subsitutionsList = dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char);
-  ampInfo(ctx: 'subs', message: subsitutionsList);
-}
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,8 +28,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 400), () {
-      if(Prefs.password != '' && Prefs.username != '') loadSubstitustions();
+    Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
         backgroundColor = AmpColors.colorBackground;
       });
@@ -110,20 +104,18 @@ class _MyHomePageState extends State<MyHomePage> {
     if(dsbWidget is Container) dsbGetWidget(() => setState(() => {}));
     List<Widget> containers = [
       Container(
-        child: Flexible(
-          child: Center(
-            child: ListView(
-              children: <Widget>[
-                Text('${Prefs.counter}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
-                RaisedButton(
-                  child: Text('Häsch dini Ovo hüt scho ka?'),
-                  onPressed: () async {
-                    Animations.changeScreenEaseOutBack(NiceFullScreenScrollView(await dsbGetWidget(null)), context);
-                  },
-                ),
-                dsbWidget
-              ],
-            ),
+        child: Center(
+          child: ListView(
+            children: <Widget>[
+              Text('${Prefs.counter}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
+              RaisedButton(
+                child: Text('Häsch dini Ovo hüt scho ka?'),
+                onPressed: () async {
+                  Animations.changeScreenEaseOutBack(NiceFullScreenScrollView(await dsbGetWidget(null)), context);
+                },
+              ),
+              dsbWidget
+            ],
           )
         ),
       ),
