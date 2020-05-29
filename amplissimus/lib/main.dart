@@ -97,13 +97,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   
-  int _counter = Prefs.counter;
+  //int _counter = Prefs.counter;
 
   void _incrementCounter() {
     setState(() {
-      _counter = Prefs.counter;
-      _counter++;
-      Prefs.saveCounter(_counter);
+      Prefs.saveCounter(Prefs.counter + 2);
     });
   }
 
@@ -116,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Center(
             child: ListView(
               children: <Widget>[
-                Text('$_counter', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
+                Text('${Prefs.counter}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
                 RaisedButton(
                   child: Text('Häsch dini Ovo hüt scho ka?'),
                   onPressed: () async {
