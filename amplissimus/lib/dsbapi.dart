@@ -229,7 +229,7 @@ Table dsbGetTable(List<DsbPlan> plans) {
 }
 
 Widget dsbGetGoodList(List<DsbPlan> plans) {
-  ampInfo(ctx: 'DSB', message: plans);
+  ampInfo(ctx: 'DSB', message: '$plans');
   List<Widget> widgets = [];
   for(DsbPlan plan in plans) {
     for(DsbSubstitution sub in plan.subs) {
