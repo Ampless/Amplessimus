@@ -258,7 +258,7 @@ Future<Widget> dsbGetWidget(Function f) async {
   try {
     dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
-    dsbWidget = Text('\r\n\r\n${errorString(e)}');
+    dsbWidget = Text('${errorString(e)}', style: TextStyle(color: AmpColors.colorForeground));
   }
   if(f != null) f();
   return dsbWidget;

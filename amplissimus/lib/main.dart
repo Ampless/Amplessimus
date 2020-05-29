@@ -12,10 +12,15 @@ import 'dsbapi.dart';
 void main() {
   runApp(SplashScreen());
 }
+void loadDsbWidget() async {
+  dsbWidget = await dsbGetWidget(null);
+  ampInfo(ctx: 'dsbWidget', message: '$dsbWidget');
+}
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Prefs.loadPrefs();
+    loadDsbWidget();
     return MaterialApp(home: SplashScreenPage());
   }
 }
@@ -90,8 +95,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
-  //int _counter = Prefs.counter;
 
   void _incrementCounter() {
     setState(() {
@@ -101,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if(dsbWidget is Container) dsbGetWidget(() => setState(() => {}));
+    
     List<Widget> containers = [
       Container(
         child: Center(
