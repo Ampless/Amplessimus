@@ -95,10 +95,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Widget localDsbWidget = dsbWidget;
 
   void _incrementCounter() {
     setState(() {
-      Prefs.saveCounter(Prefs.counter + 2);
+      Prefs.saveCounter(++Prefs.counter);
     });
   }
 
