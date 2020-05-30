@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
@@ -12,15 +14,12 @@ import 'dsbapi.dart';
 void main() {
   runApp(SplashScreen());
 }
-void loadDsbWidget() async {
-  dsbWidget = await dsbGetWidget(null);
-  ampInfo(ctx: 'dsbWidget', message: '$dsbWidget');
-}
+
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Prefs.loadPrefs();
-    loadDsbWidget();
+    dsbUpdateWidget(() {});
     return MaterialApp(home: SplashScreenPage());
   }
 }
@@ -95,25 +94,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget localDsbWidget = dsbWidget;
 
   void _incrementCounter() {
     setState(() {
-      Prefs.saveCounter(++Prefs.counter);
-    });
-  }
-  void reloadLocalDsbWidget() async {
-    loadDsbWidget();
-    Future.delayed(Duration(milliseconds: 1000), () {
-      setState(() {
-        localDsbWidget = dsbWidget;
-      });
+      Prefs.saveCounter(Prefs.counter += 2);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    
+    ampInfo(ctx: 'MyHomePage', message: 'Building...');
+    while(dsbWidget is Container) sleep(Duration(milliseconds: 10));
     List<Widget> containers = [
       Container(
         child: Center(
@@ -123,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
               RaisedButton(
                 child: Text('Häsch dini Ovo hüt scho ka?'),
                 onPressed: () async {
-                  Animations.changeScreenEaseOutBack(NiceFullScreenScrollView(await dsbGetWidget(null)), context);
+                  dsbUpdateWidget(() => setState(() {}));
                 },
               ),
               dsbWidget
@@ -210,8 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
             onPressed: () {
-              _incrementCounter;
-              reloadLocalDsbWidget();
+              _incrementCounter();
             },
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
