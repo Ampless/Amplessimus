@@ -23,12 +23,14 @@ class SplashScreen extends StatelessWidget {
     return MaterialApp(home: SplashScreenPage());
   }
 }
+
 class SplashScreenPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {return SplashScreenPageState();}
+  State<StatefulWidget> createState() => SplashScreenPageState();
 }
+
 class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerProviderStateMixin {
-  Color backgroundColor = AmpColors.blankWhite;
+  Color backgroundColor = AmpColors.blankBlack;
   @override
   void initState() {
     super.initState();
