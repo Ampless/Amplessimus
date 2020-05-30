@@ -4,12 +4,10 @@ import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
-
-import 'dsbapi.dart';
 
 void main() {
   runApp(SplashScreen());

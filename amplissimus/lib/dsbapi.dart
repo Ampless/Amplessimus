@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:amplissimus/dsbutil.dart';
 import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
