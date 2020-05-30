@@ -45,7 +45,7 @@ class DsbSubstitution {
   }
 
   static DsbSubstitution fromStrings(String affectedClass, String hour, String teacher, String subject, String notes) {
-    return DsbSubstitution(affectedClass, parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
+    return DsbSubstitution(affectedClass.toLowerCase(), parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
   }
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
     return fromStrings(ihu(affectedClass), ihu(hour), ihu(teacher), ihu(subject), ihu(notes));
@@ -201,20 +201,14 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String letter) {
-  stage = stage.toLowerCase();
-  letter = letter.toLowerCase();
-  List<DsbPlan> newPlans = [];
   for(DsbPlan plan in plans) {
     List<DsbSubstitution> subs = [];
-    for(DsbSubstitution sub in plan.subs) {
-      String c = sub.affectedClass.toLowerCase();
-      if(c.contains(stage) && c.contains(letter)) {
+    for(DsbSubstitution sub in plan.subs)
+      if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(letter))
         subs.add(sub);
-      }
-    }
-    newPlans.add(DsbPlan(plan.title, subs));
+    plan.subs = subs;
   }
-  return newPlans;
+  return plans;
 }
 
 int max(List<int> i) {

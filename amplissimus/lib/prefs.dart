@@ -35,10 +35,10 @@ String get username => getString('username_dsb');
 set username(String s) => set('username_dsb', s);
 String get password => getString('password_dsb');
 set password(String s) => set('password_dsb', s);
-String get grade => getString('grade');
-set grade(String s) => set('grade', s);
-String get char => getString('char');
-set char(String s) => set('char', s);
+String get grade => getString('grade').toLowerCase();
+set grade(String s) => set('grade', s.toLowerCase());
+String get char => getString('char').toLowerCase();
+set char(String s) => set('char', s.toLowerCase());
 
 set designMode(bool isDarkMode) => set('is_dark_mode', isDarkMode);
 
