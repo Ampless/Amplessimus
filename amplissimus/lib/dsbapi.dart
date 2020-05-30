@@ -99,8 +99,8 @@ Future<String> dsbGetData(String username, String password) async {
   return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
 }
 
-Future<Map<String, http.Response>> dsbGetHtml(String jsontext) async {
-  Map<String, http.Response> map = {};
+Future<Map<String, String>> dsbGetHtml(String jsontext) async {
+  Map<String, String> map = {};
   var client = http.Client();
   var json = jsonDecode(jsontext);
   assert(json is Map);
@@ -123,8 +123,13 @@ Future<Map<String, http.Response>> dsbGetHtml(String jsontext) async {
   json = json['Root'];
   assert(json is Map);
   assert(json.containsKey('Childs'));
-  for (var plan in json['Childs'])
-    map[plan['Title']] = await client.get(plan['Childs'][0]['Detail']);
+  for (var plan in json['Childs']) {
+    String title = plan['Title'];
+    String url = plan['Childs'][0]['Detail'];
+    ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
+    map[title] = (await client.get(url)).body;
+    ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
+  }
   return map;
 }
 
@@ -136,7 +141,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
     var res = htmls[title];
     try {
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser(res.body).parse()
+      List<dom.Element> html = HtmlParser(res).parse()
                                .children[0].children[1].children[1]
                                .children[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];
