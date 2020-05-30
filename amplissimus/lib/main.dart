@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      Prefs.saveCounter(Prefs.counter += 2);
+      Prefs.counter += 2;
     });
   }
 
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Center(
           child: ListView(
             children: <Widget>[
-              Text('${Prefs.counter}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
+              Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 child: Text('Häsch dini Ovo hüt scho ka?'),
                 onPressed: () async {

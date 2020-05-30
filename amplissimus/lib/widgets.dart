@@ -117,8 +117,8 @@ class Widgets {
                 bool condA = passwordInputFormKey.currentState.validate();
                 bool condB = usernameInputFormKey.currentState.validate();
                 if (!condA || !condB) return;
-                Prefs.saveCredentials(usernameInputFormController.text.toString().trim(), 
-                  passwordInputFormController.text.toString().trim());
+                Prefs.username = usernameInputFormController.text.trim();
+                Prefs.password = passwordInputFormController.text.trim();
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
@@ -226,8 +226,8 @@ class Widgets {
                 bool condA = gradeInputFormKey.currentState.validate();
                 bool condB = charInputFormKey.currentState.validate();
                 if(!condA || !condB) return;
-                Prefs.saveClass(gradeInputFormController.text.toString().trim(), 
-                  charInputFormController.text.toString().trim().toLowerCase());
+                Prefs.grade = gradeInputFormController.text.trim();
+                Prefs.char = charInputFormController.text.trim();
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
@@ -246,7 +246,7 @@ class Widgets {
   }
 
   static String letterFieldValidator(String value) {
-    List<String> letters = ['a','b','c','d','e','f','q'];
+    List<String> letters = ['a','b','c','d','e','f','g','h','i','q'];
     if(value.trim().isEmpty) return 'Feld ist leer!';
     if(!letters.contains(value.trim().toLowerCase())) return 'Ungültige Eingabe!';
     return null;
@@ -272,9 +272,7 @@ class Widgets {
   }
 
   Widget subsTextListView2(int index, int index2, List<DsbPlan> plans) {
-    return Text(
-      ''
-    );
+    return Text('');
   }
 
 }
