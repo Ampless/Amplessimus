@@ -95,12 +95,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  void _incrementCounter() {
-    setState(() {
-      Prefs.counter += 2;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'MyHomePage', message: 'Building...');
@@ -113,9 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 child: Text('Häsch dini Ovo hüt scho ka?'),
-                onPressed: () async {
-                  dsbUpdateWidget(() => setState(() {}));
-                },
+                onPressed: () => dsbUpdateWidget(() => setState(() {})),
               ),
               dsbWidget
             ],
@@ -200,9 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
-            onPressed: () {
-              _incrementCounter();
-            },
+            onPressed: () => setState(() => Prefs.counter += 2),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
           ),
@@ -231,20 +221,4 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> classes = ['5','6','7','8','9','10','11','12','13'];
   String currentSelectedDropdownClassValue = '5';
   String currentSelectedDropdownCharValue = 'A';
-}
-
-class NiceFullScreenScrollView extends StatelessWidget {
-  final Widget displayWidget;
-  NiceFullScreenScrollView(this.displayWidget);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AmpColors.colorBackground,
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: displayWidget,
-      )
-    );
-  }
-
 }
