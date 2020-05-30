@@ -32,12 +32,21 @@ class DsbSubstitution {
 
   DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
+  static final int ZERO = '0'.codeUnitAt(0),
+                   NINE = '9'.codeUnitAt(0);
+
   static List<int> parseIntsFromString(String s) {
-    List<int> i = [];
-    for(String t in s.split(RegExp('[ -]+')))
-      if(t.length != 0)
-        i.add(int.parse(t));
-    return i;
+    List<int> out = [];
+    int lastindex = 0;
+    for(int i = 0; i < s.length; i++) {
+      int c = s[i].codeUnitAt(0);
+      if(c < ZERO || c > NINE) {
+        if(lastindex != i) out.add(int.parse(s.substring(lastindex, i)));
+        lastindex = i + 1;
+      }
+    }
+    out.add(int.parse(s.substring(lastindex, s.length)));
+    return out;
   }
 
   static DsbSubstitution fromStrings(String affectedClass, String hour, String teacher, String subject, String notes) {
@@ -72,7 +81,7 @@ class DsbSubstitution {
     if(isFree)
       return hours.length == 1 ? 'Freistunde' : 'Freistunden';
     else
-      return teacher;
+      return 'Vertreten durch $teacher';
   }
 }
 
@@ -218,6 +227,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: plans);
   List<Widget> widgets = [];
   for(DsbPlan plan in plans) {
+    widgets.add(Text(plan.realTitle, style: TextStyle(color: AmpColors.colorForeground)));
     for(DsbSubstitution sub in plan.subs) {
       widgets.add(ListTile(
         title: Text(sub.title(), style: TextStyle(color: AmpColors.colorForeground)),
