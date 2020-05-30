@@ -22,20 +22,6 @@ String removeLastChars(String s, int n) {
   return s.substring(0, s.length - n);
 }
 
-Future<http.Response> httpPost(String url, dynamic body, {Map<String, String> headers}) async {
-  ampInfo(ctx: 'DSB][HTTP', message: 'Posting to "$url" with headers "$headers": $body');
-  http.Response res = await http.post(url, body: body, headers: headers);
-  ampInfo(ctx: 'DSB][HTTP', message: 'Got POST-Response with status code ${res.statusCode}.');
-  return res;
-}
-
-Future<http.Response> httpGet(String url) async {
-  ampInfo(ctx: 'DSB][HTTP', message: 'Getting from "$url"...');
-  http.Response res = await http.get(url);
-  ampInfo(ctx: 'DSB][HTTP', message: 'Got GET-Response with status code ${res.statusCode}.');
-  return res;
-}
-
 class DsbSubstitution {
   String affectedClass;
   List<int> hours;
@@ -106,15 +92,16 @@ class DsbPlan {
 Future<String> dsbGetData(String username, String password) async {
   String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
   String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"${v4()}","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
-  http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
-  var jsonResponse = jsonDecode(res.body);
+  String res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
+  var jsonResponse = jsonDecode(res);
   assert(jsonResponse is Map);
   assert(jsonResponse.containsKey('d'));
   return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
 }
 
-Map<String, Future<http.Response>> dsbGetHtml(String jsontext) {
-  Map<String, Future<http.Response>> map = {};
+Future<Map<String, http.Response>> dsbGetHtml(String jsontext) async {
+  Map<String, http.Response> map = {};
+  var client = http.Client();
   var json = jsonDecode(jsontext);
   assert(json is Map);
   assert(json.containsKey('Resultcode'));
@@ -137,19 +124,19 @@ Map<String, Future<http.Response>> dsbGetHtml(String jsontext) {
   assert(json is Map);
   assert(json.containsKey('Childs'));
   for (var plan in json['Childs'])
-    map[plan['Title']] = httpGet(plan['Childs'][0]['Detail']);
+    map[plan['Title']] = await client.get(plan['Childs'][0]['Detail']);
   return map;
 }
 
 Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
   List<DsbPlan> plans = [];
   String json = await dsbGetData(username, password);
-  var htmls = dsbGetHtml(json);
+  var htmls = await dsbGetHtml(json);
   for(var title in htmls.keys) {
     var res = htmls[title];
     try {
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser((await res).body).parse()
+      List<dom.Element> html = HtmlParser(res.body).parse()
                                .children[0].children[1].children[1]
                                .children[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];

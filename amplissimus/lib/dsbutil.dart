@@ -3,6 +3,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:amplissimus/dsbhtmlcodes.dart' as htmlcodes;
+import 'package:amplissimus/logging.dart';
+import 'package:http/http.dart';
 
 String hex(int i) {
   return i < 16 ? '0' + i.toRadixString(16) : i.toRadixString(16);
@@ -25,9 +27,6 @@ String v4() {
          '${hex(r[i++])}${hex(r[i++])}-${hex(r[i++])}${hex(r[i++])}'
          '${hex(r[i++])}${hex(r[i++])}${hex(r[i++])}${hex(r[i++])}';
 }
-
-
-
 class HtmlUnescape extends Converter<String, String> {
 
   int _chunkLength;
@@ -87,4 +86,12 @@ class HtmlUnescape extends Converter<String, String> {
 
     return buf.toString();
   }
+}
+
+
+Future<String> httpPost(String url, dynamic body, {Map<String, String> headers}) async {
+  ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
+  Response res = await post(url, body: body, headers: headers);
+  ampInfo(ctx: 'HTTP', message: 'Got POST-Response with status code ${res.statusCode}.');
+  return res.body;
 }
