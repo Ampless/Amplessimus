@@ -33,9 +33,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 1000), () {
-      setState(() {
-        backgroundColor = AmpColors.colorBackground;
-      });
+      setState(() => backgroundColor = AmpColors.colorBackground);
       Future.delayed(Duration(milliseconds: 1650), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
@@ -155,9 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
-                  Widgets.showInputSelectCurrentClass(context);
-                },
+                onTap: () => Widgets.showInputSelectCurrentClass(context),
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
             ),
@@ -169,9 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
-                  Animations.changeScreenEaseOutBack(DevOptionsScreen(), context);
-                },
+                onTap: () => Animations.changeScreenEaseOutBack(DevOptionsScreen(), context),
                 child: Widgets.developerOptionsWidget(widget.textStyle),
               ),
             ),

@@ -103,7 +103,7 @@ class DsbPlan {
   }
 }
 
-Future<String> getData(String username, String password) async {
+Future<String> dsbGetData(String username, String password) async {
   String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
   String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"${v4()}","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
   http.Response res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
@@ -143,7 +143,7 @@ Map<String, Future<http.Response>> dsbGetHtml(String jsontext) {
 
 Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
   List<DsbPlan> plans = [];
-  String json = await getData(username, password);
+  String json = await dsbGetData(username, password);
   var htmls = dsbGetHtml(json);
   for(var title in htmls.keys) {
     var res = htmls[title];
