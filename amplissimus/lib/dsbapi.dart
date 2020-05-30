@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,10 +16,6 @@ const String DSB_VERSION = "2.5.9";
 const String DSB_OS_VERSION = "29 10.0";
 const String DSB_LANGUAGE = "de";
 const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData';
-
-String removeLastChars(String s, int n) {
-  return s.substring(0, s.length - n);
-}
 
 class DsbSubstitution {
   String affectedClass;
@@ -60,28 +55,51 @@ class DsbSubstitution {
   }
 
   static String ihu(dom.Element e) {
-    return HtmlUnescape().convert(e.innerHtml).replaceAll(RegExp(r'</?.+?>', caseSensitive: false), '');
+    return htmlUnescape(e.innerHtml).replaceAll(RegExp(r'</?.+?>'), '').trim();
   }
 
   String toString() {
-    return "['$affectedClass', '$hours', '$teacher', '$subject', '$notes', '$isFree']";
+    return "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
+  }
+
+  static const Map<String, String> SUBJECT_LOOKUP_TABLE = {
+    'sp': 'Sport',
+    'e': 'Englisch',
+    'd': 'Deutsch',
+    'in': 'Informatik',
+    'geo': 'Geografie',
+    'ges': 'Geschichte',
+    'l': 'Latein',
+    'it': 'Italienisch',
+    'f': 'Französisch',
+    'so': 'Sozialkunde',
+    'mu': 'Musik',
+    'ma': 'Mathematik',
+    'b': 'Biologie',
+    'c': 'Chemie',
+    'k': 'Kunst',
+    'p': 'Physik',
+    'w': 'Wirtschaft/Recht',
+  };
+
+  String get realSubject {
+    String sub = subject.toLowerCase();
+    String s = subject;
+    SUBJECT_LOOKUP_TABLE.forEach((key, value) => { if(sub.startsWith(key)) s = value });
+    return s;
   }
 
   String title() {
-    String hour;
+    String hour = '';
     for(int h in hours)
-      if(hour == null)
-        hour = h.toString();
-      else
-        hour += '-$h';
-    return '$hour. Stunde $subject';
+      hour += hour == '' ? h.toString() : '-$h';
+    return '$hour. Stunde $realSubject';
   }
 
   String subtitle() {
-    if(isFree)
-      return hours.length == 1 ? 'Freistunde' : 'Freistunden';
-    else
-      return 'Vertreten durch $teacher';
+    String notesaddon = notes.length > 0 ? ' ($notes)' : '';
+    return isFree ? 'Freistunde${hours.length == 1 ? '' : 'n'}$notesaddon'
+                  : 'Vertreten durch $teacher$notesaddon';
   }
 }
 
@@ -99,9 +117,25 @@ class DsbPlan {
 }
 
 Future<String> dsbGetData(String username, String password) async {
-  String datetime = removeLastChars(DateTime.now().toIso8601String(), 3) + 'Z';
-  String json = '{"UserId":"$username","UserPw":"$password","AppVersion":"$DSB_VERSION","Language":"$DSB_LANGUAGE","OsVersion":"$DSB_OS_VERSION","AppId":"${v4()}","Device":"$DSB_DEVICE","BundleId":"$DSB_BUNDLE_ID","Date":"$datetime","LastUpdate":"$datetime"}';
-  String res = await httpPost(DSB_WEBSERVICE, '{"req": {"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", "DataType": 1}}', headers: HashMap.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
+  String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
+  String json = '{'
+      '"UserId":"$username",'
+      '"UserPw":"$password",'
+      '"AppVersion":"$DSB_VERSION",'
+      '"Language":"$DSB_LANGUAGE",'
+      '"OsVersion":"$DSB_OS_VERSION",'
+      '"AppId":"${v4()}",'
+      '"Device":"$DSB_DEVICE",'
+      '"BundleId":"$DSB_BUNDLE_ID",'
+      '"Date":"$datetime",'
+      '"LastUpdate":"$datetime"'
+    '}';
+  String res = await httpPost(DSB_WEBSERVICE, '{'
+      '"req": {'
+        '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
+        '"DataType": 1'
+      '}'
+    '}', headers: Map.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
   var jsonResponse = jsonDecode(res);
   assert(jsonResponse is Map);
   assert(jsonResponse.containsKey('d'));
@@ -228,6 +262,12 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   List<Widget> widgets = [];
   for(DsbPlan plan in plans) {
     widgets.add(Text(plan.realTitle, style: TextStyle(color: AmpColors.colorForeground)));
+    if(plan.subs.length == 0) {
+      widgets.add(ListTile(
+        title: Text('Keine Vertretungen', style: TextStyle(color: AmpColors.colorForeground)),
+      ));
+      widgets.add(Divider(color: AmpColors.colorForeground));
+    }
     for(DsbSubstitution sub in plan.subs) {
       widgets.add(ListTile(
         title: Text(sub.title(), style: TextStyle(color: AmpColors.colorForeground)),
