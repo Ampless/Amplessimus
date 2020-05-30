@@ -1,4 +1,3 @@
-import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
@@ -270,9 +269,4 @@ class Widgets {
       ),
     );
   }
-
-  Widget subsTextListView2(int index, int index2, List<DsbPlan> plans) {
-    return Text('');
-  }
-
 }

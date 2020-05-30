@@ -55,6 +55,7 @@ class AmpColors {
     ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
   }
   static void setMode(bool _isDarkMode) {
+    if(_isDarkMode == null) return;
     isDarkMode = _isDarkMode;
     Prefs.designMode = isDarkMode;
     if(isDarkMode) {

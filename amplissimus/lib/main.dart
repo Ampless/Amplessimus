@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
@@ -17,7 +15,6 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Prefs.loadPrefs();
-    dsbUpdateWidget(() {});
     return MaterialApp(home: SplashScreenPage());
   }
 }
@@ -93,10 +90,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  void rebuild() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'MyHomePage', message: 'Building...');
-    while(dsbWidget is Container) sleep(Duration(milliseconds: 10));
+    if(dsbWidget is Container) dsbUpdateWidget(rebuild);
     List<Widget> containers = [
       Container(
         child: Center(
@@ -105,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 child: Text('Häsch dini Ovo hüt scho ka?'),
-                onPressed: () => dsbUpdateWidget(() => setState(() {})),
+                onPressed: () => dsbUpdateWidget(rebuild),
               ),
               dsbWidget
             ],
