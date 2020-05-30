@@ -191,16 +191,10 @@ int max(List<int> i) {
   return j;
 }
 
-List<DsbSubstitution> dsbSortByHour(List<DsbSubstitution> subs) {
-  subs.sort((a, b) => max(a.hours).compareTo(max(b.hours)));
-  return subs;
-}
-
 List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
-  List<DsbPlan> newPlans = [];
   for(DsbPlan plan in plans)
-    newPlans.add(DsbPlan(plan.title, dsbSortByHour(plan.subs)));
-  return newPlans;
+    plan.subs.sort((a, b) => max(a.hours).compareTo(max(b.hours)));
+  return plans;
 }
 
 Table dsbGetTable(List<DsbPlan> plans) {

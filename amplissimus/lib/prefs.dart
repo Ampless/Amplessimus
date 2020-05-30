@@ -15,54 +15,32 @@ void set(String key, dynamic value) {
   else throw '${value.runtimeType} cannot be saved in the SharedPreferences.';
 }
 
-int get counter {
+int getInt(String key) {
   if(preferences == null) throw '';
-  int i = preferences.getInt('counter');
+  int i = preferences.getInt(key);
   if(i == null) i = 0;
   return i;
 }
-set counter(int i) {
-  set('counter', i);
-}
-String get username {
+
+String getString(String key) {
   if(preferences == null) throw '';
-  String s = preferences.getString('username_dsb');
+  String s = preferences.getString(key);
   if(s == null) s = '';
   return s;
 }
-set username(String s) {
-  set('username_dsb', s);
-}
-String get password {
-  if(preferences == null) throw '';
-  String s = preferences.getString('password_dsb');
-  if(s == null) s = '';
-  return s;
-}
-set password(String s) {
-  set('password_dsb', s);
-}
-String get grade {
-  if(preferences == null) throw '';
-  String s = preferences.getString('grade');
-  if(s == null) s = '';
-  return s;
-}
-set grade(String s) {
-  set('grade', s);
-}
-String get char {
-  if(preferences == null) throw '';
-  String s = preferences.getString('char');
-  if(s == null) s = '';
-  return s;
-}
-set char(String s) {
-  set('char', s);
-}
-set designMode(bool isDarkMode) {
-  set('is_dark_mode', isDarkMode);
-}
+
+int get counter => getInt('counter');
+set counter(int i) => set('counter', i);
+String get username => getString('username_dsb');
+set username(String s) => set('username_dsb', s);
+String get password => getString('password_dsb');
+set password(String s) => set('password_dsb', s);
+String get grade => getString('grade');
+set grade(String s) => set('grade', s);
+String get char => getString('char');
+set char(String s) => set('char', s);
+
+set designMode(bool isDarkMode) => set('is_dark_mode', isDarkMode);
 
 void loadPrefs() {
   (() async => preferences = await SharedPreferences.getInstance())().then((thereisnovalue) {
@@ -79,4 +57,3 @@ void clear() {
   preferences.clear();
   ampInfo(ctx: 'Prefs', message: 'Cleared SharedPreferences.');
 }
-
