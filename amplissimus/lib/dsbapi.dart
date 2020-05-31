@@ -27,15 +27,15 @@ class DsbSubstitution {
 
   DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
-  static final int ZERO = '0'.codeUnitAt(0),
-                   NINE = '9'.codeUnitAt(0);
+  static final int zero = '0'.codeUnitAt(0),
+                   nine = '9'.codeUnitAt(0);
 
   static List<int> parseIntsFromString(String s) {
     List<int> out = [];
     int lastindex = 0;
     for(int i = 0; i < s.length; i++) {
       int c = s[i].codeUnitAt(0);
-      if(c < ZERO || c > NINE) {
+      if(c < zero || c > nine) {
         if(lastindex != i) out.add(int.parse(s.substring(lastindex, i)));
         lastindex = i + 1;
       }
@@ -288,8 +288,7 @@ void dsbUpdateWidget(Function f) async {
   try {
     dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
-    dsbWidget = Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground));
+    dsbWidget = Text(errorString(e), style: TextStyle(color: Color.fromARGB(255, 255, 0, 0)));
   }
   f();
 }
-

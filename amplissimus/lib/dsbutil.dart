@@ -1,6 +1,5 @@
 // this code is based on the pub packages 'uuid' and 'html_unescape'
 
-import 'dart:convert';
 import 'dart:math';
 import 'package:amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:amplissimus/logging.dart';
