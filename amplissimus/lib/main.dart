@@ -127,6 +127,192 @@ class _MyHomePageState extends State<MyHomePage> {
     return null;
   }
 
+  void showInputSelectCurrentClass(BuildContext context) {
+    final gradeInputFormKey = GlobalKey<FormFieldState>();
+    final charInputFormKey = GlobalKey<FormFieldState>();
+    final gradeInputFormController = TextEditingController(text: Prefs.grade);
+    final charInputFormController = TextEditingController(text: Prefs.char.toUpperCase());
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorBackground,
+          content: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Flexible(
+                child: TextFormField(
+                  style: TextStyle(color: AmpColors.colorForeground),
+                  controller: gradeInputFormController,
+                  key: gradeInputFormKey,
+                  validator: Widgets.gradeFieldValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: AmpColors.colorForeground),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Stufe',
+                    fillColor: AmpColors.colorForeground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AmpColors.colorForeground),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(6)),
+              Flexible(
+                child: TextFormField(
+                  style: TextStyle(color: AmpColors.colorForeground),
+                  controller: charInputFormController,
+                  key: charInputFormKey,
+                  validator: Widgets.letterFieldValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: AmpColors.colorForeground),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Buchstabe',
+                    fillColor: AmpColors.colorForeground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AmpColors.colorForeground),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => {Navigator.of(context).pop()},
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                bool condA = gradeInputFormKey.currentState.validate();
+                bool condB = charInputFormKey.currentState.validate();
+                if(!condA || !condB) return;
+                Prefs.grade = gradeInputFormController.text.trim();
+                Prefs.char = charInputFormController.text.trim();
+                rebuildNewBuild();
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showInputEntryCredentials(BuildContext context) {
+    final usernameInputFormKey = GlobalKey<FormFieldState>();
+    final passwordInputFormKey = GlobalKey<FormFieldState>();
+    final usernameInputFormController = TextEditingController(text: Prefs.username);
+    final passwordInputFormController = TextEditingController(text: Prefs.password);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorBackground,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                style: TextStyle(color: AmpColors.colorForeground),
+                controller: usernameInputFormController,
+                key: usernameInputFormKey,
+                validator: Widgets.textFieldValidator,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelStyle: TextStyle(color: AmpColors.colorForeground),
+                  labelText: 'Benutzername',
+                  fillColor: AmpColors.colorForeground,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide:
+                    BorderSide(color: AmpColors.colorForeground)
+                  )
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(6)),
+              TextFormField(
+                style: TextStyle(color: AmpColors.colorForeground),
+                controller: passwordInputFormController,
+                key: passwordInputFormKey,
+                validator: Widgets.textFieldValidator,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(color: AmpColors.colorForeground),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Passwort',
+                  fillColor: AmpColors.colorForeground,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AmpColors.colorForeground),
+                  )
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => {Navigator.of(context).pop()},
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                bool condA = passwordInputFormKey.currentState.validate();
+                bool condB = usernameInputFormKey.currentState.validate();
+                if (!condA || !condB) return;
+                Prefs.username = usernameInputFormController.text.trim();
+                Prefs.password = passwordInputFormController.text.trim();
+                rebuildNewBuild();
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
@@ -144,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
               dsbWidget
             ],
           ) : Center(child: SizedBox(child: CircularProgressIndicator(
-            strokeWidth: 25,
+            strokeWidth: 15,
             backgroundColor: AmpColors.blankGrey,
             valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
           ), height: 200, width: 200,)), onRefresh: rebuildDragDown),
@@ -178,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
-                  Widgets.showInputEntryCredentials(context);
+                  showInputEntryCredentials(context);
                 },
                 child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
@@ -191,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () => Widgets.showInputSelectCurrentClass(context),
+                onTap: () => showInputSelectCurrentClass(context),
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
             ),
