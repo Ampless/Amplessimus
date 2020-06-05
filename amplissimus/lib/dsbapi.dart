@@ -295,7 +295,7 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-void dsbUpdateWidget(Function f) async {
+Future<void> dsbUpdateWidget(Function f) async {
   try {
     dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {

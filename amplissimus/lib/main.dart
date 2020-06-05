@@ -55,6 +55,14 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
   }
 }
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class MyApp extends StatelessWidget {
   MyApp({@required this.initialIndex});
   final int initialIndex;
@@ -63,6 +71,9 @@ class MyApp extends StatelessWidget {
     ampInfo(ctx: 'MyApp', message: 'Building Main Page');
     return WillPopScope(
       child: MaterialApp(
+        builder: (context, child) {
+          return ScrollConfiguration(behavior: MyBehavior(), child: child);
+        },
         title: AmpStrings.appTitle,
         theme: ThemeData(
           primarySwatch: AmpColors.primaryBlack,
@@ -95,8 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Null> rebuildDragDown() async {
-    await Future.delayed(Duration(milliseconds: 500));
-    dsbUpdateWidget(rebuild);
+    await dsbUpdateWidget(rebuild);
     return null;
   }
 
@@ -112,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
-              Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
+              Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
               RaisedButton(
                 child: Text('Häsch dini Ovo hüt scho ka?'),
                 onPressed: () => dsbUpdateWidget(rebuild),
