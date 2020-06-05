@@ -255,20 +255,31 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: plans);
   List<Widget> widgets = [];
   for(DsbPlan plan in plans) {
-    widgets.add(Text(plan.realTitle, style: TextStyle(color: AmpColors.colorForeground)));
+    List<Widget> dayWidgets = [];
     if(plan.subs.length == 0) {
-      widgets.add(ListTile(
+      dayWidgets.add(ListTile(
         title: Text('Keine Vertretungen', style: TextStyle(color: AmpColors.colorForeground)),
       ));
-      widgets.add(Divider(color: AmpColors.colorForeground));
     }
+    int i = 0;
+    int iMax = plan.subs.length;
     for(DsbSubstitution sub in plan.subs) {
-      widgets.add(ListTile(
+      dayWidgets.add(ListTile(
         title: Text(sub.title(), style: TextStyle(color: AmpColors.colorForeground)),
         subtitle: Text(sub.subtitle(), style: TextStyle(color: AmpColors.colorForeground)),
       ));
-      widgets.add(Divider(color: AmpColors.colorForeground));
+      if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground));
     }
+    widgets.add(Text(plan.realTitle, style: TextStyle(color: AmpColors.colorForeground)));
+    widgets.add(Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16), 
+        border: Border.all(color: AmpColors.colorForeground)
+      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+    ));
+    
+    
   }
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
