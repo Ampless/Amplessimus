@@ -1,6 +1,6 @@
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/main.dart';
-import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
 

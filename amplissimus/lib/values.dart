@@ -1,5 +1,5 @@
 import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +43,7 @@ class AmpColors {
   );
   static int whitePrimaryValue = 0xFFFFFFFF;
 
-  static MaterialColor materialColor = primaryWhite;
+  //static MaterialColor materialColor = primaryWhite;
   static Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
   static Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
   static Color blankGrey = Color.fromRGBO(127, 127, 127, 1);
@@ -51,17 +51,21 @@ class AmpColors {
   static Color colorForeground = blankWhite;
   static bool isDarkMode = true;
   static void changeMode() {
-    isDarkMode = !isDarkMode;
+    setMode(!isDarkMode);
     ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
-    Prefs.saveCurrentDesignMode(isDarkMode);
-    if(!isDarkMode) {
-      materialColor = primaryBlack;
-      colorForeground = blankBlack;
-      colorBackground = blankWhite;
-    } else {
+  }
+  static void setMode(bool _isDarkMode) {
+    if(_isDarkMode == null) return;
+    isDarkMode = _isDarkMode;
+    Prefs.designMode = isDarkMode;
+    if(isDarkMode) {
       
       colorForeground = blankWhite;
       colorBackground = blankBlack;
+    } else {
+      //materialColor = primaryBlack;
+      colorForeground = blankBlack;
+      colorBackground = blankWhite;
     }
   }
   

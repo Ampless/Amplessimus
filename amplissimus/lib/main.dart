@@ -2,41 +2,35 @@ import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart';
+import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 
-import 'dsbapi.dart';
-
 void main() {
   runApp(SplashScreen());
 }
-void loadDsbWidget() async {
-  dsbWidget = await dsbGetWidget(null);
-  ampInfo(ctx: 'dsbWidget', message: '$dsbWidget');
-}
+
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Prefs.loadPrefs();
-    loadDsbWidget();
     return MaterialApp(home: SplashScreenPage());
   }
 }
+
 class SplashScreenPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {return SplashScreenPageState();}
+  State<StatefulWidget> createState() => SplashScreenPageState();
 }
+
 class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerProviderStateMixin {
-  Color backgroundColor = AmpColors.blankWhite;
+  Color backgroundColor = AmpColors.blankBlack;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 1000), () {
-      setState(() {
-        backgroundColor = AmpColors.colorBackground;
-      });
+      setState(() => backgroundColor = AmpColors.colorBackground);
       Future.delayed(Duration(milliseconds: 1650), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
@@ -95,36 +89,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget localDsbWidget = dsbWidget;
 
-  void _incrementCounter() {
-    setState(() {
-      Prefs.saveCounter(++Prefs.counter);
-    });
-  }
-  void reloadLocalDsbWidget() async {
-    loadDsbWidget();
-    Future.delayed(Duration(milliseconds: 1000), () {
-      setState(() {
-        localDsbWidget = dsbWidget;
-      });
-    });
+  void rebuild() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    
+    ampInfo(ctx: 'MyHomePage', message: 'Building...');
+    if(dsbWidget is Container) dsbUpdateWidget(rebuild);
     List<Widget> containers = [
       Container(
         child: Center(
           child: ListView(
             children: <Widget>[
-              Text('${Prefs.counter}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 30),),
+              Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
                 child: Text('Häsch dini Ovo hüt scho ka?'),
-                onPressed: () async {
-                  Animations.changeScreenEaseOutBack(NiceFullScreenScrollView(await dsbGetWidget(null)), context);
-                },
+                onPressed: () => dsbUpdateWidget(rebuild),
               ),
               dsbWidget
             ],
@@ -172,9 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
-                  Widgets.showInputSelectCurrentClass(context);
-                },
+                onTap: () => Widgets.showInputSelectCurrentClass(context),
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
             ),
@@ -186,9 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
-                  Animations.changeScreenEaseOutBack(DevOptionsScreen(), context);
-                },
+                onTap: () => Animations.changeScreenEaseOutBack(DevOptionsScreen(), context),
                 child: Widgets.developerOptionsWidget(widget.textStyle),
               ),
             ),
@@ -209,10 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
-            onPressed: () {
-              _incrementCounter;
-              reloadLocalDsbWidget();
-            },
+            onPressed: () => setState(() => Prefs.counter += 2),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
           ),
@@ -241,20 +216,4 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> classes = ['5','6','7','8','9','10','11','12','13'];
   String currentSelectedDropdownClassValue = '5';
   String currentSelectedDropdownCharValue = 'A';
-}
-
-class NiceFullScreenScrollView extends StatelessWidget {
-  final Widget displayWidget;
-  NiceFullScreenScrollView(this.displayWidget);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AmpColors.colorBackground,
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: displayWidget,
-      )
-    );
-  }
-
 }
