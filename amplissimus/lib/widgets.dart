@@ -46,7 +46,7 @@ class Widgets {
           Icon(isDarkMode ? MdiIcons.school : MdiIcons.schoolOutline,
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text('Klasse auswählen',style: textStyle,)
+          Text('Klasse auswählen', style: textStyle,)
         ],
       ),
     );

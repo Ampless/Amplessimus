@@ -32,9 +32,10 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() => backgroundColor = AmpColors.colorBackground);
-      Future.delayed(Duration(milliseconds: 1650), () {
+      Future.delayed(Duration(milliseconds: 2000), () {
+        dsbUpdateWidget(() {});
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
     });
@@ -49,7 +50,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
           height: double.infinity,
           width: double.infinity,
           color: backgroundColor,
-          duration: Duration(milliseconds: 1000),
+          duration: Duration(milliseconds: 1500),
           child: Image.asset('assets/images/logo.png', scale: 5,),
         ),
       ),
@@ -60,8 +61,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
