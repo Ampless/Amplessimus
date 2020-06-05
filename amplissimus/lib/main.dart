@@ -94,14 +94,23 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+  Future<Null> rebuildDragDown() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    dsbUpdateWidget(rebuild);
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    ampInfo(ctx: 'MyHomePage', message: 'Building...');
+    ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     if(dsbWidget is Container) dsbUpdateWidget(rebuild);
     List<Widget> containers = [
       Container(
-        child: Center(
+        margin: EdgeInsets.all(6),
+        child: RefreshIndicator(
           child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
             children: <Widget>[
               Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
               RaisedButton(
@@ -110,8 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               dsbWidget
             ],
-          )
-        ),
+          ), onRefresh: rebuildDragDown),
       ),
       Container(
         child: GridView.count(

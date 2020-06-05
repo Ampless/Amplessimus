@@ -270,7 +270,8 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground));
     }
-    widgets.add(Text(plan.realTitle, style: TextStyle(color: AmpColors.colorForeground)));
+    widgets.add(Align(child: Text(' ${plan.realTitle}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)), alignment: Alignment.centerLeft,));
+    widgets.add(Padding(padding: EdgeInsets.all(6)));
     widgets.add(Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16), 
@@ -278,8 +279,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
     ));
-    
-    
+    widgets.add(Padding(padding: EdgeInsets.all(12)));
   }
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
