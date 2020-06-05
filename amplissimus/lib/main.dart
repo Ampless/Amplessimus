@@ -211,6 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if(!condA || !condB) return;
                 Prefs.grade = gradeInputFormController.text.trim();
                 Prefs.char = charInputFormController.text.trim();
+                ampInfo(ctx: 'Prefs1', message: '${Prefs.grade} --- ${Prefs.char}');
                 rebuildNewBuild();
                 Navigator.of(context).pop();
               },

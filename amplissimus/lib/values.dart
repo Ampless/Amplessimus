@@ -1,7 +1,12 @@
+import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+class CustomValues {
+  static List<DsbPlan> dsbPlans = [];
+}
 
 class AmpStrings {
   static String appTitle = 'Amplissimus';
