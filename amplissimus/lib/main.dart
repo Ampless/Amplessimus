@@ -95,7 +95,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget localDsbWidget = dsbWidget; 
+  Widget localDsbWidget = dsbWidget;
 
   void _incrementCounter() {
     setState(() {
