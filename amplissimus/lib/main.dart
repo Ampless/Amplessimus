@@ -27,6 +27,7 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerProviderStateMixin {
+  
   Color backgroundColor = AmpColors.blankBlack;
   @override
   void initState() {
@@ -49,7 +50,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
           width: double.infinity,
           color: backgroundColor,
           duration: Duration(milliseconds: 1000),
-          child: Image(image: AssetImage('assets/images/logo.png'), height: 300,),
+          child: Image.asset('assets/images/logo.png', scale: 5,),
         ),
       ),
       backgroundColor: Colors.red,
@@ -102,32 +103,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  bool circularProgressIndicatorActive = false;
 
   void rebuild() {
     setState(() {});
   }
 
   Future<Null> rebuildDragDown() async {
+    refreshKey.currentState?.show();
     await dsbUpdateWidget(rebuild);
+    return null;
+  }
+
+  Future<Null> rebuildNewBuild() async {
+    setState(() {
+      circularProgressIndicatorActive = true;
+    });
+    await dsbUpdateWidget(rebuild);
+    setState(() {
+      circularProgressIndicatorActive = false;
+    });
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
-    if(dsbWidget is Container) dsbUpdateWidget(rebuild);
+    if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
       Container(
         margin: EdgeInsets.all(6),
         child: RefreshIndicator(
-          child: ListView(
+          key: refreshKey,
+          child: !circularProgressIndicatorActive ? ListView(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
               Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
               dsbWidget
             ],
-          ), onRefresh: rebuildDragDown),
+          ) : Center(child: SizedBox(child: CircularProgressIndicator(
+            strokeWidth: 25,
+            backgroundColor: AmpColors.blankGrey,
+            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          ), height: 200, width: 200,)), onRefresh: rebuildDragDown),
       ),
       Container(
         child: GridView.count(
