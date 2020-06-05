@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
@@ -25,13 +27,15 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerProviderStateMixin {
+  
   Color backgroundColor = AmpColors.blankBlack;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() => backgroundColor = AmpColors.colorBackground);
-      Future.delayed(Duration(milliseconds: 1650), () {
+      Future.delayed(Duration(milliseconds: 2000), () {
+        dsbUpdateWidget(() {});
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
     });
@@ -46,12 +50,19 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
           height: double.infinity,
           width: double.infinity,
           color: backgroundColor,
-          duration: Duration(milliseconds: 1000),
-          child: Image(image: AssetImage('assets/images/logo.png')),
+          duration: Duration(milliseconds: 1500),
+          child: Image.asset('assets/images/logo.png', scale: 5,),
         ),
       ),
       backgroundColor: Colors.red,
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
 
@@ -63,6 +74,9 @@ class MyApp extends StatelessWidget {
     ampInfo(ctx: 'MyApp', message: 'Building Main Page');
     return WillPopScope(
       child: MaterialApp(
+        builder: (context, child) {
+          return ScrollConfiguration(behavior: MyBehavior(), child: child);
+        },
         title: AmpStrings.appTitle,
         theme: ThemeData(
           primarySwatch: AmpColors.primaryBlack,
@@ -89,29 +103,237 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  bool circularProgressIndicatorActive = false;
 
   void rebuild() {
     setState(() {});
   }
 
+  Future<Null> rebuildDragDown() async {
+    refreshKey.currentState?.show();
+    await dsbUpdateWidget(rebuild);
+    return null;
+  }
+
+  Future<Null> rebuildNewBuild() async {
+    setState(() {
+      circularProgressIndicatorActive = true;
+    });
+    await dsbUpdateWidget(rebuild);
+    setState(() {
+      circularProgressIndicatorActive = false;
+    });
+    return null;
+  }
+
+  void showInputSelectCurrentClass(BuildContext context) {
+    final gradeInputFormKey = GlobalKey<FormFieldState>();
+    final charInputFormKey = GlobalKey<FormFieldState>();
+    final gradeInputFormController = TextEditingController(text: Prefs.grade);
+    final charInputFormController = TextEditingController(text: Prefs.char.toUpperCase());
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorBackground,
+          content: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Flexible(
+                child: TextFormField(
+                  style: TextStyle(color: AmpColors.colorForeground),
+                  controller: gradeInputFormController,
+                  key: gradeInputFormKey,
+                  validator: Widgets.gradeFieldValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: AmpColors.colorForeground),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Stufe',
+                    fillColor: AmpColors.colorForeground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AmpColors.colorForeground),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(6)),
+              Flexible(
+                child: TextFormField(
+                  style: TextStyle(color: AmpColors.colorForeground),
+                  controller: charInputFormController,
+                  key: charInputFormKey,
+                  validator: Widgets.letterFieldValidator,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: AmpColors.colorForeground),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Buchstabe',
+                    fillColor: AmpColors.colorForeground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AmpColors.colorForeground),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => {Navigator.of(context).pop()},
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                bool condA = gradeInputFormKey.currentState.validate();
+                bool condB = charInputFormKey.currentState.validate();
+                if(!condA || !condB) return;
+                Prefs.grade = gradeInputFormController.text.trim();
+                Prefs.char = charInputFormController.text.trim();
+                rebuildNewBuild();
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showInputEntryCredentials(BuildContext context) {
+    final usernameInputFormKey = GlobalKey<FormFieldState>();
+    final passwordInputFormKey = GlobalKey<FormFieldState>();
+    final usernameInputFormController = TextEditingController(text: Prefs.username);
+    final passwordInputFormController = TextEditingController(text: Prefs.password);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorBackground,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                style: TextStyle(color: AmpColors.colorForeground),
+                controller: usernameInputFormController,
+                key: usernameInputFormKey,
+                validator: Widgets.textFieldValidator,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelStyle: TextStyle(color: AmpColors.colorForeground),
+                  labelText: 'Benutzername',
+                  fillColor: AmpColors.colorForeground,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide:
+                    BorderSide(color: AmpColors.colorForeground)
+                  )
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(6)),
+              TextFormField(
+                style: TextStyle(color: AmpColors.colorForeground),
+                controller: passwordInputFormController,
+                key: passwordInputFormKey,
+                validator: Widgets.textFieldValidator,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(color: AmpColors.colorForeground),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Passwort',
+                  fillColor: AmpColors.colorForeground,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AmpColors.colorForeground),
+                  )
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => {Navigator.of(context).pop()},
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                bool condA = passwordInputFormKey.currentState.validate();
+                bool condB = usernameInputFormKey.currentState.validate();
+                if (!condA || !condB) return;
+                Prefs.username = usernameInputFormController.text.trim();
+                Prefs.password = passwordInputFormController.text.trim();
+                rebuildNewBuild();
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    ampInfo(ctx: 'MyHomePage', message: 'Building...');
-    if(dsbWidget is Container) dsbUpdateWidget(rebuild);
+    ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
+    if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
       Container(
-        child: Center(
-          child: ListView(
+        margin: EdgeInsets.all(6),
+        child: RefreshIndicator(
+          key: refreshKey,
+          child: !circularProgressIndicatorActive ? ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
             children: <Widget>[
-              Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)),
-              RaisedButton(
-                child: Text('Häsch dini Ovo hüt scho ka?'),
-                onPressed: () => dsbUpdateWidget(rebuild),
-              ),
+              Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
               dsbWidget
             ],
-          )
-        ),
+          ) : Center(child: SizedBox(child: CircularProgressIndicator(
+            strokeWidth: 15,
+            backgroundColor: AmpColors.blankGrey,
+            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          ), height: 200, width: 200,)), onRefresh: rebuildDragDown),
       ),
       Container(
         child: GridView.count(
@@ -125,8 +347,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
+                onTap: () async {
                   AmpColors.changeMode();
+                  dsbWidget = Container();
                   Animations.changeScreenNoAnimation(new MyApp(initialIndex: 1,), context);
                 },
                 child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, widget.textStyle),
@@ -141,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
-                  Widgets.showInputEntryCredentials(context);
+                  showInputEntryCredentials(context);
                 },
                 child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
@@ -154,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () => Widgets.showInputSelectCurrentClass(context),
+                onTap: () => showInputSelectCurrentClass(context),
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
             ),
@@ -213,7 +436,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  List<String> classes = ['5','6','7','8','9','10','11','12','13'];
-  String currentSelectedDropdownClassValue = '5';
-  String currentSelectedDropdownCharValue = 'A';
 }

@@ -38,6 +38,20 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
       body: Center(
         child: ListView(
           children: <Widget>[
+            RaisedButton(
+              child: Text('App-Informationen'),
+              onPressed: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'Amplissimus',
+                  applicationVersion: '1.0.0',
+                  applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
+                  children: [
+                    Text('Amplissimus is an App for easily viewing substitution plans using DSB Mobile.')
+                  ]
+                );
+              }
+            ),
             RaisedButton.icon(
               color: Colors.red,
               icon: Icon(Icons.delete, color: AmpColors.blankWhite,),
@@ -46,7 +60,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
                 showDialog(context: context, barrierDismissible: true, builder: (context) {
                   return AlertDialog(
                     title: Text('App-Daten löschen', style: widget.textStyle),
-                    content: Text('Löschen der App-Daten bestätigen?'),
+                    content: Text('Löschen der App-Daten bestätigen?', style: TextStyle(color: AmpColors.colorForeground),),
                     backgroundColor: AmpColors.colorBackground,
                     actions: <Widget>[
                       FlatButton(
