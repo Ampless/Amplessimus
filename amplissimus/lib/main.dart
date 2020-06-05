@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
 import 'package:amplissimus/dsbapi.dart';
@@ -47,7 +49,7 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
           width: double.infinity,
           color: backgroundColor,
           duration: Duration(milliseconds: 1000),
-          child: Image(image: AssetImage('assets/images/logo.png')),
+          child: Image(image: AssetImage('assets/images/logo.png'), height: 300,),
         ),
       ),
       backgroundColor: Colors.red,
@@ -123,10 +125,6 @@ class _MyHomePageState extends State<MyHomePage> {
             shrinkWrap: true,
             children: <Widget>[
               Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
-              RaisedButton(
-                child: Text('Häsch dini Ovo hüt scho ka?'),
-                onPressed: () => dsbUpdateWidget(rebuild),
-              ),
               dsbWidget
             ],
           ), onRefresh: rebuildDragDown),
@@ -143,8 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
+                onTap: () async {
                   AmpColors.changeMode();
+                  dsbWidget = Container();
                   Animations.changeScreenNoAnimation(new MyApp(initialIndex: 1,), context);
                 },
                 child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, widget.textStyle),
@@ -231,7 +230,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  List<String> classes = ['5','6','7','8','9','10','11','12','13'];
-  String currentSelectedDropdownClassValue = '5';
-  String currentSelectedDropdownCharValue = 'A';
 }

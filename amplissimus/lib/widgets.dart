@@ -261,8 +261,7 @@ class Widgets {
       child: Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.all(24)),
-          Icon(MdiIcons.codeBrackets,
-              size: 50, color: AmpColors.colorForeground),
+          Icon(MdiIcons.codeBrackets, size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
           Text('Entwickleroptionen',style: textStyle,),
         ],
