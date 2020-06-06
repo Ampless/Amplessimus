@@ -4,7 +4,6 @@ Name: Amplissimus
 Version: $VERSION
 Installed-Size: $SIZE
 Section: Education
-Pre-Depends: firmware (>= 3.2)
 Pre-Depends: dpkg (>= 1.14.25-8)
 Depends: system-cmds
 Architecture: $ARCH

@@ -1,4 +1,4 @@
-VERSION = a0.2
+VERSION = 0.2a
 
 all: ipa deb apk
 

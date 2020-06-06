@@ -14,7 +14,7 @@ APPLICATION_SIZE=`du -sk $APPLICATION_DIR | awk '{ print $1 }'`
 
 mkdir -p $DEB_METADATA_DIR
 grep -v "^#" control.def | \
-  sed "s/\$VERSION/$VERSION/" | \
+  sed "s/\$VERSION/$1/" | \
   sed "s/\$SIZE/$APPLICATION_SIZE/" | \
   sed "s/\$ARCH/iphoneos-arm/" > $DEB_METADATA_DIR/control
 
