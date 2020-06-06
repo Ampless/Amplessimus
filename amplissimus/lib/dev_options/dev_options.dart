@@ -38,6 +38,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
       body: Center(
         child: ListView(
           children: <Widget>[
+            ListTile(
+              title: Text('Dauerhafter Ladebalken', style: widget.textStyle,),
+              trailing: Switch(
+                activeColor: AmpColors.colorForeground,
+                value: Prefs.loadingBarEnabled, 
+                onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+              ),
+            ),
             RaisedButton(
               child: Text('App-Informationen'),
               onPressed: () {

@@ -8,7 +8,6 @@ import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -35,7 +34,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     Future.delayed(Duration(milliseconds: 500), () async {
       setState(() => backgroundColor = AmpColors.colorBackground);
       await dsbUpdateWidget(() {});
-      Future.delayed(Duration(milliseconds: 1500), () {
+      Future.delayed(Duration(milliseconds: 1000), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
     });
@@ -325,12 +324,14 @@ class _MyHomePageState extends State<MyHomePage> {
       Container(
         child: Scaffold(
           appBar: AppBar(
-            title: Text('${AmpStrings.appTitle} ${Prefs.counter}'),
+            elevation: 0,
+            backgroundColor: AmpColors.colorBackground,
+            title: Text('${AmpStrings.appTitle} ${Prefs.counter}', style: widget.textStyle,),
             centerTitle: true,
           ),
           backgroundColor: AmpColors.colorBackground,
           body: RefreshIndicator(
-          key: refreshKey,
+            key: refreshKey,
             child: !circularProgressIndicatorActive ? ListView(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -439,6 +440,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
+            backgroundColor: AmpColors.blankGrey,
+            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          ) : Container(height: 0,),
         )
       ),
     );

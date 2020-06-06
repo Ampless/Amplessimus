@@ -29,6 +29,13 @@ String getString(String key) {
   return s;
 }
 
+bool getBool(String key) {
+  if(preferences == null) throw '';
+  bool b = preferences.getBool(key);
+  if(b == null) b = false;
+  return b;
+} 
+
 int get counter => getInt('counter');
 set counter(int i) => set('counter', i);
 String get username => getString('username_dsb');
@@ -39,6 +46,8 @@ String get grade => getString('grade').toLowerCase();
 set grade(String s) => set('grade', s.toLowerCase());
 String get char => getString('char').toLowerCase();
 set char(String s) => set('char', s.toLowerCase());
+bool get loadingBarEnabled => getBool('loading_bar_enabled');
+set loadingBarEnabled(bool b) => set('loading_bar_enabled', b);
 
 set designMode(bool isDarkMode) => set('is_dark_mode', isDarkMode);
 
