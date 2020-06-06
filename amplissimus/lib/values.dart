@@ -52,6 +52,7 @@ class AmpColors {
   static Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
   static Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
   static Color blankGrey = Color.fromRGBO(75, 75, 75, 1);
+  static Color lightForeground = Color.fromRGBO(25, 25, 25, 1);
   static Color colorBackground = blankBlack;
   static Color colorForeground = blankWhite;
   static bool isDarkMode = true;
@@ -65,10 +66,12 @@ class AmpColors {
     Prefs.designMode = isDarkMode;
     if(isDarkMode) {
       blankGrey = Color.fromRGBO(75, 75, 75, 1);
+      lightForeground = Color.fromRGBO(25, 25, 25, 1);
       colorForeground = blankWhite;
       colorBackground = blankBlack;
     } else {
       blankGrey = Color.fromRGBO(200, 200, 200, 1);
+      lightForeground = Color.fromRGBO(220, 220, 220, 1);
       colorForeground = blankBlack;
       colorBackground = blankWhite;
     }

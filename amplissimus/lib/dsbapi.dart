@@ -274,11 +274,8 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
     }
     widgets.add(Align(child: Text(' ${plan.realTitle}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)), alignment: Alignment.centerLeft,));
     widgets.add(Padding(padding: EdgeInsets.all(6)));
-    widgets.add(Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16), 
-        border: Border.all(color: AmpColors.colorForeground)
-      ),
+    widgets.add(Card(
+      color: AmpColors.lightForeground,
       child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
     ));
     widgets.add(Padding(padding: EdgeInsets.all(12)));
