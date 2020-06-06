@@ -418,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
-            onPressed: () => setState(() => Prefs.counter += 2),
+            onPressed: () => setState(() => Prefs.counter++),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
           ),

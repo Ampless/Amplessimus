@@ -105,9 +105,10 @@ class DsbSubstitution {
 
 class DsbPlan {
   String title;
+  String date;
   List<DsbSubstitution> subs;
 
-  DsbPlan(this.title, this.subs);
+  DsbPlan(this.title, this.subs, this.date);
 
   String get realTitle => title.replaceFirst('Vertretung_M_', '');
 
@@ -184,17 +185,18 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
     var res = htmls[title];
     try {
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser(res).parse()
-                               .children[0].children[1].children[1]
-                               .children[2].children[0].children[0].children;
+      List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children[2].children[0].children[0].children;
+      dom.Element htmlDateElement = HtmlParser(res).parse().children[0].children[1].children[1].children[0];
+      String planDate = htmlDateElement.innerHtml.toString();
+      print(htmlDateElement);
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++) {
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
       }
-      plans.add(DsbPlan(title, subs));
+      plans.add(DsbPlan(title, subs, planDate));
     } catch (e) {
       ampErr(ctx: 'DSB', message: errorString(e));
-      plans.add(DsbPlan(title, []));
+      plans.add(DsbPlan(title, [], ''));
     }
   }
   Cache.dsbPlans = plans;
