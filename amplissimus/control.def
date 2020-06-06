@@ -1,0 +1,15 @@
+Package: amplissimus
+Priority: standard
+Name: Amplissimus
+Version: $VERSION
+Installed-Size: $SIZE
+Section: Education
+Pre-Depends: firmware (>= 3.2)
+Pre-Depends: dpkg (>= 1.14.25-8)
+Depends: system-cmds
+Architecture: $ARCH
+Author: Amplus <amplus@chrissx.de>
+Maintainer: Amplus <amplus@chrissx.de>
+Description: A DSBMobile substitution ;)
+ This is just a better version of DSBMobile.
+Homepage: https://amplus.chrissx.de
