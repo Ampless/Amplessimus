@@ -1,16 +1,15 @@
 VERSION = 0.2a
 
-all: ipa deb apk
+all: cleanexes ipa deb apk
 
 app:
 	flutter build ios --release
 
 ipa: app
-	mkdir -p build/ios/iphoneos/Payload
-	mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload
-	rm -f build/$(VERSION).ipa
-	cd build/ios/iphoneos && zip -r ../../$(VERSION).ipa Payload
-	rm -rf build/ios/iphoneos/Payload
+	mkdir -p build/Payload
+	cp -r build/ios/iphoneos/Runner.app build/Payload
+	cd build && zip -r $(VERSION).ipa Payload
+	rm -rf build/Payload
 
 deb: app
 	./build_deb.bash $(VERSION)
@@ -19,4 +18,7 @@ apk:
 	flutter build apk --release
 	mv build/app/outputs/apk/release/app-release.apk build/$(VERSION).apk
 
-.PHONY: ios ipa apk
+cleanexes:
+	cd build && rm -f $(VERSION).ipa $(VERSION).deb $(VERSION).apk
+
+.PHONY: cleanexes ios ipa apk
