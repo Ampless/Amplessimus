@@ -106,6 +106,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final homeScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   bool circularProgressIndicatorActive = false;
 
@@ -318,11 +319,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
       Container(
         child: Scaffold(
+          key: homeScaffoldKey,
           appBar: AppBar(
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
