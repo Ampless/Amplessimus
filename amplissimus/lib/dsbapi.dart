@@ -17,6 +17,8 @@ const String DSB_OS_VERSION = "29 10.0";
 const String DSB_LANGUAGE = "de";
 const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData';
 
+var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
+
 class DsbSubstitution {
   String affectedClass;
   List<int> hours;
@@ -110,8 +112,6 @@ class DsbPlan {
 
   DsbPlan(this.title, this.subs, this.date);
 
-  String get realTitle => title.replaceFirst('Vertretung_M_', '');
-
   String toString() {
     return '$title: $subs';
   }
@@ -188,12 +188,13 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children[2].children[0].children[0].children;
       dom.Element htmlDateElement = HtmlParser(res).parse().children[0].children[1].children[1].children[0];
       String planDate = htmlDateElement.innerHtml.toString();
+      String planTitle = htmlDateElement.innerHtml.toString().split(' ').last;
       print(htmlDateElement);
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++) {
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
       }
-      plans.add(DsbPlan(title, subs, planDate));
+      plans.add(DsbPlan(planTitle, subs, planDate));
     } catch (e) {
       ampErr(ctx: 'DSB', message: errorString(e));
       plans.add(DsbPlan(title, [], ''));
@@ -204,12 +205,10 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
   return plans;
 }
 
-List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String letter) {
+List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
   for(DsbPlan plan in plans) {
     List<DsbSubstitution> subs = [];
-    for(DsbSubstitution sub in plan.subs)
-      if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(letter))
-        subs.add(sub);
+    for(DsbSubstitution sub in plan.subs) if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(char)) subs.add(sub);
     plan.subs = subs;
   }
   return plans;
@@ -274,14 +273,20 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground));
     }
-    widgets.add(Align(child: Text(' ${plan.realTitle}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)), alignment: Alignment.centerLeft,));
-    widgets.add(Padding(padding: EdgeInsets.all(6)));
+    widgets.add(ListTile(title: Row(children: <Widget>[
+      Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)),
+      IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date, onPressed: () {
+        dsbApiHomeScaffoldKey.currentState?.showSnackBar(
+          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))
+        );
+      },)
+    ])));
     widgets.add(Card(
       color: AmpColors.lightForeground,
       child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
     ));
-    widgets.add(Padding(padding: EdgeInsets.all(12)));
   }
+  widgets.add(Padding(padding: EdgeInsets.all(12)));
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: widgets
