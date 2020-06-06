@@ -215,7 +215,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 if(!condA || !condB) return;
                 Prefs.grade = gradeInputFormController.text.trim();
                 Prefs.char = charInputFormController.text.trim();
-                ampInfo(ctx: 'Prefs1', message: '${Prefs.grade} --- ${Prefs.char}');
                 rebuildNewBuild();
                 Navigator.of(context).pop();
               },
@@ -324,17 +323,24 @@ class _MyHomePageState extends State<MyHomePage> {
     if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
       Container(
-        margin: EdgeInsets.all(16),
-        child: RefreshIndicator(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('${AmpStrings.appTitle} ${Prefs.counter}'),
+            centerTitle: true,
+          ),
+          backgroundColor: AmpColors.colorBackground,
+          body: RefreshIndicator(
           key: refreshKey,
-          child: !circularProgressIndicatorActive ? ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: <Widget>[
-              Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
-              dsbWidget
-            ],
-          ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)), onRefresh: rebuildDragDown),
+            child: !circularProgressIndicatorActive ? ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: <Widget>[
+                dsbWidget
+              ],
+            ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)
+          ), onRefresh: rebuildDragDown),
+        ),
+        margin: EdgeInsets.all(16),
       ),
       Container(
         child: GridView.count(

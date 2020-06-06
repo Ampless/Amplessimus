@@ -299,11 +299,8 @@ Future<void> dsbUpdateWidget(Function f) async {
     if(Prefs.username.length == 0 || Prefs.password.length == 0) throw '';
     dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
-    dsbWidget = SizedBox(child: Container(child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16), 
-        border: Border.all(color: AmpColors.colorForeground)
-      ),
+    dsbWidget = SizedBox(child: Container(child: Card(
+      color: AmpColors.lightForeground,
       child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
     ), padding: EdgeInsets.only(top: 15),));
   }

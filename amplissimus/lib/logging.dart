@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 void _log(String level, String ctx, Object message) {
   DateTime time = DateTime.now();
   String s = time.second.toString(),
@@ -12,6 +14,6 @@ void _log(String level, String ctx, Object message) {
   print('$h:$m:$s.$ms [$level][$ctx] $message');
 }
 
-void ampErr({String ctx = 'UNK', Object message = ''}) => _log('Error', ctx, message);
-void ampWarn({String ctx = 'UNK', Object message = ''}) => _log('Warn', ctx, message);
-void ampInfo({String ctx = 'UNK', Object message = ''}) => _log('Info', ctx, message);
+void ampErr({@required String ctx, @required Object message}) => _log('Error', ctx, message);
+void ampWarn({@required String ctx, @required Object message}) => _log('Warn', ctx, message);
+void ampInfo({@required String ctx, @required Object message}) => _log('Info', ctx, message);
