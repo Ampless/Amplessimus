@@ -8,6 +8,7 @@ import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -102,10 +103,10 @@ class MyHomePage extends StatefulWidget {
   final String title;
   final TextStyle textStyle;
   @override
-  MyHomePageState createState() => MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   bool circularProgressIndicatorActive = false;
 
@@ -333,10 +334,8 @@ class MyHomePageState extends State<MyHomePage> {
               Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
               dsbWidget
             ],
-          ) : Center(child: SizedBox(child: CircularProgressIndicator(
-            strokeWidth: 15,
-            backgroundColor: AmpColors.blankGrey,
-            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          ) : Center(child: SizedBox(child: SpinKitFoldingCube(
+            color: AmpColors.colorForeground,
           ), height: 200, width: 200,)), onRefresh: rebuildDragDown),
       ),
       Container(
