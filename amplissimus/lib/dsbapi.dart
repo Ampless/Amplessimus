@@ -20,14 +20,14 @@ const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetDat
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class DsbSubstitution {
-  String affectedClass;
+  String usedClass;
   List<int> hours;
   String teacher;
   String subject;
   String notes;
   bool isFree;
 
-  DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
+  DsbSubstitution(this.usedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
   static final int zero = '0'.codeUnitAt(0),
                    nine = '9'.codeUnitAt(0);
@@ -61,11 +61,11 @@ class DsbSubstitution {
   }
 
   String toString() {
-    return "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
+    return "['$usedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
   }
 
   static const Map<String, String> SUBJECT_LOOKUP_TABLE = {
-    'sp': 'Sport',
+    'spo': 'Sport',
     'e': 'Englisch',
     'd': 'Deutsch',
     'in': 'Informatik',
@@ -82,6 +82,7 @@ class DsbSubstitution {
     'k': 'Kunst',
     'p': 'Physik',
     'w': 'Wirtschaft/Recht',
+    'spr' : 'Sprechstunde',
   };
 
   String get realSubject {
@@ -91,17 +92,22 @@ class DsbSubstitution {
     return s;
   }
 
-  String title() {
+  String get title {
     String hour = '';
     for(int h in hours)
       hour += hour == '' ? h.toString() : '-$h';
     return '$hour. Stunde $realSubject';
   }
 
-  String subtitle() {
+  String get subtitle {
     String notesaddon = notes.length > 0 ? ' ($notes)' : '';
     return isFree ? 'Freistunde${hours.length == 1 ? '' : 'n'}$notesaddon'
                   : 'Vertreten durch $teacher$notesaddon';
+  }
+
+  String get affectedClass {
+    if(usedClass.startsWith('0')) return usedClass.replaceFirst('0', '');
+    return usedClass;
   }
 }
 
@@ -189,7 +195,6 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       dom.Element htmlDateElement = HtmlParser(res).parse().children[0].children[1].children[1].children[0];
       String planDate = htmlDateElement.innerHtml.toString();
       String planTitle = htmlDateElement.innerHtml.toString().split(' ').last;
-      print(htmlDateElement);
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++) {
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
@@ -268,14 +273,15 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
     int iMax = plan.subs.length;
     for(DsbSubstitution sub in plan.subs) {
       dayWidgets.add(ListTile(
-        title: Text(sub.title(), style: TextStyle(color: AmpColors.colorForeground)),
-        subtitle: Text(sub.subtitle(), style: TextStyle(color: AmpColors.colorForeground)),
+        title: Text(sub.title, style: TextStyle(color: AmpColors.colorForeground)),
+        subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
+        trailing: Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)),
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground));
     }
     widgets.add(ListTile(title: Row(children: <Widget>[
       Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)),
-      IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date, onPressed: () {
+      IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
         dsbApiHomeScaffoldKey.currentState?.showSnackBar(
           SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))
         );

@@ -48,6 +48,8 @@ String get char => getString('char', '').toLowerCase();
 set char(String s) => set('char', s.toLowerCase());
 bool get loadingBarEnabled => getBool('loading_bar_enabled', false);
 set loadingBarEnabled(bool b) => set('loading_bar_enabled', b);
+bool get oneClassOnly => getBool('one_class_only', false);
+set oneClassOnly(bool b) => set('one_class_only', b);
 
 set designMode(bool isDarkMode) => set('is_dark_mode', isDarkMode);
 

@@ -40,6 +40,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     });
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
@@ -317,6 +319,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget changeSubVisibility() {
+    return Row(children: <Widget>[
+      Align(child: Text('Alle Klassen'), alignment: Alignment.centerLeft,),
+      Align(child: Text('Alle Klassen'), alignment: Alignment.center,),
+      Align(child: Text('${Prefs.grade}${Prefs.char}'), alignment: Alignment.centerRight,),
+    ],);
+  }
+
   @override
   Widget build(BuildContext context) {
     dsbApiHomeScaffoldKey = homeScaffoldKey;
@@ -339,7 +349,9 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: <Widget>[
-                dsbWidget
+                dsbWidget,
+                changeSubVisibility(),
+                Padding(padding: EdgeInsets.all(100)),
               ],
             ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)
           ), onRefresh: rebuildDragDown),
