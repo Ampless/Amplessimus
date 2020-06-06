@@ -27,15 +27,14 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerProviderStateMixin {
-  
-  Color backgroundColor = AmpColors.blankBlack;
+  Color backgroundColor = AmpColors.blankWhite;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 500), () async {
       setState(() => backgroundColor = AmpColors.colorBackground);
-      Future.delayed(Duration(milliseconds: 2000), () {
-        dsbUpdateWidget(() {});
+      await dsbUpdateWidget(() {});
+      Future.delayed(Duration(milliseconds: 1500), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
       });
     });
@@ -50,9 +49,13 @@ class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPro
           height: double.infinity,
           width: double.infinity,
           color: backgroundColor,
-          duration: Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1000),
           child: Image.asset('assets/images/logo.png', scale: 5,),
         ),
+      ),
+      bottomSheet: LinearProgressIndicator(
+        backgroundColor: AmpColors.blankGrey,
+        valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
       ),
       backgroundColor: Colors.red,
     );
