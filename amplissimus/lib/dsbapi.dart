@@ -197,8 +197,8 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       plans.add(DsbPlan(title, []));
     }
   }
-  CustomValues.dsbPlans = plans;
-  ampInfo(ctx: 'DSB', message: '[SAVE] CustomValues.dsbPlans = ${CustomValues.dsbPlans}');
+  Cache.dsbPlans = plans;
+  ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return plans;
 }
 

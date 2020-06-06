@@ -4,7 +4,7 @@ import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomValues {
+class Cache {
   static List<DsbPlan> dsbPlans = [];
 }
 
