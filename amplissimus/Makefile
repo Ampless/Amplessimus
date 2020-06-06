@@ -19,4 +19,4 @@ apk:
 	flutter build apk --release
 	mv build/app/outputs/apk/release/app-release.apk build/$(VERSION).apk
 
-.PHONY: ios apk
+.PHONY: ios ipa apk
