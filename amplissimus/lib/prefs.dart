@@ -18,21 +18,21 @@ void set(String key, dynamic value) {
 int getInt(String key, int defaultValue) {
   if(preferences == null) throw 'PREFSI NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
   int i = preferences.getInt(key);
-  if(i == null) i = 0;
+  if(i == null) i = defaultValue;
   return i;
 }
 
 String getString(String key, String defaultValue) {
   if(preferences == null) throw 'PREFSS NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
   String s = preferences.getString(key);
-  if(s == null) s = '';
+  if(s == null) s = defaultValue;
   return s;
 }
 
 bool getBool(String key, bool defaultValue) {
   if(preferences == null) throw 'PREFSB NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
   bool b = preferences.getBool(key);
-  if(b == null) b = false;
+  if(b == null) b = defaultValue;
   return b;
 } 
 
