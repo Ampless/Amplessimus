@@ -1,6 +1,7 @@
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Widgets {
@@ -83,4 +84,39 @@ class Widgets {
       ),
     );
   }
+
+  static Widget loadingWidget(int id) {
+    switch (id) {
+      case 0:
+        return SpinKitFoldingCube(
+          size: 100,
+          duration: Duration(milliseconds: 350),
+          color: AmpColors.colorForeground,
+        );
+        break;
+      case 1:
+        return SpinKitWave(
+          size: 100,
+          duration: Duration(milliseconds: 1050),
+          color: AmpColors.colorForeground,
+        );
+        break;
+      case 2:
+        return SpinKitCubeGrid(
+          size: 100,
+          duration: Duration(milliseconds: 350),
+          color: AmpColors.colorForeground,
+        );
+        break;
+      default:
+        return SpinKitFoldingCube(
+          size: 100,
+          duration: Duration(milliseconds: 350),
+          color: AmpColors.colorForeground,
+        );
+        break;
+    }
+    
+  }
+  
 }

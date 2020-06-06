@@ -27,7 +27,7 @@ class SplashScreenPage extends StatefulWidget {
   State<StatefulWidget> createState() => SplashScreenPageState();
 }
 
-class SplashScreenPageState extends State<SplashScreenPage> with SingleTickerProviderStateMixin {
+class SplashScreenPageState extends State<SplashScreenPage> {
   Color backgroundColor = AmpColors.blankWhite;
   @override
   void initState() {
@@ -324,7 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
       Container(
-        margin: EdgeInsets.all(6),
+        margin: EdgeInsets.all(16),
         child: RefreshIndicator(
           key: refreshKey,
           child: !circularProgressIndicatorActive ? ListView(
@@ -334,9 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Align(child: Text(Prefs.counter.toString(), style: TextStyle(color: AmpColors.colorForeground, fontSize: 30)), alignment: Alignment.center,),
               dsbWidget
             ],
-          ) : Center(child: SizedBox(child: SpinKitFoldingCube(
-            color: AmpColors.colorForeground,
-          ), height: 200, width: 200,)), onRefresh: rebuildDragDown),
+          ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)), onRefresh: rebuildDragDown),
       ),
       Container(
         child: GridView.count(
