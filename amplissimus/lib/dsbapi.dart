@@ -299,6 +299,7 @@ Widget dsbWidget = Container();
 
 Future<void> dsbUpdateWidget(Function f) async {
   try {
+    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw '';
     dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
   } catch (e) {
     dsbWidget = Text(errorString(e), style: TextStyle(color: Color.fromARGB(255, 255, 0, 0)));
