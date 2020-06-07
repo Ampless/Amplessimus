@@ -205,7 +205,6 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       plans.add(DsbPlan(title, [], ''));
     }
   }
-  Cache.dsbPlans = plans;
   ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return plans;
 }
@@ -311,7 +310,7 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
+void dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Daten eingetragen!';
     String tempGrade = '';
@@ -321,13 +320,12 @@ Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
       tempChar = Prefs.char;
     }
     if(fetchDataAgain || Cache.dsbPlans.isEmpty) {
-      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), tempGrade, tempChar)));
+      List<DsbPlan> tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
     } else {
-      List<DsbPlan> tempPlans = Cache.dsbPlans;
       ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
       ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
       dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(Cache.dsbPlans, tempGrade, tempChar)));
-      Cache.dsbPlans = tempPlans;
       ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
     }
     
