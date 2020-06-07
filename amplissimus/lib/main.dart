@@ -35,7 +35,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await Prefs.loadPrefs();
       await dsbUpdateWidget(() {});
       Future.delayed(Duration(milliseconds: 1000), () {
-        Animations.changeScreenEaseOutBackReplace(new MyApp(initialIndex: 0,), context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
       });
     });
   }
@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
           initialIndex: initialIndex,),
       ), 
       onWillPop: () {
-        return new Future(() => true);
+        return new Future(() => Prefs.closeAppOnBackPress);
       },
     );
   }
@@ -418,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () => Animations.changeScreenEaseOutBack(DevOptionsScreen(), context),
+                onTap: () => Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context),
                 child: Widgets.developerOptionsWidget(widget.textStyle),
               ),
             ),

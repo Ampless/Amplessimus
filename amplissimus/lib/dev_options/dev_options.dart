@@ -7,13 +7,19 @@ import 'package:flutter/material.dart';
 class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AmpStrings.appTitle,
-      theme: ThemeData(
-        primarySwatch: AmpColors.primaryBlack,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+    return WillPopScope(
+      child: MaterialApp(
+        title: AmpStrings.appTitle,
+        theme: ThemeData(
+          primarySwatch: AmpColors.primaryBlack,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+      ), 
+      onWillPop: () {
+        Animations.changeScreenEaseOutBackReplace(MyApp(initialIndex: 1,), context);
+        return new Future(() => false);
+      }
     );
   }
 }
@@ -38,6 +44,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
       body: Center(
         child: ListView(
           children: <Widget>[
+            ListTile(
+              title: Text('App schließt bei zurück-Taste', style: widget.textStyle,),
+              trailing: Switch(
+                activeColor: AmpColors.colorForeground,
+                value: Prefs.closeAppOnBackPress, 
+                onChanged: (value) => setState(() => Prefs.closeAppOnBackPress = value),
+              ),
+            ),
             ListTile(
               title: Text('Dauerhafter Ladebalken', style: widget.textStyle,),
               trailing: Switch(
