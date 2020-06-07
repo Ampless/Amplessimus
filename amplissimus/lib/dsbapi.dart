@@ -19,17 +19,17 @@ const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetDat
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class DsbSubstitution {
-  String usedClass;
+  String affectedClass;
   List<int> hours;
   String teacher;
   String subject;
   String notes;
   bool isFree;
 
-  DsbSubstitution(this.usedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
+  DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
   DsbSubstitution.fromJson(Map<String, dynamic> json)
-    : usedClass = json['usedClass'],
+    : affectedClass = json['usedClass'],
       hours = List<int>.from(jsonDecode(json['hours'])),
       teacher = json['teacher'],
       subject = json['subject'],
@@ -38,7 +38,7 @@ class DsbSubstitution {
 
   Map<String, dynamic> toJson() =>
     {
-      'usedClass': usedClass,
+      'usedClass': affectedClass,
       'hours': jsonEncode(hours),
       'teacher': teacher,
       'subject': subject,
@@ -64,6 +64,7 @@ class DsbSubstitution {
   }
 
   static DsbSubstitution fromStrings(String affectedClass, String hour, String teacher, String subject, String notes) {
+    if(affectedClass[0] == '0') affectedClass = affectedClass.substring(1);
     return DsbSubstitution(affectedClass.toLowerCase(), parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
   }
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
@@ -77,9 +78,7 @@ class DsbSubstitution {
     return htmlUnescape(e.innerHtml).replaceAll(RegExp(r'</?.+?>'), '').trim();
   }
 
-  String toString() {
-    return "['$usedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
-  }
+  String toString() => "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
   static const Map<String, String> SUBJECT_LOOKUP_TABLE = {
     'spo': 'Sport',
@@ -121,11 +120,6 @@ class DsbSubstitution {
     return isFree ? 'Freistunde${hours.length == 1 ? '' : 'n'}$notesaddon'
                   : 'Vertreten durch $teacher$notesaddon';
   }
-
-  String get affectedClass {
-    if(usedClass.startsWith('0')) return usedClass.replaceFirst('0', '');
-    return usedClass;
-  }
 }
 
 class DsbPlan {
@@ -135,9 +129,7 @@ class DsbPlan {
 
   DsbPlan(this.title, this.subs, this.date);
 
-  String toString() {
-    return '$title: $subs';
-  }
+  String toString() => '$title: $subs';
 
   DsbPlan.fromJson(Map<String, dynamic> json)
       : title = json['title'],
