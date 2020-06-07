@@ -307,7 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (!condA || !condB) return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
-                rebuildNewBuild();
+                rebuildDragDown();
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),

@@ -218,8 +218,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   json = json['Root'];
   assert(json is Map);
   assert(json.containsKey('Childs'));
-  for (var plan in json['Childs'])
-    map[plan['Title']] = await httpGet(plan['Childs'][0]['Detail']);
+  for (var plan in json['Childs']) map[plan['Title']] = await httpGet(plan['Childs'][0]['Detail']);
   return map;
 }
 
@@ -363,12 +362,14 @@ Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
       tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
       Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(tempPlans);
       ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlansJsonEncoded}');
-      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
     } else {
       ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
-      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
     }
-    
+    if(Prefs.oneClassOnly) {
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
+    } else {
+      dsbWidget = dsbGetGoodList(tempPlans);
+    }
   } catch (e) {
     dsbWidget = SizedBox(child: Container(child: Card(
       color: AmpColors.lightForeground,
