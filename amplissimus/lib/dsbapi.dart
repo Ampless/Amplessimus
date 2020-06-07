@@ -68,13 +68,13 @@ class DsbSubstitution {
     return DsbSubstitution(affectedClass.toLowerCase(), parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
   }
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
-    return fromStrings(ihu(affectedClass), ihu(hour), ihu(teacher), ihu(subject), ihu(notes));
+    return fromStrings(_str(affectedClass), _str(hour), _str(teacher), _str(subject), _str(notes));
   }
   static DsbSubstitution fromElementArray(List<dom.Element> elements) {
     return fromElements(elements[0], elements[1], elements[2], elements[3], elements[4]);
   }
 
-  static String ihu(dom.Element e) {
+  static String _str(dom.Element e) {
     return htmlUnescape(e.innerHtml).replaceAll(RegExp(r'</?.+?>'), '').trim();
   }
 
@@ -100,7 +100,7 @@ class DsbSubstitution {
     'k': 'Kunst',
     'p': 'Physik',
     'w': 'Wirtschaft/Recht',
-    'spr' : 'Sprechstunde',
+    'spr': 'Sprechstunde',
   };
 
   String get realSubject {
