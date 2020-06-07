@@ -307,10 +307,25 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-Future<void> dsbUpdateWidget(Function f) async {
+Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
   try {
-    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw '';
-    dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
+    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Daten eingetragen!';
+    String tempGrade = '';
+    String tempChar = '';
+    if(Prefs.oneClassOnly) {
+      tempGrade = Prefs.grade;
+      tempChar = Prefs.char;
+    }
+    if(fetchDataAgain || Cache.dsbPlans.isEmpty) {
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), tempGrade, tempChar)));
+    } else {
+      List<DsbPlan> tempPlans = Cache.dsbPlans;
+      ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
+      ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
+      ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
+    }
+    
   } catch (e) {
     dsbWidget = SizedBox(child: Container(child: Card(
       color: AmpColors.lightForeground,

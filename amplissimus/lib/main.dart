@@ -16,7 +16,6 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Prefs.loadPrefs();
     return MaterialApp(home: SplashScreenPage());
   }
 }
@@ -33,6 +32,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 500), () async {
       setState(() => backgroundColor = AmpColors.colorBackground);
+      await Prefs.loadPrefs();
       await dsbUpdateWidget(() {});
       Future.delayed(Duration(milliseconds: 1000), () {
         Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild);
+    await dsbUpdateWidget(rebuild, fetchDataAgain: true);
     return null;
   }
 
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       circularProgressIndicatorActive = true;
     });
-    await dsbUpdateWidget(rebuild);
+    await dsbUpdateWidget(rebuild, fetchDataAgain: true);
     setState(() {
       circularProgressIndicatorActive = false;
     });
@@ -319,12 +319,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget changeSubVisibility() {
-    return Row(children: <Widget>[
-      Align(child: Text('Alle Klassen'), alignment: Alignment.centerLeft,),
-      Align(child: Text('Alle Klassen'), alignment: Alignment.center,),
-      Align(child: Text('${Prefs.grade}${Prefs.char}'), alignment: Alignment.centerRight,),
-    ],);
+  Widget get changeSubVisibilityWidget {
+    bool display = true;
+    Widget widget;
+    if(Prefs.grade == '' && Prefs.char == '') display = false;
+    display ? widget = Stack(children: <Widget>[
+      SizedBox(child: ListTile(title: Text('Alle Klassen', style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),), width: 300,),
+      Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
+        setState(() => Prefs.oneClassOnly = value);
+        dsbUpdateWidget(rebuild);
+      }), alignment: Alignment.center,),
+    ],) : widget = Container(height: 0);
+    return widget;
   }
 
   @override
@@ -350,8 +356,9 @@ class _MyHomePageState extends State<MyHomePage> {
               shrinkWrap: true,
               children: <Widget>[
                 dsbWidget,
-                changeSubVisibility(),
-                Padding(padding: EdgeInsets.all(100)),
+                Divider(),
+                changeSubVisibilityWidget,
+                Padding(padding: EdgeInsets.all(30)),
               ],
             ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)
           ), onRefresh: rebuildDragDown),
