@@ -45,6 +45,22 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
         child: ListView(
           children: <Widget>[
             ListTile(
+              title: Text('Entwickleroptionen aktiviert', style: widget.textStyle,),
+              trailing: Switch(
+                activeColor: AmpColors.colorForeground,
+                value: Prefs.devOptionsEnabled, 
+                onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
+              ),
+            ),
+            ListTile(
+              title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle,),
+              trailing: Switch(
+                activeColor: AmpColors.colorForeground,
+                value: Prefs.counterEnabled, 
+                onChanged: (value) => setState(() => Prefs.counterEnabled = value),
+              ),
+            ),
+            ListTile(
               title: Text('App schließt bei zurück-Taste', style: widget.textStyle,),
               trailing: Switch(
                 activeColor: AmpColors.colorForeground,

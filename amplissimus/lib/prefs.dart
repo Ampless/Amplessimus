@@ -88,8 +88,21 @@ void flushCache() {
   setStringList('CACHE_URLS', cachedUrls);
 }
 
+void devOptionsTimerCache() {
+  if(DateTime.now().millisecondsSinceEpoch < getInt('last_pressed_tgl_drk_mode', 0) + 10000) {
+    setInt('times_tgl_drk_mode_pressed', getInt('times_tgl_drk_mode_pressed', 1)+1);
+  } else {
+    setInt('times_tgl_drk_mode_pressed', 1);
+  }
+  setInt('last_pressed_tgl_drk_mode', DateTime.now().millisecondsSinceEpoch);
+  print('$timesToggleDarkModePressed');
+  print('${getInt('last_pressed_tgl_drk_mode', -1)}');
+}
+
 int get counter => getInt('counter', 0);
 set counter(int i) => setInt('counter', i);
+int get timesToggleDarkModePressed => getInt('times_tgl_drk_mode_pressed', 1);
+set timesToggleDarkModePressed(int i) => setInt('times_tgl_drk_mode_pressed', i);
 String get username => getString('username_dsb', '');
 set username(String s) => setString('username_dsb', s);
 String get password => getString('password_dsb', '');
@@ -104,8 +117,10 @@ bool get oneClassOnly => getBool('one_class_only', false);
 set oneClassOnly(bool b) => setBool('one_class_only', b);
 bool get closeAppOnBackPress => getBool('close_app_on_back_press', false);
 set closeAppOnBackPress(bool b) => setBool('close_app_on_back_press', b);
-bool get devOptionsEnabled => getBool('dev_optoins_enabled', false);
-set devOptionsEnabled(bool b) => setBool('dev_optoins_enabled', b);
+bool get devOptionsEnabled => getBool('dev_options_enabled', false);
+set devOptionsEnabled(bool b) => setBool('dev_options_enabled', b);
+bool get counterEnabled => getBool('counter_enabled', false);
+set counterEnabled(bool b) => setBool('counter_enabled', b);
 
 set designMode(bool isDarkMode) => setBool('is_dark_mode', isDarkMode);
 
