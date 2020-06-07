@@ -329,6 +329,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
       },)
     ])));
     widgets.add(Card(
+      elevation: 0,
       color: AmpColors.lightForeground,
       child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
     ));
