@@ -3,16 +3,35 @@ import 'package:amplissimus/values.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences preferences;
-Map<String, dynamic> edits = {};
+Map<String, String> editsString = {};
+Map<String, int> editsInt = {};
+Map<String, double> editsDouble = {};
+Map<String, bool> editsBool = {};
+Map<String, List<String>> editsStrings = {};
 
-void set(String key, dynamic value) {
-  if(preferences == null) edits[key] = value;
-  else if(value is int) preferences.setInt(key, value);
-  else if(value is bool) preferences.setBool(key, value);
-  else if(value is String) preferences.setString(key, value);
-  else if(value is List<String>) preferences.setStringList(key, value);
-  else if(value is double) preferences.setDouble(key, value);
-  else throw '${value.runtimeType} cannot be saved in the SharedPreferences.';
+void setString(String key, String value) {
+  if(preferences == null) editsString[key] = value;
+  else preferences.setString(key, value);
+}
+
+void setInt(String key, int value) {
+  if(preferences == null) editsInt[key] = value;
+  else preferences.setInt(key, value);
+}
+
+void setDouble(String key, double value) {
+  if(preferences == null) editsDouble[key] = value;
+  else preferences.setDouble(key, value);
+}
+
+void setStringList(String key, List<String> value) {
+  if(preferences == null) editsStrings[key] = value;
+  else preferences.setStringList(key, value);
+}
+
+void setBool(String key, bool value) {
+  if(preferences == null) editsBool[key] = value;
+  else preferences.setBool(key, value);
 }
 
 int getInt(String key, int defaultValue) {
@@ -36,6 +55,13 @@ bool getBool(String key, bool defaultValue) {
   return b;
 }
 
+List<String> getStringList(String key, List<String> defaultValue) {
+  if(preferences == null) throw 'PREFSB NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
+  List<String> s = preferences.getStringList(key);
+  if(s == null) s = defaultValue;
+  return s;
+}
+
 String getCache(String url) {
   if(preferences == null || url == null) throw 'PREFSC NULLED, THIS IS A SEVERE CODE BUG';
   int ttl = getInt('CACHE_TTL_$url', 0);
@@ -44,35 +70,46 @@ String getCache(String url) {
 }
 
 void setCache(String url, String html, {Duration ttl = Duration.zero}) {
-  preferences.setString('CACHE_VAL_$url', html);
-  preferences.setInt('CACHE_TTL_$url', ttl == Duration.zero ? 0
+  List<String> cacheUrls = getStringList('CACHE_URLS', []);
+  cacheUrls.add(url);
+  setStringList('CACHE_URLS', cacheUrls);
+  setString('CACHE_VAL_$url', html);
+  setInt('CACHE_TTL_$url', ttl == Duration.zero ? 0
     : DateTime.now().add(ttl).millisecondsSinceEpoch);
 }
 
 int get counter => getInt('counter', 0);
-set counter(int i) => set('counter', i);
+set counter(int i) => setInt('counter', i);
 String get username => getString('username_dsb', '');
-set username(String s) => set('username_dsb', s);
+set username(String s) => setString('username_dsb', s);
 String get password => getString('password_dsb', '');
-set password(String s) => set('password_dsb', s);
+set password(String s) => setString('password_dsb', s);
 String get grade => getString('grade', '').toLowerCase();
-set grade(String s) => set('grade', s.toLowerCase());
+set grade(String s) => setString('grade', s.toLowerCase());
 String get char => getString('char', '').toLowerCase();
-set char(String s) => set('char', s.toLowerCase());
+set char(String s) => setString('char', s.toLowerCase());
 bool get loadingBarEnabled => getBool('loading_bar_enabled', false);
-set loadingBarEnabled(bool b) => set('loading_bar_enabled', b);
+set loadingBarEnabled(bool b) => setBool('loading_bar_enabled', b);
 bool get oneClassOnly => getBool('one_class_only', false);
-set oneClassOnly(bool b) => set('one_class_only', b);
+set oneClassOnly(bool b) => setBool('one_class_only', b);
 
-set designMode(bool isDarkMode) => set('is_dark_mode', isDarkMode);
+set designMode(bool isDarkMode) => setBool('is_dark_mode', isDarkMode);
 
 Future<void> loadPrefs() async {
   preferences = await SharedPreferences.getInstance();
   bool isDarkMode = preferences.getBool('is_dark_mode');
   ampInfo(ctx: 'Prefs', message: 'recognized isDarkMode = $isDarkMode');
   AmpColors.setMode(isDarkMode);
-  edits.forEach((key, value) => set(key, value));
-  edits.clear();
+  editsString.forEach((key, value) => preferences.setString(key, value));
+  editsInt.forEach((key, value) => preferences.setInt(key, value));
+  editsDouble.forEach((key, value) => preferences.setDouble(key, value));
+  editsBool.forEach((key, value) => preferences.setBool(key, value));
+  editsStrings.forEach((key, value) => preferences.setStringList(key, value));
+  editsString.clear();
+  editsInt.clear();
+  editsDouble.clear();
+  editsBool.clear();
+  editsStrings.clear();
 }
 
 void clear() {
