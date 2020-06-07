@@ -29,6 +29,24 @@ class DsbSubstitution {
 
   DsbSubstitution(this.usedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
+  DsbSubstitution.fromJson(Map<String, dynamic> json)
+    : usedClass = json['usedClass'],
+      hours = List<int>.from(jsonDecode(json['hours'])),
+      teacher = json['teacher'],
+      subject = json['subject'],
+      notes = json['notes'],
+      isFree = json['isFree'];
+
+  Map<String, dynamic> toJson() =>
+    {
+      'usedClass': usedClass,
+      'hours': jsonEncode(hours),
+      'teacher': teacher,
+      'subject': subject,
+      'notes': notes,
+      'isFree': isFree,
+    };
+
   static final int zero = '0'.codeUnitAt(0),
                    nine = '9'.codeUnitAt(0);
 
@@ -121,6 +139,34 @@ class DsbPlan {
   String toString() {
     return '$title: $subs';
   }
+
+  DsbPlan.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        subs = subsFromJson(List<String>.from(jsonDecode(json['subs']))),
+        date = json['date'];
+
+  Map<String, dynamic> toJson() =>
+    {
+      'title': title,
+      'subs': jsonEncode(subsToJson(subs)),
+      'date': date,
+    };
+  
+  static List<DsbSubstitution> subsFromJson(List<String> tempStrings) {
+    List<DsbSubstitution> tempSubs = [];
+    for(String tempString in tempStrings) {
+      tempSubs.add(DsbSubstitution.fromJson(jsonDecode(tempString)));
+    }
+    return tempSubs;
+  }
+
+  static List<String> subsToJson(List<DsbSubstitution> tempSubs) {
+    List<String> tempStrings = [];
+    for(DsbSubstitution tempSub in tempSubs) {
+      tempStrings.add(jsonEncode(tempSub.toJson()));
+    }
+    return tempStrings;
+  }
 }
 
 Future<String> dsbGetData(String username, String password) async {
@@ -205,7 +251,6 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       plans.add(DsbPlan(title, [], ''));
     }
   }
-  ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return plans;
 }
 
@@ -310,7 +355,7 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-void dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
+Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Daten eingetragen!';
     String tempGrade = '';
@@ -321,11 +366,21 @@ void dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
     }
     if(fetchDataAgain || Cache.dsbPlans.isEmpty) {
       List<DsbPlan> tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
+      Cache.dsbPlans = tempPlans;
+      ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
       dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
     } else {
       ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
       ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
+      List<String> tempPlansString = [];
+      for(DsbPlan tempPlan in Cache.dsbPlans) tempPlansString.add(jsonEncode(tempPlan.toJson()));
+      print(tempPlansString);
       dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(Cache.dsbPlans, tempGrade, tempChar)));
+      Cache.dsbPlans = new List();
+      for(String tempString in tempPlansString) {
+        print(tempString);
+        Cache.dsbPlans.add(DsbPlan.fromJson(jsonDecode(tempString)));
+      }
       ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
     }
     
