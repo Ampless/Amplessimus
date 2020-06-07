@@ -364,24 +364,15 @@ Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
       tempGrade = Prefs.grade;  
       tempChar = Prefs.char;
     }
-    if(fetchDataAgain || Cache.dsbPlans.isEmpty) {
-      List<DsbPlan> tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
-      Cache.dsbPlans = tempPlans;
-      ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
+    List<DsbPlan> tempPlans = jsonDecodeDsbPlans(Cache.dsbPlansJsonEncoded);
+    if(fetchDataAgain || tempPlans.isEmpty) {
+      tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
+      Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(tempPlans);
+      ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlansJsonEncoded}');
       dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
     } else {
       ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
-      ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
-      List<String> tempPlansString = [];
-      for(DsbPlan tempPlan in Cache.dsbPlans) tempPlansString.add(jsonEncode(tempPlan.toJson()));
-      print(tempPlansString);
-      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(Cache.dsbPlans, tempGrade, tempChar)));
-      Cache.dsbPlans = new List();
-      for(String tempString in tempPlansString) {
-        print(tempString);
-        Cache.dsbPlans.add(DsbPlan.fromJson(jsonDecode(tempString)));
-      }
-      ampInfo(ctx: 'CACHE', message: Cache.dsbPlans);
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
     }
     
   } catch (e) {
@@ -391,4 +382,18 @@ Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
     ), padding: EdgeInsets.only(top: 15),));
   }
   f();
+}
+
+List<DsbPlan> jsonDecodeDsbPlans(List<String> tempStrings) {
+  List<DsbPlan> tempPlans = [];
+  for(String tempString in tempStrings) {
+    tempPlans.add(DsbPlan.fromJson(jsonDecode(tempString)));
+  }
+  return tempPlans;
+}
+
+List<String> jsonEncodeDsbPlans(List<DsbPlan> tempPlans) {
+  List<String> tempStrings = [];
+  for(DsbPlan tempPlan in tempPlans) tempStrings.add(jsonEncode(tempPlan.toJson()));
+  return tempStrings;
 }

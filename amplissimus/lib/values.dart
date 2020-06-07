@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Cache {
-  static List<DsbPlan> dsbPlans = new List<DsbPlan>();
+  static List<String> dsbPlansJsonEncoded = [];
 }
 
 class AmpStrings {
