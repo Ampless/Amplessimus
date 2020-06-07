@@ -102,6 +102,8 @@ bool get loadingBarEnabled => getBool('loading_bar_enabled', false);
 set loadingBarEnabled(bool b) => setBool('loading_bar_enabled', b);
 bool get oneClassOnly => getBool('one_class_only', false);
 set oneClassOnly(bool b) => setBool('one_class_only', b);
+bool get closeAppOnBackPress => getBool('close_app_on_back_press', false);
+set closeAppOnBackPress(bool b) => setBool('close_app_on_back_press', b);
 
 set designMode(bool isDarkMode) => setBool('is_dark_mode', isDarkMode);
 

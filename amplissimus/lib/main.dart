@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
           initialIndex: initialIndex,),
       ), 
       onWillPop: () {
-        return new Future(() => false);
+        return new Future(() => true);
       },
     );
   }
@@ -323,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget widget;
     if(Prefs.grade == '' && Prefs.char == '') display = false;
     display ? widget = Stack(children: <Widget>[
-      SizedBox(child: ListTile(title: Text('Alle Klassen', style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),), width: 300,),
+      ListTile(title: Text('Alle Klassen', style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
       Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
         setState(() => Prefs.oneClassOnly = value);
         dsbUpdateWidget(rebuild);
