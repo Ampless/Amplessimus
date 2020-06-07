@@ -211,11 +211,19 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
+  ampInfo(ctx: 'DSB - searchClass-begin', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   for(DsbPlan plan in plans) {
+    ampInfo(ctx: 'DSB - searchClass-for-begin', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
     List<DsbSubstitution> subs = [];
-    for(DsbSubstitution sub in plan.subs) if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(char)) subs.add(sub);
+    for(DsbSubstitution sub in plan.subs) {
+      if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(char)) {
+        subs.add(sub);
+      }
+    }
     plan.subs = subs;
+    ampInfo(ctx: 'DSB - searchClass-for-end', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   }
+  ampInfo(ctx: 'DSB - searchClass-end', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return plans;
 }
 
@@ -231,6 +239,7 @@ int max(List<int> i) {
 List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
   for(DsbPlan plan in plans)
     plan.subs.sort((a, b) => max(a.hours).compareTo(max(b.hours)));
+  ampInfo(ctx: 'DSB - sortByHour', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return plans;
 }
 
@@ -293,6 +302,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
     ));
   }
   widgets.add(Padding(padding: EdgeInsets.all(12)));
+  ampInfo(ctx: 'DSB - getGoodList', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: widgets
@@ -313,7 +323,7 @@ Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
     String tempGrade = '';
     String tempChar = '';
     if(Prefs.oneClassOnly) {
-      tempGrade = Prefs.grade;
+      tempGrade = Prefs.grade;  
       tempChar = Prefs.char;
     }
     if(fetchDataAgain || Cache.dsbPlans.isEmpty) {

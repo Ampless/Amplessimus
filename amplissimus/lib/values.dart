@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class Cache {
   static List<DsbPlan> dsbPlans = [];
+  static List<DsbPlan> dsbPlansFragile = [];
 }
 
 class AmpStrings {
