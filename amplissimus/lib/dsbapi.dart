@@ -160,7 +160,7 @@ class DsbPlan {
   }
 }
 
-Future<String> dsbGetData(String username, String password) async {
+Future<String> dsbGetData(String username, String password, {bool cachePostRequests = true}) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
@@ -174,12 +174,16 @@ Future<String> dsbGetData(String username, String password) async {
     '"Date":"$datetime",'
     '"LastUpdate":"$datetime"'
   '}';
-  String res = await httpPost(DSB_WEBSERVICE, '{'
-    '"req": {'
-      '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
-      '"DataType": 1'
-    '}'
-  '}', {"content-type": "application/json"});
+  String res = await httpPost(
+    DSB_WEBSERVICE, '{'
+      '"req": {'
+        '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
+        '"DataType": 1'
+      '}'
+    '}',
+    {"content-type": "application/json"},
+    useCache: cachePostRequests,
+  );
   return utf8.decode(
     gzip.decode(
       base64.decode(
@@ -201,7 +205,7 @@ dynamic _jsonGetFirst(dynamic json) {
   return json[0];
 }
 
-Future<Map<String, String>> dsbGetHtml(String jsontext) async {
+Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests = true}) async {
   var json = jsonDecode(jsontext);
   if(_jsonGetKey(json, 'Resultcode') != 0) throw _jsonGetKey(json, 'ResultStatusInfo');
   json = _jsonGetFirst(
@@ -219,22 +223,24 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
     ] = await httpGet(
       _jsonGetKey(
         _jsonGetFirst(
-          _jsonGetKey(
-            plan,
-            'Childs',
-          ),
+          _jsonGetKey(plan, 'Childs'),
         ),
         'Detail',
       ),
+      useCache: cacheGetRequests,
     );
   return map;
 }
 
-Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
+Future<List<DsbPlan>> dsbGetAllSubs(String username,
+                                    String password, {
+                                      bool cacheGetRequests = true,
+                                      bool cachePostRequests = true
+}) async {
   List<DsbPlan> plans = [];
   Prefs.flushCache();
-  String json = await dsbGetData(username, password);
-  var htmls = await dsbGetHtml(json);
+  String json = await dsbGetData(username, password, cachePostRequests: cachePostRequests);
+  var htmls = await dsbGetHtml(json, cacheGetRequests: cacheGetRequests);
   for(var title in htmls.keys) {
     var res = htmls[title];
     try {
@@ -332,21 +338,20 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-Future<void> dsbUpdateWidget(Function f, {bool disableCache = false}) async {
+Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Login-Daten eingetragen.';
-    List<DsbPlan> tempPlans = jsonDecodeDsbPlans(Cache.dsbPlansJsonEncoded);
-    if(disableCache || tempPlans.isEmpty) {
-      tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
-      Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(tempPlans);
+    List<DsbPlan> plans = jsonDecodeDsbPlans(Cache.dsbPlansJsonEncoded);
+    if(!cacheGetRequests || !cachePostRequests || plans.isEmpty) {
+      plans = await dsbGetAllSubs(Prefs.username, Prefs.password);
+      Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(plans);
       ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlansJsonEncoded}');
     } else {
       ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
     }
     if(Prefs.oneClassOnly)
-      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, Prefs.grade, Prefs.char)));
-    else
-      dsbWidget = dsbGetGoodList(tempPlans);
+      plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+    dsbWidget = dsbGetGoodList(plans);
   } catch (e) {
     dsbWidget = SizedBox(child: Container(child: Card(
       color: AmpColors.lightForeground,

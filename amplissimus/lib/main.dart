@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild, disableCache: true);
+    await dsbUpdateWidget(rebuild, cachePostRequests: false);
     return null;
   }
 
@@ -446,7 +446,7 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
-            onPressed: () => setState(() => Prefs.counter++),
+            onPressed: () => setState(() => Prefs.counter += 2),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
           ) : Container(),
