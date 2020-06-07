@@ -76,9 +76,11 @@ String htmlUnescape(String data) {
 
 http.Client _httpclient = http.Client();
 
-Future<String> httpPost(String url, dynamic body, Map<String, String> headers) async {
-  String cachedResp = Prefs.getCache(url + body.toString());
-  if(cachedResp != null) return cachedResp;
+Future<String> httpPost(String url, dynamic body, Map<String, String> headers, {bool useCache = true}) async {
+  if(useCache) {
+    String cachedResp = Prefs.getCache(url + body.toString());
+    if(cachedResp != null) return cachedResp;
+  }
   ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
   http.Response res = await _httpclient.post(url, body: body, headers: headers);
   ampInfo(ctx: 'HTTP', message: 'Got POST-Response with status code ${res.statusCode}.');
@@ -87,9 +89,11 @@ Future<String> httpPost(String url, dynamic body, Map<String, String> headers) a
   return r;
 }
 
-Future<String> httpGet(String url) async {
-  String cachedResp = Prefs.getCache(url);
-  if(cachedResp != null) return cachedResp;
+Future<String> httpGet(String url, {bool useCache = true}) async {
+  if(useCache) {
+    String cachedResp = Prefs.getCache(url);
+    if(cachedResp != null) return cachedResp;
+  }
   ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
   String res = (await _httpclient.get(url)).body;
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');

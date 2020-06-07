@@ -8,7 +8,6 @@ import 'package:amplissimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
-import 'package:http/http.dart' as http;
 
 const String DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
 const String DSB_DEVICE = "SM-G950F";
@@ -195,30 +194,47 @@ Future<String> dsbGetData(String username, String password) async {
   return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
 }
 
+dynamic _jsonGetKey(dynamic json, String key) {
+  assert(json is Map);
+  assert(json.containsKey(key));
+  return json[key];
+}
+
+dynamic _jsonGetFirst(dynamic json) {
+  assert(json is List);
+  assert(json.length > 0);
+  return json[0];
+}
+
 Future<Map<String, String>> dsbGetHtml(String jsontext) async {
-  Map<String, String> map = {};
   var json = jsonDecode(jsontext);
-  assert(json is Map);
-  assert(json.containsKey('Resultcode'));
-  assert(json.containsKey('ResultStatusInfo'));
-  if(json['Resultcode'] != 0) throw json['ResultStatusInfo'];
-  assert(json.containsKey('ResultMenuItems'));
-  json = json['ResultMenuItems'];
-  assert(json is List);
-  assert(json.length > 0);
-  json = json[0];
-  assert(json is Map);
-  assert(json.containsKey('Childs'));
-  json = json['Childs'];
-  assert(json is List);
-  assert(json.length > 0);
-  json = json[0];
-  assert(json is Map);
-  assert(json.containsKey('Root'));
-  json = json['Root'];
-  assert(json is Map);
-  assert(json.containsKey('Childs'));
-  for (var plan in json['Childs']) map[plan['Title']] = await httpGet(plan['Childs'][0]['Detail']);
+  if(_jsonGetKey(json, 'Resultcode') != 0) throw _jsonGetKey(json, 'ResultStatusInfo');
+  json = _jsonGetFirst(
+    _jsonGetKey(
+      _jsonGetFirst(
+        _jsonGetKey(
+          json,
+          'ResultMenuItems',
+        ),
+      ),
+      'Childs',
+    ),
+  );
+  Map<String, String> map = {};
+  for (var plan in _jsonGetKey(_jsonGetKey(json, 'Root'), 'Childs'))
+    map[
+      _jsonGetKey(plan, 'Title')
+    ] = await httpGet(
+      _jsonGetKey(
+        _jsonGetFirst(
+          _jsonGetKey(
+            plan,
+            'Childs',
+          ),
+        ),
+        'Detail',
+      ),
+    );
   return map;
 }
 
