@@ -104,6 +104,8 @@ bool get oneClassOnly => getBool('one_class_only', false);
 set oneClassOnly(bool b) => setBool('one_class_only', b);
 bool get closeAppOnBackPress => getBool('close_app_on_back_press', false);
 set closeAppOnBackPress(bool b) => setBool('close_app_on_back_press', b);
+bool get devOptionsEnabled => getBool('dev_optoins_enabled', false);
+set devOptionsEnabled(bool b) => setBool('dev_optoins_enabled', b);
 
 set designMode(bool isDarkMode) => setBool('is_dark_mode', isDarkMode);
 

@@ -419,7 +419,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () => Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context),
-                child: Widgets.developerOptionsWidget(widget.textStyle),
+                child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(widget.textStyle) : Container(),
               ),
             ),
           ],
