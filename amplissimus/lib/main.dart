@@ -338,13 +338,13 @@ class _MyHomePageState extends State<MyHomePage> {
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
-      Container(
+       Container(
         child: Scaffold(
           key: homeScaffoldKey,
           appBar: AppBar(
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
-            title: Text('${AmpStrings.appTitle} ${Prefs.counter}', style: widget.textStyle,),
+            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: widget.textStyle,) : Text('${AmpStrings.appTitle}', style: widget.textStyle,),
             centerTitle: true,
           ),
           backgroundColor: AmpColors.colorBackground,
@@ -377,6 +377,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () async {
+                  Prefs.devOptionsTimerCache();
+                  if(Prefs.timesToggleDarkModePressed >= 10) {
+                    Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
+                    Prefs.timesToggleDarkModePressed = 0;
+                  }
                   AmpColors.changeMode();
                   dsbWidget = Container();
                   Animations.changeScreenNoAnimationReplace(new MyApp(initialIndex: 1,), context);
@@ -418,7 +423,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () => Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context),
+                onTap: () {
+                  if(Prefs.devOptionsEnabled) Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
+                },
                 child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(widget.textStyle) : Container(),
               ),
             ),
@@ -434,7 +441,7 @@ class _MyHomePageState extends State<MyHomePage> {
             physics: ClampingScrollPhysics(),
             children: containers,
           ),
-          floatingActionButton: FloatingActionButton.extended(
+          floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
             hoverColor: AmpColors.colorForeground,
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
@@ -442,7 +449,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => setState(() => Prefs.counter++),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
             label: Text('Zählen', style: widget.textStyle,),
-          ),
+          ) : Container(),
           bottomNavigationBar: SizedBox(
             height: 55,
             child: TabBar(
