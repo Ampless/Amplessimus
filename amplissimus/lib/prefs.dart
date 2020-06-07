@@ -66,14 +66,13 @@ set oneClassOnly(bool b) => set('one_class_only', b);
 
 set designMode(bool isDarkMode) => set('is_dark_mode', isDarkMode);
 
-void loadPrefs() {
-  (() async => preferences = await SharedPreferences.getInstance())().then((thereisnovalue) {
-    bool isDarkMode = preferences.getBool('is_dark_mode');
-    ampInfo(ctx: 'Prefs', message: 'recognized isDarkMode = $isDarkMode');
-    AmpColors.setMode(isDarkMode);
-    edits.forEach((key, value) => set(key, value));
-    edits.clear();
-  });
+Future<void> loadPrefs() async {
+  preferences = await SharedPreferences.getInstance();
+  bool isDarkMode = preferences.getBool('is_dark_mode');
+  ampInfo(ctx: 'Prefs', message: 'recognized isDarkMode = $isDarkMode');
+  AmpColors.setMode(isDarkMode);
+  edits.forEach((key, value) => set(key, value));
+  edits.clear();
 }
 
 void clear() {

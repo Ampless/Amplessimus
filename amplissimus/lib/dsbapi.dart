@@ -29,6 +29,24 @@ class DsbSubstitution {
 
   DsbSubstitution(this.usedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
+  DsbSubstitution.fromJson(Map<String, dynamic> json)
+    : usedClass = json['usedClass'],
+      hours = List<int>.from(jsonDecode(json['hours'])),
+      teacher = json['teacher'],
+      subject = json['subject'],
+      notes = json['notes'],
+      isFree = json['isFree'];
+
+  Map<String, dynamic> toJson() =>
+    {
+      'usedClass': usedClass,
+      'hours': jsonEncode(hours),
+      'teacher': teacher,
+      'subject': subject,
+      'notes': notes,
+      'isFree': isFree,
+    };
+
   static final int zero = '0'.codeUnitAt(0),
                    nine = '9'.codeUnitAt(0);
 
@@ -121,6 +139,34 @@ class DsbPlan {
   String toString() {
     return '$title: $subs';
   }
+
+  DsbPlan.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        subs = subsFromJson(List<String>.from(jsonDecode(json['subs']))),
+        date = json['date'];
+
+  Map<String, dynamic> toJson() =>
+    {
+      'title': title,
+      'subs': jsonEncode(subsToJson(subs)),
+      'date': date,
+    };
+  
+  static List<DsbSubstitution> subsFromJson(List<String> tempStrings) {
+    List<DsbSubstitution> tempSubs = [];
+    for(String tempString in tempStrings) {
+      tempSubs.add(DsbSubstitution.fromJson(jsonDecode(tempString)));
+    }
+    return tempSubs;
+  }
+
+  static List<String> subsToJson(List<DsbSubstitution> tempSubs) {
+    List<String> tempStrings = [];
+    for(DsbSubstitution tempSub in tempSubs) {
+      tempStrings.add(jsonEncode(tempSub.toJson()));
+    }
+    return tempStrings;
+  }
 }
 
 Future<String> dsbGetData(String username, String password) async {
@@ -199,15 +245,17 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
       plans.add(DsbPlan(title, [], ''));
     }
   }
-  Cache.dsbPlans = plans;
-  ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlans}');
   return plans;
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
   for(DsbPlan plan in plans) {
     List<DsbSubstitution> subs = [];
-    for(DsbSubstitution sub in plan.subs) if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(char)) subs.add(sub);
+    for(DsbSubstitution sub in plan.subs) {
+      if(sub.affectedClass.contains(stage) && sub.affectedClass.contains(char)) {
+        subs.add(sub);
+      }
+    }
     plan.subs = subs;
   }
   return plans;
@@ -301,10 +349,26 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-Future<void> dsbUpdateWidget(Function f) async {
+Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
   try {
-    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw '';
-    dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(await dsbGetAllSubs(Prefs.username, Prefs.password), Prefs.grade, Prefs.char)));
+    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Daten eingetragen!';
+    String tempGrade = '';
+    String tempChar = '';
+    if(Prefs.oneClassOnly) {
+      tempGrade = Prefs.grade;  
+      tempChar = Prefs.char;
+    }
+    List<DsbPlan> tempPlans = jsonDecodeDsbPlans(Cache.dsbPlansJsonEncoded);
+    if(fetchDataAgain || tempPlans.isEmpty) {
+      tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
+      Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(tempPlans);
+      ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlansJsonEncoded}');
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
+    } else {
+      ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
+    }
+    
   } catch (e) {
     dsbWidget = SizedBox(child: Container(child: Card(
       color: AmpColors.lightForeground,
@@ -312,4 +376,18 @@ Future<void> dsbUpdateWidget(Function f) async {
     ), padding: EdgeInsets.only(top: 15),));
   }
   f();
+}
+
+List<DsbPlan> jsonDecodeDsbPlans(List<String> tempStrings) {
+  List<DsbPlan> tempPlans = [];
+  for(String tempString in tempStrings) {
+    tempPlans.add(DsbPlan.fromJson(jsonDecode(tempString)));
+  }
+  return tempPlans;
+}
+
+List<String> jsonEncodeDsbPlans(List<DsbPlan> tempPlans) {
+  List<String> tempStrings = [];
+  for(DsbPlan tempPlan in tempPlans) tempStrings.add(jsonEncode(tempPlan.toJson()));
+  return tempStrings;
 }
