@@ -62,12 +62,7 @@ List<String> getStringList(String key, List<String> defaultValue) {
   return s;
 }
 
-String getCache(String url) {
-  if(preferences == null || url == null) throw 'PREFSC NULLED, THIS IS A SEVERE CODE BUG';
-  int ttl = getInt('CACHE_TTL_$url', 0);
-  if(ttl != 0 && ttl < DateTime.now().millisecondsSinceEpoch) return null;
-  return getString('CACHE_VAL_$url', null);
-}
+String getCache(String url) => getString('CACHE_VAL_$url', null);
 
 void setCache(String url, String html, {Duration ttl = Duration.zero}) {
   List<String> cacheUrls = getStringList('CACHE_URLS', []);

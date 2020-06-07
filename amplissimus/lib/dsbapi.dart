@@ -224,6 +224,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
 
 Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
   List<DsbPlan> plans = [];
+  Prefs.flushCache();
   String json = await dsbGetData(username, password);
   var htmls = await dsbGetHtml(json);
   for(var title in htmls.keys) {
