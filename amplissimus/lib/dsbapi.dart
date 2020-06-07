@@ -319,7 +319,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
         subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
         trailing: Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)),
       ));
-      if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground));
+      if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: 0,));
     }
     widgets.add(ListTile(title: Row(children: <Widget>[
       Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)),
