@@ -55,14 +55,12 @@ class Widgets {
 
   static String gradeFieldValidator(String value) {
     List<String> grades = ['5','6','7','8','9','10','11','12','13', ''];
-    if(value.trim().isEmpty) return 'Feld ist leer!';
     if(!grades.contains(value.trim())) return 'Keine Zahl von 5 bis 13!';
     return null;
   }
 
   static String letterFieldValidator(String value) {
     List<String> letters = ['a','b','c','d','e','f','g','h','i','q', ''];
-    if(value.trim().isEmpty) return 'Feld ist leer!';
     if(!letters.contains(value.trim().toLowerCase())) return 'Ungültige Eingabe!';
     return null;
   }
