@@ -78,6 +78,21 @@ void setCache(String url, String html, {Duration ttl = Duration.zero}) {
     : DateTime.now().add(ttl).millisecondsSinceEpoch);
 }
 
+void flushCache() {
+  List<String> urlsToRemove = [];
+  List<String> cachedUrls = getStringList('CACHE_URLS', []);
+  for(String url in cachedUrls) {
+    int ttl = getInt('CACHE_TTL_$url', 0);
+    if(ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) continue;
+    urlsToRemove.add(url);
+    setString('CACHE_VAL_$url', null);
+    setInt('CACHE_TTL_$url', null);
+  }
+  if(urlsToRemove.length == 0) return;
+  cachedUrls.removeWhere((element) => urlsToRemove.contains(element));
+  setStringList('CACHE_URLS', cachedUrls);
+}
+
 int get counter => getInt('counter', 0);
 set counter(int i) => setInt('counter', i);
 String get username => getString('username_dsb', '');
