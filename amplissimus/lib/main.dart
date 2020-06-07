@@ -35,7 +35,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await Prefs.loadPrefs();
       await dsbUpdateWidget(() {});
       Future.delayed(Duration(milliseconds: 1000), () {
-        Animations.changeScreenEaseOutBack(new MyApp(initialIndex: 0,), context);
+        Animations.changeScreenEaseOutBackReplace(new MyApp(initialIndex: 0,), context);
       });
     });
   }
@@ -91,7 +91,6 @@ class MyApp extends StatelessWidget {
           initialIndex: initialIndex,),
       ), 
       onWillPop: () {
-        Animations.changeScreenNoAnimation(this, context);
         return new Future(() => false);
       },
     );
@@ -126,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       circularProgressIndicatorActive = true;
     });
-    await dsbUpdateWidget(rebuild, fetchDataAgain: true);
+    await dsbUpdateWidget(rebuild);
     setState(() {
       circularProgressIndicatorActive = false;
     });
@@ -380,7 +379,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () async {
                   AmpColors.changeMode();
                   dsbWidget = Container();
-                  Animations.changeScreenNoAnimation(new MyApp(initialIndex: 1,), context);
+                  Animations.changeScreenNoAnimationReplace(new MyApp(initialIndex: 1,), context);
                 },
                 child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, widget.textStyle),
               ),
