@@ -171,27 +171,30 @@ class DsbPlan {
 Future<String> dsbGetData(String username, String password) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
-      '"UserId":"$username",'
-      '"UserPw":"$password",'
-      '"AppVersion":"$DSB_VERSION",'
-      '"Language":"$DSB_LANGUAGE",'
-      '"OsVersion":"$DSB_OS_VERSION",'
-      '"AppId":"${v4()}",'
-      '"Device":"$DSB_DEVICE",'
-      '"BundleId":"$DSB_BUNDLE_ID",'
-      '"Date":"$datetime",'
-      '"LastUpdate":"$datetime"'
-    '}';
+    '"UserId":"$username",'
+    '"UserPw":"$password",'
+    '"AppVersion":"$DSB_VERSION",'
+    '"Language":"$DSB_LANGUAGE",'
+    '"OsVersion":"$DSB_OS_VERSION",'
+    '"AppId":"${v4()}",'
+    '"Device":"$DSB_DEVICE",'
+    '"BundleId":"$DSB_BUNDLE_ID",'
+    '"Date":"$datetime",'
+    '"LastUpdate":"$datetime"'
+  '}';
   String res = await httpPost(DSB_WEBSERVICE, '{'
-      '"req": {'
-        '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
-        '"DataType": 1'
-      '}'
-    '}', Map.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
-  var jsonResponse = jsonDecode(res);
-  assert(jsonResponse is Map);
-  assert(jsonResponse.containsKey('d'));
-  return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
+    '"req": {'
+      '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
+      '"DataType": 1'
+    '}'
+  '}', {"content-type": "application/json"});
+  return utf8.decode(
+    gzip.decode(
+      base64.decode(
+        _jsonGetKey(jsonDecode(res), 'd'),
+      ),
+    ),
+  );
 }
 
 dynamic _jsonGetKey(dynamic json, String key) {
@@ -212,10 +215,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   json = _jsonGetFirst(
     _jsonGetKey(
       _jsonGetFirst(
-        _jsonGetKey(
-          json,
-          'ResultMenuItems',
-        ),
+        _jsonGetKey(json, 'ResultMenuItems'),
       ),
       'Childs',
     ),
