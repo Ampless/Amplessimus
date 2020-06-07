@@ -19,17 +19,17 @@ const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetDat
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class DsbSubstitution {
-  String usedClass;
+  String affectedClass;
   List<int> hours;
   String teacher;
   String subject;
   String notes;
   bool isFree;
 
-  DsbSubstitution(this.usedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
+  DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
   DsbSubstitution.fromJson(Map<String, dynamic> json)
-    : usedClass = json['usedClass'],
+    : affectedClass = json['usedClass'],
       hours = List<int>.from(jsonDecode(json['hours'])),
       teacher = json['teacher'],
       subject = json['subject'],
@@ -38,7 +38,7 @@ class DsbSubstitution {
 
   Map<String, dynamic> toJson() =>
     {
-      'usedClass': usedClass,
+      'usedClass': affectedClass,
       'hours': jsonEncode(hours),
       'teacher': teacher,
       'subject': subject,
@@ -64,6 +64,7 @@ class DsbSubstitution {
   }
 
   static DsbSubstitution fromStrings(String affectedClass, String hour, String teacher, String subject, String notes) {
+    if(affectedClass[0] == '0') affectedClass = affectedClass.substring(1);
     return DsbSubstitution(affectedClass.toLowerCase(), parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
   }
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
@@ -77,9 +78,7 @@ class DsbSubstitution {
     return htmlUnescape(e.innerHtml).replaceAll(RegExp(r'</?.+?>'), '').trim();
   }
 
-  String toString() {
-    return "['$usedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
-  }
+  String toString() => "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
   static const Map<String, String> SUBJECT_LOOKUP_TABLE = {
     'spo': 'Sport',
@@ -121,11 +120,6 @@ class DsbSubstitution {
     return isFree ? 'Freistunde${hours.length == 1 ? '' : 'n'}$notesaddon'
                   : 'Vertreten durch $teacher$notesaddon';
   }
-
-  String get affectedClass {
-    if(usedClass.startsWith('0')) return usedClass.replaceFirst('0', '');
-    return usedClass;
-  }
 }
 
 class DsbPlan {
@@ -135,9 +129,7 @@ class DsbPlan {
 
   DsbPlan(this.title, this.subs, this.date);
 
-  String toString() {
-    return '$title: $subs';
-  }
+  String toString() => '$title: $subs';
 
   DsbPlan.fromJson(Map<String, dynamic> json)
       : title = json['title'],
@@ -171,27 +163,30 @@ class DsbPlan {
 Future<String> dsbGetData(String username, String password) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
-      '"UserId":"$username",'
-      '"UserPw":"$password",'
-      '"AppVersion":"$DSB_VERSION",'
-      '"Language":"$DSB_LANGUAGE",'
-      '"OsVersion":"$DSB_OS_VERSION",'
-      '"AppId":"${v4()}",'
-      '"Device":"$DSB_DEVICE",'
-      '"BundleId":"$DSB_BUNDLE_ID",'
-      '"Date":"$datetime",'
-      '"LastUpdate":"$datetime"'
-    '}';
+    '"UserId":"$username",'
+    '"UserPw":"$password",'
+    '"AppVersion":"$DSB_VERSION",'
+    '"Language":"$DSB_LANGUAGE",'
+    '"OsVersion":"$DSB_OS_VERSION",'
+    '"AppId":"${v4()}",'
+    '"Device":"$DSB_DEVICE",'
+    '"BundleId":"$DSB_BUNDLE_ID",'
+    '"Date":"$datetime",'
+    '"LastUpdate":"$datetime"'
+  '}';
   String res = await httpPost(DSB_WEBSERVICE, '{'
-      '"req": {'
-        '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
-        '"DataType": 1'
-      '}'
-    '}', Map.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
-  var jsonResponse = jsonDecode(res);
-  assert(jsonResponse is Map);
-  assert(jsonResponse.containsKey('d'));
-  return utf8.decode(gzip.decode(base64.decode(jsonResponse['d'])));
+    '"req": {'
+      '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
+      '"DataType": 1'
+    '}'
+  '}', {"content-type": "application/json"});
+  return utf8.decode(
+    gzip.decode(
+      base64.decode(
+        _jsonGetKey(jsonDecode(res), 'd'),
+      ),
+    ),
+  );
 }
 
 dynamic _jsonGetKey(dynamic json, String key) {
@@ -212,10 +207,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   json = _jsonGetFirst(
     _jsonGetKey(
       _jsonGetFirst(
-        _jsonGetKey(
-          json,
-          'ResultMenuItems',
-        ),
+        _jsonGetKey(json, 'ResultMenuItems'),
       ),
       'Childs',
     ),
