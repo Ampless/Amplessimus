@@ -142,7 +142,7 @@ Future<String> dsbGetData(String username, String password) async {
         '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
         '"DataType": 1'
       '}'
-    '}', headers: Map.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
+    '}', Map.fromEntries([MapEntry<String, String>("content-type", "application/json")]));
   var jsonResponse = jsonDecode(res);
   assert(jsonResponse is Map);
   assert(jsonResponse.containsKey('d'));
@@ -151,7 +151,6 @@ Future<String> dsbGetData(String username, String password) async {
 
 Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   Map<String, String> map = {};
-  var client = http.Client();
   var json = jsonDecode(jsontext);
   assert(json is Map);
   assert(json.containsKey('Resultcode'));
@@ -173,13 +172,8 @@ Future<Map<String, String>> dsbGetHtml(String jsontext) async {
   json = json['Root'];
   assert(json is Map);
   assert(json.containsKey('Childs'));
-  for (var plan in json['Childs']) {
-    String title = plan['Title'];
-    String url = plan['Childs'][0]['Detail'];
-    ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
-    map[title] = (await client.get(url)).body;
-    ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
-  }
+  for (var plan in json['Childs'])
+    map[plan['Title']] = await httpGet(plan['Childs'][0]['Detail']);
   return map;
 }
 

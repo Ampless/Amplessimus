@@ -34,7 +34,20 @@ bool getBool(String key, bool defaultValue) {
   bool b = preferences.getBool(key);
   if(b == null) b = defaultValue;
   return b;
-} 
+}
+
+String getCache(String url) {
+  if(preferences == null || url == null) throw 'PREFSC NULLED, THIS IS A SEVERE CODE BUG';
+  int ttl = getInt('CACHE_TTL_$url', 0);
+  if(ttl != 0 && ttl < DateTime.now().millisecondsSinceEpoch) return null;
+  return getString('CACHE_VAL_$url', null);
+}
+
+void setCache(String url, String html, {Duration ttl = Duration.zero}) {
+  preferences.setString('CACHE_VAL_$url', html);
+  preferences.setInt('CACHE_TTL_$url', ttl == Duration.zero ? 0
+    : DateTime.now().add(ttl).millisecondsSinceEpoch);
+}
 
 int get counter => getInt('counter', 0);
 set counter(int i) => set('counter', i);

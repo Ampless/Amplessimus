@@ -3,7 +3,8 @@
 import 'dart:math';
 import 'package:amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:amplissimus/logging.dart';
-import 'package:http/http.dart';
+import 'package:amplissimus/prefs.dart' as Prefs;
+import 'package:http/http.dart' as http;
 
 String hex(int i) {
   return i < 16 ? '0' + i.toRadixString(16) : i.toRadixString(16);
@@ -73,9 +74,25 @@ String htmlUnescape(String data) {
 }
 
 
-Future<String> httpPost(String url, dynamic body, {Map<String, String> headers}) async {
+http.Client _httpclient = http.Client();
+
+Future<String> httpPost(String url, dynamic body, Map<String, String> headers) async {
+  String cachedResp = Prefs.getCache(url + body.toString());
+  if(cachedResp != null) return cachedResp;
   ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
-  Response res = await post(url, body: body, headers: headers);
+  http.Response res = await _httpclient.post(url, body: body, headers: headers);
   ampInfo(ctx: 'HTTP', message: 'Got POST-Response with status code ${res.statusCode}.');
-  return res.body;
+  String r = res.body;
+  Prefs.setCache(url, r + body.toString(), ttl: Duration(minutes: 2));
+  return r;
+}
+
+Future<String> httpGet(String url) async {
+  String cachedResp = Prefs.getCache(url);
+  if(cachedResp != null) return cachedResp;
+  ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
+  String res = (await _httpclient.get(url)).body;
+  ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
+  Prefs.setCache(url, res);
+  return res;
 }
