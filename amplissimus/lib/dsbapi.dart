@@ -247,14 +247,13 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password) async {
     var res = htmls[title];
     try {
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children[2].children[0].children[0].children;
-      dom.Element htmlDateElement = HtmlParser(res).parse().children[0].children[1].children[1].children[0];
-      String planDate = htmlDateElement.innerHtml.toString();
-      String planTitle = htmlDateElement.innerHtml.toString().split(' ').last;
+      List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children;
+      String planDate = html[0].innerHtml;
+      String planTitle = planDate.split(' ').last;
+      html = html[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];
-      for(int i = 1; i < html.length; i++) {
+      for(int i = 1; i < html.length; i++)
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
-      }
       plans.add(DsbPlan(planTitle, subs, planDate));
     } catch (e) {
       ampErr(ctx: 'DSB', message: errorString(e));
@@ -292,33 +291,8 @@ List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
   return plans;
 }
 
-Table dsbGetTable(List<DsbPlan> plans) {
-  ampInfo(ctx: 'DSB', message: 'Generating table...');
-  List<TableRow> rows = [ TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]) ];
-  for(DsbPlan plan in plans) {
-    rows.add(TableRow(children: [ Text(' '), Container(), Container(), Container(), Container() ]));
-    rows.add(TableRow(children: [ Text(plan.title), Container(), Container(), Container(), Container() ]));
-    rows.add(TableRow(children: [ Text('Klasse'), Text('Stunde'), Text('Lehrer*in'), Text('Fach'), Container() ]));
-    for(DsbSubstitution sub in plan.subs)
-      rows.add(TableRow(children: [
-        Text(sub.affectedClass),
-        Text(sub.hours.toString()),
-        Text(sub.teacher),
-        Text(sub.subject),
-        Text(sub.notes)
-      ]));
-  }
-  return Table(
-    border: TableBorder(
-      horizontalInside: BorderSide(width: 1),
-      verticalInside: BorderSide(width: 1)
-    ),
-    children: rows
-  );
-}
-
 Widget dsbGetGoodList(List<DsbPlan> plans) {
-  ampInfo(ctx: 'DSB', message: plans);
+  ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   List<Widget> widgets = [];
   for(DsbPlan plan in plans) {
     List<Widget> dayWidgets = [];
@@ -366,28 +340,21 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-Future<void> dsbUpdateWidget(Function f, {bool fetchDataAgain=false}) async {
+Future<void> dsbUpdateWidget(Function f, {bool disableCache = false}) async {
   try {
-    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Daten eingetragen!';
-    String tempGrade = '';
-    String tempChar = '';
-    if(Prefs.oneClassOnly) {
-      tempGrade = Prefs.grade;  
-      tempChar = Prefs.char;
-    }
+    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Login-Daten eingetragen.';
     List<DsbPlan> tempPlans = jsonDecodeDsbPlans(Cache.dsbPlansJsonEncoded);
-    if(fetchDataAgain || tempPlans.isEmpty) {
+    if(disableCache || tempPlans.isEmpty) {
       tempPlans = await dsbGetAllSubs(Prefs.username, Prefs.password);
       Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(tempPlans);
       ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlansJsonEncoded}');
     } else {
       ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
     }
-    if(Prefs.oneClassOnly) {
-      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, tempGrade, tempChar)));
-    } else {
+    if(Prefs.oneClassOnly)
+      dsbWidget = dsbGetGoodList(dsbSortAllByHour(dsbSearchClass(tempPlans, Prefs.grade, Prefs.char)));
+    else
       dsbWidget = dsbGetGoodList(tempPlans);
-    }
   } catch (e) {
     dsbWidget = SizedBox(child: Container(child: Card(
       color: AmpColors.lightForeground,

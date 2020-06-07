@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild, fetchDataAgain: true);
+    await dsbUpdateWidget(rebuild, disableCache: true);
     return null;
   }
 
