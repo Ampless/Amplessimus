@@ -1,4 +1,4 @@
-VERSION = 0.3b
+VERSION = 0.4b
 
 all: cleanexes ipa deb apk
 
