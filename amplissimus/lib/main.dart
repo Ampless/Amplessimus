@@ -319,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
-                dsbUpdateWidget(rebuild);
+                rebuildDragDown();
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
