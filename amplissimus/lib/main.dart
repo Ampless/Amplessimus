@@ -11,7 +11,6 @@ import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -31,11 +30,13 @@ class SplashScreenPage extends StatefulWidget {
 
 class SplashScreenPageState extends State<SplashScreenPage> {
   String fileString = 'assets/anims/data-white-to-black.html';
+  Color backgroundColor = AmpColors.blankWhite;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
+      setState(() => backgroundColor = AmpColors.colorBackground);
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       Cache.checkForAprilFools();
       await dsbUpdateWidget(() {});
@@ -51,17 +52,17 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
+          color: backgroundColor,
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
-          child: Image.asset('assets/images/logo.png'),
+          child: Image.asset('assets/images/logo.png', scale: 5,),
         ),
       ),
       bottomSheet: LinearProgressIndicator(
         backgroundColor: AmpColors.blankGrey,
         valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
       ),
-      backgroundColor: Colors.red,
     );
   }
 }
