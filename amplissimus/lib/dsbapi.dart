@@ -29,24 +29,6 @@ class DsbSubstitution {
 
   DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject, this.notes, this.isFree);
 
-  DsbSubstitution.fromJson(Map<String, dynamic> json)
-    : affectedClass = json['usedClass'],
-      hours = List<int>.from(jsonDecode(json['hours'])),
-      teacher = json['teacher'],
-      subject = json['subject'],
-      notes = json['notes'],
-      isFree = json['isFree'];
-
-  Map<String, dynamic> toJson() =>
-    {
-      'usedClass': affectedClass,
-      'hours': jsonEncode(hours),
-      'teacher': teacher,
-      'subject': subject,
-      'notes': notes,
-      'isFree': isFree,
-    };
-
   static final int zero = '0'.codeUnitAt(0),
                    nine = '9'.codeUnitAt(0);
 
@@ -150,34 +132,6 @@ class DsbPlan {
   DsbPlan(this.title, this.subs, this.date);
 
   String toString() => '$title: $subs';
-
-  DsbPlan.fromJson(Map<String, dynamic> json)
-      : title = json['title'],
-        subs = subsFromJson(List<String>.from(jsonDecode(json['subs']))),
-        date = json['date'];
-
-  Map<String, dynamic> toJson() =>
-    {
-      'title': title,
-      'subs': jsonEncode(subsToJson(subs)),
-      'date': date,
-    };
-  
-  static List<DsbSubstitution> subsFromJson(List<String> tempStrings) {
-    List<DsbSubstitution> tempSubs = [];
-    for(String tempString in tempStrings) {
-      tempSubs.add(DsbSubstitution.fromJson(jsonDecode(tempString)));
-    }
-    return tempSubs;
-  }
-
-  static List<String> subsToJson(List<DsbSubstitution> tempSubs) {
-    List<String> tempStrings = [];
-    for(DsbSubstitution tempSub in tempSubs) {
-      tempStrings.add(jsonEncode(tempSub.toJson()));
-    }
-    return tempStrings;
-  }
 
   String toPlist() {
     String plist =
@@ -350,14 +304,7 @@ Widget dsbWidget = Container();
 Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Login-Daten eingetragen.';
-    List<DsbPlan> plans = jsonDecodeDsbPlans(Cache.dsbPlansJsonEncoded);
-    if(!cacheGetRequests || !cachePostRequests || plans.isEmpty) {
-      plans = await dsbGetAllSubs(Prefs.username, Prefs.password);
-      Cache.dsbPlansJsonEncoded = jsonEncodeDsbPlans(plans);
-      ampInfo(ctx: 'DSB', message: '[SAVE] Cache.dsbPlans = ${Cache.dsbPlansJsonEncoded}');
-    } else {
-      ampInfo(ctx: 'DSB', message: 'Building dsbWidget without fetching again...');
-    }
+    List<DsbPlan> plans = await dsbGetAllSubs(Prefs.username, Prefs.password);
     if(Prefs.oneClassOnly)
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
@@ -387,20 +334,6 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cac
     }
   }
   f();
-}
-
-List<DsbPlan> jsonDecodeDsbPlans(List<String> tempStrings) {
-  List<DsbPlan> tempPlans = [];
-  for(String tempString in tempStrings) {
-    tempPlans.add(DsbPlan.fromJson(jsonDecode(tempString)));
-  }
-  return tempPlans;
-}
-
-List<String> jsonEncodeDsbPlans(List<DsbPlan> tempPlans) {
-  List<String> tempStrings = [];
-  for(DsbPlan tempPlan in tempPlans) tempStrings.add(jsonEncode(tempPlan.toJson()));
-  return tempStrings;
 }
 
 void initializeTheme0(List<Widget> widgets, List<DsbPlan> plans) {

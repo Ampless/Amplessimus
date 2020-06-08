@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Cache {
-  static List<String> dsbPlansJsonEncoded = [];
   static bool isAprilFools = false;
   static void checkForAprilFools() {
     var now = DateTime.now();
