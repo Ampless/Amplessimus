@@ -54,9 +54,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
-          child: InAppWebView(
-            initialFile: fileString,
-          ),
+          child: Image.asset('assets/images/logo.png'),
         ),
       ),
       bottomSheet: LinearProgressIndicator(
