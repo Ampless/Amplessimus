@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:amplissimus/dsbutil.dart';
 import 'package:amplissimus/logging.dart';
@@ -232,11 +233,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
   return map;
 }
 
-Future<List<DsbPlan>> dsbGetAllSubs(String username,
-                                    String password, {
-                                      bool cacheGetRequests = true,
-                                      bool cachePostRequests = true
-}) async {
+Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
   List<DsbPlan> plans = [];
   Prefs.flushCache();
   String json = await dsbGetData(username, password, cachePostRequests: cachePostRequests);
@@ -302,15 +299,17 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
     int i = 0;
     int iMax = plan.subs.length;
     for(DsbSubstitution sub in plan.subs) {
+      String titleSub = sub.title;
+      if(Cache.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title: Text(sub.title, style: TextStyle(color: AmpColors.colorForeground)),
+        title: Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
         subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
-        trailing: Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)),
+        trailing: !Prefs.oneClassOnly ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));
     }
     widgets.add(ListTile(title: Row(children: <Widget>[
-      Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25)),
+      Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
       IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
         dsbApiHomeScaffoldKey.currentState?.showSnackBar(
           SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))

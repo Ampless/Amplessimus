@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dev_options/dev_options.dart';
@@ -33,6 +34,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     Future.delayed(Duration(milliseconds: 500), () async {
       setState(() => backgroundColor = AmpColors.colorBackground);
       await Prefs.loadPrefs();
+      Cache.checkForAprilFools();
       await dsbUpdateWidget(() {});
       Future.delayed(Duration(milliseconds: 1000), () {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
@@ -122,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild, cachePostRequests: false);
+    await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
     return null;
   }
 
@@ -350,7 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
-            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
+            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
             centerTitle: true,
           ),
           backgroundColor: AmpColors.colorBackground,

@@ -1,4 +1,3 @@
-import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
@@ -6,6 +5,11 @@ import 'package:flutter/material.dart';
 
 class Cache {
   static List<String> dsbPlansJsonEncoded = [];
+  static bool isAprilFools = false;
+  static void checkForAprilFools() {
+    var now = DateTime.now();
+    if(now.day == 1 && now.month == 4) isAprilFools = true;
+  }
 }
 
 class AmpStrings {
