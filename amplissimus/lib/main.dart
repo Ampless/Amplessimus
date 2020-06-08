@@ -87,8 +87,14 @@ class MyApp extends StatelessWidget {
           primarySwatch: AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground), 
-          initialIndex: initialIndex,),
+        home: MyHomePage(
+          title: AmpStrings.appTitle,
+          textStyle: TextStyle(
+            color: AmpColors.colorForeground,
+            fontSize: 30
+          ), 
+          initialIndex: initialIndex,
+        ),
       ), 
       onWillPop: () {
         return new Future(() => Prefs.closeAppOnBackPress);
@@ -211,9 +217,9 @@ class _MyHomePageState extends State<MyHomePage> {
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
-                bool condA = gradeInputFormKey.currentState.validate();
-                bool condB = charInputFormKey.currentState.validate();
-                if(!condA || !condB) return;
+                if(!gradeInputFormKey.currentState.validate() ||
+                   !charInputFormKey.currentState.validate())
+                  return;
                 Prefs.grade = gradeInputFormController.text.trim();
                 Prefs.char = charInputFormController.text.trim();
                 rebuildNewBuild();
@@ -237,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
+          title: Text('DSBMobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
           backgroundColor: AmpColors.colorBackground,
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -302,9 +308,9 @@ class _MyHomePageState extends State<MyHomePage> {
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
-                bool condA = passwordInputFormKey.currentState.validate();
-                bool condB = usernameInputFormKey.currentState.validate();
-                if (!condA || !condB) return;
+                if(!passwordInputFormKey.currentState.validate() ||
+                   !usernameInputFormKey.currentState.validate())
+                  return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
                 rebuildDragDown();
@@ -336,6 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
+    var textStyle = TextStyle(color: AmpColors.colorForeground);
     if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
        Container(
@@ -386,7 +393,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   dsbWidget = Container();
                   Animations.changeScreenNoAnimationReplace(new MyApp(initialIndex: 1,), context);
                 },
-                child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, widget.textStyle),
+                child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
               ),
             ),
             Card(
@@ -400,7 +407,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   showInputEntryCredentials(context);
                 },
-                child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, widget.textStyle),
+                child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
               ),
             ),
             Card(
@@ -412,7 +419,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () => showInputSelectCurrentClass(context),
-                child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, widget.textStyle),
+                child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
               ),
             ),
             Card(
@@ -426,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   if(Prefs.devOptionsEnabled) Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
                 },
-                child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(widget.textStyle) : Container(),
+                child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(textStyle) : Container(),
               ),
             ),
           ],
