@@ -348,6 +348,10 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cac
         ), padding: EdgeInsets.only(top: 15),));
         break;
       default:
+        dsbWidget = SizedBox(child: Container(child: Card(
+          color: AmpColors.lightForeground,
+          child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
+        ), padding: EdgeInsets.only(top: 15),));
     }
     
   }
