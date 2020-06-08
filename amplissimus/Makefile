@@ -8,7 +8,7 @@ app:
 ipa: app
 	mkdir -p build/Payload
 	cp -r build/ios/iphoneos/Runner.app build/Payload
-	cd build && zip -r $(VERSION).ipa Payload
+	cd build && zip -r -9 $(VERSION).ipa Payload
 	rm -rf build/Payload
 
 deb: app

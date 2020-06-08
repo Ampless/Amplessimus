@@ -24,7 +24,7 @@ cp -rp $APPLICATION_DIR $DEB_APP_DIR/
 export COPYFILE_DISABLE
 export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
-dpkg-deb --build $DEB_BUILD_DIR $DEB_DST
+dpkg-deb -Sextreme -z9 --build $DEB_BUILD_DIR $DEB_DST
 
 rm -rf $DEB_BUILD_DIR
 exit 0
