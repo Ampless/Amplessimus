@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
 
   void rebuild() {
@@ -225,14 +225,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             ),
             FlatButton(
               textColor: AmpColors.colorForeground,
-              onPressed: () {
-                if(!gradeInputFormKey.currentState.validate() ||
-                   !charInputFormKey.currentState.validate())
-                  return;
+              onPressed: () async {
+                if(!gradeInputFormKey.currentState.validate() ||  !charInputFormKey.currentState.validate()) return;
                 Prefs.grade = gradeInputFormController.text.trim();
                 Prefs.char = charInputFormController.text.trim();
-                rebuildNewBuild();
+                await dsbUpdateWidget(rebuild);
                 Navigator.of(context).pop();
+                tabController.animateTo(0);
               },
               child: Text('Speichern'),
             ),
@@ -317,12 +316,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
-                if(!passwordInputFormKey.currentState.validate() ||
-                   !usernameInputFormKey.currentState.validate())
-                  return;
+                if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
-                rebuildDragDown();
+                dsbUpdateWidget(rebuild);
                 Navigator.of(context).pop();
               },
               child: Text('Speichern'),
@@ -402,8 +399,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       Prefs.timesToggleDarkModePressed = 0;
                     }
                     AmpColors.changeMode();
-                    dsbWidget = Container();
-                    Animations.changeScreenNoAnimationReplace(new MyApp(initialIndex: 1,), context);
+                    dsbUpdateWidget(rebuild);
                   },
                   child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
                 ),
@@ -446,10 +442,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
-                      dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild);
                     } else {
                       Prefs.currentThemeId++;
-                      dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild);
                     }
                     tabController.animateTo(0);
                   },
@@ -485,13 +481,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           children: containers,
         ),
         floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
-          hoverColor: AmpColors.colorForeground,
           elevation: 0,
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
           onPressed: () => setState(() => Prefs.counter += 2),
           icon: Icon(Icons.add, color: AmpColors.colorForeground,),
-          label: Text('Zählen', style: widget.textStyle,),
+          label: Text('Zählen', style: TextStyle(color: AmpColors.colorForeground),),
         ) : Container(),
         bottomNavigationBar: SizedBox(
           height: 55,
