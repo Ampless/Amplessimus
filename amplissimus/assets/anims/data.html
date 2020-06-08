@@ -2,14 +2,23 @@
 <meta charset="UTF-8">
 <head>
     <style>
+        @keyframes background_color_anim {
+            0% {
+                background-color:#FFFFFF;
+            }
+            100% {
+                background-color:#000000;
+            }
+        }
         body{
-            background-color:#fff;
+            background-color:#FFFFFF;
             margin: 0px;
             height: 100%;
             overflow: hidden;
         }
         #lottie{
-            background-color:#fff;
+            background-color:#FFFFFF;
+            animation: background_color_anim 1000ms forwards;
             width:100%;
             height:100%;
             display:block;
@@ -18,7 +27,6 @@
             text-align: center;
             opacity: 1;
         }
-
     </style>
 </head>
 <body>
