@@ -1,14 +1,26 @@
 import 'package:amplissimus/animations.dart';
+import 'package:amplissimus/dsbapi.dart';
 import 'package:amplissimus/main.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
+import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
 
 class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: MaterialApp(
+        builder: (context, child) {
+          return ScrollConfiguration(behavior: MyBehavior(), child: child);
+        },
         title: AmpStrings.appTitle,
         theme: ThemeData(
           primarySwatch: AmpColors.primaryBlack,
@@ -16,8 +28,9 @@ class DevOptionsScreen extends StatelessWidget {
         ),
         home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
       ), 
-      onWillPop: () {
-        Animations.changeScreenEaseOutBackReplace(MyApp(initialIndex: 1,), context);
+      onWillPop: () async {
+        await dsbUpdateWidget((){});
+        Animations.changeScreenEaseOutBackReplace(new MyApp(initialIndex: 1,), context);
         return new Future(() => false);
       }
     );
@@ -37,13 +50,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
       backgroundColor: AmpColors.colorBackground,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AmpStrings.appTitle, style: widget.textStyle,),
+        title: Text('Entwickleroptionen', style: TextStyle(fontSize: 20, color: AmpColors.colorForeground),),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: Center(
         child: ListView(
           children: <Widget>[
+            Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()+2,),
             ListTile(
               title: Text('Entwickleroptionen aktiviert', style: widget.textStyle,),
               trailing: Switch(
@@ -52,6 +66,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
                 onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
               ),
             ),
+            Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
             ListTile(
               title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle,),
               trailing: Switch(
@@ -76,6 +91,16 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
                 onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
               ),
             ),
+            Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+            ListTile(
+              title: Text('Listenelementabstand', style: widget.textStyle,),
+              trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),
+              onTap: () {
+                showInputSubListItemSpacingDialog(context);
+              },
+            ),
+            Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+            Divider(color: AmpColors.colorBackground, height: 10),
             RaisedButton(
               child: Text('App-Informationen'),
               onPressed: () {
@@ -136,5 +161,58 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> {
       ),
     );
   }
-
+  void showInputSubListItemSpacingDialog(BuildContext context) {
+    final subListSpacingInputFormKey = GlobalKey<FormFieldState>();
+    final subListSpacingInputFormController = TextEditingController(text: Prefs.subListItemSpace.toString());
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Listenelementabstand', style: TextStyle(color: AmpColors.colorForeground),),
+          backgroundColor: AmpColors.colorBackground,
+          content: TextFormField(
+            style: TextStyle(color: AmpColors.colorForeground),
+            controller: subListSpacingInputFormController,
+            key: subListSpacingInputFormKey,
+            validator: Widgets.numberValidator,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: TextStyle(color: AmpColors.colorForeground),
+              labelText: 'Listenelementabstand',
+              fillColor: AmpColors.colorForeground,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: AmpColors.colorForeground)
+              )
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Abbrechen'),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                if(!subListSpacingInputFormKey.currentState.validate()) return;
+                Prefs.subListItemSpace = int.tryParse(subListSpacingInputFormController.text.trim());
+                setState(() => Prefs.subListItemSpace);
+                Navigator.of(context).pop();
+              },
+              child: Text('Speichern'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

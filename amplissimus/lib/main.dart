@@ -350,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
-            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 24)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24),),
+            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
             centerTitle: true,
           ),
           backgroundColor: AmpColors.colorBackground,

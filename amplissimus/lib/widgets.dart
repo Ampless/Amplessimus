@@ -116,5 +116,13 @@ class Widgets {
     }
     
   }
+
+  static String numberValidator(String value) {
+    if (value.trim().isEmpty) return 'Feld ist leer!';
+    final n = num.tryParse(value);
+    if (n == null) return '"$value" ist keine Zahl!';
+    if (n < 0) return '"$value" ist keine positive Zahl!';
+    return null;
+  }
   
 }
