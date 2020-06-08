@@ -431,6 +431,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                onTap: () async {
+                  ampInfo(ctx: 'MyApp', message: 'switching design mode');
+                  if(Prefs.currentThemeId >= 1) {
+                    Prefs.currentThemeId = 0;
+                    dsbUpdateWidget(rebuild);
+                  } else {
+                    Prefs.currentThemeId++;
+                    dsbUpdateWidget(rebuild);
+                  }
+                },
+                child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
+              ),
+            ),
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+              color: AmpColors.colorBackground,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                 onTap: () {
                   if(Prefs.devOptionsEnabled) Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
                 },

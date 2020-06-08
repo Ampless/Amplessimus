@@ -22,6 +22,20 @@ class Widgets {
     );
   }
 
+  static Widget toggleDesignModeWidget(bool isDarkMode, TextStyle textStyle) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(isDarkMode ? MdiIcons.clipboardList : MdiIcons.clipboardListOutline,
+              size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text('Aussehen ändern', style: textStyle,)
+        ],
+      ),
+    );
+  }
+
   static Widget entryCredentialsWidget(bool isDarkMode, TextStyle textStyle) {
     return Center(
       child: Column(

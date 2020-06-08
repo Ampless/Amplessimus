@@ -289,39 +289,17 @@ List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
 Widget dsbGetGoodList(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   List<Widget> widgets = [];
-  for(DsbPlan plan in plans) {
-    List<Widget> dayWidgets = [];
-    if(plan.subs.length == 0) {
-      dayWidgets.add(ListTile(
-        title: Text('Keine Vertretungen', style: TextStyle(color: AmpColors.colorForeground)),
-      ));
-    }
-    int i = 0;
-    int iMax = plan.subs.length;
-    for(DsbSubstitution sub in plan.subs) {
-      String titleSub = sub.title;
-      if(Cache.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
-      dayWidgets.add(ListTile(
-        title: Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
-        subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
-        trailing: !Prefs.oneClassOnly ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
-      ));
-      if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));
-    }
-    widgets.add(ListTile(title: Row(children: <Widget>[
-      Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
-      IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
-        dsbApiHomeScaffoldKey.currentState?.showSnackBar(
-          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))
-        );
-      },)
-    ])));
-    widgets.add(Card(
-      elevation: 0,
-      color: AmpColors.lightForeground,
-      child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
-    ));
+  switch (Prefs.currentThemeId) {
+    case 0:
+      initializeTheme0(widgets, plans);
+      break;
+    case 1:
+      initializeTheme1(widgets, plans);
+      break;
+    default:
+      initializeTheme0(widgets, plans);
   }
+  
   widgets.add(Padding(padding: EdgeInsets.all(12)));
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -372,4 +350,79 @@ List<String> jsonEncodeDsbPlans(List<DsbPlan> tempPlans) {
   List<String> tempStrings = [];
   for(DsbPlan tempPlan in tempPlans) tempStrings.add(jsonEncode(tempPlan.toJson()));
   return tempStrings;
+}
+
+void initializeTheme0(List<Widget> widgets, List<DsbPlan> plans) {
+  for(DsbPlan plan in plans) {
+    List<Widget> dayWidgets = [];
+    if(plan.subs.length == 0) {
+      dayWidgets.add(ListTile(
+        title: Text('Keine Vertretungen', style: TextStyle(color: AmpColors.colorForeground)),
+      ));
+    }
+    int i = 0;
+    int iMax = plan.subs.length;
+    for(DsbSubstitution sub in plan.subs) {
+      String titleSub = sub.title;
+      if(Cache.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
+      dayWidgets.add(ListTile(
+        title: Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
+        subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
+        trailing: !Prefs.oneClassOnly ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
+      ));
+      if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));
+    }
+    widgets.add(ListTile(title: Row(children: <Widget>[
+      Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
+      IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
+        dsbApiHomeScaffoldKey.currentState?.showSnackBar(
+          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))
+        );
+      },)
+    ])));
+    widgets.add(Card(
+      elevation: 0,
+      color: AmpColors.lightForeground,
+      child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+    ));
+  }
+}
+
+void initializeTheme1(List<Widget> widgets, List<DsbPlan> plans) {
+  for(DsbPlan plan in plans) {
+    List<Widget> dayWidgets = [];
+    if(plan.subs.length == 0) {
+      dayWidgets.add(ListTile(
+        title: Text('Keine Vertretungen', style: TextStyle(color: AmpColors.colorForeground)),
+      ));
+    }
+    int i = 0;
+    int iMax = plan.subs.length;
+    for(DsbSubstitution sub in plan.subs) {
+      String titleSub = sub.title;
+      if(Cache.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
+      dayWidgets.add(ListTile(
+        title: Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
+        subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
+        trailing: !Prefs.oneClassOnly ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
+      ));
+      if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));
+    }
+    widgets.add(ListTile(title: Row(children: <Widget>[
+      Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
+      IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
+        dsbApiHomeScaffoldKey.currentState?.showSnackBar(
+          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))
+        );
+      },)
+    ])));
+    widgets.add(Container(
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: AmpColors.colorForeground),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+    ));
+  }
 }
