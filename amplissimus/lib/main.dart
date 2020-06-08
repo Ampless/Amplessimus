@@ -91,7 +91,6 @@ class MyApp extends StatelessWidget {
           title: AmpStrings.appTitle,
           textStyle: TextStyle(
             color: AmpColors.colorForeground,
-            fontSize: 30
           ), 
           initialIndex: initialIndex,
         ),
@@ -351,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: AmpColors.colorBackground,
-            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: widget.textStyle,) : Text('${AmpStrings.appTitle}', style: widget.textStyle,),
+            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 24)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24),),
             centerTitle: true,
           ),
           backgroundColor: AmpColors.colorBackground,
