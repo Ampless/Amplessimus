@@ -113,10 +113,18 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+  TabController tabController;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
+  final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   bool circularProgressIndicatorActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
 
   void rebuild() {
     setState(() {});
@@ -373,136 +381,142 @@ class _MyHomePageState extends State<MyHomePage> {
         margin: EdgeInsets.all(16),
       ),
       Container(
-        child: GridView.count(
-          crossAxisCount: 2,
-          children: <Widget>[
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-              color: AmpColors.colorBackground,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () async {
-                  Prefs.devOptionsTimerCache();
-                  if(Prefs.timesToggleDarkModePressed >= 10) {
-                    Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
-                    Prefs.timesToggleDarkModePressed = 0;
-                  }
-                  AmpColors.changeMode();
-                  dsbWidget = Container();
-                  Animations.changeScreenNoAnimationReplace(new MyApp(initialIndex: 1,), context);
-                },
-                child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
+        child: Scaffold(
+          key: settingsScaffoldKey,
+          backgroundColor: AmpColors.colorBackground,
+          body: GridView.count(
+            crossAxisCount: 2,
+            children: <Widget>[
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: AmpColors.colorBackground,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () async {
+                    Prefs.devOptionsTimerCache();
+                    if(Prefs.timesToggleDarkModePressed >= 10) {
+                      Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
+                      Prefs.timesToggleDarkModePressed = 0;
+                    }
+                    AmpColors.changeMode();
+                    dsbWidget = Container();
+                    Animations.changeScreenNoAnimationReplace(new MyApp(initialIndex: 1,), context);
+                  },
+                  child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
+                ),
               ),
-            ),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-              color: AmpColors.colorBackground,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
-                  showInputEntryCredentials(context);
-                },
-                child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: AmpColors.colorBackground,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () {
+                    showInputEntryCredentials(context);
+                  },
+                  child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
+                ),
               ),
-            ),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-              color: AmpColors.colorBackground,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () => showInputSelectCurrentClass(context),
-                child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: AmpColors.colorBackground,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () => showInputSelectCurrentClass(context),
+                  child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
+                ),
               ),
-            ),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-              color: AmpColors.colorBackground,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () async {
-                  ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                  if(Prefs.currentThemeId >= 1) {
-                    Prefs.currentThemeId = 0;
-                    dsbUpdateWidget(rebuild);
-                  } else {
-                    Prefs.currentThemeId++;
-                    dsbUpdateWidget(rebuild);
-                  }
-                },
-                child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: AmpColors.colorBackground,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () async {
+                    ampInfo(ctx: 'MyApp', message: 'switching design mode');
+                    if(Prefs.currentThemeId >= 1) {
+                      Prefs.currentThemeId = 0;
+                      dsbUpdateWidget(rebuild);
+                    } else {
+                      Prefs.currentThemeId++;
+                      dsbUpdateWidget(rebuild);
+                    }
+                    tabController.animateTo(0);
+                  },
+                  child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
+                ),
               ),
-            ),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-              color: AmpColors.colorBackground,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                onTap: () {
-                  if(Prefs.devOptionsEnabled) Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
-                },
-                child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(textStyle) : Container(),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: AmpColors.colorBackground,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () {
+                    if(Prefs.devOptionsEnabled) Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
+                  },
+                  child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(textStyle) : Container(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        
       )
     ];
-    return DefaultTabController(length: 2, initialIndex: widget.initialIndex,
-      child: SafeArea(
-        child: Scaffold(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AmpColors.colorBackground,
+        body: TabBarView(
+          controller: tabController,
+          physics: ClampingScrollPhysics(),
+          children: containers,
+        ),
+        floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
+          hoverColor: AmpColors.colorForeground,
+          elevation: 0,
           backgroundColor: AmpColors.colorBackground,
-          body: TabBarView(
-            physics: ClampingScrollPhysics(),
-            children: containers,
+          splashColor: AmpColors.colorForeground,
+          onPressed: () => setState(() => Prefs.counter += 2),
+          icon: Icon(Icons.add, color: AmpColors.colorForeground,),
+          label: Text('Zählen', style: widget.textStyle,),
+        ) : Container(),
+        bottomNavigationBar: SizedBox(
+          height: 55,
+          child: TabBar(
+            controller: tabController,
+            indicatorColor: AmpColors.colorForeground,
+            labelColor: AmpColors.colorForeground,
+            tabs: <Widget>[
+              new Tab(
+                icon: Icon(Icons.home),
+                text: 'Start',
+              ),
+              new Tab(
+                icon: Icon(Icons.settings),
+                text: 'Einstellungen',
+              )
+            ],
           ),
-          floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
-            hoverColor: AmpColors.colorForeground,
-            elevation: 0,
-            backgroundColor: AmpColors.colorBackground,
-            splashColor: AmpColors.colorForeground,
-            onPressed: () => setState(() => Prefs.counter += 2),
-            icon: Icon(Icons.add, color: AmpColors.colorForeground,),
-            label: Text('Zählen', style: widget.textStyle,),
-          ) : Container(),
-          bottomNavigationBar: SizedBox(
-            height: 55,
-            child: TabBar(
-              indicatorColor: AmpColors.colorForeground,
-              labelColor: AmpColors.colorForeground,
-              tabs: <Widget>[
-                new Tab(
-                  icon: Icon(Icons.home),
-                  text: 'Start',
-                ),
-                new Tab(
-                  icon: Icon(Icons.settings),
-                  text: 'Einstellungen',
-                )
-              ],
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
-            backgroundColor: AmpColors.blankGrey,
-            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
-          ) : Container(height: 0,),
-        )
-      ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
+          backgroundColor: AmpColors.blankGrey,
+          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+        ) : Container(height: 0,),
+      )
     );
   }
 }
