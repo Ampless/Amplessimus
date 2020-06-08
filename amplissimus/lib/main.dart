@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:amplissimus/animations.dart';
@@ -9,6 +10,8 @@ import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -42,8 +45,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     ampInfo(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
@@ -54,7 +55,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           width: double.infinity,
           color: backgroundColor,
           duration: Duration(milliseconds: 1000),
-          child: Image.asset('assets/images/logo.png', scale: 5,),
+          child: InAppWebView(
+            initialFile: 'assets/anims/data.html',
+          ),
         ),
       ),
       bottomSheet: LinearProgressIndicator(
