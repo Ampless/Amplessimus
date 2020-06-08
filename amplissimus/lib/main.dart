@@ -30,13 +30,13 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> {
-  Color backgroundColor = AmpColors.blankWhite;
+  String fileString = 'assets/anims/data-white-to-black.html';
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () async {
-      setState(() => backgroundColor = AmpColors.colorBackground);
+    Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
+      if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       Cache.checkForAprilFools();
       await dsbUpdateWidget(() {});
       Future.delayed(Duration(milliseconds: 1000), () {
@@ -53,10 +53,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         child: AnimatedContainer(
           height: double.infinity,
           width: double.infinity,
-          color: backgroundColor,
           duration: Duration(milliseconds: 1000),
           child: InAppWebView(
-            initialFile: 'assets/anims/data.html',
+            initialFile: fileString,
           ),
         ),
       ),
