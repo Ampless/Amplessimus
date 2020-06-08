@@ -97,6 +97,6 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
   ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
   String res = (await _httpclient.get(url)).body;
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
-  Prefs.setCache(url, res);
+  Prefs.setCache(url, res, ttl: Duration(days: 4));
   return res;
 }
