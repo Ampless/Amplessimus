@@ -330,10 +330,26 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cac
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
   } catch (e) {
-    dsbWidget = SizedBox(child: Container(child: Card(
-      color: AmpColors.lightForeground,
-      child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
-    ), padding: EdgeInsets.only(top: 15),));
+    switch (Prefs.currentThemeId) {
+      case 0:
+        dsbWidget = SizedBox(child: Container(child: Card(
+          color: AmpColors.lightForeground,
+          child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
+        ), padding: EdgeInsets.only(top: 15),));
+        break;
+      case 1:
+        dsbWidget = SizedBox(child: Container(child: Container(
+          margin: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border.all(color: AmpColors.colorForeground),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
+        ), padding: EdgeInsets.only(top: 15),));
+        break;
+      default:
+    }
+    
   }
   f();
 }
