@@ -121,6 +121,25 @@ class DsbSubstitution {
     return isFree ? 'Freistunde${hours.length == 1 ? '' : 'n'}$notesaddon'
                   : 'Vertreten durch $teacher$notesaddon';
   }
+
+  String toPlist() {
+    String plist =
+      '        <key>class</key>\n'
+      '        <string>${_xmlEscape(affectedClass)}</string>\n'
+      '        <key>lessons</key>\n'
+      '        <array>\n';
+    for(int h in hours)
+      plist += '            <integer>$h</integer>\n';
+    plist +=
+      '        </array>\n'
+      '        <key>teacher</key>\n'
+      '        <string>${_xmlEscape(teacher)}</string>\n'
+      '        <key>subject</key>\n'
+      '        <string>${_xmlEscape(subject)}</string>\n'
+      '        <key>notes</key>\n'
+      '        <string>${_xmlEscape(notes)}</string>\n';
+    return plist;
+  }
 }
 
 class DsbPlan {
@@ -158,6 +177,19 @@ class DsbPlan {
       tempStrings.add(jsonEncode(tempSub.toJson()));
     }
     return tempStrings;
+  }
+
+  String toPlist() {
+    String plist =
+      '    <key>title</key>\n'
+      '    <string>${_xmlEscape(title)}</string>\n'
+      '    <key>date</key>\n'
+      '    <string>$date</string>\n'
+      '    <key>subs</key>\n'
+      '    <array>\n';
+    for(DsbSubstitution sub in subs)
+      plist += sub.toPlist();
+    return '$plist    </array>\n';
   }
 }
 
@@ -353,7 +385,6 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cac
           child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
         ), padding: EdgeInsets.only(top: 15),));
     }
-    
   }
   f();
 }
@@ -445,4 +476,23 @@ void initializeTheme1(List<Widget> widgets, List<DsbPlan> plans) {
       child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
     ));
   }
+}
+
+String _xmlEscape(String s) => s.replaceAll('&', '&amp;')
+                                .replaceAll('"', '&quot;')
+                                .replaceAll("'", '&apos;')
+                                .replaceAll('<', '&lt;')
+                                .replaceAll('>', '&gt;');
+
+String toPlist(List<DsbPlan> plans) {
+    String plist =
+      '<?xml version="1.0" encoding="UTF-8"?>\n'
+      '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
+      '<plist version="1.0">\n'
+      '<array>\n';
+    for(var plan in plans)
+      plist += plan.toPlist();
+  return '$plist'
+         '</array>\n'
+         '</plist>\n';
 }
