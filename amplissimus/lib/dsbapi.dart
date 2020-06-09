@@ -168,6 +168,7 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
         '"DataType": 1'
       '}'
     '}',
+    '$username\t$password',
     {"content-type": "application/json"},
     useCache: cachePostRequests,
   );
