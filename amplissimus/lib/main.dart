@@ -352,16 +352,18 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     var textStyle = TextStyle(color: AmpColors.colorForeground);
     if(dsbWidget is Container) rebuildNewBuild();
     List<Widget> containers = [
-       Container(
+      AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        color: AmpColors.colorBackground,
         child: Scaffold(
           key: homeScaffoldKey,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: AmpColors.colorBackground,
+            backgroundColor: Colors.transparent,
             title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
             centerTitle: true,
           ),
-          backgroundColor: AmpColors.colorBackground,
+          backgroundColor: Colors.transparent,
           body: RefreshIndicator(
             key: refreshKey,
             child: !circularProgressIndicatorActive ? ListView(
@@ -378,17 +380,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
         margin: EdgeInsets.all(16),
       ),
-      Container(
+      AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        color: Colors.transparent,
         child: Scaffold(
           key: settingsScaffoldKey,
-          backgroundColor: AmpColors.colorBackground,
+          backgroundColor: Colors.transparent,
           body: GridView.count(
             crossAxisCount: 2,
             children: <Widget>[
               Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: AmpColors.colorBackground,
+                color: Colors.transparent,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -400,7 +404,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       Prefs.timesToggleDarkModePressed = 0;
                     }
                     AmpColors.changeMode();
-                    dsbUpdateWidget(rebuild);
+                    setState(() {
+                      dsbWidget = Container();
+                    });
                   },
                   child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
                 ),
@@ -408,7 +414,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: AmpColors.colorBackground,
+                color: Colors.transparent,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -417,10 +423,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
-                      await dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
                     } else {
                       Prefs.currentThemeId++;
-                      await dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
                     }
                     tabController.animateTo(0);
                   },
@@ -430,7 +436,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: AmpColors.colorBackground,
+                color: Colors.transparent,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -444,7 +450,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: AmpColors.colorBackground,
+                color: Colors.transparent,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -456,7 +462,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: AmpColors.colorBackground,
+                color: Colors.transparent,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -473,45 +479,52 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       )
     ];
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: AmpColors.colorBackground,
-        body: TabBarView(
-          controller: tabController,
-          physics: ClampingScrollPhysics(),
-          children: containers,
+      child: Stack(children: <Widget>[
+        AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          color: AmpColors.colorBackground,
         ),
-        floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
-          elevation: 0,
-          backgroundColor: AmpColors.colorBackground,
-          splashColor: AmpColors.colorForeground,
-          onPressed: () => setState(() => Prefs.counter += 2),
-          icon: Icon(Icons.add, color: AmpColors.colorForeground,),
-          label: Text('Zählen', style: TextStyle(color: AmpColors.colorForeground),),
-        ) : Container(),
-        bottomNavigationBar: SizedBox(
-          height: 55,
-          child: TabBar(
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: TabBarView(
             controller: tabController,
-            indicatorColor: AmpColors.colorForeground,
-            labelColor: AmpColors.colorForeground,
-            tabs: <Widget>[
-              new Tab(
-                icon: Icon(Icons.home),
-                text: 'Start',
-              ),
-              new Tab(
-                icon: Icon(Icons.settings),
-                text: 'Einstellungen',
-              )
-            ],
+            physics: ClampingScrollPhysics(),
+            children: containers,
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
-          backgroundColor: AmpColors.blankGrey,
-          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
-        ) : Container(height: 0,),
-      )
+          floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
+            elevation: 0,
+            backgroundColor: AmpColors.colorBackground,
+            splashColor: AmpColors.colorForeground,
+            onPressed: () => setState(() => Prefs.counter += 2),
+            icon: Icon(Icons.add, color: AmpColors.colorForeground,),
+            label: Text('Zählen', style: TextStyle(color: AmpColors.colorForeground),),
+          ) : Container(),
+          bottomNavigationBar: SizedBox(
+            height: 55,
+            child: TabBar(
+              controller: tabController,
+              indicatorColor: AmpColors.colorForeground,
+              labelColor: AmpColors.colorForeground,
+              tabs: <Widget>[
+                new Tab(
+                  icon: Icon(Icons.home),
+                  text: 'Start',
+                ),
+                new Tab(
+                  icon: Icon(Icons.settings),
+                  text: 'Einstellungen',
+                )
+              ],
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
+            backgroundColor: AmpColors.blankGrey,
+            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          ) : Container(height: 0,),
+        )
+      ],)
+      
     );
   }
 }
