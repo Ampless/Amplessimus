@@ -38,7 +38,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await Prefs.loadPrefs();
       setState(() => backgroundColor = AmpColors.colorBackground);
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
-      Cache.checkForAprilFools();
+      CustomValues.checkForAprilFools();
+      if(CustomValues.isAprilFools) Prefs.currentThemeId = -1; else Prefs.currentThemeId = 0;
       await dsbUpdateWidget(() {});
       Future.delayed(Duration(milliseconds: 1000), () {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
@@ -498,7 +499,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
           floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
             elevation: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: AmpColors.colorBackground,
             splashColor: AmpColors.colorForeground,
             onPressed: () => setState(() => Prefs.counter += 2),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),

@@ -3,7 +3,7 @@ import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Cache {
+class CustomValues {
   static bool isAprilFools = false;
   static void checkForAprilFools() {
     var now = DateTime.now();

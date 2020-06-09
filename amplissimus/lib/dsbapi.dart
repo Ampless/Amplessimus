@@ -361,7 +361,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     int iMax = plan.subs.length;
     for(DsbSubstitution sub in plan.subs) {
       String titleSub = sub.title;
-      if(Cache.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
+      if(CustomValues.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
         title: Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
         subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
