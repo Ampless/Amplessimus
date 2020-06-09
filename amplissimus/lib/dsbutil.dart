@@ -76,16 +76,16 @@ String htmlUnescape(String data) {
 
 http.Client _httpclient = http.Client();
 
-Future<String> httpPost(String url, dynamic body, String joinedUsernameAndPassword,
+Future<String> httpPost(String url, dynamic body, String id,
                         Map<String, String> headers, {bool useCache = true}) async {
   if(useCache) {
-    String cachedResp = Prefs.getCache(url + joinedUsernameAndPassword);
+    String cachedResp = Prefs.getCache('$url\t$id');
     if(cachedResp != null) return cachedResp;
   }
   ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
   http.Response res = await _httpclient.post(url, body: body, headers: headers);
   ampInfo(ctx: 'HTTP', message: 'Got POST-Response.');
-  if(res.statusCode == 200) Prefs.setCache(url + joinedUsernameAndPassword, res.body, ttl: Duration(minutes: 2));
+  if(res.statusCode == 200) Prefs.setCache('$url\t$id', res.body, ttl: Duration(minutes: 2));
   return res.body;
 }
 

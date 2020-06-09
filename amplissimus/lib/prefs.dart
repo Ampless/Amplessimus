@@ -94,6 +94,7 @@ void clearCache() {
   for(String url in cachedUrls) {
     setString('CACHE_VAL_$url', null);
     setInt('CACHE_TTL_$url', null);
+    ampInfo(ctx: 'CACHE', message: 'Removed $url');
   }
   setStringList('CACHE_URLS', []);
 }
