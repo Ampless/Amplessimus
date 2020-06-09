@@ -353,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    if(CustomValues.isAprilFools) 
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     var textStyle = TextStyle(color: AmpColors.colorForeground);
@@ -426,6 +427,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () async {
+                    if(CustomValues.isAprilFools) {tabController.animateTo(0); return;}
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;

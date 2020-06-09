@@ -304,7 +304,7 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cac
       case 0:
         dsbWidget = SizedBox(child: Container(child: Card(
           color: AmpColors.lightForeground,
-          child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
+          child: ListTile(title: CustomValues.isAprilFools ? Text(errorString(e), style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground)),)
         ), padding: EdgeInsets.only(top: 15),));
         break;
       case 1:
@@ -314,20 +314,20 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cac
             border: Border.all(color: AmpColors.colorForeground),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
+          child: ListTile(title: CustomValues.isAprilFools ? Text(errorString(e), style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground)),)
         ), padding: EdgeInsets.only(top: 15),));
         break;
       default:
         dsbWidget = SizedBox(child: Container(child: Card(
           color: AmpColors.lightForeground,
-          child: ListTile(title: Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground),),)
+          child: ListTile(title: CustomValues.isAprilFools ? Text(errorString(e), style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground)),)
         ), padding: EdgeInsets.only(top: 15),));
     }
   }
   f();
 }
 
-Widget _getWidget(List<Widget> dayWidgets, int themeId) {
+Widget _getWidget(List<Widget> dayWidgets, int themeId, {AnimationController animController}) {
   switch (themeId) {
     case 0:
       return Card(
@@ -342,6 +342,12 @@ Widget _getWidget(List<Widget> dayWidgets, int themeId) {
           border: Border.all(color: AmpColors.colorForeground),
           borderRadius: BorderRadius.circular(8),
         ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+      );
+    case -1:
+      return Card(
+        elevation: 0,
+        color: AmpColors.lightForeground,
         child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
       );
     default:
@@ -363,8 +369,8 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       String titleSub = sub.title;
       if(CustomValues.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title: Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
-        subtitle: Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
+        title: CustomValues.isAprilFools ? Text(titleSub, style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
+        subtitle: CustomValues.isAprilFools ? Text(sub.subtitle, style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
         trailing: !Prefs.oneClassOnly ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));

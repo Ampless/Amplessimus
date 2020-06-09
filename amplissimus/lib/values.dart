@@ -79,5 +79,31 @@ class AmpColors {
       colorBackground = blankWhite;
     }
   }
+
+  static final Animatable<Color> rainbowBackgroundAnimation = TweenSequence<Color>(
+    [
+      TweenSequenceItem(
+        weight: 1.0,
+        tween: ColorTween(
+          begin: Colors.red,
+          end: Colors.green,
+        ),
+      ),
+      TweenSequenceItem(
+        weight: 1.0,
+        tween: ColorTween(
+          begin: Colors.green,
+          end: Colors.blue,
+        ),
+      ),
+      TweenSequenceItem(
+        weight: 1.0,
+        tween: ColorTween(
+          begin: Colors.blue,
+          end: Colors.pink,
+        ),
+      ),
+    ],
+  );
   
 }
