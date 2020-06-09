@@ -99,13 +99,11 @@ void clearCache() {
   setStringList('CACHE_URLS', []);
 }
 
-String listCache() {
-  List<String> cachedUrls = getStringList('CACHE_URLS', []);
-  if(cachedUrls.length == 0) return '{}';
-  String s = '';
-  for(String url in cachedUrls)
-    s += '{url=\'$url\',val.length=${getString('CACHE_VAL_$url', '').length},ttl=${getInt('CACHE_TTL_$url', -1)}},';
-  return '{$s}';
+void listCache() {
+  print('{');
+  for(String url in getStringList('CACHE_URLS', []))
+    print('    {url=\'$url\',len=${getString('CACHE_VAL_$url', '').length},ttl=${getInt('CACHE_TTL_$url', -1)}},');
+  print('}');
 }
 
 void devOptionsTimerCache() {

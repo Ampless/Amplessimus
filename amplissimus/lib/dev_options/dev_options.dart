@@ -117,9 +117,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
                   child: Text('print Cache'),
-                  onPressed: () {
-                    ampInfo(ctx: 'CACHE', message: Prefs.listCache());
-                  }
+                  onPressed: Prefs.listCache
                 ),
                 RaisedButton(
                   child: Text('Cache leeren'),
