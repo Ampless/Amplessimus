@@ -88,6 +88,16 @@ void flushCache() {
   setStringList('CACHE_URLS', cachedUrls);
 }
 
+void clearCache() {
+  List<String> cachedUrls = getStringList('CACHE_URLS', []);
+  if(cachedUrls.length == 0) return;
+  for(String url in cachedUrls) {
+    setString('CACHE_VAL_$url', null);
+    setInt('CACHE_TTL_$url', null);
+  }
+  setStringList('CACHE_URLS', []);
+}
+
 void devOptionsTimerCache() {
   if(DateTime.now().millisecondsSinceEpoch < getInt('last_pressed_tgl_drk_mode', 0) + 10000) {
     setInt('times_tgl_drk_mode_pressed', getInt('times_tgl_drk_mode_pressed', 1)+1);
