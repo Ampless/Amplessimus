@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:amplissimus/animations.dart';
@@ -499,7 +498,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
           floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
             elevation: 0,
-            backgroundColor: AmpColors.colorBackground,
+            backgroundColor: Colors.transparent,
             splashColor: AmpColors.colorForeground,
             onPressed: () => setState(() => Prefs.counter += 2),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),

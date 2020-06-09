@@ -1,5 +1,6 @@
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dsbapi.dart';
+import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/main.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
@@ -64,103 +65,120 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        body: Center(
-          child: ListView(
-            children: <Widget>[
-              Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()+2,),
-              ListTile(
-                title: Text('Entwickleroptionen aktiviert', style: widget.textStyle,),
-                trailing: Switch(
-                  activeColor: AmpColors.colorForeground,
-                  value: Prefs.devOptionsEnabled, 
-                  onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
+        body: Container(
+          color: AmpColors.colorBackground,
+          margin: EdgeInsets.all(16),
+          child: Center(
+            child: ListView(
+              children: <Widget>[
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()+2,),
+                ListTile(
+                  title: Text('Entwickleroptionen aktiviert', style: widget.textStyle,),
+                  trailing: Switch(
+                    activeColor: AmpColors.colorForeground,
+                    value: Prefs.devOptionsEnabled, 
+                    onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
+                  ),
                 ),
-              ),
-              Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
-              ListTile(
-                title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle,),
-                trailing: Switch(
-                  activeColor: AmpColors.colorForeground,
-                  value: Prefs.counterEnabled, 
-                  onChanged: (value) => setState(() => Prefs.counterEnabled = value),
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                ListTile(
+                  title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle,),
+                  trailing: Switch(
+                    activeColor: AmpColors.colorForeground,
+                    value: Prefs.counterEnabled, 
+                    onChanged: (value) => setState(() => Prefs.counterEnabled = value),
+                  ),
                 ),
-              ),
-              ListTile(
-                title: Text('App schließt bei zurück-Taste', style: widget.textStyle,),
-                trailing: Switch(
-                  activeColor: AmpColors.colorForeground,
-                  value: Prefs.closeAppOnBackPress, 
-                  onChanged: (value) => setState(() => Prefs.closeAppOnBackPress = value),
+                ListTile(
+                  title: Text('App schließt bei zurück-Taste', style: widget.textStyle,),
+                  trailing: Switch(
+                    activeColor: AmpColors.colorForeground,
+                    value: Prefs.closeAppOnBackPress, 
+                    onChanged: (value) => setState(() => Prefs.closeAppOnBackPress = value),
+                  ),
                 ),
-              ),
-              ListTile(
-                title: Text('Dauerhafter Ladebalken', style: widget.textStyle,),
-                trailing: Switch(
-                  activeColor: AmpColors.colorForeground,
-                  value: Prefs.loadingBarEnabled, 
-                  onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+                ListTile(
+                  title: Text('Dauerhafter Ladebalken', style: widget.textStyle,),
+                  trailing: Switch(
+                    activeColor: AmpColors.colorForeground,
+                    value: Prefs.loadingBarEnabled, 
+                    onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+                  ),
                 ),
-              ),
-              Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
-              ListTile(
-                title: Text('Listenelementabstand', style: widget.textStyle,),
-                trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),
-                onTap: () {
-                  showInputSubListItemSpacingDialog(context);
-                },
-              ),
-              Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
-              Divider(color: AmpColors.colorBackground, height: 10),
-              RaisedButton(
-                child: Text('App-Informationen'),
-                onPressed: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationName: 'Amplissimus',
-                    applicationVersion: '1.0.0',
-                    applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
-                    children: [
-                      Text('Amplissimus is an App for easily viewing substitution plans using DSB Mobile.')
-                    ]
-                  );
-                }
-              ),
-              RaisedButton.icon(
-                color: Colors.red,
-                icon: Icon(Icons.delete, color: AmpColors.blankWhite,),
-                label: Text('App-Daten löschen', style: TextStyle(color: AmpColors.blankWhite),),
-                onPressed: () {
-                  showDialog(context: context, barrierDismissible: true, builder: (context) {
-                    return AlertDialog(
-                      title: Text('App-Daten löschen', style: widget.textStyle),
-                      content: Text('Löschen der App-Daten bestätigen?', style: TextStyle(color: AmpColors.colorForeground),),
-                      backgroundColor: AmpColors.colorBackground,
-                      actions: <Widget>[
-                        FlatButton(
-                          textColor: AmpColors.colorForeground,
-                          onPressed: () { 
-                            Navigator.of(context).pop();
-                          }, 
-                          child: Text('Abbrechen')
-                        ),
-                        FlatButton(
-                          textColor: AmpColors.colorForeground,
-                          onPressed: () {
-                            Prefs.clear();
-                            Navigator.of(context).pop();
-                            Animations.changeScreenEaseOutBack(MyApp(initialIndex: 0,), context);
-                          }, 
-                          child: Text('Bestätigen'),
-                        ),
-                      ],
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                ListTile(
+                  title: Text('Listenelementabstand', style: widget.textStyle,),
+                  trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),
+                  onTap: () {
+                    showInputSubListItemSpacingDialog(context);
+                  },
+                ),
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                Divider(color: Colors.transparent, height: 10),
+                RaisedButton(
+                  child: Text('print Cache'),
+                  onPressed: () {
+                    ampInfo(ctx: 'CACHE', message: Prefs.listCache());
+                  }
+                ),
+                RaisedButton(
+                  child: Text('Cache leeren'),
+                  onPressed: () {
+                    Prefs.clearCache();
+                  }
+                ),
+                RaisedButton(
+                  child: Text('App-Informationen'),
+                  onPressed: () {
+                    showAboutDialog(
+                      context: context,
+                      applicationName: 'Amplissimus',
+                      applicationVersion: '1.0.0',
+                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
+                      children: [
+                        Text('Amplissimus is an App for easily viewing substitution plans using DSB Mobile.')
+                      ]
                     );
-                  },);
-                }
-              )
-            ],
+                  }
+                ),
+                RaisedButton.icon(
+                  color: Colors.red,
+                  icon: Icon(Icons.delete, color: AmpColors.blankWhite,),
+                  label: Text('App-Daten löschen', style: TextStyle(color: AmpColors.blankWhite),),
+                  onPressed: () {
+                    showDialog(context: context, barrierDismissible: true, builder: (context) {
+                      return AlertDialog(
+                        title: Text('App-Daten löschen', style: widget.textStyle),
+                        content: Text('Löschen der App-Daten bestätigen?', style: TextStyle(color: AmpColors.colorForeground),),
+                        backgroundColor: AmpColors.colorBackground,
+                        actions: <Widget>[
+                          FlatButton(
+                            textColor: AmpColors.colorForeground,
+                            onPressed: () { 
+                              Navigator.of(context).pop();
+                            }, 
+                            child: Text('Abbrechen')
+                          ),
+                          FlatButton(
+                            textColor: AmpColors.colorForeground,
+                            onPressed: () {
+                              Prefs.clear();
+                              Navigator.of(context).pop();
+                              Animations.changeScreenEaseOutBack(MyApp(initialIndex: 0,), context);
+                            }, 
+                            child: Text('Bestätigen'),
+                          ),
+                        ],
+                      );
+                    },);
+                  }
+                )
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
+          elevation: 0,
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
           onPressed: () {
