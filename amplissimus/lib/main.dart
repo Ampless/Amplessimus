@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
+    await dsbUpdateWidget(rebuild);
     return null;
   }
 
@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     setState(() {
       circularProgressIndicatorActive = true;
     });
-    await dsbUpdateWidget(rebuild);
+    await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
     setState(() {
       circularProgressIndicatorActive = false;
     });
@@ -429,10 +429,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
-                      await dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
                     } else {
                       Prefs.currentThemeId++;
-                      await dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
                     }
                     tabController.animateTo(0);
                   },
