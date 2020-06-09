@@ -9,6 +9,7 @@ import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
 import 'package:amplissimus/widgets.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -56,7 +57,12 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
-          child: Image.asset('assets/images/logo.png', scale: 5,),
+          child: FlareActor(
+            'assets/anims/splash_screen.flr',
+            alignment:Alignment.center, 
+            fit:BoxFit.contain, 
+            animation:'anim'
+          ),
         ),
       ),
       bottomSheet: LinearProgressIndicator(
