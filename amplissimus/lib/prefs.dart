@@ -103,7 +103,7 @@ String listCache() {
   if(cachedUrls.length == 0) return '{}';
   String s = '';
   for(String url in cachedUrls)
-    s += '{\'$url\':\'${getString('CACHE_VAL_$url', '').length};ttl=${getInt('CACHE_TTL_$url', -1)}\'},';
+    s += '{url=\'$url\',val.length=${getString('CACHE_VAL_$url', '').length},ttl=${getInt('CACHE_TTL_$url', -1)}},';
   return '{$s}';
 }
 
