@@ -423,10 +423,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
-                      await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
+                      await dsbUpdateWidget(rebuild);
                     } else {
                       Prefs.currentThemeId++;
-                      await dsbUpdateWidget(rebuild, cacheGetRequests: false, cachePostRequests: false);
+                      await dsbUpdateWidget(rebuild);
                     }
                     tabController.animateTo(0);
                   },
