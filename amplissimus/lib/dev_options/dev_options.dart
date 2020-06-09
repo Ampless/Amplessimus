@@ -1,5 +1,6 @@
 import 'package:amplissimus/animations.dart';
 import 'package:amplissimus/dsbapi.dart';
+import 'package:amplissimus/logging.dart';
 import 'package:amplissimus/main.dart';
 import 'package:amplissimus/prefs.dart' as Prefs;
 import 'package:amplissimus/values.dart';
@@ -114,6 +115,12 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 Divider(color: Colors.transparent, height: 10),
+                RaisedButton(
+                  child: Text('print Cache'),
+                  onPressed: () {
+                    ampInfo(ctx: 'CACHE', message: Prefs.listCache());
+                  }
+                ),
                 RaisedButton(
                   child: Text('Cache leeren'),
                   onPressed: () {
