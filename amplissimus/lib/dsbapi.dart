@@ -295,9 +295,8 @@ Widget dsbWidget = Container();
 Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Login-Daten eingetragen.';
-    List<DsbPlan> plans = await dsbGetAllSubs(Prefs.username, Prefs.password);
-    if(Prefs.oneClassOnly)
-      plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+    List<DsbPlan> plans = await dsbGetAllSubs(Prefs.username, Prefs.password, cacheGetRequests: cacheGetRequests, cachePostRequests: cachePostRequests);
+    if(Prefs.oneClassOnly) plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
   } catch (e) {
     switch (Prefs.currentThemeId) {
