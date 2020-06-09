@@ -66,7 +66,7 @@ String getCache(String url) => getString('CACHE_VAL_$url', null);
 
 void setCache(String url, String html, {Duration ttl = Duration.zero}) {
   List<String> cacheUrls = getStringList('CACHE_URLS', []);
-  cacheUrls.add(url);
+  if(!cacheUrls.contains(url)) cacheUrls.add(url);
   setStringList('CACHE_URLS', cacheUrls);
   setString('CACHE_VAL_$url', html);
   setInt('CACHE_TTL_$url', ttl == Duration.zero ? 0
