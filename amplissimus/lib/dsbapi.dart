@@ -104,6 +104,13 @@ class DsbSubstitution {
                   : 'Vertreten durch $teacher$notesaddon';
   }
 
+  List<int> get actualHours {
+    List<int> h = [];
+    for(int i = min(hours); i <= max(hours); i++)
+      h.add(i);
+    return h;
+  }
+
   String toPlist() {
     String plist =
       '        <key>class</key>\n'
@@ -231,12 +238,11 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cac
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
       List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children;
       String planDate = html[0].innerHtml;
-      String planTitle = planDate.split(' ').last;
       html = html[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++)
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
-      plans.add(DsbPlan(planTitle, subs, planDate));
+      plans.add(DsbPlan(planDate.split(' ').last, subs, planDate));
     } catch (e) {
       ampErr(ctx: 'DSB', message: errorString(e));
       plans.add(DsbPlan(title, [], ''));
@@ -263,6 +269,15 @@ int max(List<int> i) {
   int j = i[0];
   for(int k in i)
     if(j < k)
+      j = k;
+  return j;
+}
+
+int min(List<int> i) {
+  if(i.length == 0) return null;
+  int j = i[0];
+  for(int k in i)
+    if(j > k)
       j = k;
   return j;
 }
