@@ -1,24 +1,35 @@
-VERSION = 0.5b
+VERSION = 0.5.1b
 
-all: cleanexes ipa deb apk
+FLAGS = --release --split-debug-info=debug_symbols
+
+all: cleanexes app ipa deb apk cleanartifacts
 
 app:
-	flutter build ios --release
+	mkdir -p debug_symbols
+	flutter build ios $(FLAGS)
+	xcrun bitcode_strip build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
+	mv -f tmpfltr build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter
 
-ipa: app
-	mkdir -p build/Payload
-	cp -r build/ios/iphoneos/Runner.app build/Payload
-	cd build && zip -r -9 $(VERSION).ipa Payload
-	rm -rf build/Payload
+ipa:
+	mkdir Payload
+	cp -r build/ios/Release-iphoneos/Runner.app Payload
+	zip -r -9 $(VERSION).ipa Payload
 
-deb: app
+deb:
 	./build_deb.bash $(VERSION)
 
 apk:
-	flutter build apk --release
-	mv build/app/outputs/apk/release/app-release.apk build/$(VERSION).apk
+	mkdir -p debug_symbols
+	flutter build apk $(FLAGS)
+	mv build/app/outputs/apk/release/app-release.apk $(VERSION).apk
 
 cleanexes:
-	cd build && rm -f $(VERSION).ipa $(VERSION).deb $(VERSION).apk
+	cd bin && rm -f $(VERSION).ipa $(VERSION).deb $(VERSION).apk
 
-.PHONY: cleanexes ios ipa apk
+cleanartifacts:
+	mkdir -p bin
+	mv -f $(VERSION).* bin
+	flutter clean
+	rm -rf Payload debug_symbols
+
+.PHONY: cleanexes cleanartifacts ios ipa apk
