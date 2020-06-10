@@ -353,7 +353,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    if(CustomValues.isAprilFools) 
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     var textStyle = TextStyle(color: AmpColors.colorForeground);
