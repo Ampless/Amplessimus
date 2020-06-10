@@ -40,7 +40,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       CustomValues.checkForAprilFools();
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1; else Prefs.currentThemeId = 0;
-      await dsbUpdateWidget(() {});
+      await dsbUpdateWidget(() {}, cachePostRequests: false);
       await CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));

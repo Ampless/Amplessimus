@@ -85,7 +85,7 @@ Future<String> httpPost(String url, dynamic body, String id,
   ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
   http.Response res = await _httpclient.post(url, body: body, headers: headers);
   ampInfo(ctx: 'HTTP', message: 'Got POST-Response.');
-  if(res.statusCode == 200) Prefs.setCache('$url\t$id', res.body, ttl: Duration(minutes: 2));
+  if(res.statusCode == 200) Prefs.setCache('$url\t$id', res.body, ttl: Duration(minutes: 15));
   return res.body;
 }
 
