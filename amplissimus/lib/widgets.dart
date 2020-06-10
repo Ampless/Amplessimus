@@ -75,7 +75,7 @@ class Widgets {
           Icon(isDarkMode ? MdiIcons.folderInformation : MdiIcons.folderInformationOutline,
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text('App-Informationen anzeigen', style: textStyle,)
+          Text('App-Informationen', style: textStyle,)
         ],
       ),
     );

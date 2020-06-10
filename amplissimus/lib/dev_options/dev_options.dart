@@ -125,20 +125,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                     Prefs.clearCache();
                   }
                 ),
-                RaisedButton(
-                  child: Text('App-Informationen'),
-                  onPressed: () {
-                    showAboutDialog(
-                      context: context,
-                      applicationName: 'Amplissimus',
-                      applicationVersion: '1.0.0',
-                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
-                      children: [
-                        Text('Amplissimus is an App for easily viewing substitution plans using DSB Mobile.')
-                      ]
-                    );
-                  }
-                ),
                 RaisedButton.icon(
                   color: Colors.red,
                   icon: Icon(Icons.delete, color: AmpColors.blankWhite,),

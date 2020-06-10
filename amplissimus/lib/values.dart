@@ -2,12 +2,17 @@ import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 class CustomValues {
   static bool isAprilFools = false;
   static void checkForAprilFools() {
     var now = DateTime.now();
     if(now.day == 1 && now.month == 4) isAprilFools = true;
+  }
+  static PackageInfo packageInfo;
+  static Future<void> loadPackageInfo() async {
+    packageInfo = await PackageInfo.fromPlatform();
   }
 }
 

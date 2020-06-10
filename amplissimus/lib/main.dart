@@ -41,6 +41,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       CustomValues.checkForAprilFools();
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1; else Prefs.currentThemeId = 0;
       await dsbUpdateWidget(() {});
+      await CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
       });
@@ -125,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+  Color fabBackgroundColor = AmpColors.colorBackground;
   bool circularProgressIndicatorActive = false;
 
   @override
@@ -411,7 +413,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     }
                     AmpColors.changeMode();
                     setState(() {
+                      fabBackgroundColor = Colors.transparent;
                       dsbWidget = Container();
+                    });
+                    Future.delayed(Duration(milliseconds: 150), () {
+                      print('post masdkjnfhokijasdnbflkjasnfkjasbnfjklsdbnjkfnasjkdlnbfjkshnd');
+                      setState(() => fabBackgroundColor = AmpColors.colorBackground);
                     });
                   },
                   child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
@@ -477,11 +484,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   onTap: () {
                     showAboutDialog(
                       context: context,
-                      applicationName: 'Amplissimus',
-                      applicationVersion: '0.5.1',
+                      applicationName: CustomValues.packageInfo.appName.replaceFirst('a', 'A'),
+                      applicationVersion: CustomValues.packageInfo.version,
                       applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
                       children: [
-                        Text('Amplissimus is an App for easily viewing substitution plans using DSB Mobile.')
+                        Text('Amplissimus is an App for easily viewing Untis substitution plans using DSB Mobile.')
                       ]
                     );
                   },
@@ -522,7 +529,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
           floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
             elevation: 0,
-            backgroundColor: AmpColors.colorBackground,
+            backgroundColor: fabBackgroundColor,
             splashColor: AmpColors.colorForeground,
             onPressed: () => setState(() => Prefs.counter += 2),
             icon: Icon(Icons.add, color: AmpColors.colorForeground,),
