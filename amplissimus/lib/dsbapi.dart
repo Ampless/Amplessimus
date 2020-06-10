@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:Amplissimus/dsbutil.dart';
+import 'package:Amplissimus/intutils.dart';
+import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
@@ -104,6 +106,13 @@ class DsbSubstitution {
                   : 'Vertreten durch $teacher$notesaddon';
   }
 
+  List<int> get actualHours {
+    List<int> h = [];
+    for(int i = min(hours); i <= max(hours); i++)
+      h.add(i);
+    return h;
+  }
+
   String toPlist() {
     String plist =
       '        <key>class</key>\n'
@@ -175,43 +184,31 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
   return utf8.decode(
     gzip.decode(
       base64.decode(
-        _jsonGetKey(jsonDecode(res), 'd'),
+        jsonGetKey(jsonDecode(res), 'd'),
       ),
     ),
   );
 }
 
-dynamic _jsonGetKey(dynamic json, String key) {
-  assert(json is Map);
-  assert(json.containsKey(key));
-  return json[key];
-}
-
-dynamic _jsonGetFirst(dynamic json) {
-  assert(json is List);
-  assert(json.length > 0);
-  return json[0];
-}
-
 Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests = true}) async {
   var json = jsonDecode(jsontext);
-  if(_jsonGetKey(json, 'Resultcode') != 0) throw _jsonGetKey(json, 'ResultStatusInfo');
-  json = _jsonGetFirst(
-    _jsonGetKey(
-      _jsonGetFirst(
-        _jsonGetKey(json, 'ResultMenuItems'),
+  if(jsonGetKey(json, 'Resultcode') != 0) throw jsonGetKey(json, 'ResultStatusInfo');
+  json = jsonGetIndex(
+    jsonGetKey(
+      jsonGetIndex(
+        jsonGetKey(json, 'ResultMenuItems'),
       ),
       'Childs',
     ),
   );
   Map<String, String> map = {};
-  for (var plan in _jsonGetKey(_jsonGetKey(json, 'Root'), 'Childs'))
+  for (var plan in jsonGetKey(jsonGetKey(json, 'Root'), 'Childs'))
     map[
-      _jsonGetKey(plan, 'Title')
+      jsonGetKey(plan, 'Title')
     ] = await httpGet(
-      _jsonGetKey(
-        _jsonGetFirst(
-          _jsonGetKey(plan, 'Childs'),
+      jsonGetKey(
+        jsonGetIndex(
+          jsonGetKey(plan, 'Childs'),
         ),
         'Detail',
       ),
@@ -231,12 +228,11 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cac
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
       List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children;
       String planDate = html[0].innerHtml;
-      String planTitle = planDate.split(' ').last;
       html = html[2].children[0].children[0].children;
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++)
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
-      plans.add(DsbPlan(planTitle, subs, planDate));
+      plans.add(DsbPlan(planDate.split(' ').last, subs, planDate));
     } catch (e) {
       ampErr(ctx: 'DSB', message: errorString(e));
       plans.add(DsbPlan(title, [], ''));
@@ -256,15 +252,6 @@ List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
     plan.subs = subs;
   }
   return plans;
-}
-
-int max(List<int> i) {
-  if(i.length == 0) return null;
-  int j = i[0];
-  for(int k in i)
-    if(j < k)
-      j = k;
-  return j;
 }
 
 List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
