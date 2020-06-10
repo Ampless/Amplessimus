@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dev_options/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
@@ -49,7 +50,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await dsbUpdateWidget(() {}, cachePostRequests: false);
       await CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
+        if(!Prefs.firstLogin) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
+        else Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
       });
     });
   }
