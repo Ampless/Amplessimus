@@ -1,6 +1,8 @@
 VERSION = 0.6.0b
 
-FLAGS = --release --split-debug-info=debug_symbols
+FLAGS = --release --split-debug-info=debug_symbols --obfuscate
+IOS_FLAGS = $(FLAGS)
+APK_FLAGS = $(FLAGS) --shrink
 
 all: ios android
 
@@ -10,7 +12,7 @@ ios: app ipa deb cleanartifacts
 
 app:
 	mkdir -p debug_symbols
-	flutter build ios $(FLAGS)
+	flutter build ios $(IOS_FLAGS)
 	xcrun bitcode_strip build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter
 
@@ -24,7 +26,7 @@ deb:
 
 apk:
 	mkdir -p debug_symbols
-	flutter build apk $(FLAGS)
+	flutter build apk $(APK_FLAGS)
 	mv build/app/outputs/apk/release/app-release.apk $(VERSION).apk
 
 cleanartifacts:
