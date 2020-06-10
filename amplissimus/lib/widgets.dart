@@ -1,5 +1,5 @@
-import 'package:amplissimus/prefs.dart' as Prefs;
-import 'package:amplissimus/values.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -62,6 +62,20 @@ class Widgets {
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
           Text('Klasse auswählen', style: textStyle,)
+        ],
+      ),
+    );
+  }
+
+  static Widget appInfoWidget(bool isDarkMode, TextStyle textStyle) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(isDarkMode ? MdiIcons.folderInformation : MdiIcons.folderInformationOutline,
+              size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text('App-Informationen anzeigen', style: textStyle,)
         ],
       ),
     );

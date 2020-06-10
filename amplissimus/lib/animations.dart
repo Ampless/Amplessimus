@@ -1,4 +1,4 @@
-import 'package:amplissimus/logging.dart';
+import 'package:Amplissimus/logging.dart';
 import 'package:flutter/material.dart';
 
 class Animations {

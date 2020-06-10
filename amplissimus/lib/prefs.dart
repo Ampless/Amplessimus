@@ -1,5 +1,5 @@
-import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/values.dart';
+import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/values.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences preferences;

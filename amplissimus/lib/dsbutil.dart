@@ -1,9 +1,9 @@
 // this code is based on the pub packages 'uuid' and 'html_unescape'
 
 import 'dart:math';
-import 'package:amplissimus/dsbhtmlcodes.dart' as htmlcodes;
-import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
+import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:http/http.dart' as http;
 
 String hex(int i) {

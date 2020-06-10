@@ -1,10 +1,10 @@
-import 'package:amplissimus/animations.dart';
-import 'package:amplissimus/dsbapi.dart';
-import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/main.dart';
-import 'package:amplissimus/prefs.dart' as Prefs;
-import 'package:amplissimus/values.dart';
-import 'package:amplissimus/widgets.dart';
+import 'package:Amplissimus/animations.dart';
+import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/main.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/values.dart';
+import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 
 class MyBehavior extends ScrollBehavior {

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:amplissimus/animations.dart';
-import 'package:amplissimus/dev_options/dev_options.dart';
-import 'package:amplissimus/dsbapi.dart';
-import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart' as Prefs;
-import 'package:amplissimus/values.dart';
-import 'package:amplissimus/widgets.dart';
+import 'package:Amplissimus/animations.dart';
+import 'package:Amplissimus/dev_options/dev_options.dart';
+import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/values.dart';
+import 'package:Amplissimus/widgets.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -464,6 +464,28 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () => showInputSelectCurrentClass(context),
                   child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
+                ),
+              ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () {
+                    showAboutDialog(
+                      context: context,
+                      applicationName: 'Amplissimus',
+                      applicationVersion: '0.5.1',
+                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
+                      children: [
+                        Text('Amplissimus is an App for easily viewing substitution plans using DSB Mobile.')
+                      ]
+                    );
+                  },
+                  child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
                 ),
               ),
               Card(

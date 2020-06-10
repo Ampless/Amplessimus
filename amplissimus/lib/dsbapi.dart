@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:amplissimus/dsbutil.dart';
-import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart' as Prefs;
-import 'package:amplissimus/values.dart';
+import 'package:Amplissimus/dsbutil.dart';
+import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';

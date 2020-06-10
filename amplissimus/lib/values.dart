@@ -1,5 +1,5 @@
-import 'package:amplissimus/logging.dart';
-import 'package:amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
