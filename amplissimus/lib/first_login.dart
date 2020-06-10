@@ -44,17 +44,13 @@ class FirstLoginScreenPage extends StatefulWidget {
 }
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleTickerProviderStateMixin {
   TabController tabController;
-  bool isIdling = false;
+  String darkAnimName = 'introDark';
+  String brightAnimName = 'introBright';
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
-    Future.delayed(Duration(seconds: 3), () {
-      setState(() {
-        isIdling = true;
-      });
-    });
   }
   @override
   Widget build(BuildContext context) {
@@ -63,27 +59,41 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
         controller: tabController,
         children: <Widget> [
           Stack(children: <Widget>[
-            AnimatedContainer(duration: Duration(milliseconds: 150), color: AmpColors.colorBackground,),
+            Column(children: <Widget>[
+              Container(color: AmpColors.blankBlack,),
+              Container(color: AmpColors.blankWhite,),
+            ]),
             Scaffold(
+              backgroundColor: Colors.transparent,
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: Text('Thema wählen', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
+                title: Text('Thema wählen', style: TextStyle(fontSize: 24, color: AmpColors.blankWhite),),
                 centerTitle: true,
               ),
               body: Center(child: Column(children: <Widget>[
-                Flexible(child: InkWell(child: FlareActor(
-                  'assets/anims/white_dark_mode_select.flr',
-                  fit: BoxFit.contain,
-                  animation: isIdling ? 'idleDark' : 'introDark',
-                ), onTap: () {},),),
-                Flexible(child: FlareActor(
-                  'assets/anims/white_dark_mode_select.flr',
-                  fit: BoxFit.contain,
-                  animation: isIdling ? 'idleBright' : 'introBright',
-                ),),
-              ],),)
-              
+                  Flexible(child: InkWell(child: FlareActor(
+                    'assets/anims/white_dark_mode_select.flr',
+                    fit: BoxFit.contain,
+                    animation: darkAnimName,
+                    callback: (value) {
+                      if(value == 'idleDark2') setState(() => darkAnimName = 'idleDark');
+                      else if(value == 'idleDark') setState(() => darkAnimName = 'idleDark2');
+                      else setState(() => darkAnimName = 'idleDark');
+                    },
+                  ), onTap: () {},),),
+                  Flexible(child: FlareActor(
+                    'assets/anims/white_dark_mode_select.flr',
+                    fit: BoxFit.contain,
+                    animation: brightAnimName,
+                    callback: (value) {
+                      if(value == 'idleBright2') setState(() => brightAnimName = 'idleBright');
+                      else if(value == 'idleBright') setState(() => brightAnimName = 'idleBright2');
+                      else setState(() => brightAnimName = 'idleBright');
+                    },
+                  ),),
+                ]
+              )),
             ),
           ],),
           Stack(children: <Widget>[

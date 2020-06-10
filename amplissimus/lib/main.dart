@@ -42,6 +42,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         bool b = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
         Prefs.designMode = b;
         AmpColors.setMode(b);
+        Prefs.firstLogin = false;
       }
       setState(() => backgroundColor = AmpColors.colorBackground);
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
@@ -50,8 +51,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await dsbUpdateWidget(() {}, cachePostRequests: false);
       await CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
-        if(!Prefs.firstLogin) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0),));
-        else Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
       });
     });
   }
