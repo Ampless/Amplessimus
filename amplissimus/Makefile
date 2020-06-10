@@ -1,4 +1,4 @@
-VERSION = 0.5.1b
+VERSION = 0.6.0b
 
 FLAGS = --release --split-debug-info=debug_symbols
 
