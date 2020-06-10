@@ -2,7 +2,11 @@ VERSION = 0.6.0b
 
 FLAGS = --release --split-debug-info=debug_symbols
 
-all: cleanexes app ipa deb apk cleanartifacts
+all: ios android
+
+android: apk cleanartifacts
+
+ios: app ipa deb cleanartifacts
 
 app:
 	mkdir -p debug_symbols
@@ -23,13 +27,10 @@ apk:
 	flutter build apk $(FLAGS)
 	mv build/app/outputs/apk/release/app-release.apk $(VERSION).apk
 
-cleanexes:
-	cd bin && rm -f $(VERSION).ipa $(VERSION).deb $(VERSION).apk
-
 cleanartifacts:
 	mkdir -p bin
 	mv -f $(VERSION).* bin
 	flutter clean
 	rm -rf Payload debug_symbols
 
-.PHONY: cleanexes cleanartifacts ios ipa apk
+.PHONY: cleanartifacts ios ipa apk
