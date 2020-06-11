@@ -35,6 +35,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   Color backgroundColor = AmpColors.blankWhite;
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
@@ -42,7 +45,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         bool b = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
         Prefs.designMode = b;
         AmpColors.setMode(b);
-        Prefs.firstLogin = false;
       }
       setState(() => backgroundColor = AmpColors.colorBackground);
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
@@ -51,7 +53,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await dsbUpdateWidget(() {}, cachePostRequests: false);
       await CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
+        if(Prefs.firstLogin) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
+        else Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0,),));
       });
     });
   }
@@ -333,7 +336,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
-                if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
+                bool condA = FirstLoginValues.passwordInputFormKey.currentState.validate();
+                bool condB = FirstLoginValues.usernameInputFormKey.currentState.validate();
+                if(!condA || !condB) return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
                 rebuildDragDown();

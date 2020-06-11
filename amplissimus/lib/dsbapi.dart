@@ -157,6 +157,11 @@ class DsbPlan {
 }
 
 Future<String> dsbGetData(String username, String password, {bool cachePostRequests = true}) async {
+  try {
+    await InternetAddress.lookup('google.com');
+  } catch(e) {
+    throw 'Internetverbingung fehlgeschlagen';
+  }
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
