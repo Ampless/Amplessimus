@@ -4,6 +4,7 @@ import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/widgets.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_loading/flare_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -50,8 +51,10 @@ class FirstLoginScreenPage extends StatefulWidget {
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleTickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool credentialsAreLoading = false;
+  bool dsbWidgetIsLoading = false;
   bool isError = false;
   String textString = '';
+  String animNameReady = 'idle';
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
@@ -90,9 +93,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       DropdownButton(
                         underline: Container(
                           height: 2,
-                          color: Colors.white,
+                          color: AmpColors.colorForeground,
                         ),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AmpColors.colorForeground),
                         value: gradeDropDownValue,
                         items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -112,9 +115,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       DropdownButton(
                         underline: Container(
                           height: 2,
-                          color: Colors.white,
+                          color: AmpColors.colorForeground,
                         ),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AmpColors.colorForeground),
                         value: letterDropDownValue,
                         items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -233,28 +236,47 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
               ),
             ),
           ),
-          AnimatedContainer(duration: Duration(seconds: 1), color: AmpColors.colorBackground,
-            child: Scaffold(
+          Stack(children: [
+            Container(child: FlareLoading(
+              name: 'assets/anims/get_ready.flr', 
+              isLoading: true,
+              startAnimation: 'idle',
+              loopAnimation: 'idle',
+              endAnimation: 'idle', 
+              onError: null,
+              onSuccess: null,
+            ), color: Colors.black,),
+            Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
+                title: Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: Colors.white),),
                 centerTitle: true,
               ),
               floatingActionButton: FloatingActionButton.extended(
                 elevation: 0,
-                onPressed: () {
+                onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  FirstLoginValues.tabController.animateTo(1);
+                  Prefs.firstLogin = true;
+                  setState(() => dsbWidgetIsLoading = true);
+                  await dsbUpdateWidget(() {}, cachePostRequests: false);
+                  Prefs.firstLogin = false;
+                  setState(() => dsbWidgetIsLoading = false);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0,),));
                 }, 
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
                 label: Text('Fertig', style: widget.textStyle),
                 icon: Icon(MdiIcons.arrowRight, color: AmpColors.colorForeground,),
               ),
+              bottomSheet: dsbWidgetIsLoading 
+                ? LinearProgressIndicator(
+                  backgroundColor: AmpColors.colorBackground, 
+                  valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+                ) : Container(height: 0,),
             ),
-          ),
+          ]),
         ]
       )
     );

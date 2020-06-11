@@ -41,6 +41,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
+      Prefs.firstLogin = true;
       if(Prefs.firstLogin) {
         bool b = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
         Prefs.designMode = b;
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
         },
         title: AmpStrings.appTitle,
         theme: ThemeData(
+          canvasColor: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryBlack : AmpColors.primaryWhite,
           primarySwatch: AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
@@ -139,9 +141,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   Color fabBackgroundColor = AmpColors.colorBackground;
   bool circularProgressIndicatorActive = false;
+  String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
+  String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
   @override
   void initState() {
+    if(Prefs.char.trim().toLowerCase().isEmpty) letterDropDownValue = 'Leer';
+    if(Prefs.grade.trim().toLowerCase().isEmpty) gradeDropDownValue = 'Leer';
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
@@ -167,11 +173,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return null;
   }
 
+
   void showInputSelectCurrentClass(BuildContext context) {
-    final gradeInputFormKey = GlobalKey<FormFieldState>();
-    final charInputFormKey = GlobalKey<FormFieldState>();
-    final gradeInputFormController = TextEditingController(text: Prefs.grade);
-    final charInputFormController = TextEditingController(text: Prefs.char.toUpperCase());
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -179,64 +182,53 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         return AlertDialog(
           title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
           backgroundColor: AmpColors.colorBackground,
-          content: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Flexible(
-                child: TextFormField(
-                  style: TextStyle(color: AmpColors.colorForeground),
-                  controller: gradeInputFormController,
-                  key: gradeInputFormKey,
-                  validator: Widgets.gradeFieldValidator,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(color: AmpColors.colorForeground),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    labelText: 'Stufe',
-                    fillColor: AmpColors.colorForeground,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AmpColors.colorForeground),
-                    ),
-                  ),
+          content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
+            return Row(mainAxisSize: MainAxisSize.min, children: [
+              DropdownButton(
+                underline: Container(
+                  height: 2,
+                  color: Colors.white,
                 ),
+                style: TextStyle(color: Colors.grey),
+                value: gradeDropDownValue,
+                items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setAlState(() {
+                    gradeDropDownValue = value;
+                    if(gradeDropDownValue == 'Leer')  Prefs.grade = '';
+                    else Prefs.grade = value;
+                  });
+                },
               ),
-              Padding(padding: EdgeInsets.all(6)),
-              Flexible(
-                child: TextFormField(
-                  style: TextStyle(color: AmpColors.colorForeground),
-                  controller: charInputFormController,
-                  key: charInputFormKey,
-                  validator: Widgets.letterFieldValidator,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(color: AmpColors.colorForeground),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    labelText: 'Buchstabe',
-                    fillColor: AmpColors.colorForeground,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AmpColors.colorForeground),
-                    ),
-                  ),
+              Padding(padding: EdgeInsets.all(10)),
+              DropdownButton(
+                underline: Container(
+                  height: 2,
+                  color: Colors.white,
                 ),
+                style: TextStyle(color: Colors.grey),
+                value: letterDropDownValue,
+                items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setAlState(() {
+                    letterDropDownValue = value;
+                    if(letterDropDownValue == 'Leer')  Prefs.char = '';
+                    else Prefs.char = value;
+                  });
+                },
               ),
-            ],
-          ),
+            ]);
+          }),
           actions: <Widget>[
             FlatButton(
               textColor: AmpColors.colorForeground,
@@ -246,12 +238,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () async {
-                if(!gradeInputFormKey.currentState.validate() ||  !charInputFormKey.currentState.validate()) return;
-                Prefs.grade = gradeInputFormController.text.trim();
-                Prefs.char = charInputFormController.text.trim();
-                await dsbUpdateWidget(rebuild);
-                Navigator.of(context).pop();
-                tabController.animateTo(0);
               },
               child: Text('Speichern'),
             ),
