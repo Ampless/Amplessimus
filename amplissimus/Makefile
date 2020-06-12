@@ -19,7 +19,7 @@ app:
 ipa:
 	mkdir Payload
 	cp -r build/ios/Release-iphoneos/Runner.app Payload
-	zip -r -9 $(VERSION).ipa Payload
+	zip -r -9 bin/$(VERSION).ipa Payload
 
 deb:
 	./build_deb.bash $(VERSION)
@@ -27,11 +27,10 @@ deb:
 apk:
 	mkdir -p debug_symbols
 	flutter build apk $(APK_FLAGS)
-	mv build/app/outputs/apk/release/app-release.apk $(VERSION).apk
+	mv build/app/outputs/apk/release/app-release.apk bin/$(VERSION).apk
 
 cleanartifacts:
 	mkdir -p bin
-	mv -f $(VERSION).* bin
 	flutter clean
 	rm -rf Payload debug_symbols
 

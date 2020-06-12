@@ -16,7 +16,7 @@ cp -rp build/ios/Release-iphoneos/Runner.app tmp2deb/Applications/
 export COPYFILE_DISABLE
 export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
-dpkg-deb -Sextreme -z9 --build tmp2deb $1.deb
+dpkg-deb -Sextreme -z9 --build tmp2deb bin/$1.deb
 
 rm -rf tmp2deb
 exit 0
