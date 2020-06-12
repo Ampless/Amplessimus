@@ -27,6 +27,7 @@ dependencies:
   material_design_icons_flutter: ^4.0.5345
   pull_to_refresh: ^1.5.8
   flutter_spinkit: ^4.1.2+1
+  flare_loading: ^2.1.1
   flare_flutter: ^2.0.3
   package_info: ^0.4.1
   http: ^0.12.1
@@ -38,8 +39,14 @@ dependencies:
   cupertino_icons: ^0.1.3
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.7.5
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -57,6 +64,7 @@ flutter:
     - assets/images/logo.png
     - assets/anims/splash_screen.flr
     - assets/anims/white_dark_mode_select.flr
+    - assets/anims/get_ready.flr
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
