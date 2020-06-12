@@ -1,4 +1,4 @@
-VERSION = 1.0.0
+VERSION = 1.1.0
 
 FLAGS = --release --split-debug-info=debug_symbols --obfuscate
 IOS_FLAGS = $(FLAGS)
