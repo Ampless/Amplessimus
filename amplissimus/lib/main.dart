@@ -41,7 +41,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
-      Prefs.firstLogin = true;
       if(Prefs.firstLogin) {
         bool b = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
         Prefs.designMode = b;
@@ -107,7 +106,7 @@ class MyApp extends StatelessWidget {
         title: AmpStrings.appTitle,
         theme: ThemeData(
           canvasColor: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryBlack : AmpColors.primaryWhite,
-          primarySwatch: AmpColors.primaryBlack,
+          primarySwatch: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryWhite : AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage(
@@ -183,13 +182,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
           backgroundColor: AmpColors.colorBackground,
           content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
-            return Row(mainAxisSize: MainAxisSize.min, children: [
+            return Theme(child: Row(mainAxisSize: MainAxisSize.min, children: [
               DropdownButton(
                 underline: Container(
                   height: 2,
                   color: Colors.white,
                 ),
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: AmpColors.colorForeground,),
                 value: gradeDropDownValue,
                 items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -211,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   height: 2,
                   color: Colors.white,
                 ),
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: AmpColors.colorForeground),
                 value: letterDropDownValue,
                 items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -227,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   });
                 },
               ),
-            ]);
+            ]), data: ThemeData(canvasColor: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryBlack : AmpColors.primaryWhite,),);
           }),
           actions: <Widget>[
             FlatButton(
@@ -238,6 +237,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () async {
+                await dsbUpdateWidget(rebuild);
+                Navigator.of(context).pop();
+                tabController.animateTo(0);
               },
               child: Text('Speichern'),
             ),

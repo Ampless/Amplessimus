@@ -258,7 +258,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                 elevation: 0,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  Prefs.firstLogin = true;
                   setState(() => dsbWidgetIsLoading = true);
                   await dsbUpdateWidget(() {}, cachePostRequests: false);
                   Prefs.firstLogin = false;
