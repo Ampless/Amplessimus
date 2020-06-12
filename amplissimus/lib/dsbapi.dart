@@ -363,7 +363,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       dayWidgets.add(ListTile(
         title: CustomValues.isAprilFools ? Text(titleSub, style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
         subtitle: CustomValues.isAprilFools ? Text(sub.subtitle, style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
-        trailing: !Prefs.oneClassOnly ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
+        trailing: (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly) ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));
     }

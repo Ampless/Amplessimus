@@ -41,11 +41,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
-      if(Prefs.firstLogin) {
-        bool b = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
-        Prefs.designMode = b;
-        AmpColors.setMode(b);
-      }
       setState(() => backgroundColor = AmpColors.colorBackground);
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       CustomValues.checkForAprilFools();

@@ -1,11 +1,12 @@
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/logging.dart';
+import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MyBehavior extends ScrollBehavior {
   @override
@@ -31,7 +32,7 @@ class DevOptionsScreen extends StatelessWidget {
       ), 
       onWillPop: () async {
         await dsbUpdateWidget((){});
-        Animations.changeScreenEaseOutBackReplace(new MyApp(initialIndex: 1,), context);
+        DevOptionsValues.tabController.animateTo(0);
         return new Future(() => false);
       }
     );
@@ -45,17 +46,16 @@ class DevOptionsScreenPage extends StatefulWidget {
   State<StatefulWidget> createState() {return DevOptionsScreenPageState();}
 }
 class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleTickerProviderStateMixin {
-  TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+    DevOptionsValues.tabController = TabController(length: 2, vsync: this, initialIndex: 1);
   }
 
   @override
   Widget build(BuildContext context) {
-    return TabBarView(controller: tabController, children: [
+    return TabBarView(controller: DevOptionsValues.tabController, children: [
       MyApp(initialIndex: 1,),
       Scaffold(
         backgroundColor: AmpColors.colorBackground,
@@ -147,8 +147,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                             textColor: AmpColors.colorForeground,
                             onPressed: () {
                               Prefs.clear();
-                              Navigator.of(context).pop();
-                              Animations.changeScreenEaseOutBack(MyApp(initialIndex: 0,), context);
+                              SystemNavigator.pop();
                             }, 
                             child: Text('Bestätigen'),
                           ),
@@ -166,7 +165,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
           onPressed: () {
-            tabController.animateTo(0);
+            DevOptionsValues.tabController.animateTo(0);
           }, 
           label: Text('zurück', style: TextStyle(color: AmpColors.colorForeground),),
           icon: Icon(Icons.arrow_back, color: AmpColors.colorForeground,),
@@ -228,4 +227,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
       },
     );
   }
+}
+
+class DevOptionsValues {
+  static TabController tabController;
 }
