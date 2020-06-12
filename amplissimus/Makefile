@@ -4,7 +4,7 @@ FLAGS = --release --split-debug-info=debug_symbols --obfuscate
 IOS_FLAGS = $(FLAGS)
 APK_FLAGS = $(FLAGS) --shrink
 
-all: ios android
+all: mkdirs ios android
 
 android: apk cleanartifacts
 
@@ -29,8 +29,10 @@ apk:
 	flutter build apk $(APK_FLAGS)
 	mv build/app/outputs/apk/release/app-release.apk bin/$(VERSION).apk
 
-cleanartifacts:
+mkdirs:
 	mkdir -p bin
+
+cleanartifacts:
 	flutter clean
 	rm -rf Payload debug_symbols
 
