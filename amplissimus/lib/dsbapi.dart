@@ -443,3 +443,25 @@ String toJson(List<DsbPlan> plans) {
     json += plan.toJson();
   return '$json]\n';
 }
+
+List<DsbPlan> fromJson(String jsontext) {
+  dynamic json = jsonDecode(jsontext);
+  List<DsbPlan> plans = [];
+  for(dynamic plan in jsonIsList(json)) {
+    List<DsbSubstitution> subs = [];
+    for(dynamic sub in jsonIsList(jsonGetKey(plan, 'subs'))) {
+      String teacher = jsonGetKey(sub, 'teacher');
+      List<int> lessons = [];
+      for(dynamic lesson in jsonGetKey(sub, 'lessons')) {
+        lessons.add(int.parse(lesson));
+      }
+      subs.add(DsbSubstitution(jsonGetKey(sub, 'class'),
+                               lessons,
+                               teacher,
+                               jsonGetKey(sub, 'subject'),
+                               jsonGetKey(sub, 'notes'),
+                               teacher.contains('---')));
+    }
+    plans.add(DsbPlan(jsonGetKey(plan, 'title'), subs, jsonGetKey(plan, 'date')));
+  }
+}
