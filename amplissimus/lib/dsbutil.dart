@@ -6,7 +6,7 @@ import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:http/http.dart' as http;
 
-String hex(int i) {
+String _x(int i) {
   return i < 16 ? '0' + i.toRadixString(16) : i.toRadixString(16);
 }
 
@@ -22,10 +22,10 @@ String v4() {
   r[6] = (r[6] & 0x0f) | 0x40;
   r[8] = (r[8] & 0x3f) | 0x80;
   int i = 0;
-  return '${hex(r[i++])}${hex(r[i++])}${hex(r[i++])}${hex(r[i++])}-'
-         '${hex(r[i++])}${hex(r[i++])}-${hex(r[i++])}${hex(r[i++])}-'
-         '${hex(r[i++])}${hex(r[i++])}-${hex(r[i++])}${hex(r[i++])}'
-         '${hex(r[i++])}${hex(r[i++])}${hex(r[i++])}${hex(r[i++])}';
+  return '${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}-'
+         '${_x(r[i++])}${_x(r[i++])}-${_x(r[i++])}${_x(r[i++])}-'
+         '${_x(r[i++])}${_x(r[i++])}-${_x(r[i++])}${_x(r[i++])}'
+         '${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}';
 }
 
 String htmlUnescape(String data) {

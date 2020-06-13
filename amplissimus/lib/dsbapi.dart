@@ -115,21 +115,39 @@ class DsbSubstitution {
 
   String toPlist() {
     String plist =
-      '        <key>class</key>\n'
-      '        <string>${_xmlEscape(affectedClass)}</string>\n'
-      '        <key>lessons</key>\n'
-      '        <array>\n';
+      '            <dict>\n'
+      '                <key>class</key>\n'
+      '                <string>${_xmlEscape(affectedClass)}</string>\n'
+      '                <key>lessons</key>\n'
+      '                <array>\n';
     for(int h in hours)
-      plist += '            <integer>$h</integer>\n';
+      plist += '                    <integer>$h</integer>\n';
     plist +=
-      '        </array>\n'
-      '        <key>teacher</key>\n'
-      '        <string>${_xmlEscape(teacher)}</string>\n'
-      '        <key>subject</key>\n'
-      '        <string>${_xmlEscape(subject)}</string>\n'
-      '        <key>notes</key>\n'
-      '        <string>${_xmlEscape(notes)}</string>\n';
+      '                </array>\n'
+      '                <key>teacher</key>\n'
+      '                <string>${_xmlEscape(teacher)}</string>\n'
+      '                <key>subject</key>\n'
+      '                <string>${_xmlEscape(subject)}</string>\n'
+      '                <key>notes</key>\n'
+      '                <string>${_xmlEscape(notes)}</string>\n'
+      '            </dict>\n';
     return plist;
+  }
+
+  String toJson() {
+    String json =
+      '            {\n'
+      '                "class": "${_jsonEscape(affectedClass)}",\n'
+      '                "lessons": [';
+    for(int h in hours)
+      json += '$h,';
+    json +=
+      '],\n'
+      '                "teacher": "${_jsonEscape(teacher)}",\n'
+      '                "subject": "${_jsonEscape(subject)}",\n'
+      '                "notes": "${_jsonEscape(notes)}"\n'
+      '            },\n';
+    return json;
   }
 }
 
@@ -144,15 +162,33 @@ class DsbPlan {
 
   String toPlist() {
     String plist =
-      '    <key>title</key>\n'
-      '    <string>${_xmlEscape(title)}</string>\n'
-      '    <key>date</key>\n'
-      '    <string>$date</string>\n'
-      '    <key>subs</key>\n'
-      '    <array>\n';
+      '    <dict>\n'
+      '        <key>title</key>\n'
+      '        <string>${_xmlEscape(title)}</string>\n'
+      '        <key>date</key>\n'
+      '        <string>${_jsonEscape(date)}</string>\n'
+      '        <key>subs</key>\n'
+      '        <array>\n';
     for(DsbSubstitution sub in subs)
       plist += sub.toPlist();
-    return '$plist    </array>\n';
+    plist +=
+      '        </array>\n'
+      '    </dict>\n';
+    return plist;
+  }
+
+  String toJson() {
+    String json =
+      '    {\n'
+      '        "title": "${_jsonEscape(title)}",\n'
+      '        "date": "${_jsonEscape(date)}",\n'
+      '        "subs": [\n';
+    for(DsbSubstitution sub in subs)
+      json += sub.toJson();
+    json +=
+      '        ]\n'
+      '    },\n';
+    return json;
   }
 }
 
@@ -384,16 +420,26 @@ String _xmlEscape(String s) => s.replaceAll('&', '&amp;')
                                 .replaceAll("'", '&apos;')
                                 .replaceAll('<', '&lt;')
                                 .replaceAll('>', '&gt;');
+String _jsonEscape(String s) => s.replaceAll('\\', '\\\\')
+                                 .replaceAll('"', '\\"');
 
 String toPlist(List<DsbPlan> plans) {
-    String plist =
-      '<?xml version="1.0" encoding="UTF-8"?>\n'
-      '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
-      '<plist version="1.0">\n'
-      '<array>\n';
-    for(var plan in plans)
-      plist += plan.toPlist();
+  String plist =
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
+    '<plist version="1.0">\n'
+    '<array>\n';
+  for(var plan in plans)
+    plist += plan.toPlist();
   return '$plist'
          '</array>\n'
          '</plist>\n';
+}
+
+String toJson(List<DsbPlan> plans) {
+  String json =
+    '[\n';
+  for(var plan in plans)
+    json += plan.toJson();
+  return '$json]\n';
 }
