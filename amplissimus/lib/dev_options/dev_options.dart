@@ -110,7 +110,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.useJsonCache, 
-                    onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+                    onChanged: (value) => setState(() => Prefs.useJsonCache = value),
                   ),
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
