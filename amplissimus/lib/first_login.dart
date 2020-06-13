@@ -54,7 +54,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
   bool dsbWidgetIsLoading = false;
   bool isError = false;
   String textString = '';
-  String animNameReady = 'idle';
+  String animString = 'intro';
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
@@ -237,14 +237,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
             ),
           ),
           Stack(children: [
-            Container(child: FlareLoading(
-              name: 'assets/anims/get_ready.flr', 
-              isLoading: true,
-              startAnimation: 'idle',
-              loopAnimation: 'idle',
-              endAnimation: 'idle', 
-              onError: null,
-              onSuccess: null,
+            Container(child: FlareActor(
+              'assets/anims/get_ready.flr',
+              animation: animString,
+              callback: (name) {
+                if(name.trim().toLowerCase() == 'idle') setState(() => animString = 'idle2');
+                else setState(() => animString = 'idle');
+              },
             ), color: Colors.black,),
             Scaffold(
               backgroundColor: Colors.transparent,
