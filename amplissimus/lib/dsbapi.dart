@@ -338,7 +338,7 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
       );
       Prefs.setString('DSB_JSON_CACHE', toJson(plans));
     } else plans = fromJson(jsonCache);
-    if(Prefs.oneClassOnly && Prefs.username.trim().isNotEmpty && Prefs.password.trim().isNotEmpty)
+    if(Prefs.oneClassOnly)
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
   } catch (e) {

@@ -231,9 +231,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             ),
             FlatButton(
               textColor: AmpColors.colorForeground,
-              onPressed: () {
-                rebuildNewBuild();
+              onPressed: () async {
+                await dsbUpdateWidget(rebuild);
                 Navigator.of(context).pop();
+                tabController.animateTo(0);
               },
               child: Text('Speichern'),
             ),
@@ -312,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           actions: <Widget>[
             FlatButton(
               textColor: AmpColors.colorForeground,
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => {Navigator.of(context).pop()},
               child: Text('Abbrechen'),
             ),
             FlatButton(
