@@ -45,7 +45,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       CustomValues.checkForAprilFools();
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1; else Prefs.currentThemeId = 0;
-      await dsbUpdateWidget(() {}, cachePostRequests: false);
+      await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
       await CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
         if(Prefs.firstLogin) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
@@ -342,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       ListTile(title: Text('Alle Klassen', style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
       Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
         setState(() => Prefs.oneClassOnly = value);
-        dsbUpdateWidget(rebuild);
+        dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
       }), alignment: Alignment.center,),
     ],) : widget = Container(height: 0);
     return widget;
@@ -432,10 +432,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
-                      await dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
                     } else {
                       Prefs.currentThemeId++;
-                      await dsbUpdateWidget(rebuild);
+                      await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
                     }
                     tabController.animateTo(0);
                   },
