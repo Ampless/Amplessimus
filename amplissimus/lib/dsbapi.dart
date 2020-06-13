@@ -321,11 +321,25 @@ String errorString(dynamic e) {
 
 Widget dsbWidget = Container();
 
-Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
+Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
+                                          bool cachePostRequests = true,
+                                          bool cacheJsonPlans = false}) async {
   try {
-    if(Prefs.username.length == 0 || Prefs.password.length == 0) throw 'Keine Login-Daten eingetragen.';
-    List<DsbPlan> plans = await dsbGetAllSubs(Prefs.username, Prefs.password, cacheGetRequests: cacheGetRequests, cachePostRequests: cachePostRequests);
-    if(Prefs.oneClassOnly) plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+    if(Prefs.username.length == 0 || Prefs.password.length == 0)
+      throw 'Keine Login-Daten eingetragen.';
+    String jsonCache = Prefs.getString('DSB_JSON_CACHE', null);
+    List<DsbPlan> plans;
+    if(!cacheJsonPlans || jsonCache == null) {
+      plans = await dsbGetAllSubs(
+        Prefs.username,
+        Prefs.password,
+        cacheGetRequests: cacheGetRequests,
+        cachePostRequests: cachePostRequests
+      );
+      Prefs.setString('DSB_JSON_CACHE', toJson(plans));
+    } else plans = fromJson(jsonCache);
+    if(Prefs.oneClassOnly)
+      plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
   } catch (e) {
     switch (Prefs.currentThemeId) {
@@ -464,4 +478,5 @@ List<DsbPlan> fromJson(String jsontext) {
     }
     plans.add(DsbPlan(jsonGetKey(plan, 'title'), subs, jsonGetKey(plan, 'date')));
   }
+  return plans;
 }

@@ -65,6 +65,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
       }
     }
   }
+  return table;
 }
 
 String ttLessonToJson(TTLesson lesson) {
