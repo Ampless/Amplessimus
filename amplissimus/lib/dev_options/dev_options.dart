@@ -105,6 +105,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                     onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
                   ),
                 ),
+                ListTile(
+                  title: Text('JSON Cache benutzen', style: widget.textStyle,),
+                  trailing: Switch(
+                    activeColor: AmpColors.colorForeground,
+                    value: Prefs.useJsonCache, 
+                    onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+                  ),
+                ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 ListTile(
                   title: Text('Listenelementabstand', style: widget.textStyle,),

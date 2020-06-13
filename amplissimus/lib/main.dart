@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild, cachePostRequests: false);
+    await dsbUpdateWidget(rebuild, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
     return null;
   }
 
@@ -160,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     setState(() {
       circularProgressIndicatorActive = true;
     });
-    await dsbUpdateWidget(rebuild);
+    await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
     setState(() {
       circularProgressIndicatorActive = false;
     });

@@ -145,6 +145,8 @@ bool get counterEnabled => getBool('counter_enabled', false);
 set counterEnabled(bool b) => setBool('counter_enabled', b);
 bool get firstLogin => getBool('first_login', true);
 set firstLogin(bool b) => setBool('first_login', b);
+bool get useJsonCache => getBool('use_json_cache', false);
+set useJsonCache(bool b) => setBool('use_json_cache', b);
 
 set designMode(bool isDarkMode) => setBool('is_dark_mode', isDarkMode);
 
