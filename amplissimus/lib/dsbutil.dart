@@ -108,8 +108,8 @@ bool lastConnectivityCheckFalse = false;
 void registerConnectivityHook(var callback) => _connectivity.onConnectivityChanged.listen(callback);
 
 void checkConnectivity() async {
-  if(await _connectivity.checkConnectivity() != ConnectivityResult.none) {
+  if(await _connectivity.checkConnectivity() == ConnectivityResult.none) {
     lastConnectivityCheckFalse = true;
-    throw 'Keine InternetverBINGung.';
+    throw 'Keine Internetverbindung.';
   }
 }

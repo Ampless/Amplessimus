@@ -195,7 +195,6 @@ class DsbPlan {
 }
 
 Future<String> dsbGetData(String username, String password, {bool cachePostRequests = true}) async {
-  checkConnectivity();
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
@@ -210,6 +209,7 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
     '"LastUpdate":"$datetime"'
   '}';
   try {
+    checkConnectivity();
     return utf8.decode(
       gzip.decode(
         base64.decode(
@@ -232,7 +232,7 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
       ),
     );
   } catch(e) {
-    throw 'Bitte überprüfen Sie Ihre InternetverBINGung. (Fehler: $e)';
+    throw 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
   }
 }
 

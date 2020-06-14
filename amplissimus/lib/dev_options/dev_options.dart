@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/first_login.dart';
@@ -5,6 +7,7 @@ import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -131,6 +134,12 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   child: Text('Cache leeren'),
                   onPressed: () {
                     Prefs.clearCache();
+                  }
+                ),
+                RaisedButton(
+                  child: Text('JSON importieren'),
+                  onPressed: () async {
+                    File file = await FilePicker.getFile(type: FileType.custom, allowedExtensions: ['json']);
                   }
                 ),
                 RaisedButton.icon(
