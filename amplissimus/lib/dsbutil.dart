@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 String _x(int i) {
@@ -99,4 +100,16 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
   if(res.statusCode == 200) Prefs.setCache(url, res.body, ttl: Duration(days: 4));
   return res.body;
+}
+
+Connectivity _connectivity = Connectivity();
+bool lastConnectivityCheckFalse = false;
+
+void registerConnectivityHook(var callback) => _connectivity.onConnectivityChanged.listen(callback);
+
+void checkConnectivity() async {
+  if(await _connectivity.checkConnectivity() != ConnectivityResult.none) {
+    lastConnectivityCheckFalse = true;
+    throw 'Keine InternetverBINGung.';
+  }
 }

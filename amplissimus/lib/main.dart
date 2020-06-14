@@ -4,11 +4,13 @@ import 'dart:ui';
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dev_options/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -144,6 +146,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     if(Prefs.grade.trim().toLowerCase().isEmpty) gradeDropDownValue = 'Leer';
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
+    registerConnectivityHook((event) {
+      if(event != ConnectivityResult.none && lastConnectivityCheckFalse) {
+        lastConnectivityCheckFalse = false;
+        dsbUpdateWidget(rebuild);
+      }
+    });
   }
 
   void rebuild() {

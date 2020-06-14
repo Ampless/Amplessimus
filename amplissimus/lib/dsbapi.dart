@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -8,6 +9,7 @@ import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
@@ -193,11 +195,7 @@ class DsbPlan {
 }
 
 Future<String> dsbGetData(String username, String password, {bool cachePostRequests = true}) async {
-  try {
-    await InternetAddress.lookup('google.com');
-  } catch(e) {
-    throw 'Internetverbingung fehlgeschlagen';
-  }
+  checkConnectivity();
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
@@ -211,24 +209,31 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
     '"Date":"$datetime",'
     '"LastUpdate":"$datetime"'
   '}';
-  String res = await httpPost(
-    DSB_WEBSERVICE, '{'
-      '"req": {'
-        '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
-        '"DataType": 1'
-      '}'
-    '}',
-    '$username\t$password',
-    {"content-type": "application/json"},
-    useCache: cachePostRequests,
-  );
-  return utf8.decode(
-    gzip.decode(
-      base64.decode(
-        jsonGetKey(jsonDecode(res), 'd'),
+  try {
+    return utf8.decode(
+      gzip.decode(
+        base64.decode(
+          jsonGetKey(
+            jsonDecode(
+              await httpPost(
+                DSB_WEBSERVICE, '{'
+                  '"req": {'
+                    '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
+                    '"DataType": 1'
+                  '}'
+                '}',
+                '$username\t$password',
+                {"content-type": "application/json"},
+                useCache: cachePostRequests,
+              ),
+            ), 'd'
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  } catch(e) {
+    throw 'Bitte überprüfen Sie Ihre InternetverBINGung. (Fehler: $e)';
+  }
 }
 
 Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests = true}) async {
