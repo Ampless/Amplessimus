@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:Amplissimus/dsbutil.dart';
@@ -9,9 +8,11 @@ import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
+import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
+import 'package:http/http.dart';
 
 const String DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
 const String DSB_DEVICE = "SM-G950F";
@@ -210,14 +211,14 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
   try {
     checkConnectivity();
     return utf8.decode(
-      gzip.decode(
+      GZipDecoder().decodeBytes(
         base64.decode(
           jsonGetKey(
             jsonDecode(
               await httpPost(
                 DSB_WEBSERVICE, '{'
                   '"req": {'
-                    '"Data": "${base64.encode(gzip.encode(utf8.encode(json)))}", '
+                    '"Data": "${base64.encode(GZipEncoder().encode(utf8.encode(json)))}", '
                     '"DataType": 1'
                   '}'
                 '}',
@@ -231,7 +232,8 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
       ),
     );
   } catch(e) {
-    throw 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
+    String m = e.toString();
+    throw 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $m)';
   }
 }
 

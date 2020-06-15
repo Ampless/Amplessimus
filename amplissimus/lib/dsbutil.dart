@@ -9,23 +9,15 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-String _x(int i) {
-  return i < 16 ? '0' + i.toRadixString(16) : i.toRadixString(16);
-}
+String _x(int i) => (i < 16 ? '0' : '') + i.toRadixString(16);
 
-String v4() {
-  var r = List<int>(16);
-  var rand = Random();
-  for(int i = 0; i < 16; i++)
-    r[i] = rand.nextInt(256);
-  r[6] = (r[6] & 0x0f) | 0x40;
-  r[8] = (r[8] & 0x3f) | 0x80;
-  int i = 0;
-  return '${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}-'
-         '${_x(r[i++])}${_x(r[i++])}-${_x(r[i++])}${_x(r[i++])}-'
-         '${_x(r[i++])}${_x(r[i++])}-${_x(r[i++])}${_x(r[i++])}'
-         '${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}${_x(r[i++])}';
-}
+var _rand = Random();
+int _r(int max) => _rand.nextInt(max);
+String get _100 => _x(_r(0x100));
+String get _104 => _x(_r(0x10) | 0x40);
+String get _408 => _x(_r(0x40) | 0x80);
+
+String v4() => '$_100$_100$_100$_100-$_100$_100-$_104$_100-$_408$_100-$_100$_100$_100$_100$_100$_100';
 
 String htmlUnescape(String data) {
   if (data.indexOf('&') == -1) return data;
