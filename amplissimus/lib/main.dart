@@ -144,7 +144,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     if(Prefs.grade.trim().toLowerCase().isEmpty) gradeDropDownValue = 'Leer';
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
-    registerConnectivityHook(rebuild);
   }
 
   void rebuild() {

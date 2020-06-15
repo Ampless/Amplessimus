@@ -209,7 +209,6 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
     '"LastUpdate":"$datetime"'
   '}';
   try {
-    checkConnectivity();
     return utf8.decode(
       GZipDecoder().decodeBytes(
         base64.decode(
