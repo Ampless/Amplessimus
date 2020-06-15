@@ -1,9 +1,4 @@
-import 'dart:io';
-
-import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/file_picker.dart';
-import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
@@ -139,7 +134,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 RaisedButton(
                   child: Text('JSON importieren'),
                   onPressed: () async {
-                    File file = await FilePicker.getFile(['json']);
+                    Prefs.setString('DSB_JSON_CACHE',
+                      await rootBundle.loadString('assets/json/trailer.json'));
                   }
                 ),
                 RaisedButton.icon(
