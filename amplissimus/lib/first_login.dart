@@ -24,7 +24,7 @@ class FirstLoginScreen extends StatelessWidget {
         },
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          canvasColor: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryBlack : AmpColors.primaryWhite,
+          canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite,
           primarySwatch: AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

@@ -101,8 +101,8 @@ class MyApp extends StatelessWidget {
         },
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          canvasColor: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryBlack : AmpColors.primaryWhite,
-          primarySwatch: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryWhite : AmpColors.primaryBlack,
+          canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite,
+          primarySwatch: Prefs.designMode ? AmpColors.primaryWhite : AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage(
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   });
                 },
               ),
-            ]), data: ThemeData(canvasColor: Prefs.getBool('is_dark_mode', true) ? AmpColors.primaryBlack : AmpColors.primaryWhite,),);
+            ]), data: ThemeData(canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite));
           }),
           actions: <Widget>[
             FlatButton(

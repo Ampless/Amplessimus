@@ -333,7 +333,7 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0)
       throw 'Keine Login-Daten eingetragen.';
-    String jsonCache = Prefs.getString('DSB_JSON_CACHE', null);
+    String jsonCache = Prefs.dsbJsonCache;
     List<DsbPlan> plans;
     if(!cacheJsonPlans || jsonCache == null) {
       plans = await dsbGetAllSubs(
@@ -342,7 +342,7 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
         cacheGetRequests: cacheGetRequests,
         cachePostRequests: cachePostRequests
       );
-      Prefs.setString('DSB_JSON_CACHE', toJson(plans));
+      Prefs.dsbJsonCache = toJson(plans);
     } else plans = fromJson(jsonCache);
     if(Prefs.oneClassOnly && Prefs.username.trim().isNotEmpty && Prefs.password.trim().isNotEmpty)
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
