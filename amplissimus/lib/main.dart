@@ -42,7 +42,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
       setState(() => backgroundColor = AmpColors.colorBackground);
-      if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       CustomValues.checkForAprilFools();
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
@@ -414,7 +413,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       dsbWidget = Container();
                     });
                     Future.delayed(Duration(milliseconds: 150), () {
-                      print('post masdkjnfhokijasdnbflkjasnfkjasbnfjklsdbnjkfnasjkdlnbfjkshnd');
                       setState(() => fabBackgroundColor = AmpColors.colorBackground);
                     });
                   },
