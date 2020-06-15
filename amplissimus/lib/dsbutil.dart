@@ -14,14 +14,10 @@ String _x(int i) {
 }
 
 String v4() {
-  int rand;
   var r = List<int>(16);
-  var _rand = Random();
-  for(int i = 0; i < 16; i++) {
-    if((i & 3) == 0)
-      rand = _rand.nextInt(1 << 32);
-    r[i] = rand >> ((i & 0x03) << 3) & 0xff;
-  }
+  var rand = Random();
+  for(int i = 0; i < 16; i++)
+    r[i] = rand.nextInt(256);
   r[6] = (r[6] & 0x0f) | 0x40;
   r[8] = (r[8] & 0x3f) | 0x80;
   int i = 0;

@@ -44,12 +44,13 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       setState(() => backgroundColor = AmpColors.colorBackground);
       if(AmpColors.colorBackground != AmpColors.blankBlack) fileString = 'assets/anims/data-black-to-white.html';
       CustomValues.checkForAprilFools();
-      if(CustomValues.isAprilFools) Prefs.currentThemeId = -1; else Prefs.currentThemeId = 0;
+      if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
+      else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
       await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
-      await CustomValues.loadPackageInfo();
+      CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
-        if(Prefs.firstLogin) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen(),));
-        else Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0,),));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder:
+          (context) => Prefs.firstLogin ? FirstLoginScreen() : MyApp(initialIndex: 0,),));
       });
     });
   }
@@ -480,8 +481,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   onTap: () {
                     showAboutDialog(
                       context: context,
-                      applicationName: CustomValues.packageInfo.appName.replaceFirst('a', 'A'),
-                      applicationVersion: CustomValues.packageInfo.version,
+                      applicationName: 'Amplissimus',
+                      applicationVersion: CustomValues.version,
                       applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
                       children: [
                         Text('Amplissimus is an App for easily viewing Untis substitution plans using DSB Mobile.')

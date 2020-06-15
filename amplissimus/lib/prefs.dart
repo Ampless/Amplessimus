@@ -107,20 +107,19 @@ void listCache() {
 }
 
 void devOptionsTimerCache() {
-  if(DateTime.now().millisecondsSinceEpoch < getInt('last_pressed_tgl_drk_mode', 0) + 10000) {
-    setInt('times_tgl_drk_mode_pressed', getInt('times_tgl_drk_mode_pressed', 1)+1);
+  if(DateTime.now().millisecondsSinceEpoch < lastPressedToggleDarkMode + 10000) {
+    timesToggleDarkModePressed = timesToggleDarkModePressed + 1;
   } else {
-    setInt('times_tgl_drk_mode_pressed', 1);
+    timesToggleDarkModePressed = 1;
   }
-  setInt('last_pressed_tgl_drk_mode', DateTime.now().millisecondsSinceEpoch);
-  print('$timesToggleDarkModePressed');
-  print('${getInt('last_pressed_tgl_drk_mode', -1)}');
+  lastPressedToggleDarkMode =  DateTime.now().millisecondsSinceEpoch;
 }
+
+int timesToggleDarkModePressed = 0;
+int lastPressedToggleDarkMode = 0;
 
 int get counter => getInt('counter', 0);
 set counter(int i) => setInt('counter', i);
-int get timesToggleDarkModePressed => getInt('times_tgl_drk_mode_pressed', 1);
-set timesToggleDarkModePressed(int i) => setInt('times_tgl_drk_mode_pressed', i);
 int get subListItemSpace => getInt('sub_list_item_space', 0);
 set subListItemSpace(int i) => setInt('sub_list_item_space', i);
 int get currentThemeId => getInt('current_theme_id', 0);

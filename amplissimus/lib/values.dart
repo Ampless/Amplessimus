@@ -10,9 +10,9 @@ class CustomValues {
     var now = DateTime.now();
     if(now.day == 1 && now.month == 4) isAprilFools = true;
   }
-  static PackageInfo packageInfo;
-  static Future<void> loadPackageInfo() async {
-    packageInfo = await PackageInfo.fromPlatform();
+  static String version = '-1';
+  static void loadPackageInfo() {
+    PackageInfo.fromPlatform().then((value) => version = value.version);
   }
 }
 
