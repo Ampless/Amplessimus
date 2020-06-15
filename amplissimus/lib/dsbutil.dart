@@ -1,11 +1,13 @@
-// this code is based on the pub packages 'uuid' and 'html_unescape'
+// this code is based on the pub packages 'uuid', 'html_unescape' and 'connectivity'
 
 import 'dart:math';
+import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:connectivity/connectivity.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 String _x(int i) {
   return i < 16 ? '0' + i.toRadixString(16) : i.toRadixString(16);
@@ -102,14 +104,41 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
   return res.body;
 }
 
-Connectivity _connectivity = Connectivity();
-bool lastConnectivityCheckFalse = false;
+bool _lastConnectivityCheckFailed = false;
+ConnectivityResult _connectivityResult = ConnectivityResult.wifi;
 
-void registerConnectivityHook(var callback) => _connectivity.onConnectivityChanged.listen(callback);
+void registerConnectivityHook(var rebuild) =>
+  EventChannel('plugins.flutter.io/connectivity_status')
+  .receiveBroadcastStream()
+  .map((dynamic result) => result.toString())
+  .map(parseConnectivityResult).listen((event) {
+    if(event != ConnectivityResult.none && _lastConnectivityCheckFailed) {
+      _lastConnectivityCheckFailed = false;
+      dsbUpdateWidget(rebuild);
+    }
+    _connectivityResult = event;
+  });
 
 void checkConnectivity() async {
-  if(await _connectivity.checkConnectivity() == ConnectivityResult.none) {
-    lastConnectivityCheckFalse = true;
+  if(_connectivityResult == null)
+    _connectivityResult = await methodChannel
+      .invokeMethod<String>('check').then(parseConnectivityResult);
+  if(_connectivityResult == ConnectivityResult.none) {
+    _lastConnectivityCheckFailed = true;
     throw 'Keine Internetverbindung.';
   }
+}
+
+MethodChannel methodChannel = MethodChannel('plugins.flutter.io/connectivity');
+
+ConnectivityResult parseConnectivityResult(String state) {
+  return state == 'wifi'   ? ConnectivityResult.wifi :
+         state == 'mobile' ? ConnectivityResult.cellular :
+                             ConnectivityResult.none;
+}
+
+enum ConnectivityResult {
+  wifi,
+  cellular,
+  none
 }

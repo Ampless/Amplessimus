@@ -10,10 +10,8 @@ import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -146,12 +144,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     if(Prefs.grade.trim().toLowerCase().isEmpty) gradeDropDownValue = 'Leer';
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
-    registerConnectivityHook((event) {
-      if(event != ConnectivityResult.none && lastConnectivityCheckFalse) {
-        lastConnectivityCheckFalse = false;
-        dsbUpdateWidget(rebuild);
-      }
-    });
+    registerConnectivityHook(rebuild);
   }
 
   void rebuild() {

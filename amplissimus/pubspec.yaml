@@ -26,7 +26,6 @@ dependencies:
   shared_preferences: ^0.5.7+3
   material_design_icons_flutter: ^4.0.5345
   pull_to_refresh: ^1.5.8
-  file_picker: ^1.11.0+2
   flutter_spinkit: ^4.1.2+1
   flare_loading: ^2.1.1
   flare_flutter: ^2.0.3
@@ -34,7 +33,6 @@ dependencies:
   http: ^0.12.1
   html: ^0.14.0+3
   connectivity: ^0.4.8+6
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -67,6 +65,7 @@ flutter:
     - assets/anims/splash_screen.flr
     - assets/anims/white_dark_mode_select.flr
     - assets/anims/get_ready.flr
+    - assets/json/trailer.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
