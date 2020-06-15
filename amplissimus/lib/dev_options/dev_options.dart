@@ -134,8 +134,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 RaisedButton(
                   child: Text('JSON importieren'),
                   onPressed: () async {
-                    Prefs.setString('DSB_JSON_CACHE',
-                      await rootBundle.loadString('assets/json/trailer.json'));
+                    Prefs.dsbJsonCache = await rootBundle.loadString('assets/json/trailer.json');
                   }
                 ),
                 RaisedButton.icon(
