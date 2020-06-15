@@ -26,7 +26,6 @@ dependencies:
   shared_preferences: ^0.5.7+3
   material_design_icons_flutter: ^4.0.5345
   pull_to_refresh: ^1.5.8
-  file_picker: ^1.11.0+2
   flutter_spinkit: ^4.1.2+1
   flare_loading: ^2.1.1
   flare_flutter: ^2.0.3
