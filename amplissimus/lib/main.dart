@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dev_options/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -21,7 +20,7 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SplashScreenPage());
+    return MaterialApp(title: AmpStrings.appTitle, home: SplashScreenPage());
   }
 }
 
@@ -146,9 +145,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
 
-  void rebuild() {
-    setState(() {});
-  }
+  void rebuild() => setState(() {});
 
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
@@ -157,16 +154,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   Future<Null> rebuildNewBuild() async {
-    setState(() {
-      circularProgressIndicatorActive = true;
-    });
+    setState(() => circularProgressIndicatorActive = true);
     await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
-    setState(() {
-      circularProgressIndicatorActive = false;
-    });
+    setState(() => circularProgressIndicatorActive = false);
     return null;
   }
-
 
   void showInputSelectCurrentClass(BuildContext context) {
     showDialog(
@@ -431,11 +423,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
-                      await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
                     } else {
                       Prefs.currentThemeId++;
-                      await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
                     }
+                    await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
                     tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
