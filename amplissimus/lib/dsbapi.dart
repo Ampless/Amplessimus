@@ -143,13 +143,11 @@ class DsbSubstitution {
       '                "lessons": [';
     for(int h in hours)
       json += '$h,';
-    json +=
-      '],\n'
+    return '${json.substring(0, json.length - 1)}],\n'
       '                "teacher": "${_jsonEscape(teacher)}",\n'
       '                "subject": "${_jsonEscape(subject)}",\n'
       '                "notes": "${_jsonEscape(notes)}"\n'
       '            },\n';
-    return json;
   }
 }
 
@@ -187,10 +185,9 @@ class DsbPlan {
       '        "subs": [\n';
     for(DsbSubstitution sub in subs)
       json += sub.toJson();
-    json +=
+    return '${json.substring(0, json.length - 2)}\n'
       '        ]\n'
       '    },\n';
-    return json;
   }
 }
 
@@ -460,7 +457,7 @@ String toJson(List<DsbPlan> plans) {
     '[\n';
   for(var plan in plans)
     json += plan.toJson();
-  return '$json]\n';
+  return '${json.substring(0, json.length - 2)}\n]\n';
 }
 
 List<DsbPlan> fromJson(String jsontext) {

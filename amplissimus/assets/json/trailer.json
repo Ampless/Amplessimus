@@ -11,32 +11,32 @@
         "subs": [
             {
                 "class": "5cd",
-                "lessons": [3,],
+                "lessons": [3],
                 "teacher": "Häußler",
                 "subject": "Spo",
                 "notes": "Mitbetreuung"
             },
             {
                 "class": "7b",
-                "lessons": [5,],
+                "lessons": [5],
                 "teacher": "Rosemann",
                 "subject": "E",
                 "notes": ""
             },
             {
                 "class": "7b",
-                "lessons": [6,],
+                "lessons": [6],
                 "teacher": "---",
                 "subject": "E",
                 "notes": ""
             },
             {
                 "class": "8c",
-                "lessons": [1,],
+                "lessons": [1],
                 "teacher": "Lehnert",
                 "subject": "E",
                 "notes": ""
-            },
+            }
         ]
-    },
+    }
 ]
