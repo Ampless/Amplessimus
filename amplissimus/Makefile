@@ -49,4 +49,4 @@ cleanartifacts:
 	flutter clean
 	rm -rf Payload debug_symbols tmp2deb
 
-.PHONY: cleanartifacts ios ipa apk
+.PHONY: cleanartifacts replaceversions rollbackversions ios ipa apk
