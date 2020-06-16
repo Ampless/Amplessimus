@@ -472,7 +472,7 @@ List<DsbPlan> fromJson(String jsontext) {
       String teacher = jsonGetKey(sub, 'teacher');
       List<int> lessons = [];
       for(dynamic lesson in jsonGetKey(sub, 'lessons')) {
-        lessons.add(int.parse(lesson));
+        lessons.add(lesson);
       }
       subs.add(DsbSubstitution(jsonGetKey(sub, 'class'),
                                lessons,
