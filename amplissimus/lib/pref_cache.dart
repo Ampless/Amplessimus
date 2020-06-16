@@ -99,9 +99,7 @@ class CachedSharedPreferences {
     return s;
   }
 
-  CachedSharedPreferences() { _init(); }
-
-  void _init() async {
+  Future<void> ctor() async {
     if(!Platform.isWindows)
       _prefs = await SharedPreferences.getInstance();
     for(String key in _editsString) setString(key, _cacheString[key]);

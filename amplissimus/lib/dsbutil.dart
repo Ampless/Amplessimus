@@ -74,7 +74,7 @@ Future<String> httpPost(String url, dynamic body, String id,
   ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
   http.Response res = await _httpclient.post(url, body: body, headers: headers);
   ampInfo(ctx: 'HTTP', message: 'Got POST-Response.');
-  if(res.statusCode == 200) Prefs.setCache('$url\t$id', res.body, ttl: Duration(minutes: 15));
+  if(res.statusCode == 200) Prefs.setCache('$url\t$id', res.body, Duration(minutes: 15));
   return res.body;
 }
 
@@ -86,6 +86,6 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
   ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
   http.Response res = await _httpclient.get(url);
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
-  if(res.statusCode == 200) Prefs.setCache(url, res.body, ttl: Duration(days: 4));
+  if(res.statusCode == 200) Prefs.setCache(url, res.body, Duration(days: 4));
   return res.body;
 }

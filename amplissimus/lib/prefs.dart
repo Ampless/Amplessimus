@@ -5,7 +5,7 @@ CachedSharedPreferences _prefs;
 
 String getCache(String url) => _prefs.getString('CACHE_VAL_$url', null);
 
-void setCache(String url, String html, {Duration ttl}) {
+void setCache(String url, String html, Duration ttl) {
   List<String> cacheUrls = _prefs.getStringList('CACHE_URLS', []);
   if(!cacheUrls.contains(url)) cacheUrls.add(url);
   _prefs.setStringList('CACHE_URLS', cacheUrls);
@@ -92,10 +92,13 @@ set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
 set designMode(bool isDarkMode) => _prefs.setBool('is_dark_mode', isDarkMode);
 bool get designMode => _prefs.getBool('is_dark_mode', true);
 
-Future<void> loadPrefs() async => _prefs = CachedSharedPreferences();
+Future<void> loadPrefs() async {
+  _prefs = CachedSharedPreferences();
+  await _prefs.ctor();
+}
 
 void clear() {
-  if(_prefs == null) throw 'HOLY SDHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
+  if(_prefs == null) throw 'HOLY SHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
   _prefs.clear();
   ampInfo(ctx: 'Prefs', message: 'Cleared SharedPreferences.');
 }
