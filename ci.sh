@@ -1,5 +1,5 @@
 #!/bin/sh
-flutter channel beta
+flutter channel master
 flutter upgrade
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
