@@ -4,11 +4,21 @@ FLAGS = --release --split-debug-info=debug_symbols --obfuscate
 IOS_FLAGS = $(FLAGS)
 APK_FLAGS = $(FLAGS) --shrink
 
-all: mkdirs ios android
+all: ios android
 
-android: apk cleanartifacts
+android: mkdirs replaceversions apk cleanartifacts rollbackversions
 
-ios: app ipa deb cleanartifacts
+ios: mkdirs replaceversions app ipa deb cleanartifacts rollbackversions
+
+replaceversions:
+	mv pubspec.yaml pubspec.yaml.def
+	sed "s/0.0.0-1/$(VERSION)/" pubspec.yaml.def > pubspec.yaml
+	mv lib/values.dart lib/values.dart.def
+	sed "s/0.0.0-1/$(VERSION)/" lib/values.dart.def > lib/values.dart
+
+rollbackversions:
+	mv pubspec.yaml.def pubspec.yaml
+	mv lib/values.dart.def lib/values.dart
 
 app:
 	flutter build ios $(IOS_FLAGS)

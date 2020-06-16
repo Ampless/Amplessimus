@@ -1,11 +1,9 @@
 // this code is based on the pub packages 'uuid', 'html_unescape' and 'connectivity'
 
 import 'dart:math';
-import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 

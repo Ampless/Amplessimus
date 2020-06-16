@@ -2,18 +2,14 @@ import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
 
 class CustomValues {
   static bool isAprilFools = false;
   static void checkForAprilFools() {
     var now = DateTime.now();
-    if(now.day == 1 && now.month == 4) isAprilFools = true;
+    isAprilFools = now.day == 1 && now.month == 4;
   }
-  static String version = '-1';
-  static void loadPackageInfo() {
-    PackageInfo.fromPlatform().then((value) => version = value.version);
-  }
+  static const String version = '0.0.0-1';
 }
 
 class AmpStrings {

@@ -45,7 +45,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
       await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
-      CustomValues.loadPackageInfo();
       Future.delayed(Duration(milliseconds: 1000), () {
         Navigator.pushReplacement(context, MaterialPageRoute(builder:
           (context) => Prefs.firstLogin ? FirstLoginScreen() : MyApp(initialIndex: 0,),));

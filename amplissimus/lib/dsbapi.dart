@@ -12,7 +12,6 @@ import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
-import 'package:http/http.dart';
 
 const String DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
 const String DSB_DEVICE = "SM-G950F";
