@@ -1,4 +1,6 @@
 #!/bin/sh
+flutter channel beta
+flutter upgrade
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
 make || exit 1
