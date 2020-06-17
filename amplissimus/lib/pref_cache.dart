@@ -18,8 +18,7 @@ class CachedSharedPreferences {
   Map<String, List<String>> _cacheStrings = {};
 
   bool get _platformSupportsSharedPrefs => !Platform.isWindows &&
-                                          !Platform.isLinux &&
-                                          !Platform.isMacOS;
+                                          !Platform.isLinux;
 
   void setString(String key, String value) {
     if(_prefs == null) _editsString.add(key);
