@@ -44,11 +44,16 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       CustomValues.checkForAprilFools();
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-      await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
-      Future.delayed(Duration(milliseconds: 1000), () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder:
-          (context) => Prefs.firstLogin ? FirstLoginScreen() : MyApp(initialIndex: 0,),));
-      });
+      if(Prefs.firstLogin) {
+        Future.delayed(Duration(milliseconds: 1000), () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen()));
+        });
+      } else {
+        await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
+        Future.delayed(Duration(milliseconds: 1000), () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
+        });
+      }
     });
   }
 
