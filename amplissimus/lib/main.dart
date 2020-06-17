@@ -426,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     } else {
                       Prefs.currentThemeId++;
                     }
-                    await dsbUpdateWidget(rebuildDragDown, cacheJsonPlans: Prefs.useJsonCache);
+                    await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
                     tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
