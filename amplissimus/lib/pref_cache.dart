@@ -17,6 +17,10 @@ class CachedSharedPreferences {
   Map<String, bool> _cacheBool = {};
   Map<String, List<String>> _cacheStrings = {};
 
+  bool get _platformSupportsSharedPrefs => !Platform.isWindows &&
+                                          !Platform.isLinux &&
+                                          !Platform.isMacOS;
+
   void setString(String key, String value) {
     if(_prefs == null) _editsString.add(key);
     else _prefs.setString(key, value);
@@ -50,7 +54,7 @@ class CachedSharedPreferences {
   int getInt(String key, int defaultValue) {
     if(_cacheInt.containsKey(key)) return _cacheInt[key];
     if(_prefs == null) {
-      if(!Platform.isWindows)
+      if(_platformSupportsSharedPrefs)
         throw 'PREFSI NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
       else
         return defaultValue;
@@ -63,7 +67,7 @@ class CachedSharedPreferences {
   String getString(String key, String defaultValue) {
     if(_cacheString.containsKey(key)) return _cacheString[key];
     if(_prefs == null) {
-      if(!Platform.isWindows)
+      if(_platformSupportsSharedPrefs)
         throw 'PREFSS NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
       else
         return defaultValue;
@@ -76,7 +80,7 @@ class CachedSharedPreferences {
   bool getBool(String key, bool defaultValue) {
     if(_cacheBool.containsKey(key)) return _cacheBool[key];
     if(_prefs == null) {
-      if(!Platform.isWindows)
+      if(_platformSupportsSharedPrefs)
         throw 'PREFSB NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
       else
         return defaultValue;
@@ -89,7 +93,7 @@ class CachedSharedPreferences {
   List<String> getStringList(String key, List<String> defaultValue) {
     if(_cacheStrings.containsKey(key)) return _cacheStrings[key];
     if(_prefs == null) {
-      if(!Platform.isWindows)
+      if(_platformSupportsSharedPrefs)
         throw 'PREFSSL NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
       else
         return defaultValue;
@@ -100,7 +104,7 @@ class CachedSharedPreferences {
   }
 
   Future<void> ctor() async {
-    if(!Platform.isWindows)
+    if(_platformSupportsSharedPrefs)
       _prefs = await SharedPreferences.getInstance();
     for(String key in _editsString) setString(key, _cacheString[key]);
     for(String key in _editsInt) setInt(key, _cacheInt[key]);
@@ -124,10 +128,9 @@ class CachedSharedPreferences {
     _cacheString.clear();
     _cacheStrings.clear();
     if(_prefs == null) {
-      if(Platform.isWindows)
-        return;
-      else
+      if(_platformSupportsSharedPrefs)
         throw 'PREFS NOT LODADA D A D AD';
+      else return;
     }
     _prefs.clear();
   }
