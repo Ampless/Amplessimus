@@ -8,5 +8,5 @@ make || exit 1
 cp -rf bin "/usr/local/var/www/amplissimus/$1"
 cd bin
 tar cJf "/usr/local/var/www/amplissimus/$1/$1.tar.xz" *
-rm -f *
+rm -rf *
 cd ../..
