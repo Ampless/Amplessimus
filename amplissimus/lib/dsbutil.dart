@@ -4,16 +4,20 @@ import 'dart:math';
 import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
 String _x(int i) => (i < 16 ? '0' : '') + i.toRadixString(16);
 
-var _rand = Random();
-int _r(int max) => _rand.nextInt(max);
+var rand = Random();
+int _r(int max) => rand.nextInt(max);
 String get _100 => _x(_r(0x100));
 String get _104 => _x(_r(0x10) | 0x40);
 String get _408 => _x(_r(0x40) | 0x80);
+
+int get rbyte => _r(256);
+Color get rcolor => Color.fromARGB(255, rbyte, rbyte, rbyte);
 
 String v4() => '$_100$_100$_100$_100-$_100$_100-$_104$_100-$_408$_100-$_100$_100$_100$_100$_100$_100';
 
