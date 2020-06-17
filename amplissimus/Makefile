@@ -61,4 +61,7 @@ cleanartifacts:
 	flutter clean
 	rm -rf Payload debug_symbols tmp2deb
 
+setup:
+	sudo apt install -y ninja-build
+
 .PHONY: cleanartifacts replaceversions rollbackversions ios ipa apk
