@@ -7,7 +7,7 @@ APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm,android-arm64,an
 WIN_FLAGS = $(BIN_FLAGS)
 WEB_FLAGS = $(FLAGS) --csp
 
-all: ios android
+all: ios android web
 
 android: mkdirs replaceversions apk cleanartifacts rollbackversions
 ios: mkdirs replaceversions app ipa deb cleanartifacts rollbackversions
