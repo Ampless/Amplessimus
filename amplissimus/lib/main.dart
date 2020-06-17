@@ -44,11 +44,16 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       CustomValues.checkForAprilFools();
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-      await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
-      Future.delayed(Duration(milliseconds: 1000), () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder:
-          (context) => Prefs.firstLogin ? FirstLoginScreen() : MyApp(initialIndex: 0,),));
-      });
+      if(Prefs.firstLogin) {
+        Future.delayed(Duration(milliseconds: 1000), () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen()));
+        });
+      } else {
+        await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
+        Future.delayed(Duration(milliseconds: 1000), () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
+        });
+      }
     });
   }
 
@@ -80,9 +85,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
-  }
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) => child;
 }
 
 class MyApp extends StatelessWidget {
@@ -146,17 +149,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   void rebuild() => setState(() {});
 
-  Future<Null> rebuildDragDown() async {
+  Future<void> rebuildDragDown() async {
     refreshKey.currentState?.show();
     await dsbUpdateWidget(rebuild, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
-    return null;
   }
 
-  Future<Null> rebuildNewBuild() async {
+  Future<void> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
     await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
     setState(() => circularProgressIndicatorActive = false);
-    return null;
   }
 
   void showInputSelectCurrentClass(BuildContext context) {
@@ -334,7 +335,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
         setState(() => Prefs.oneClassOnly = value);
         dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
-      }), alignment: Alignment.center,),
+      }), alignment: Alignment.center),
     ],) : widget = Container(height: 0);
     return widget;
   }
@@ -344,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     var textStyle = TextStyle(color: AmpColors.colorForeground);
-    if(dsbWidget is Container) rebuildNewBuild();
+    if(dsbWidget == null) rebuildNewBuild();
     List<Widget> containers = [
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
@@ -354,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            title: Prefs.counterEnabled ? Text('${AmpStrings.appTitle} ${Prefs.counter}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)) : Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: AmpColors.colorForeground),),
+            title: Text('${AmpStrings.appTitle} ${Prefs.counterEnabled ? Prefs.counter : ''}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)),
             centerTitle: true,
           ),
           backgroundColor: Colors.transparent,
@@ -417,15 +418,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () async {
-                    if(CustomValues.isAprilFools) {tabController.animateTo(0); return;}
+                  onTap: () {
+                    if(CustomValues.isAprilFools) return;
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
                     } else {
                       Prefs.currentThemeId++;
                     }
-                    await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
+                    rebuildDragDown();
                     tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),

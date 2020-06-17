@@ -320,7 +320,7 @@ String errorString(dynamic e) {
   return e.toString();
 }
 
-Widget dsbWidget = Container();
+Widget dsbWidget;
 
 Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
                                           bool cachePostRequests = true,
@@ -339,44 +339,27 @@ Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
       );
       Prefs.dsbJsonCache = toJson(plans);
     } else plans = fromJson(jsonCache);
-    if(Prefs.oneClassOnly && Prefs.username.trim().isNotEmpty && Prefs.password.trim().isNotEmpty)
+    if(Prefs.oneClassOnly && Prefs.username.isNotEmpty && Prefs.password.isNotEmpty)
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
   } catch (e) {
-    switch (Prefs.currentThemeId) {
-      case 0:
-        dsbWidget = SizedBox(child: Container(child: Card(
-          color: AmpColors.lightForeground,
-          child: ListTile(title: CustomValues.isAprilFools ? Text(errorString(e), style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground)),)
-        ), padding: EdgeInsets.only(top: 15),));
-        break;
-      case 1:
-        dsbWidget = SizedBox(child: Container(child: Container(
-          margin: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            border: Border.all(color: AmpColors.colorForeground),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ListTile(title: CustomValues.isAprilFools ? Text(errorString(e), style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground)),)
-        ), padding: EdgeInsets.only(top: 15),));
-        break;
-      default:
-        dsbWidget = SizedBox(child: Container(child: Card(
-          color: AmpColors.lightForeground,
-          child: ListTile(title: CustomValues.isAprilFools ? Text(errorString(e), style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(errorString(e), style: TextStyle(color: AmpColors.colorForeground)),)
-        ), padding: EdgeInsets.only(top: 15),));
-    }
+    dsbWidget = SizedBox(child: Container(
+      child: _getThemedWidget(ListTile(
+          title: Text(errorString(e), style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
+        ), Prefs.currentThemeId,
+      ), padding: EdgeInsets.only(top: 15))
+    );
   }
   f();
 }
 
-Widget _getWidget(List<Widget> dayWidgets, int themeId, {AnimationController animController}) {
+Widget _getThemedWidget(Widget child, int themeId) {
   switch (themeId) {
     case 0:
       return Card(
         elevation: 0,
         color: AmpColors.lightForeground,
-        child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+        child: child,
       );
     case 1:
       return Container(
@@ -385,18 +368,20 @@ Widget _getWidget(List<Widget> dayWidgets, int themeId, {AnimationController ani
           border: Border.all(color: AmpColors.colorForeground),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+        child: child,
       );
     case -1:
       return Card(
         elevation: 0,
         color: AmpColors.lightForeground,
-        child: Column(mainAxisSize: MainAxisSize.min, children: dayWidgets),
+        child: child,
       );
     default:
-      return _getWidget(dayWidgets, 0);
+      return _getThemedWidget(child, 0);
   }
 }
+
+Widget _getWidget(List<Widget> dayW, int theme) => _getThemedWidget(Column(mainAxisSize: MainAxisSize.min, children: dayW), theme);
 
 void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
   for(DsbPlan plan in plans) {
@@ -412,8 +397,8 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       String titleSub = sub.title;
       if(CustomValues.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title: CustomValues.isAprilFools ? Text(titleSub, style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
-        subtitle: CustomValues.isAprilFools ? Text(sub.subtitle, style: TextStyle(color: Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1))) : Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
+        title: CustomValues.isAprilFools ? Text(titleSub, style: TextStyle(color: rcolor)) : Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
+        subtitle: CustomValues.isAprilFools ? Text(sub.subtitle, style: TextStyle(color: rcolor)) : Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
         trailing: (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly) ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));
