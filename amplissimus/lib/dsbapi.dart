@@ -320,7 +320,7 @@ String errorString(dynamic e) {
   return e.toString();
 }
 
-Widget dsbWidget = Container();
+Widget dsbWidget;
 
 Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
                                           bool cachePostRequests = true,
