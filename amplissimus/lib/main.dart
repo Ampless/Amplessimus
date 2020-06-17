@@ -419,7 +419,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () {
-                    if(CustomValues.isAprilFools) {tabController.animateTo(0); return;}
+                    if(CustomValues.isAprilFools) return;
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
                       Prefs.currentThemeId = 0;
