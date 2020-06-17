@@ -418,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () async {
+                  onTap: () {
                     if(CustomValues.isAprilFools) {tabController.animateTo(0); return;}
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) {
@@ -426,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     } else {
                       Prefs.currentThemeId++;
                     }
-                    await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
+                    rebuildDragDown();
                     tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
