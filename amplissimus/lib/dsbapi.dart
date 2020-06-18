@@ -8,6 +8,7 @@ import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
+import 'package:Amplissimus/xml.dart';
 import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
@@ -118,7 +119,7 @@ class DsbSubstitution {
     String plist =
       '            <dict>\n'
       '                <key>class</key>\n'
-      '                <string>${_xmlEscape(affectedClass)}</string>\n'
+      '                <string>${xmlEscape(affectedClass)}</string>\n'
       '                <key>lessons</key>\n'
       '                <array>\n';
     for(int h in hours)
@@ -126,11 +127,11 @@ class DsbSubstitution {
     plist +=
       '                </array>\n'
       '                <key>teacher</key>\n'
-      '                <string>${_xmlEscape(teacher)}</string>\n'
+      '                <string>${xmlEscape(teacher)}</string>\n'
       '                <key>subject</key>\n'
-      '                <string>${_xmlEscape(subject)}</string>\n'
+      '                <string>${xmlEscape(subject)}</string>\n'
       '                <key>notes</key>\n'
-      '                <string>${_xmlEscape(notes)}</string>\n'
+      '                <string>${xmlEscape(notes)}</string>\n'
       '            </dict>\n';
     return plist;
   }
@@ -138,14 +139,14 @@ class DsbSubstitution {
   String toJson() {
     String json =
       '            {\n'
-      '                "class": "${_jsonEscape(affectedClass)}",\n'
+      '                "class": "${jsonEscape(affectedClass)}",\n'
       '                "lessons": [';
     for(int h in hours)
       json += '$h,';
     return '${json.substring(0, json.length - 1)}],\n'
-      '                "teacher": "${_jsonEscape(teacher)}",\n'
-      '                "subject": "${_jsonEscape(subject)}",\n'
-      '                "notes": "${_jsonEscape(notes)}"\n'
+      '                "teacher": "${jsonEscape(teacher)}",\n'
+      '                "subject": "${jsonEscape(subject)}",\n'
+      '                "notes": "${jsonEscape(notes)}"\n'
       '            },\n';
   }
 }
@@ -163,9 +164,9 @@ class DsbPlan {
     String plist =
       '    <dict>\n'
       '        <key>title</key>\n'
-      '        <string>${_xmlEscape(title)}</string>\n'
+      '        <string>${xmlEscape(title)}</string>\n'
       '        <key>date</key>\n'
-      '        <string>${_jsonEscape(date)}</string>\n'
+      '        <string>${jsonEscape(date)}</string>\n'
       '        <key>subs</key>\n'
       '        <array>\n';
     for(DsbSubstitution sub in subs)
@@ -179,8 +180,8 @@ class DsbPlan {
   String toJson() {
     String json =
       '    {\n'
-      '        "title": "${_jsonEscape(title)}",\n'
-      '        "date": "${_jsonEscape(date)}",\n'
+      '        "title": "${jsonEscape(title)}",\n'
+      '        "date": "${jsonEscape(date)}",\n'
       '        "subs": [\n';
     for(DsbSubstitution sub in subs)
       json += sub.toJson();
@@ -414,14 +415,6 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     widgets.add(_getWidget(dayWidgets, Prefs.currentThemeId));
   }
 }
-
-String _xmlEscape(String s) => s.replaceAll('&', '&amp;')
-                                .replaceAll('"', '&quot;')
-                                .replaceAll("'", '&apos;')
-                                .replaceAll('<', '&lt;')
-                                .replaceAll('>', '&gt;');
-String _jsonEscape(String s) => s.replaceAll('\\', '\\\\')
-                                 .replaceAll('"', '\\"');
 
 String toPlist(List<DsbPlan> plans) {
   String plist =

@@ -1,11 +1,15 @@
 import 'dart:io';
 
+import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/values.dart';
+import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CachedSharedPreferences {
   SharedPreferences _prefs;
+  RandomAccessFile _prefFile;
+  Mutex _prefFileMutex = Mutex();
   List<String> _editsString = [];
   List<String> _editsInt = [];
   List<String> _editsDouble = [];
@@ -17,8 +21,7 @@ class CachedSharedPreferences {
   Map<String, bool> _cacheBool = {};
   Map<String, List<String>> _cacheStrings = {};
 
-  bool get _platformSupportsSharedPrefs => !Platform.isWindows &&
-                                          !Platform.isLinux;
+  bool _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
 
   void setString(String key, String value) {
     if(_prefs == null) _editsString.add(key);
@@ -102,19 +105,71 @@ class CachedSharedPreferences {
     return s;
   }
 
+  void flush() async {
+    if(_prefFile != null && (_cacheString.length > 0 ||
+                             _cacheInt.length > 0 ||
+                             _cacheDouble.length > 0 ||
+                             _cacheBool.length > 0 ||
+                             _cacheStrings.length > 0)) {
+      await _prefFileMutex.acquire();
+      await _prefFile.setPosition(0);
+      await _prefFile.writeString('[');
+      for(var k in _cacheString.keys)
+        await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":"${jsonEscape(_cacheString[k])}","t":"str"},');
+      for(var k in _cacheInt.keys)
+        await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheInt[k]},"t":"int"},');
+      for(var k in _cacheDouble.keys)
+        await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheDouble[k]},"t":"flt"},');
+      for(var k in _cacheBool.keys)
+        await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheBool[k]},"t":"bol"},');
+      for(var k in _cacheStrings.keys) {
+        await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":[');
+        for(var s in _cacheStrings[k])
+          await _prefFile.writeString('"${jsonEscape(s)}",');
+        await _prefFile.setPosition((await _prefFile.position()) - 1);
+        await _prefFile.writeString('],"t":"s[]"},');
+      }
+      await _prefFile.setPosition((await _prefFile.position()) - 1);
+      await _prefFile.writeString(']');
+      _prefFileMutex.release();
+    }
+  }
+
   Future<void> ctor() async {
-    if(_platformSupportsSharedPrefs)
+    if(_platformSupportsSharedPrefs) {
       _prefs = await SharedPreferences.getInstance();
-    for(String key in _editsString) setString(key, _cacheString[key]);
-    for(String key in _editsInt) setInt(key, _cacheInt[key]);
-    for(String key in _editsDouble) setDouble(key, _cacheDouble[key]);
-    for(String key in _editsBool) setBool(key, _cacheBool[key]);
-    for(String key in _editsStrings) setStringList(key, _cacheStrings[key]);
-    _editsString.clear();
-    _editsInt.clear();
-    _editsDouble.clear();
-    _editsBool.clear();
-    _editsStrings.clear();
+      for(String key in _editsString) setString(key, _cacheString[key]);
+      for(String key in _editsInt) setInt(key, _cacheInt[key]);
+      for(String key in _editsDouble) setDouble(key, _cacheDouble[key]);
+      for(String key in _editsBool) setBool(key, _cacheBool[key]);
+      for(String key in _editsStrings) setStringList(key, _cacheStrings[key]);
+      _editsString.clear();
+      _editsInt.clear();
+      _editsDouble.clear();
+      _editsBool.clear();
+      _editsStrings.clear();
+    } else {
+      await _prefFileMutex.acquire();
+      _prefFile = await File('.amplissimus_desktop_prealpha_shared_prefs').open(mode: FileMode.append);
+      if(await _prefFile.length() > 1) {
+        await _prefFile.setPosition(0);
+        var bytes = await _prefFile.read(await _prefFile.length());
+        var jsontext = String.fromCharCodes(bytes);
+        //this kind of creates a race condition, but that doesn't really matter lol
+        for(dynamic json in jsonIsList(jsontext)) {
+          dynamic key = jsonGetKey(json, 'k');
+          dynamic val = jsonGetKey(json, 'v');
+          dynamic typ = jsonGetKey(json, 't');
+          if(typ == 'str') _cacheString[key] = val;
+          else if(typ == 'int') _cacheInt[key] = val;
+          else if(typ == 'flt') _cacheDouble[key] = val;
+          else if(typ == 'bol') _cacheBool[key] = val;
+          else if(typ == 's[]') _cacheStrings[key] = jsonIsList(val);
+          else throw 'Prefs doesn\'t know the pref type "$typ".';
+        }
+      }
+      _prefFileMutex.release();
+    }
     bool isDarkMode = getBool('is_dark_mode', true);
     ampInfo(ctx: 'Prefs', message: 'recognized isDarkMode = $isDarkMode');
     AmpColors.setMode(isDarkMode);
