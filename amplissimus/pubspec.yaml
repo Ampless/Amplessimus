@@ -65,7 +65,6 @@ flutter:
     - assets/anims/splash_screen.flr
     - assets/anims/white_dark_mode_select.flr
     - assets/anims/get_ready.flr
-    - assets/json/trailer.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

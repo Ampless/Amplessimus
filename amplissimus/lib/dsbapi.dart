@@ -138,16 +138,16 @@ class DsbSubstitution {
 
   String toJson() {
     String json =
-      '            {\n'
-      '                "class": "${jsonEscape(affectedClass)}",\n'
-      '                "lessons": [';
+      '{'
+      '"class": "${jsonEscape(affectedClass)}",'
+      '"lessons": [';
     for(int h in hours)
       json += '$h,';
-    return '${json.substring(0, json.length - 1)}],\n'
-      '                "teacher": "${jsonEscape(teacher)}",\n'
-      '                "subject": "${jsonEscape(subject)}",\n'
-      '                "notes": "${jsonEscape(notes)}"\n'
-      '            },\n';
+    return '${json.substring(0, json.length - 1)}],'
+      '"teacher": "${jsonEscape(teacher)}",'
+      '"subject": "${jsonEscape(subject)}",'
+      '"notes": "${jsonEscape(notes)}"'
+      '},';
   }
 }
 
@@ -179,15 +179,15 @@ class DsbPlan {
 
   String toJson() {
     String json =
-      '    {\n'
-      '        "title": "${jsonEscape(title)}",\n'
-      '        "date": "${jsonEscape(date)}",\n'
-      '        "subs": [\n';
+      '{'
+      '"title": "${jsonEscape(title)}",'
+      '"date": "${jsonEscape(date)}",'
+      '"subs": [';
     for(DsbSubstitution sub in subs)
       json += sub.toJson();
-    return '${json.substring(0, json.length - 2)}\n'
-      '        ]\n'
-      '    },\n';
+    return '${json.substring(0, json.length - 2)}'
+      ']'
+      '},';
   }
 }
 
@@ -250,8 +250,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
       jsonGetKey(
         jsonGetIndex(
           jsonGetKey(plan, 'Childs'),
-        ),
-        'Detail',
+        ), 'Detail',
       ),
       useCache: cacheGetRequests,
     );
@@ -429,10 +428,10 @@ String toPlist(List<DsbPlan> plans) {
 
 String toJson(List<DsbPlan> plans) {
   String json =
-    '[\n';
+    '[';
   for(var plan in plans)
     json += plan.toJson();
-  return '${json.substring(0, json.length - 2)}\n]\n';
+  return '${json.substring(0, json.length - 2)}]\n';
 }
 
 List<DsbPlan> fromJson(String jsontext) {

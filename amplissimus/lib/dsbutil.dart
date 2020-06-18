@@ -98,10 +98,13 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
     .replaceAll(RegExp(r'<style.*?<\/style>'), '')
     .replaceAll(RegExp(r'<\/?span.*?>'), '')
     .replaceAll(RegExp(r'<\/?a.*?>'), '')
+    .replaceAll(RegExp(r'<div.*?>'), '<div>')
+    .replaceAll(RegExp(r'<font.*?>'), '<font>')
     .replaceAll(RegExp(r'<table.*?>'), '<table>')
     .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
     .replaceAll(RegExp(r'<td.*?>'), '<td>')
-    .replaceAll(RegExp(r'<th.*?>'), '<th>');
+    .replaceAll(RegExp(r'<th.*?>'), '<th>')
+    .replaceAll(RegExp(r' +'), ' ');
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
   if(res.statusCode == 200) Prefs.setCache(url, r, Duration(days: 4));
   return r;

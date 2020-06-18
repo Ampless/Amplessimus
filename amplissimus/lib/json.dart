@@ -26,5 +26,6 @@ dynamic jsonGetIndex(dynamic json, {int index = 0}) => jsonContainsIndex(jsonIsL
 String jsonEscape(Object s) => s.toString().replaceAll('\\', '\\\\')
                                            .replaceAll('"', '\\"')
                                            .replaceAll('\t', '\\t')
+                                           .replaceAll('\f', '\\f')
                                            .replaceAll('\n', '\\n')
                                            .replaceAll('\r', '\\r');
