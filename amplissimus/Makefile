@@ -5,6 +5,7 @@ BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
 IOS_FLAGS = $(BIN_FLAGS)
 APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm,android-arm64,android-x64
 WIN_FLAGS = $(BIN_FLAGS)
+GTK_FLAGS = $(BIN_FLAGS)
 WEB_FLAGS = $(FLAGS) --csp
 
 all: ios android web
@@ -13,6 +14,7 @@ android: mkdirs replaceversions apk cleanartifacts rollbackversions
 ios: mkdirs replaceversions app ipa deb cleanartifacts rollbackversions
 web: mkdirs replaceversions _web cleanartifacts rollbackversions
 win: mkdirs replaceversions winx64 cleanartifacts rollbackversions
+linux: mkdirs replaceversions linux64 cleanartifacts rollbackversions
 
 replaceversions:
 	mv -f pubspec.yaml pubspec.yaml.def
@@ -53,6 +55,10 @@ _web:
 winx64:
 	flutter build windows $(WIN_FLAGS)
 	mv build/windows/x64/Release/Runner bin/$(VERSION).win
+
+linux64:
+	flutter build linux $(GTK_FLAGS)
+	mv build/linux/Release/bundle bin/$(VERSION).linux
 
 mkdirs:
 	mkdir -p debug_symbols bin Payload tmp2deb/DEBIAN tmp2deb/Applications
