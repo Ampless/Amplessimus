@@ -108,16 +108,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.useJsonCache, 
-                    onChanged: (value) => setState(() => Prefs.useJsonCache = value),
+                    onChanged: (value) {Prefs.useJsonCache = value; dsbUpdateWidget(() {}, cacheJsonPlans: value);},
                   ),
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 ListTile(
                   title: Text('Listenelementabstand', style: widget.textStyle,),
                   trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),
-                  onTap: () {
-                    showInputSubListItemSpacingDialog(context);
-                  },
+                  onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 Divider(color: Colors.transparent, height: 10),
@@ -165,7 +163,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                           ),
                         ],
                       );
-                    },);
+                    });
                   }
                 )
               ],
@@ -176,9 +174,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           elevation: 0,
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
-          onPressed: () {
-            DevOptionsValues.tabController.animateTo(0);
-          }, 
+          onPressed: () => DevOptionsValues.tabController.animateTo(0), 
           label: Text('zurück', style: TextStyle(color: AmpColors.colorForeground),),
           icon: Icon(Icons.arrow_back, color: AmpColors.colorForeground,),
         ),
