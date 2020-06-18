@@ -246,9 +246,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
   );
   Map<String, String> map = {};
   for (var plan in jsonGetKey(jsonGetKey(json, 'Root'), 'Childs'))
-    map[
-      jsonGetKey(plan, 'Title')
-    ] = await httpGet(
+    map[jsonGetKey(plan, 'Title')] = (await httpGet(
       jsonGetKey(
         jsonGetIndex(
           jsonGetKey(plan, 'Childs'),
@@ -256,7 +254,10 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
         'Detail',
       ),
       useCache: cacheGetRequests,
-    );
+    )).replaceAll('\n', '')
+      .replaceAll('\r', '')
+      .replaceAll(RegExp(r'<script>.*?</script>'), '')
+      .replaceAll(RegExp(r'<style>.*?</style>'), '');
   return map;
 }
 
@@ -323,9 +324,9 @@ String errorString(dynamic e) {
 
 Widget dsbWidget;
 
-Future<void> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
-                                          bool cachePostRequests = true,
-                                          bool cacheJsonPlans = false}) async {
+Future dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
+                                    bool cachePostRequests = true,
+                                    bool cacheJsonPlans = false}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0)
       throw 'Keine Login-Daten eingetragen.';

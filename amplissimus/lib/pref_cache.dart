@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:Amplissimus/json.dart';
@@ -24,33 +25,38 @@ class CachedSharedPreferences {
   bool _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
 
   void setString(String key, String value) {
-    if(_prefs == null) _editsString.add(key);
-    else _prefs.setString(key, value);
     _cacheString[key] = value;
+    if(_prefs != null) _prefs.setString(key, value);
+    else if(_prefFile != null) flush();
+    else _editsString.add(key);
   }
 
   void setInt(String key, int value) {
-    if(_prefs == null) _editsInt.add(key);
-    else _prefs.setInt(key, value);
     _cacheInt[key] = value;
+    if(_prefs != null) _prefs.setInt(key, value);
+    else if(_prefFile != null) flush();
+    else _editsInt.add(key);
   }
 
   void setDouble(String key, double value) {
-    if(_prefs == null) _editsDouble.add(key);
-    else _prefs.setDouble(key, value);
     _cacheDouble[key] = value;
+    if(_prefs != null) _prefs.setDouble(key, value);
+    else if(_prefFile != null) flush();
+    else _editsDouble.add(key);
   }
 
   void setStringList(String key, List<String> value) {
-    if(_prefs == null) _editsStrings.add(key);
-    else _prefs.setStringList(key, value);
     _cacheStrings[key] = value;
+    if(_prefs != null) _prefs.setStringList(key, value);
+    else if(_prefFile != null) flush();
+    else _editsStrings.add(key);
   }
 
   void setBool(String key, bool value) {
-    if(_prefs == null) _editsBool.add(key);
-    else _prefs.setBool(key, value);
     _cacheBool[key] = value;
+    if(_prefs != null) _prefs.setBool(key, value);
+    else if(_prefFile != null) flush();
+    else _editsBool.add(key);
   }
 
   int getInt(String key, int defaultValue) {
@@ -130,12 +136,13 @@ class CachedSharedPreferences {
         await _prefFile.writeString('],"t":"s[]"},');
       }
       await _prefFile.setPosition((await _prefFile.position()) - 1);
-      await _prefFile.writeString(']');
+      await _prefFile.writeString('] ');
+      await _prefFile.flush();
       _prefFileMutex.release();
     }
   }
 
-  Future<void> ctor() async {
+  Future ctor() async {
     if(_platformSupportsSharedPrefs) {
       _prefs = await SharedPreferences.getInstance();
       for(String key in _editsString) setString(key, _cacheString[key]);
@@ -154,9 +161,8 @@ class CachedSharedPreferences {
       if(await _prefFile.length() > 1) {
         await _prefFile.setPosition(0);
         var bytes = await _prefFile.read(await _prefFile.length());
-        var jsontext = String.fromCharCodes(bytes);
         //this kind of creates a race condition, but that doesn't really matter lol
-        for(dynamic json in jsonIsList(jsontext)) {
+        for(dynamic json in jsonIsList(jsonDecode(utf8.decode(bytes)))) {
           dynamic key = jsonGetKey(json, 'k');
           dynamic val = jsonGetKey(json, 'v');
           dynamic typ = jsonGetKey(json, 't');
@@ -164,8 +170,11 @@ class CachedSharedPreferences {
           else if(typ == 'int') _cacheInt[key] = val;
           else if(typ == 'flt') _cacheDouble[key] = val;
           else if(typ == 'bol') _cacheBool[key] = val;
-          else if(typ == 's[]') _cacheStrings[key] = jsonIsList(val);
-          else throw 'Prefs doesn\'t know the pref type "$typ".';
+          else if(typ == 's[]') {
+            _cacheStrings[key] = [];
+            for(dynamic s in jsonIsList(val))
+              _cacheStrings[key].add(s);
+          } else throw 'Prefs doesn\'t know the pref type "$typ".';
         }
       }
       _prefFileMutex.release();

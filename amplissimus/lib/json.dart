@@ -24,4 +24,7 @@ dynamic jsonGetKey(dynamic json, dynamic key) => jsonContainsKey(jsonIsMap(json)
 dynamic jsonGetIndex(dynamic json, {int index = 0}) => jsonContainsIndex(jsonIsList(json), index)[index];
 
 String jsonEscape(Object s) => s.toString().replaceAll('\\', '\\\\')
-                                           .replaceAll('"', '\\"');
+                                           .replaceAll('"', '\\"')
+                                           .replaceAll('\t', '\\t')
+                                           .replaceAll('\n', '\\n')
+                                           .replaceAll('\r', '\\r');
