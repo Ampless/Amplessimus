@@ -108,7 +108,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.useJsonCache, 
-                    onChanged: (value) {Prefs.useJsonCache = value; dsbUpdateWidget(() {}, cacheJsonPlans: value);},
+                    onChanged: (value) {
+                      Prefs.useJsonCache = value;
+                      dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: value);
+                    },
                   ),
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
@@ -133,6 +136,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   child: Text('JSON importieren'),
                   onPressed: () async {
                     Prefs.dsbJsonCache = await rootBundle.loadString('assets/json/trailer.json');
+                    dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: Prefs.useJsonCache);
                   }
                 ),
                 RaisedButton.icon(
@@ -174,7 +178,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           elevation: 0,
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
-          onPressed: () => DevOptionsValues.tabController.animateTo(0), 
+          onPressed: () {
+            DevOptionsValues.tabController.animateTo(0);
+            dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: Prefs.useJsonCache);
+          }, 
           label: Text('zurück', style: TextStyle(color: AmpColors.colorForeground),),
           icon: Icon(Icons.arrow_back, color: AmpColors.colorForeground,),
         ),
