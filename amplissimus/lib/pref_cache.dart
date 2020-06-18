@@ -22,7 +22,7 @@ class CachedSharedPreferences {
   Map<String, bool> _cacheBool = {};
   Map<String, List<String>> _cacheStrings = {};
 
-  bool _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
+  bool _platformSupportsSharedPrefs;
 
   void setString(String key, String value) {
     _cacheString[key] = value;
@@ -119,6 +119,7 @@ class CachedSharedPreferences {
                              _cacheStrings.length > 0)) {
       await _prefFileMutex.acquire();
       await _prefFile.setPosition(0);
+      await _prefFile.truncate(0);
       await _prefFile.writeString('[');
       for(var k in _cacheString.keys)
         await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":"${jsonEscape(_cacheString[k])}","t":"str"},');
@@ -136,13 +137,19 @@ class CachedSharedPreferences {
         await _prefFile.writeString('],"t":"s[]"},');
       }
       await _prefFile.setPosition((await _prefFile.position()) - 1);
-      await _prefFile.writeString('] ');
+      await _prefFile.writeString(']\n');
       await _prefFile.flush();
       _prefFileMutex.release();
     }
   }
 
   Future ctor() async {
+    try {
+      _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
+    } catch (e) {
+      //it should only fail on web
+      _platformSupportsSharedPrefs = true;
+    }
     if(_platformSupportsSharedPrefs) {
       _prefs = await SharedPreferences.getInstance();
       for(String key in _editsString) setString(key, _cacheString[key]);

@@ -246,7 +246,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
   );
   Map<String, String> map = {};
   for (var plan in jsonGetKey(jsonGetKey(json, 'Root'), 'Childs'))
-    map[jsonGetKey(plan, 'Title')] = (await httpGet(
+    map[jsonGetKey(plan, 'Title')] = await httpGet(
       jsonGetKey(
         jsonGetIndex(
           jsonGetKey(plan, 'Childs'),
@@ -254,10 +254,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
         'Detail',
       ),
       useCache: cacheGetRequests,
-    )).replaceAll('\n', '')
-      .replaceAll('\r', '')
-      .replaceAll(RegExp(r'<script>.*?</script>'), '')
-      .replaceAll(RegExp(r'<style>.*?</style>'), '');
+    );
   return map;
 }
 

@@ -89,7 +89,20 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
   }
   ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
   http.Response res = await _httpclient.get(url);
+  String r = res.body
+    .replaceAll('\n', '')
+    .replaceAll('\r', '')
+    //just fyi: these regexes only work because there are no more newlines
+    .replaceAll(RegExp(r'<head.*?<\/head>'), '')
+    .replaceAll(RegExp(r'<script.*?<\/script>'), '')
+    .replaceAll(RegExp(r'<style.*?<\/style>'), '')
+    .replaceAll(RegExp(r'<\/?span.*?>'), '')
+    .replaceAll(RegExp(r'<\/?a.*?>'), '')
+    .replaceAll(RegExp(r'<table.*?>'), '<table>')
+    .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
+    .replaceAll(RegExp(r'<td.*?>'), '<td>')
+    .replaceAll(RegExp(r'<th.*?>'), '<th>');
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
-  if(res.statusCode == 200) Prefs.setCache(url, res.body, Duration(days: 4));
-  return res.body;
+  if(res.statusCode == 200) Prefs.setCache(url, r, Duration(days: 4));
+  return r;
 }
