@@ -62,7 +62,7 @@ class DsbSubstitution {
   }
 
   static String _str(dom.Element e) {
-    return htmlUnescape(e.innerHtml).replaceAll(RegExp(r'</?.+?>'), '').trim();
+    return e.innerHtml.replaceAll(RegExp(r'</?.+?>'), '').trim();
   }
 
   String toString() => "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";

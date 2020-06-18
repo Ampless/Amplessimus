@@ -89,22 +89,29 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
   }
   ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
   http.Response res = await _httpclient.get(url);
-  String r = res.body
+  String r = htmlUnescape(res.body)
     .replaceAll('\n', '')
     .replaceAll('\r', '')
     //just fyi: these regexes only work because there are no more newlines
-    .replaceAll(RegExp(r'<head.*?<\/head>'), '')
-    .replaceAll(RegExp(r'<script.*?<\/script>'), '')
-    .replaceAll(RegExp(r'<style.*?<\/style>'), '')
-    .replaceAll(RegExp(r'<\/?span.*?>'), '')
-    .replaceAll(RegExp(r'<\/?a.*?>'), '')
+    .replaceAll(RegExp(r'<h1.*?</h1>'), '')
+    .replaceAll(RegExp(r'<p.*?</p>'), '')
+    .replaceAll(RegExp(r'<th.*?</th>'), '')
+    .replaceAll(RegExp(r'<head.*?</head>'), '')
+    .replaceAll(RegExp(r'<script.*?</script>'), '')
+    .replaceAll(RegExp(r'<style.*?</style>'), '')
+    .replaceAll(RegExp(r'</?html.*?>'), '')
+    .replaceAll(RegExp(r'</?body.*?>'), '')
+    .replaceAll(RegExp(r'</?font.*?>'), '')
+    .replaceAll(RegExp(r'</?span.*?>'), '')
+    .replaceAll(RegExp(r'</?a.*?>'), '')
     .replaceAll(RegExp(r'<div.*?>'), '<div>')
-    .replaceAll(RegExp(r'<font.*?>'), '<font>')
     .replaceAll(RegExp(r'<table.*?>'), '<table>')
     .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
     .replaceAll(RegExp(r'<td.*?>'), '<td>')
     .replaceAll(RegExp(r'<th.*?>'), '<th>')
-    .replaceAll(RegExp(r' +'), ' ');
+    .replaceAll(RegExp(r' +'), ' ')
+    .replaceAll(RegExp(r'<br />'), '')
+    .replaceAll(RegExp(r'<!-- .*? -->'), '');
   ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
   if(res.statusCode == 200) Prefs.setCache(url, r, Duration(days: 4));
   return r;
