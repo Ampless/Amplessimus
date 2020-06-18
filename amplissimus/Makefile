@@ -58,7 +58,7 @@ winx64:
 
 linux64:
 	flutter build linux $(GTK_FLAGS)
-	mv build/linux/Release/bundle bin/$(VERSION).linux
+	mv build/linux/release/bundle bin/$(VERSION).linux
 
 mkdirs:
 	mkdir -p debug_symbols bin Payload tmp2deb/DEBIAN tmp2deb/Applications
