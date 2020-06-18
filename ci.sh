@@ -10,6 +10,6 @@ cd amplissimus
 make || exit 1
 cp -rf bin "/usr/local/var/www/amplissimus/$1"
 cd bin
-tar cJf "/usr/local/var/www/amplissimus/$1/$1.tar.xz" *
+tar cJf "/usr/local/var/www/amplissimus/$1/$2.tar.xz" *
 rm -rf *
 cd ../..
