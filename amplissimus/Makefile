@@ -1,4 +1,4 @@
-VERSION = 1.2.0
+VERSION = 1.1.2
 
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
@@ -8,6 +8,8 @@ WIN_FLAGS = $(BIN_FLAGS)
 GTK_FLAGS = $(BIN_FLAGS)
 MAC_FLAGS = $(BIN_FLAGS)
 WEB_FLAGS = $(FLAGS) --csp
+
+IOS_BUILD_DIR = build/ios/Release-iphoneos/Runner.app
 
 all: mkdirs replaceversions iosapp ipa deb apk webbuild cleanartifacts rollbackversions
 
@@ -30,8 +32,9 @@ rollbackversions:
 
 iosapp:
 	flutter build ios $(IOS_FLAGS)
-	xcrun bitcode_strip build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
-	mv -f tmpfltr build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter
+	xcrun bitcode_strip $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
+	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
+	strip -u -r $(IOS_BUILD_DIR)/Frameworks/App.framework/App $(IOS_BUILD_DIR)/Frameworks/libswift*
 
 ipa:
 	cp -rp build/ios/Release-iphoneos/Runner.app Payload
