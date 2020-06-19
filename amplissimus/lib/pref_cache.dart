@@ -123,16 +123,16 @@ class CachedSharedPreferences {
       await _prefFile.writeString('[');
       for(var k in _cacheString.keys)
         if(_cacheString[k] != null)
-          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":"${jsonEscape(_cacheString[k])}","t":"str"},');
+          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":"${jsonEscape(_cacheString[k])}","t":0},');
       for(var k in _cacheInt.keys)
         if(_cacheInt[k] != null)
-          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheInt[k]},"t":"int"},');
+          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheInt[k]},"t":1},');
       for(var k in _cacheDouble.keys)
         if(_cacheDouble[k] != null)
-          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheDouble[k]},"t":"flt"},');
+          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheDouble[k]},"t":2},');
       for(var k in _cacheBool.keys)
         if(_cacheBool[k] != null)
-          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheBool[k] ? 1 : 0},"t":"bol"},');
+          await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":${_cacheBool[k] ? 1 : 0},"t":3},');
       for(var k in _cacheStrings.keys) {
         if(_cacheStrings[k] == null) continue;
         await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":[');
@@ -140,7 +140,7 @@ class CachedSharedPreferences {
           await _prefFile.writeString('"${jsonEscape(s)}",');
         if(_cacheStrings[k].length > 0)
           await _prefFile.setPosition((await _prefFile.position()) - 1);
-        await _prefFile.writeString('],"t":"s[]"},');
+        await _prefFile.writeString('],"t":4},');
       }
       await _prefFile.setPosition((await _prefFile.position()) - 1);
       await _prefFile.writeString(']\n');
@@ -179,11 +179,11 @@ class CachedSharedPreferences {
           dynamic key = jsonGetKey(json, 'k');
           dynamic val = jsonGetKey(json, 'v');
           dynamic typ = jsonGetKey(json, 't');
-          if(typ == 'str') _cacheString[key] = val;
-          else if(typ == 'int') _cacheInt[key] = val;
-          else if(typ == 'flt') _cacheDouble[key] = val;
-          else if(typ == 'bol') _cacheBool[key] = val == 1;
-          else if(typ == 's[]') {
+          if(typ == 0) _cacheString[key] = val;
+          else if(typ == 1) _cacheInt[key] = val;
+          else if(typ == 2) _cacheDouble[key] = val;
+          else if(typ == 3) _cacheBool[key] = val == 1;
+          else if(typ == 4) {
             _cacheStrings[key] = [];
             for(dynamic s in jsonIsList(val))
               _cacheStrings[key].add(s);
