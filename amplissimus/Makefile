@@ -35,6 +35,7 @@ iosapp:
 
 ipa:
 	cp -rp build/ios/Release-iphoneos/Runner.app Payload
+	rm -rf bin/$(VERSION).ipa
 	zip -r -9 bin/$(VERSION).ipa Payload
 
 # This is for Cydia: http://www.saurik.com/id/7
