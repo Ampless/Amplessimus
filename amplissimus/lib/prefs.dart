@@ -1,48 +1,58 @@
+import 'dart:convert';
+
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/pref_cache.dart';
+import 'package:crypto/crypto.dart';
 
 CachedSharedPreferences _prefs;
 
-String getCache(String url) => _prefs.getString('CACHE_VAL_$url', null);
+//this is just a checksum basically so md5 is fine (collisions are next to impossible)
+//but because it is only 128 bits, it saves 128 bits compared to sha256,
+//which translates to 384 bits / 48 bytes saved per cached url
+//(and also it saves quite a bit of cpu)
+String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
+
+String getCache(String url) => _prefs.getString('CACHE_VAL_${_hashCache(url)}', null);
 
 void setCache(String url, String html, Duration ttl) {
-  List<String> cacheUrls = _prefs.getStringList('CACHE_URLS', []);
-  if(!cacheUrls.contains(url)) cacheUrls.add(url);
-  _prefs.setStringList('CACHE_URLS', cacheUrls);
-  _prefs.setString('CACHE_VAL_$url', html);
-  _prefs.setInt('CACHE_TTL_$url', DateTime.now().add(ttl).millisecondsSinceEpoch);
+  String hash = _hashCache(url);
+  List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  if(!cachedHashes.contains(hash)) cachedHashes.add(hash);
+  _prefs.setStringList('CACHE_URLS', cachedHashes);
+  _prefs.setString('CACHE_VAL_$hash', html);
+  _prefs.setInt('CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
 }
 
 void flushCache() {
-  List<String> urlsToRemove = [];
-  List<String> cachedUrls = _prefs.getStringList('CACHE_URLS', []);
-  for(String url in cachedUrls) {
-    int ttl = _prefs.getInt('CACHE_TTL_$url', 0);
+  List<String> toRemove = [];
+  List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  for(String hash in cachedHashes) {
+    int ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
     if(ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) continue;
-    urlsToRemove.add(url);
-    _prefs.setString('CACHE_VAL_$url', null);
-    _prefs.setInt('CACHE_TTL_$url', null);
+    toRemove.add(hash);
+    _prefs.setString('CACHE_VAL_$hash', null);
+    _prefs.setInt('CACHE_TTL_$hash', null);
   }
-  if(urlsToRemove.length == 0) return;
-  cachedUrls.removeWhere((element) => urlsToRemove.contains(element));
-  _prefs.setStringList('CACHE_URLS', cachedUrls);
+  if(toRemove.length == 0) return;
+  cachedHashes.removeWhere((element) => toRemove.contains(element));
+  _prefs.setStringList('CACHE_URLS', cachedHashes);
 }
 
 void clearCache() {
-  List<String> cachedUrls = _prefs.getStringList('CACHE_URLS', []);
-  if(cachedUrls.length == 0) return;
-  for(String url in cachedUrls) {
-    _prefs.setString('CACHE_VAL_$url', null);
-    _prefs.setInt('CACHE_TTL_$url', null);
-    ampInfo(ctx: 'CACHE', message: 'Removed $url');
+  List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  if(cachedHashes.length == 0) return;
+  for(String hash in cachedHashes) {
+    _prefs.setString('CACHE_VAL_$hash', null);
+    _prefs.setInt('CACHE_TTL_$hash', null);
+    ampInfo(ctx: 'CACHE', message: 'Removed $hash');
   }
   _prefs.setStringList('CACHE_URLS', []);
 }
 
 void listCache() {
   print('{');
-  for(String url in _prefs.getStringList('CACHE_URLS', []))
-    print('    {url=\'$url\',len=${_prefs.getString('CACHE_VAL_$url', '').length},ttl=${_prefs.getInt('CACHE_TTL_$url', -1)}},');
+  for(String hash in _prefs.getStringList('CACHE_URLS', []))
+    print('  {hash=\'$hash\',len=${_prefs.getString('CACHE_VAL_$hash', '').length},ttl=${_prefs.getInt('CACHE_TTL_$hash', -1)}},');
   print('}');
 }
 
