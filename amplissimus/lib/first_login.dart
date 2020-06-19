@@ -78,7 +78,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: Text('DSB-Mobile Daten', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25),),
+                title: Text('DSBMobile Daten', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25),),
                 centerTitle: true,
               ),
               body: Center(

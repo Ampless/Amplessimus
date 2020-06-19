@@ -68,9 +68,8 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   return table;
 }
 
-String ttLessonToJson(TTLesson lesson) {
-  return '{"subject":"${lesson.subject}","teacher":"${lesson.teacher}","notes":"${lesson.notes}","free":"${lesson.isFree ? 1 : 0}"},';
-}
+String ttLessonToJson(TTLesson lesson)
+  => '{"subject":"${lesson.subject}","teacher":"${lesson.teacher}","notes":"${lesson.notes}","free":"${lesson.isFree ? 1 : 0}"},';
 
 String ttColumnToJson(TTColumn column) {
   String s = '';

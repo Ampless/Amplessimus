@@ -1,11 +1,12 @@
 // this code is based on the pub packages 'uuid', 'html_unescape' and 'connectivity'
 
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 
 String _x(int i) => (i < 16 ? '0' : '') + i.toRadixString(16);
@@ -67,29 +68,43 @@ String htmlUnescape(String data) {
 }
 
 
-http.Client _httpclient = http.Client();
+var _httpClient = HttpClient();
 
-Future<String> httpPost(String url, dynamic body, String id,
+Future<String> httpPost(Uri url, Object body, String id,
                         Map<String, String> headers, {bool useCache = true}) async {
   if(useCache) {
-    String cachedResp = Prefs.getCache('$url\t$id');
+    String cachedResp = Prefs.getCache(id);
     if(cachedResp != null) return cachedResp;
   }
-  ampInfo(ctx: 'HTTP', message: 'Posting to "$url" with headers "$headers": $body');
-  http.Response res = await _httpclient.post(url, body: body, headers: headers);
-  ampInfo(ctx: 'HTTP', message: 'Got POST-Response.');
-  if(res.statusCode == 200) Prefs.setCache('$url\t$id', res.body, Duration(minutes: 15));
-  return res.body;
+  ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
+  var req = await _httpClient.postUrl(url);
+  headers.forEach((key, value) => req.headers.add(key, value));
+  req.writeln(body);
+  var res = await req.close();
+  var bytes = await res.toList();
+  ampInfo(ctx: 'HTTP][POST', message: 'Done.');
+  List<int> actualBytes = [];
+  for(var b in bytes)
+    actualBytes.addAll(b);
+  var r = utf8.decode(actualBytes);
+  if(res.statusCode == 200) Prefs.setCache(id, r, Duration(minutes: 15));
+  return r;
 }
 
-Future<String> httpGet(String url, {bool useCache = true}) async {
+Future<String> httpGet(Uri url, {bool useCache = true}) async {
   if(useCache) {
-    String cachedResp = Prefs.getCache(url);
+    String cachedResp = Prefs.getCache('$url');
     if(cachedResp != null) return cachedResp;
   }
-  ampInfo(ctx: 'HTTP', message: 'Getting from "$url".');
-  http.Response res = await _httpclient.get(url);
-  String r = htmlUnescape(res.body)
+  ampInfo(ctx: 'HTTP][GET', message: '$url');
+  var req = await _httpClient.getUrl(url);
+  await req.flush();
+  var res = await req.close();
+  var bytes = await res.toList();
+  List<int> actualBytes = [];
+  for(var b in bytes)
+    actualBytes.addAll(b);
+  String r = htmlUnescape(String.fromCharCodes(actualBytes))
     .replaceAll('\n', '')
     .replaceAll('\r', '')
     //just fyi: these regexes only work because there are no more newlines
@@ -112,7 +127,7 @@ Future<String> httpGet(String url, {bool useCache = true}) async {
     .replaceAll(RegExp(r' +'), ' ')
     .replaceAll(RegExp(r'<br />'), '')
     .replaceAll(RegExp(r'<!-- .*? -->'), '');
-  ampInfo(ctx: 'HTTP', message: 'Got GET-Response.');
-  if(res.statusCode == 200) Prefs.setCache(url, r, Duration(days: 4));
+  ampInfo(ctx: 'HTTP][GET', message: 'Done.');
+  if(res.statusCode == 200) Prefs.setCache('$url', r, Duration(days: 4));
   return r;
 }

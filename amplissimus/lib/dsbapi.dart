@@ -19,7 +19,6 @@ const String DSB_DEVICE = "SM-G950F";
 const String DSB_VERSION = "2.5.9";
 const String DSB_OS_VERSION = "29 10.0";
 const String DSB_LANGUAGE = "de";
-const String DSB_WEBSERVICE = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData';
 
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -191,7 +190,10 @@ class DsbPlan {
   }
 }
 
-Future<String> dsbGetData(String username, String password, {bool cachePostRequests = true}) async {
+Future<String> dsbGetData(String username,
+                          String password,
+                         {String apiEndpoint = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData',
+                          bool   cachePostRequests = true}) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
@@ -212,13 +214,13 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
           jsonGetKey(
             jsonDecode(
               await httpPost(
-                DSB_WEBSERVICE, '{'
+                Uri.parse(apiEndpoint), '{'
                   '"req": {'
                     '"Data": "${base64.encode(GZipEncoder().encode(utf8.encode(json)))}", '
                     '"DataType": 1'
                   '}'
                 '}',
-                '$username\t$password',
+                '$apiEndpoint\t$username\t$password',
                 {"content-type": "application/json"},
                 useCache: cachePostRequests,
               ),
@@ -228,8 +230,8 @@ Future<String> dsbGetData(String username, String password, {bool cachePostReque
       ),
     );
   } catch(e) {
-    String m = e.toString();
-    throw 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $m)';
+    ampErr(ctx: 'DSB][dsbGetData', message: errorString(e));
+    throw 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
   }
 }
 
@@ -245,15 +247,17 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
     ),
   );
   Map<String, String> map = {};
-  for (var plan in jsonGetKey(jsonGetKey(json, 'Root'), 'Childs'))
+  for (var plan in jsonGetKey(jsonGetKey(json, 'Root'), 'Childs')) {
+    String url = jsonGetKey(
+      jsonGetIndex(
+        jsonGetKey(plan, 'Childs'),
+      ), 'Detail',
+    );
     map[jsonGetKey(plan, 'Title')] = await httpGet(
-      jsonGetKey(
-        jsonGetIndex(
-          jsonGetKey(plan, 'Childs'),
-        ), 'Detail',
-      ),
+      Uri.parse(url),
       useCache: cacheGetRequests,
     );
+  }
   return map;
 }
 
@@ -274,7 +278,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cac
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
       plans.add(DsbPlan(planDate.split(' ').last, subs, planDate));
     } catch (e) {
-      ampErr(ctx: 'DSB', message: errorString(e));
+      ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(title, [], ''));
     }
   }
@@ -341,11 +345,12 @@ Future dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
   } catch (e) {
+    ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(child: Container(
       child: _getThemedWidget(ListTile(
           title: Text(errorString(e), style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
         ), Prefs.currentThemeId,
-      ), padding: EdgeInsets.only(top: 15))
+      ), padding: EdgeInsets.only(top: 15)),
     );
   }
   f();

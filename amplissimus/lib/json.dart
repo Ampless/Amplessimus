@@ -18,8 +18,8 @@ dynamic jsonContainsIndex(dynamic json, int index) {
   return json;
 }
 
-dynamic jsonListLength(dynamic json) => jsonIsList(json).length;
-dynamic jsonMapLength(dynamic json) => jsonIsMap(json).length;
+int jsonListLength(dynamic json) => jsonIsList(json).length;
+int jsonMapLength(dynamic json) => jsonIsMap(json).length;
 dynamic jsonGetKey(dynamic json, dynamic key) => jsonContainsKey(jsonIsMap(json), key)[key];
 dynamic jsonGetIndex(dynamic json, {int index = 0}) => jsonContainsIndex(jsonIsList(json), index)[index];
 
