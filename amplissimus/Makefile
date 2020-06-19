@@ -6,14 +6,16 @@ IOS_FLAGS = $(BIN_FLAGS)
 APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm,android-arm64,android-x64
 WIN_FLAGS = $(BIN_FLAGS)
 GTK_FLAGS = $(BIN_FLAGS)
+MAC_FLAGS = $(BIN_FLAGS)
 WEB_FLAGS = $(FLAGS) --csp
 
-all: ios android web
+all: mkdirs replaceversions iosapp ipa deb apk webbuild cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk cleanartifacts rollbackversions
-ios: mkdirs replaceversions app ipa deb cleanartifacts rollbackversions
-web: mkdirs replaceversions _web cleanartifacts rollbackversions
+ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
+web: mkdirs replaceversions webbuild cleanartifacts rollbackversions
 win: mkdirs replaceversions winx64 cleanartifacts rollbackversions
+mac: mkdirs replaceversions macapp macdmg cleanartifacts rollbackversions
 linux: mkdirs replaceversions linux64 cleanartifacts rollbackversions
 
 replaceversions:
@@ -26,7 +28,7 @@ rollbackversions:
 	mv -f pubspec.yaml.def pubspec.yaml
 	mv -f lib/values.dart.def lib/values.dart
 
-app:
+iosapp:
 	flutter build ios $(IOS_FLAGS)
 	xcrun bitcode_strip build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr build/ios/Release-iphoneos/Runner.app/Frameworks/Flutter.framework/Flutter
@@ -48,7 +50,7 @@ apk:
 	flutter build apk $(APK_FLAGS)
 	mv build/app/outputs/apk/release/app-release.apk bin/$(VERSION).apk
 
-_web:
+webbuild:
 	flutter build web $(WEB_FLAGS)
 	mv build/web bin/$(VERSION).web
 
@@ -60,14 +62,23 @@ linux64:
 	flutter build linux $(GTK_FLAGS)
 	mv build/linux/release/bundle bin/$(VERSION).linux
 
+macapp:
+	flutter build macos $(MAC_FLAGS)
+
+macdmg:
+	cp -rf build/macos/Build/Products/Release/Amplissimus.app tmp2dmg
+	ln -s /Applications tmp2dmg/Applications
+	hdiutil create tmp.dmg -ov -srcfolder tmp2dmg -fs APFS -volname AmplissimusInstall
+	hdiutil convert tmp.dmg -ov -format UDBZ -o bin/$(VERSION).dmg
+
 mkdirs:
-	mkdir -p debug_symbols bin Payload tmp2deb/DEBIAN tmp2deb/Applications
+	mkdir -p debug_symbols bin Payload tmp2deb/DEBIAN tmp2deb/Applications tmp2dmg
 
 cleanartifacts:
 	flutter clean
-	rm -rf Payload debug_symbols tmp2deb
+	rm -rf Payload tmp2deb tmp2dmg tmp.dmg
 
 setup:
-	sudo apt install -y ninja-build
+	sudo apt install -y cmake ninja-build
 
-.PHONY: cleanartifacts replaceversions rollbackversions ios ipa apk
+.PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts
