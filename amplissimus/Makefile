@@ -1,4 +1,4 @@
-VERSION = 1.1.1
+VERSION = 1.2.0
 
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
