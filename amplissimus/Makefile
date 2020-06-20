@@ -11,7 +11,7 @@ WEB_FLAGS = $(FLAGS) --csp
 
 IOS_BUILD_DIR = build/ios/Release-iphoneos/Runner.app
 
-all: mkdirs replaceversions iosapp ipa deb apk webbuild cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb apk webbuild macapp macdmg cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
