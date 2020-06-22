@@ -261,6 +261,15 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
   return map;
 }
 
+dom.Element searchHtml(List<dom.Element> rootNode, String className) {
+  for(var e in rootNode) {
+    if(e.className.contains(className)) return e;
+    var found = searchHtml(e.children, className);
+    if(found != null) return found;
+  }
+  return null;
+}
+
 Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
   List<DsbPlan> plans = [];
   Prefs.flushCache();
@@ -270,16 +279,21 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cac
     var res = htmls[title];
     try {
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children[1].children;
-      String planDate = html[0].innerHtml;
-      html = html[2].children[0].children[0].children;
+      List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children; //body
+      String planTitle = searchHtml(html, 'mon_title').innerHtml;
+      html = searchHtml(html, 'mon_list').children;
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++)
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
-      plans.add(DsbPlan(planDate.split(' ').last, subs, planDate));
+      plans.add(DsbPlan(planTitle.split(' ').last, subs, planTitle));
     } catch (e) {
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
-      plans.add(DsbPlan(title, [], ''));
+      plans.add(DsbPlan(title,
+                        [DsbSubstitution('', [0], '',
+                                         'Amplissimus-Fehler',
+                                         'Bitte an Amplus melden (https://amplus.chrissx.de/amplissimus)',
+                                         true)],
+                        title));
     }
   }
   return plans;
