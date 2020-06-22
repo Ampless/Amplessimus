@@ -1,4 +1,4 @@
-VERSION = 1.1.2
+VERSION = 1.1.3
 
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
@@ -11,7 +11,7 @@ WEB_FLAGS = $(FLAGS) --csp
 
 IOS_BUILD_DIR = build/ios/Release-iphoneos/Runner.app
 
-ci: mkdirs replaceversions iosapp ipa deb apk webbuild macapp macdmg cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb apk macapp macdmg cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
