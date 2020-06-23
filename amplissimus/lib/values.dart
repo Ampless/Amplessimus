@@ -1,6 +1,8 @@
+import 'dart:io';
+
+import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomValues {
@@ -9,12 +11,13 @@ class CustomValues {
     var now = DateTime.now();
     isAprilFools = now.day == 1 && now.month == 4;
   }
-  static const String version = '0.0.0-1';
+  static Language lang = Language.fromCode(Platform.localeName);
 }
 
 class AmpStrings {
-  static String appTitle = 'Amplissimus';
-  static List<String> authors = ['miruslavus', 'chrissx'];
+  static const String appTitle = 'Amplissimus';
+  static const String version = '0.0.0-1';
+  static const List<String> authors = ['miruslavus', 'chrissx'];
 }
 
 class AmpColors {

@@ -409,7 +409,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     AmpColors.changeMode();
                     if(Prefs.useSystemTheme) Prefs.useSystemTheme = false;
                     setState(() {
-                      Widgets.lockOnSystemTheme;
                       fabBackgroundColor = Colors.transparent;
                       rebuildNewBuild();
                     });
@@ -472,11 +471,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   onTap: () {
                     showAboutDialog(
                       context: context,
-                      applicationName: 'Amplissimus',
-                      applicationVersion: CustomValues.version,
+                      applicationName: AmpStrings.appTitle,
+                      applicationVersion: AmpStrings.version,
                       applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
                       children: [
-                        Text('Amplissimus is an App for easily viewing Untis substitution plans using DSB Mobile.')
+                        Text(CustomValues.lang.appInfo)
                       ]
                     );
                   },
