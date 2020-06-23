@@ -96,6 +96,8 @@ bool get firstLogin => _prefs.getBool('first_login', true);
 set firstLogin(bool b) => _prefs.setBool('first_login', b);
 bool get useJsonCache => _prefs.getBool('use_json_cache', false);
 set useJsonCache(bool b) => _prefs.setBool('use_json_cache', b);
+bool get useSystemTheme => _prefs.getBool('use_system_theme', true);
+set useSystemTheme(bool b) => _prefs.setBool('use_system_theme', b);
 String get dsbJsonCache => _prefs.getString('DSB_JSON_CACHE', null);
 set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
 

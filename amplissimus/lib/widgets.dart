@@ -80,6 +80,18 @@ class Widgets {
       ),
     );
   }
+  static Widget lockOnSystemTheme(bool isDarkMode, TextStyle textStyle) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(MdiIcons.brightness6, size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text('System-Helligkeit\n'+(Prefs.useSystemTheme ? 'nicht ' : '')+'verwenden', style: textStyle, textAlign: TextAlign.center,)
+        ],
+      ),
+    );
+  }
 
   static String gradeFieldValidator(String value) {
     List<String> grades = ['5','6','7','8','9','10','11','12','13', ''];

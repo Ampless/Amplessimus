@@ -11,6 +11,7 @@ import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -49,6 +50,13 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
       } else {
+        if(Prefs.useSystemTheme) {
+          var brightness = SchedulerBinding.instance.window.platformBrightness;
+          bool darkModeEnabled = brightness == Brightness.dark;
+          if(darkModeEnabled != Prefs.designMode) {
+            AmpColors.changeMode();
+          }
+        }
         await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
         Future.delayed(Duration(milliseconds: 1000), () {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
@@ -399,9 +407,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       Prefs.timesToggleDarkModePressed = 0;
                     }
                     AmpColors.changeMode();
+                    if(Prefs.useSystemTheme) Prefs.useSystemTheme = false;
                     setState(() {
+                      Widgets.lockOnSystemTheme;
                       fabBackgroundColor = Colors.transparent;
-                      dsbWidget = Container();
+                      rebuildNewBuild();
                     });
                     Future.delayed(Duration(milliseconds: 150), () {
                       setState(() => fabBackgroundColor = AmpColors.colorBackground);
@@ -421,15 +431,56 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   onTap: () {
                     if(CustomValues.isAprilFools) return;
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                    if(Prefs.currentThemeId >= 1) {
-                      Prefs.currentThemeId = 0;
-                    } else {
-                      Prefs.currentThemeId++;
-                    }
+                    if(Prefs.currentThemeId >= 1) Prefs.currentThemeId = 0; 
+                    else Prefs.currentThemeId++;
                     rebuildDragDown();
                     tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
+                ),
+              ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () async {
+                    Prefs.useSystemTheme = !Prefs.useSystemTheme;
+                    if(Prefs.useSystemTheme) {
+                      var brightness = SchedulerBinding.instance.window.platformBrightness;
+                      bool darkModeEnabled = brightness == Brightness.dark;
+                      if(darkModeEnabled != Prefs.designMode) {
+                        AmpColors.changeMode();
+                      }
+                    }
+                    rebuild();
+                  },
+                  child: Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
+                ),
+              ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () {
+                    showAboutDialog(
+                      context: context,
+                      applicationName: 'Amplissimus',
+                      applicationVersion: CustomValues.version,
+                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
+                      children: [
+                        Text('Amplissimus is an App for easily viewing Untis substitution plans using DSB Mobile.')
+                      ]
+                    );
+                  },
+                  child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
                 ),
               ),
               Card(
@@ -456,28 +507,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () => showInputSelectCurrentClass(context),
                   child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
-                ),
-              ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
-                    showAboutDialog(
-                      context: context,
-                      applicationName: 'Amplissimus',
-                      applicationVersion: CustomValues.version,
-                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
-                      children: [
-                        Text('Amplissimus is an App for easily viewing Untis substitution plans using DSB Mobile.')
-                      ]
-                    );
-                  },
-                  child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
                 ),
               ),
               Card(
