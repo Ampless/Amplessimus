@@ -310,8 +310,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
-                bool condA = FirstLoginValues.passwordInputFormKey.currentState.validate();
-                bool condB = FirstLoginValues.usernameInputFormKey.currentState.validate();
+                bool condA = passwordInputFormKey.currentState.validate();
+                bool condB = usernameInputFormKey.currentState.validate();
                 if(!condA || !condB) return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
