@@ -14,11 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 
-const String DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
-const String DSB_DEVICE = "SM-G950F";
-const String DSB_VERSION = "2.5.9";
-const String DSB_OS_VERSION = "29 10.0";
-const String DSB_LANGUAGE = "de";
+const String _DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
+const String _DSB_DEVICE = "SM-G950F";
+const String _DSB_VERSION = "2.5.9";
+const String _DSB_OS_VERSION = "29 10.0";
+const String _DSB_LANGUAGE = "de";
 
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -190,20 +190,21 @@ class DsbPlan {
   }
 }
 
-Future<String> dsbGetData(String username,
-                          String password,
-                         {String apiEndpoint = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData',
-                          bool   cachePostRequests = true}) async {
+Future<String> dsbGetData(String   username,
+                          String   password,
+                         {String   apiEndpoint = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData',
+                          bool     cachePostRequests = true,
+                          Function httpPost = httpPost}) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
     '"UserPw":"$password",'
-    '"AppVersion":"$DSB_VERSION",'
-    '"Language":"$DSB_LANGUAGE",'
-    '"OsVersion":"$DSB_OS_VERSION",'
+    '"AppVersion":"$_DSB_VERSION",'
+    '"Language":"$_DSB_LANGUAGE",'
+    '"OsVersion":"$_DSB_OS_VERSION",'
     '"AppId":"${v4()}",'
-    '"Device":"$DSB_DEVICE",'
-    '"BundleId":"$DSB_BUNDLE_ID",'
+    '"Device":"$_DSB_DEVICE",'
+    '"BundleId":"$_DSB_BUNDLE_ID",'
     '"Date":"$datetime",'
     '"LastUpdate":"$datetime"'
   '}';
@@ -235,7 +236,7 @@ Future<String> dsbGetData(String username,
   }
 }
 
-Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests = true}) async {
+Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests = true, Function httpGet = httpGet}) async {
   var json = jsonDecode(jsontext);
   if(jsonGetKey(json, 'Resultcode') != 0) throw jsonGetKey(json, 'ResultStatusInfo');
   json = jsonGetIndex(
@@ -261,31 +262,28 @@ Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests =
   return map;
 }
 
-dom.Element searchHtml(List<dom.Element> rootNode, String className) {
+dom.Element _searchHtml(List<dom.Element> rootNode, String className) {
   for(var e in rootNode) {
     if(e.className.contains(className)) return e;
-    var found = searchHtml(e.children, className);
+    var found = _searchHtml(e.children, className);
     if(found != null) return found;
   }
   return null;
 }
 
-Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cacheGetRequests = true, bool cachePostRequests = true}) async {
+Future<List<DsbPlan>> dsbGetAllSubs(String username,
+                                    String password,
+                                   {bool cacheGetRequests = true,
+                                    bool cachePostRequests = true,
+                                    Function httpGet = httpGet,
+                                    Function httpPost = httpPost}) async {
   List<DsbPlan> plans = [];
-  Prefs.flushCache();
-  String json = await dsbGetData(username, password, cachePostRequests: cachePostRequests);
-  var htmls = await dsbGetHtml(json, cacheGetRequests: cacheGetRequests);
+  if(cacheGetRequests || cachePostRequests) Prefs.flushCache();
+  String json = await dsbGetData(username, password, cachePostRequests: cachePostRequests, httpPost: httpPost);
+  var htmls = await dsbGetHtml(json, cacheGetRequests: cacheGetRequests, httpGet: httpGet);
   for(var title in htmls.keys) {
-    var res = htmls[title];
     try {
-      ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-      List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children; //body
-      String planTitle = searchHtml(html, 'mon_title').innerHtml;
-      html = searchHtml(html, 'mon_list').children.first.children; //for some reason <table>s like to contain <tbody>s
-      List<DsbSubstitution> subs = [];
-      for(int i = 1; i < html.length; i++)
-        subs.add(DsbSubstitution.fromElementArray(html[i].children));
-      plans.add(DsbPlan(planTitle.split(' ').last, subs, planTitle));
+      plans.add(dsbParseHtml(title, htmls[title]));
     } catch (e) {
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(title,
@@ -297,6 +295,17 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cac
     }
   }
   return plans;
+}
+
+DsbPlan dsbParseHtml(String title, String res) {
+  ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
+  List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children; //body
+  String planTitle = _searchHtml(html, 'mon_title').innerHtml;
+  html = _searchHtml(html, 'mon_list').children.first.children; //for some reason <table>s like to contain <tbody>s
+  List<DsbSubstitution> subs = [];
+  for(int i = 1; i < html.length; i++)
+    subs.add(DsbSubstitution.fromElementArray(html[i].children));
+  return DsbPlan(planTitle.split(' ').last, subs, planTitle);
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
