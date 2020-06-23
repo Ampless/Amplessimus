@@ -1,4 +1,4 @@
-Package: amplissimus
+Package: de.amplus.amplissimus
 Priority: standard
 Name: Amplissimus
 Version: $VERSION
