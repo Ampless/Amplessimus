@@ -50,7 +50,7 @@ class DsbSubstitution {
   }
 
   static DsbSubstitution fromStrings(String affectedClass, String hour, String teacher, String subject, String notes) {
-    if(affectedClass[0] == '0') affectedClass = affectedClass.substring(1);
+    if(affectedClass.codeUnitAt(0) == zero) affectedClass = affectedClass.substring(1);
     return DsbSubstitution(affectedClass.toLowerCase(), parseIntsFromString(hour), teacher, subject, notes, teacher.contains('---'));
   }
   static DsbSubstitution fromElements(dom.Element affectedClass, dom.Element hour, dom.Element teacher, dom.Element subject, dom.Element notes) {
@@ -90,21 +90,8 @@ class DsbSubstitution {
   String get realSubject {
     String sub = subject.toLowerCase();
     String s = subject;
-    SUBJECT_LOOKUP_TABLE.forEach((key, value) => { if(sub.startsWith(key)) s = value });
+    SUBJECT_LOOKUP_TABLE.forEach((key, value) { if(sub.startsWith(key)) s = value; });
     return s;
-  }
-
-  String get title {
-    String hour = '';
-    for(int h in hours)
-      hour += hour == '' ? h.toString() : '-$h';
-    return '$hour. Stunde $realSubject';
-  }
-
-  String get subtitle {
-    String notesaddon = notes.length > 0 ? ' ($notes)' : '';
-    return isFree ? 'Freistunde${hours.length == 1 ? '' : 'n'}$notesaddon'
-                  : 'Vertreten durch $teacher$notesaddon';
   }
 
   List<int> get actualHours {
@@ -232,7 +219,7 @@ Future<String> dsbGetData(String   username,
     );
   } catch(e) {
     ampErr(ctx: 'DSB][dsbGetData', message: errorString(e));
-    throw 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
+    throw CustomValues.lang.catchDsbGetData(e);
   }
 }
 
@@ -288,8 +275,8 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(title,
                         [DsbSubstitution('', [0], '',
-                                         'Amplissimus-Fehler',
-                                         'Bitte an Amplus melden (https://amplus.chrissx.de/amplissimus)',
+                                         CustomValues.lang.dsbListErrorTitle,
+                                         CustomValues.lang.dsbListErrorSubtitle,
                                          true)],
                         title));
     }
@@ -352,7 +339,7 @@ Future dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
                                     bool cacheJsonPlans = false}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0)
-      throw 'Keine Login-Daten eingetragen.';
+      throw CustomValues.lang.dsbErrorNoLogin;
     String jsonCache = Prefs.dsbJsonCache;
     List<DsbPlan> plans;
     if(!cacheJsonPlans || jsonCache == null) {
@@ -420,11 +407,11 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     int i = 0;
     int iMax = plan.subs.length;
     for(DsbSubstitution sub in plan.subs) {
-      String titleSub = sub.title;
+      String titleSub = CustomValues.lang.dsbSubtoTitle(sub);
       if(CustomValues.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title: CustomValues.isAprilFools ? Text(titleSub, style: TextStyle(color: rcolor)) : Text(titleSub, style: TextStyle(color: AmpColors.colorForeground)),
-        subtitle: CustomValues.isAprilFools ? Text(sub.subtitle, style: TextStyle(color: rcolor)) : Text(sub.subtitle, style: TextStyle(color: AmpColors.colorForeground)),
+        title:    Text(titleSub, style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
+        subtitle: Text(CustomValues.lang.dsbSubtoSubtitle(sub), style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
         trailing: (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly) ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
       ));
       if(++i != iMax) dayWidgets.add(Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()));

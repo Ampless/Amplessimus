@@ -59,8 +59,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
 
   @override
   void initState() {
-    if(Prefs.char.trim().toLowerCase().isEmpty) letterDropDownValue = 'Leer';
-    if(Prefs.grade.trim().toLowerCase().isEmpty) gradeDropDownValue = 'Leer';
+    if(Prefs.char.trim().toLowerCase().isEmpty)
+      letterDropDownValue = CustomValues.lang.classSelectorEmpty;
+    if(Prefs.grade.trim().toLowerCase().isEmpty)
+      gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
     FirstLoginValues.tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -78,7 +80,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: Text('DSBMobile Daten', style: TextStyle(color: AmpColors.colorForeground, fontSize: 25),),
+                title: Text(CustomValues.lang.settingsChangeLoginPopup, style: TextStyle(color: AmpColors.colorForeground, fontSize: 25),),
                 centerTitle: true,
               ),
               body: Center(
@@ -87,7 +89,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
+                    Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
                     Row(mainAxisSize: MainAxisSize.min, children: [
                       DropdownButton(
                         underline: Container(
@@ -105,8 +107,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         onChanged: (value) {
                           setState(() {
                             gradeDropDownValue = value;
-                            if(gradeDropDownValue == 'Leer')  Prefs.grade = '';
-                            else Prefs.grade = value;
+                            if(gradeDropDownValue == CustomValues.lang.classSelectorEmpty)
+                              Prefs.grade = '';
+                            else
+                              Prefs.grade = value;
                           });
                         },
                       ),
@@ -127,7 +131,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         onChanged: (value) {
                           setState(() {
                             letterDropDownValue = value;
-                            if(letterDropDownValue == 'Leer')  Prefs.char = '';
+                            if(letterDropDownValue == CustomValues.lang.classSelectorEmpty)
+                              Prefs.char = '';
                             else Prefs.char = value;
                           });
                         },
@@ -150,7 +155,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                           borderRadius: BorderRadius.circular(10),
                         ),
                         labelStyle: TextStyle(color: AmpColors.colorForeground),
-                        labelText: 'Benutzername',
+                        labelText: CustomValues.lang.settingsChangeLoginPopupUsername,
                         fillColor: AmpColors.colorForeground,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -176,7 +181,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                           borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        labelText: 'Passwort',
+                        labelText: CustomValues.lang.settingsChangeLoginPopupPassword,
                         fillColor: AmpColors.colorForeground,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -230,7 +235,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                 }, 
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
-                label: Text('Speichern', style: widget.textStyle),
+                label: Text(CustomValues.lang.settingsChangeLoginPopupSave, style: widget.textStyle),
                 icon: Icon(Icons.save, color: AmpColors.colorForeground,),
               ),
             ),
@@ -249,7 +254,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: Text('${AmpStrings.appTitle}', style: TextStyle(fontSize: 24, color: Colors.white),),
+                title: Text(AmpStrings.appTitle, style: TextStyle(fontSize: 24, color: Colors.white),),
                 centerTitle: true,
               ),
               floatingActionButton: FloatingActionButton.extended(
@@ -288,6 +293,6 @@ class FirstLoginValues {
   static final passwordInputFormController = TextEditingController(text: Prefs.password);
   static TabController tabController;
 
-  static final List<String> grades = ['Leer','5','6','7','8','9','10','11','12','13'];
-  static final List<String> letters = ['Leer','a','b','c','d','e','f','g','q'];
+  static final List<String> grades = [CustomValues.lang.classSelectorEmpty,'5','6','7','8','9','10','11','12','13'];
+  static final List<String> letters = [CustomValues.lang.classSelectorEmpty,'a','b','c','d','e','f','g','q'];
 }

@@ -42,6 +42,7 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
   return column;
 }
 
+//NOT multi-language yet
 TTDay ttMatchDay(String s) {
   if(s.contains('Montag'))
     return TTDay.Monday;

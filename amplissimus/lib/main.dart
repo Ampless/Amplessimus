@@ -149,8 +149,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    if(Prefs.char.trim().toLowerCase().isEmpty) letterDropDownValue = 'Leer';
-    if(Prefs.grade.trim().toLowerCase().isEmpty) gradeDropDownValue = 'Leer';
+    if(Prefs.char.trim().toLowerCase().isEmpty)
+      letterDropDownValue = CustomValues.lang.classSelectorEmpty;
+    if(Prefs.grade.trim().toLowerCase().isEmpty)
+      gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
@@ -174,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text('Klasse auswählen', style: TextStyle(color: AmpColors.colorForeground),),
+          title: Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground),),
           backgroundColor: AmpColors.colorBackground,
           content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
             return Theme(child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -194,7 +196,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 onChanged: (value) {
                   setAlState(() {
                     gradeDropDownValue = value;
-                    if(gradeDropDownValue == 'Leer')  Prefs.grade = '';
+                    if(gradeDropDownValue == CustomValues.lang.classSelectorEmpty)
+                      Prefs.grade = '';
                     else Prefs.grade = value;
                   });
                 },
@@ -216,7 +219,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 onChanged: (value) {
                   setAlState(() {
                     letterDropDownValue = value;
-                    if(letterDropDownValue == 'Leer')  Prefs.char = '';
+                    if(letterDropDownValue == CustomValues.lang.classSelectorEmpty)
+                      Prefs.char = '';
                     else Prefs.char = value;
                   });
                 },
@@ -227,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () => {Navigator.of(context).pop()},
-              child: Text('Abbrechen'),
+              child: Text(CustomValues.lang.settingsChangeLoginPopupCancel),
             ),
             FlatButton(
               textColor: AmpColors.colorForeground,
@@ -235,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 rebuildNewBuild();
                 Navigator.of(context).pop();
               },
-              child: Text('Speichern'),
+              child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
             ),
           ],
         );
@@ -253,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text('DSBMobile Daten', style: TextStyle(color: AmpColors.colorForeground),),
+          title: Text(CustomValues.lang.settingsChangeLoginPopup, style: TextStyle(color: AmpColors.colorForeground),),
           backgroundColor: AmpColors.colorBackground,
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -273,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     borderRadius: BorderRadius.circular(10),
                   ),
                   labelStyle: TextStyle(color: AmpColors.colorForeground),
-                  labelText: 'Benutzername',
+                  labelText: CustomValues.lang.settingsChangeLoginPopupUsername,
                   fillColor: AmpColors.colorForeground,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -299,7 +303,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  labelText: 'Passwort',
+                  labelText: CustomValues.lang.settingsChangeLoginPopupPassword,
                   fillColor: AmpColors.colorForeground,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -313,7 +317,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Abbrechen'),
+              child: Text(CustomValues.lang.settingsChangeLoginPopupCancel),
             ),
             FlatButton(
               textColor: AmpColors.colorForeground,
@@ -326,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 rebuildDragDown();
                 Navigator.of(context).pop();
               },
-              child: Text('Speichern'),
+              child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
             ),
           ],
         );
@@ -339,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     Widget widget;
     if(Prefs.grade == '' && Prefs.char == '') display = false;
     display ? widget = Stack(children: <Widget>[
-      ListTile(title: Text('Alle Klassen', style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
+      ListTile(title: Text(CustomValues.lang.dsbUiAllClasses, style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
       Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
         setState(() => Prefs.oneClassOnly = value);
         dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
@@ -557,11 +561,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               tabs: <Widget>[
                 new Tab(
                   icon: Icon(Icons.home),
-                  text: 'Start',
+                  text: CustomValues.lang.menuStart,
                 ),
                 new Tab(
                   icon: Icon(Icons.settings),
-                  text: 'Einstellungen',
+                  text: CustomValues.lang.menuSettings,
                 )
               ],
             ),

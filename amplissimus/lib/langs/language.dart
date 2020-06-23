@@ -1,3 +1,4 @@
+import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/english.dart';
 import 'package:Amplissimus/langs/german.dart';
 
@@ -15,11 +16,25 @@ abstract class Language {
   String get settingsChangeAppearance;
   String get settingsChangeLogin;
   String get settingsChangeLoginPopup;
+  String get settingsChangeLoginPopupUsername;
+  String get settingsChangeLoginPopupPassword;
+  String get settingsChangeLoginPopupSave;
+  String get settingsChangeLoginPopupCancel;
   String get settingsSelectClass;
   String get settingsAppInfo;
   String get appInfo;
   String get menuStart;
   String get menuSettings;
+  String get dsbListErrorTitle;
+  String get dsbListErrorSubtitle;
+  String get dsbErrorNoLogin;
+  String get dsbUiAllClasses;
+  String get classSelectorEmpty;
+  String get widgetValidatorFieldEmpty;
+  String get widgetValidatorInvalid;
+  String dsbSubtoTitle(DsbSubstitution sub);
+  String dsbSubtoSubtitle(DsbSubstitution sub);
+  String catchDsbGetData(Error e);
 
   static final List<Language> _langs = [English(), German()];
 

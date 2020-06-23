@@ -123,7 +123,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
-                  child: Text('print Cache'),
+                  child: Text('Print Cache'),
                   onPressed: Prefs.listCache
                 ),
                 RaisedButton(
