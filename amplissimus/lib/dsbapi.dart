@@ -278,7 +278,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,
                                     Function httpGet = httpGet,
                                     Function httpPost = httpPost}) async {
   List<DsbPlan> plans = [];
-  Prefs.flushCache();
+  if(cacheGetRequests || cachePostRequests) Prefs.flushCache();
   String json = await dsbGetData(username, password, cachePostRequests: cachePostRequests, httpPost: httpPost);
   var htmls = await dsbGetHtml(json, cacheGetRequests: cacheGetRequests, httpGet: httpGet);
   for(var title in htmls.keys) {
