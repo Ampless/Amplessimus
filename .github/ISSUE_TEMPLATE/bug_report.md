@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a bug report
-title: ''
+title: '[BUG] '
 labels: bug
 assignees: chrissxYT
 
@@ -20,8 +20,8 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots/Stacktraces/Logs**
+If applicable, add screenshots, stacktraces or logs to help explain your problem.
 
 **Versions (please complete the following information):**
  - OS/Browser version: [e.g. iOS13.5, Chrome69.0]
