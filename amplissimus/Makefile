@@ -1,4 +1,4 @@
-VERSION = 1.1.4
+VERSION = 1.1.5
 
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
@@ -23,11 +23,16 @@ MAC_STRIP_LIST = $(MAC_BUILD_DIR)/Contents/Runner \
 				 $(MAC_BUILD_DIR)/Contents/Frameworks/*.dylib
 STRIP = strip -u -r
 BITCODE_STRIP = xcrun bitcode_strip
+TRU = || true
 
-TMP_IPA_DIR = Payload
-TMP_DEB_DIR = tmp2deb
-TMP_DMG_DIR = tmp2dmg
-TMP_DMG     = tmp.dmg
+OUTPUT_DIR  = bin
+TMP         = tmp
+TMP_SYMBOLS = $(TMP)/debug_symbols
+    IPA_DIR = Payload
+TMP_IPA_DIR = $(TMP)/$(IPA_DIR)
+TMP_DEB_DIR = $(TMP)/deb
+TMP_DMG_DIR = $(TMP)/dmg
+TMP_DMG     = $(TMP)/tmp.dmg
 
 ci: mkdirs replaceversions iosapp ipa deb apk macapp macdmg cleanartifacts rollbackversions
 
@@ -52,54 +57,54 @@ iosapp:
 	flutter build ios $(IOS_FLAGS)
 	$(BITCODE_STRIP) $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
-	$(STRIP) $(IOS_STRIP_LIST)
+	$(STRIP) $(IOS_STRIP_LIST) $(TRU)
 
 ipa:
-	cp -rp build/ios/Release-iphoneos/Runner.app Payload
-	rm -rf bin/$(VERSION).ipa
-	zip -r -9 bin/$(VERSION).ipa Payload
+	cp -rp $(IOS_BUILD_DIR) $(TMP_IPA_DIR)
+	rm -rf $(OUTPUT_DIR)/$(VERSION).ipa
+	cd $(TMP) && zip -r -9 ../$(OUTPUT_DIR)/$(VERSION).ipa $(IPA_DIR)
 
 # This is for Cydia: http://www.saurik.com/id/7
 deb:
-	cp -rp build/ios/Release-iphoneos/Runner.app tmp2deb/Applications/
+	cp -rp $(IOS_BUILD_DIR) $(TMP_DEB_DIR)/Applications/
 	grep -v "^#" control.def | \
-	  sed "s/\$$VERSION/$(VERSION)/" | \
-	  sed "s/\$$SIZE/`du -sk build/ios/Release-iphoneos/Runner.app | awk '{ print $$1 }'`/" | \
-	  sed "s/\$$ARCH/iphoneos-arm/" > tmp2deb/DEBIAN/control
-	COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= dpkg-deb -Sextreme -z9 --build tmp2deb bin/$(VERSION).deb
+	  sed "s/0.0.0-1/$(VERSION)/" | \
+	  sed "s/\$$SIZE/`du -sk $(IOS_BUILD_DIR) | awk '{ print $$1 }'`/" | \
+	  sed "s/\$$ARCH/iphoneos-arm/" > $(TMP_DEB_DIR)/DEBIAN/control
+	COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= dpkg-deb -Sextreme -z9 --build $(TMP_DEB_DIR) $(OUTPUT_DIR)/$(VERSION).deb
 
 apk:
 	flutter build apk $(APK_FLAGS)
-	mv build/app/outputs/apk/release/app-release.apk bin/$(VERSION).apk
+	mv build/app/outputs/apk/release/app-release.apk $(OUTPUT_DIR)/$(VERSION).apk
 
 webbuild:
 	flutter build web $(WEB_FLAGS)
-	mv build/web bin/$(VERSION).web
+	mv build/web $(OUTPUT_DIR)/$(VERSION).web
 
 winx64:
 	flutter build windows $(WIN_FLAGS)
-	mv build/windows/x64/Release/Runner bin/$(VERSION).win
+	mv build/windows/x64/Release/Runner $(OUTPUT_DIR)/$(VERSION).win
 
 linux64:
 	flutter build linux $(GTK_FLAGS)
-	mv build/linux/release/bundle bin/$(VERSION).linux
+	mv build/linux/release/bundle $(OUTPUT_DIR)/$(VERSION).linux
 
 macapp:
-	flutter build macos $(MAC_FLAGS)
-	$(STRIP) $(MAC_STRIP_LIST)
+	flutter build macos $(MAC_FLAGS) || flutter build macos $(MAC_FLAGS)
+	$(STRIP) $(MAC_STRIP_LIST) $(TRU)
 
 macdmg:
 	cp -rf $(MAC_BUILD_DIR) $(TMP_DMG_DIR)
 	ln -s /Applications $(MAC_BUILD_DIR)/Applications
-	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname AmplissimusInstall
-	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o bin/$(VERSION).dmg
+	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname "Install Amplissimus"
+	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o $(OUTPUT_DIR)/$(VERSION).dmg
 
 mkdirs:
-	mkdir -p debug_symbols bin $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
+	mkdir -p $(TMP_SYMBOLS) $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
 
 cleanartifacts:
 	flutter clean
-	rm -rf $(TMP_IPA_DIR) $(TMP_DEB_DIR) $(TMP_DMG_DIR) $(TMP_DMG)
+	rm -rf $(TMP)/*
 
 setup:
 	sudo apt install -y cmake ninja-build
