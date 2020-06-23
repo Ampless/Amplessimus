@@ -27,29 +27,29 @@ class CachedSharedPreferences {
   void setString(String key, String value) {
     _cacheString[key] = value;
     if(_prefs != null) _prefs.setString(key, value);
-    else if(_prefFile != null) flush();
-    else _editsString.add(key);
+    else if(_prefFile == null) _editsString.add(key);
+    flush();
   }
 
   void setInt(String key, int value) {
     _cacheInt[key] = value;
     if(_prefs != null) _prefs.setInt(key, value);
-    else if(_prefFile != null) flush();
-    else _editsInt.add(key);
+    else if(_prefFile == null) _editsInt.add(key);
+    flush();
   }
 
   void setDouble(String key, double value) {
     _cacheDouble[key] = value;
     if(_prefs != null) _prefs.setDouble(key, value);
-    else if(_prefFile != null) flush();
-    else _editsDouble.add(key);
+    else if(_prefFile == null) _editsDouble.add(key);
+    flush();
   }
 
   void setStringList(String key, List<String> value) {
     _cacheStrings[key] = value;
     if(_prefs != null) _prefs.setStringList(key, value);
-    else if(_prefFile != null) flush();
-    else _editsStrings.add(key);
+    else if(_prefFile == null) _editsStrings.add(key);
+    flush();
   }
 
   void setBool(String key, bool value) {

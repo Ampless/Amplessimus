@@ -138,14 +138,14 @@ class DsbSubstitution {
   String toJson() {
     String json =
       '{'
-      '"class": "${jsonEscape(affectedClass)}",'
-      '"lessons": [';
+      '"class":"${jsonEscape(affectedClass)}",'
+      '"lessons":[';
     for(int h in hours)
       json += '$h,';
     return '${json.substring(0, json.length - 1)}],'
-      '"teacher": "${jsonEscape(teacher)}",'
-      '"subject": "${jsonEscape(subject)}",'
-      '"notes": "${jsonEscape(notes)}"'
+      '"teacher":"${jsonEscape(teacher)}",'
+      '"subject":"${jsonEscape(subject)}",'
+      '"notes":"${jsonEscape(notes)}"'
       '},';
   }
 }
@@ -179,9 +179,9 @@ class DsbPlan {
   String toJson() {
     String json =
       '{'
-      '"title": "${jsonEscape(title)}",'
-      '"date": "${jsonEscape(date)}",'
-      '"subs": [';
+      '"title":"${jsonEscape(title)}",'
+      '"date":"${jsonEscape(date)}",'
+      '"subs":[';
     for(DsbSubstitution sub in subs)
       json += sub.toJson();
     return '${json.substring(0, json.length - 2)}'
@@ -281,7 +281,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,  String password, {bool cac
       ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
       List<dom.Element> html = HtmlParser(res).parse().children[0].children[1].children; //body
       String planTitle = searchHtml(html, 'mon_title').innerHtml;
-      html = searchHtml(html, 'mon_list').children;
+      html = searchHtml(html, 'mon_list').children.first.children; //for some reason <table>s like to contain <tbody>s
       List<DsbSubstitution> subs = [];
       for(int i = 1; i < html.length; i++)
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
