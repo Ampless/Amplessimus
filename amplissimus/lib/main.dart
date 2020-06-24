@@ -432,12 +432,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
+                  onTap: () async {
                     if(CustomValues.isAprilFools) return;
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) Prefs.currentThemeId = 0; 
                     else Prefs.currentThemeId++;
-                    rebuildDragDown();
+                    await rebuildNewBuild();
                     tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
