@@ -1,4 +1,4 @@
-VERSION = 1.2.0
+VERSION = 1.2.1
 
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
@@ -34,7 +34,7 @@ TMP_DEB_DIR = $(TMP)/deb
 TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
-ci: mkdirs replaceversions iosapp ipa deb apk macapp macdmg cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb apk cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
