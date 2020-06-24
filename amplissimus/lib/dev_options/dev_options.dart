@@ -119,23 +119,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   ),
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
-                DropdownButton(
-                  underline: Container(
-                    height: 2,
-                    color: Colors.white,
-                  ),
-                  style: TextStyle(color: AmpColors.colorForeground,),
-                  value: CustomValues.lang,
-                  items: Language.all.map<DropdownMenuItem<Language>>((value) {
-                    ampInfo(ctx: 'FirstLogin', message: 'Doing things to: $value');
-                    return DropdownMenuItem<Language>(value: value, child: Text(value.name));
-                  }).toList(),
-                  onChanged: (value) => setState(() {
-                    ampInfo(ctx: 'FirstLogin', message: 'Language set. ($value)');
-                    CustomValues.lang = value;
-                  }),
-                ),
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 ListTile(
                   title: Text('Listenelementabstand', style: widget.textStyle,),
                   trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),

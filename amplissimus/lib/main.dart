@@ -157,7 +157,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
 
-  void rebuild() => setState(() {});
+  void rebuild() {
+    try {
+      setState(() {});
+    } catch (e) {
+      ampInfo(ctx: 'rebuild', message: errorString(e));
+    }
+  }
 
   Future<void> rebuildDragDown() async {
     refreshKey.currentState?.show();
