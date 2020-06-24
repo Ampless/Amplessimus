@@ -148,8 +148,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
   void checkBrightness() {
-    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
-      setState(AmpColors.changeMode);
+    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode) {
+      AmpColors.changeMode();
+      setState(() {
+        fabBackgroundColor = Colors.transparent;
+        rebuildNewBuild();
+      });
+      Future.delayed(Duration(milliseconds: 150), () {
+        setState(() => fabBackgroundColor = AmpColors.colorBackground);
+      });
+    }
   }
 
   @override
