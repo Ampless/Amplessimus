@@ -37,7 +37,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   Color backgroundColor = AmpColors.blankWhite;
   void checkBrightness() {
     if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
-      AmpColors.changeMode();
+      setState(AmpColors.changeMode);
   }
   @override
   void initState() {
