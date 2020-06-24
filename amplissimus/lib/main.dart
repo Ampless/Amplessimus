@@ -35,6 +35,10 @@ class SplashScreenPage extends StatefulWidget {
 class SplashScreenPageState extends State<SplashScreenPage> {
   String fileString = 'assets/anims/data-white-to-black.html';
   Color backgroundColor = AmpColors.blankWhite;
+  void checkBrightness() {
+    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
+      AmpColors.changeMode();
+  }
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -49,8 +53,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-      if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
-        AmpColors.changeMode();
+      checkBrightness();
+
+      SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
 
       if(Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
