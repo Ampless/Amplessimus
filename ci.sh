@@ -7,6 +7,7 @@ flutter config --enable-macos-desktop
 flutter config --enable-linux-desktop
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
+flutter pub cache repair # this might fix some stupid problems with shared_preferences_macos
 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
 cp -rf bin "/usr/local/var/www/amplissimus/$1"
 cd bin
