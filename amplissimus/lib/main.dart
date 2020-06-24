@@ -526,7 +526,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       bool darkModeEnabled = brightness == Brightness.dark;
                       if(darkModeEnabled != Prefs.designMode) {
                         AmpColors.changeMode();
-                        if(Prefs.useSystemTheme) Prefs.useSystemTheme = false;
                         setState(() {
                           fabBackgroundColor = Colors.transparent;
                           rebuildNewBuild();
@@ -536,6 +535,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         });
                       }
                     }
+                    rebuild();
                   },
                   child: Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
                 ),
