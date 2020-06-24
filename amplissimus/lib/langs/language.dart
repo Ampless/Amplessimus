@@ -37,6 +37,7 @@ abstract class Language {
   String catchDsbGetData(Error e);
 
   static final List<Language> _langs = [English(), German()];
+  static List<Language> get all => _langs;
 
   static Language fromCode(String code) {
     if(code == null) return _langs[0];

@@ -1,4 +1,5 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -189,7 +190,20 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         )
                       ),
                     ),
-                    Divider(color: Colors.transparent, height: 30,),
+                    DropdownButton(
+                      underline: Container(
+                        height: 2,
+                        color: Colors.white,
+                      ),
+                      style: TextStyle(color: AmpColors.colorForeground,),
+                      value: CustomValues.lang,
+                      items: Language.all.map<DropdownMenuItem<Language>>((value) {
+                        return DropdownMenuItem<Language>(value: value, child: Text(value.name));
+                      }).toList(),
+                      onChanged: (value) => setState(() => CustomValues.lang = value),
+                    ),
+                    Padding(padding: EdgeInsets.all(10)),
+                    Divider(color: Colors.transparent, height: 30),
                     AnimatedDefaultTextStyle(
                       child: Text(textString), 
                       style: isError ? TextStyle(color: Colors.redAccent, fontSize: 20) : TextStyle(color: Colors.redAccent, fontSize: 0), 

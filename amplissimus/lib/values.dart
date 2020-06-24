@@ -11,7 +11,12 @@ class CustomValues {
     var now = DateTime.now();
     isAprilFools = now.day == 1 && now.month == 4;
   }
-  static Language lang = Language.fromCode(Platform.localeName);
+  static Language _lang = Language.fromCode(Prefs.savedLangCode);
+  static Language get lang => _lang;
+  static set lang(Language l) {
+    Prefs.savedLangCode = l.code;
+    _lang = l;
+  }
 }
 
 class AmpStrings {

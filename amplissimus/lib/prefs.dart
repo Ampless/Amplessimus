@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/pref_cache.dart';
@@ -100,6 +101,8 @@ bool get useSystemTheme => _prefs.getBool('use_system_theme', true);
 set useSystemTheme(bool b) => _prefs.setBool('use_system_theme', b);
 String get dsbJsonCache => _prefs.getString('DSB_JSON_CACHE', null);
 set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
+String get savedLangCode => _prefs.getString('lang', Platform.localeName);
+set savedLangCode(String s) => _prefs.setString('lang', s);
 
 set designMode(bool isDarkMode) => _prefs.setBool('is_dark_mode', isDarkMode);
 bool get designMode => _prefs.getBool('is_dark_mode', true);
