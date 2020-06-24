@@ -77,6 +77,7 @@ class DsbSubstitution {
     'it': 'Italienisch',
     'f': 'Französisch',
     'so': 'Sozialkunde',
+    'sk': 'Sozialkunde',
     'mu': 'Musik',
     'ma': 'Mathematik',
     'b': 'Biologie',
@@ -87,7 +88,15 @@ class DsbSubstitution {
     'spr': 'Sprechstunde',
   };
 
-  String get realSubject {
+  static bool _isNum(int codeUnit) => codeUnit >= zero && codeUnit <= nine;
+
+  static final Pattern _letters = RegExp(r'[a-zA-Z]');
+  static final Pattern _numeric = RegExp(r'[0-9]');
+
+  static String realSubject(String subject) {
+    if(_isNum(subject.codeUnitAt(0)) && _isNum(subject.codeUnitAt(subject.length - 1)))
+      return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1))} '
+             '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';
     String sub = subject.toLowerCase();
     String s = subject;
     SUBJECT_LOOKUP_TABLE.forEach((key, value) { if(sub.startsWith(key)) s = value; });

@@ -56,7 +56,7 @@ class German extends Language {
     String hour = '';
     for(int h in sub.hours)
       hour += hour.length == 0 ? h.toString() : '-$h';
-    return '$hour. Stunde ${sub.realSubject}';
+    return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject)}';
   }
 
   @override
