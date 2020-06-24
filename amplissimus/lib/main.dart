@@ -35,10 +35,6 @@ class SplashScreenPage extends StatefulWidget {
 class SplashScreenPageState extends State<SplashScreenPage> {
   String fileString = 'assets/anims/data-white-to-black.html';
   Color backgroundColor = AmpColors.blankWhite;
-  void checkBrightness() {
-    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
-      setState(AmpColors.changeMode);
-  }
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -53,9 +49,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-      checkBrightness();
-
-      SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
+      if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
+        AmpColors.changeMode();
 
       if(Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
@@ -152,12 +147,18 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
+  void checkBrightness() {
+    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
+      setState(AmpColors.changeMode);
+  }
+
   @override
   void initState() {
     if(letterDropDownValue.isEmpty)
       letterDropDownValue = CustomValues.lang.classSelectorEmpty;
     if(gradeDropDownValue.isEmpty)
       gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
+    SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
