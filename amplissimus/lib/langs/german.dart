@@ -99,4 +99,7 @@ class German extends Language {
 
   @override
   String get settingsChangeLanguage => 'Sprache ändern';
+
+  @override
+  String get firstStartupDone => 'Fertig';
 }

@@ -106,4 +106,7 @@ class English extends Language {
 
   @override
   String get settingsChangeLanguage => 'Change language';
+
+  @override
+  String get firstStartupDone => 'Done';
 }

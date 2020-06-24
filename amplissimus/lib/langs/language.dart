@@ -33,6 +33,7 @@ abstract class Language {
   String get classSelectorEmpty;
   String get widgetValidatorFieldEmpty;
   String get widgetValidatorInvalid;
+  String get firstStartupDone;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

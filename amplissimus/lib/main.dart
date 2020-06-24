@@ -44,21 +44,19 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await Prefs.loadPrefs();
       setState(() => backgroundColor = AmpColors.colorBackground);
       CustomValues.checkForAprilFools();
+
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+
+      if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
+        AmpColors.changeMode();
+
       if(Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
       } else {
-        if(Prefs.useSystemTheme) {
-          var brightness = SchedulerBinding.instance.window.platformBrightness;
-          bool darkModeEnabled = brightness == Brightness.dark;
-          if(darkModeEnabled != Prefs.designMode) {
-            AmpColors.changeMode();
-          }
-        }
-        await dsbUpdateWidget(() {}, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
+        await dsbUpdateWidget(() {}, cacheJsonPlans: Prefs.useJsonCache);
         Future.delayed(Duration(milliseconds: 1000), () {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
         });

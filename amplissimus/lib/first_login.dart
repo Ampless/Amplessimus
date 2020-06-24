@@ -1,6 +1,5 @@
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/language.dart';
-import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -234,20 +233,14 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                   if(!condA || !condB) return;
                   setState(() => credentialsAreLoading = true);
                   try {
-                    await dsbGetAllSubs(
-                      FirstLoginValues.usernameInputFormController.text.trim(), 
-                      FirstLoginValues.passwordInputFormController.text.trim(),
-                      cacheGetRequests: false,
-                    );
-                    await Future.delayed(Duration(milliseconds: 1500));
-                    isError = true;
-                    setState(() => {credentialsAreLoading = false, textString = ''});
                     Prefs.username = FirstLoginValues.usernameInputFormController.text.trim();
                     Prefs.password = FirstLoginValues.passwordInputFormController.text.trim();
+                    await dsbUpdateWidget(() {});
+                    isError = true;
+                    setState(() => {credentialsAreLoading = false, textString = ''});
                     FocusScope.of(context).unfocus();
                     FirstLoginValues.tabController.animateTo(1);
                   } catch(e) {
-                    await Future.delayed(Duration(milliseconds: 1500));
                     setState(() {
                       credentialsAreLoading = false;
                       textString = errorString(e);
@@ -283,22 +276,20 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                 elevation: 0,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  setState(() => dsbWidgetIsLoading = true);
-                  await dsbUpdateWidget(() {}, cachePostRequests: false);
                   Prefs.firstLogin = false;
                   setState(() => dsbWidgetIsLoading = false);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0,),));
-                }, 
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
+                },
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
-                label: Text('Fertig', style: widget.textStyle),
+                label: Text(CustomValues.lang.firstStartupDone, style: widget.textStyle),
                 icon: Icon(MdiIcons.arrowRight, color: AmpColors.colorForeground,),
               ),
               bottomSheet: dsbWidgetIsLoading 
                 ? LinearProgressIndicator(
                   backgroundColor: AmpColors.colorBackground, 
                   valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
-                ) : Container(height: 0,),
+                ) : Container(height: 0),
             ),
           ]),
         ]

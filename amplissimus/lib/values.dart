@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
