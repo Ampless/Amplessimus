@@ -191,16 +191,16 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         )
                       ),
                     ),
-                    Divider(color: AmpColors.colorForeground, height: 20,),
-                    
+                    Divider(color: AmpColors.colorForeground, height: 20),
+
                     Padding(padding: EdgeInsets.all(4)),
-                    Text(CustomValues.lang.settingsChangeLanguage, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
+                    Text(CustomValues.lang.settingsChangeLanguage, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20)),
                     DropdownButton(
                       underline: Container(
                         height: 2,
                         color: Colors.white,
                       ),
-                      style: TextStyle(color: AmpColors.colorForeground,),
+                      style: TextStyle(color: AmpColors.colorForeground),
                       value: CustomValues.lang,
                       items: Language.all.map<DropdownMenuItem<Language>>((value) {
                         return DropdownMenuItem<Language>(value: value, child: Text(value.name));
@@ -214,7 +214,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                     Divider(color: Colors.transparent, height: 30),
                     AnimatedDefaultTextStyle(
                       child: Text(textString), 
-                      style: isError ? TextStyle(color: Colors.redAccent, fontSize: 20) : TextStyle(color: Colors.redAccent, fontSize: 0), 
+                      style: TextStyle(color: Colors.redAccent, fontSize: isError ? 20 : 0),
                       duration: Duration(milliseconds: 350)
                     ),
                   ],

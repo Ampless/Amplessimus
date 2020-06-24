@@ -10,7 +10,6 @@ void ampLogDebugInit() async {
 }
 
 RandomAccessFile _logFile;
-int _newline = '\n'.codeUnitAt(0);
 Mutex _logFileMutex = Mutex();
 
 void _log(String level, String ctx, Object message) {
@@ -29,7 +28,7 @@ void _log(String level, String ctx, Object message) {
   if(_logFile != null) {
     _logFileMutex.acquire();
     _logFile.writeString(msg);
-    _logFile.writeByte(_newline);
+    _logFile.writeString('\r\n');
     _logFileMutex.release();
   }
 }

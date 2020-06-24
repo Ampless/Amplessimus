@@ -5,6 +5,7 @@ import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dev_options/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/first_login.dart';
+import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
@@ -148,9 +149,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    if(Prefs.char.trim().toLowerCase().isEmpty)
+    if(letterDropDownValue.isEmpty)
       letterDropDownValue = CustomValues.lang.classSelectorEmpty;
-    if(Prefs.grade.trim().toLowerCase().isEmpty)
+    if(gradeDropDownValue.isEmpty)
       gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
@@ -175,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground),),
+          title: Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground)),
           backgroundColor: AmpColors.colorBackground,
           content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
             return Theme(child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -184,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   height: 2,
                   color: Colors.white,
                 ),
-                style: TextStyle(color: AmpColors.colorForeground,),
+                style: TextStyle(color: AmpColors.colorForeground),
                 value: gradeDropDownValue,
                 items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -235,6 +236,54 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
+                rebuildNewBuild();
+                Navigator.of(context).pop();
+              },
+              child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showInputChangeLanguage(BuildContext context) {
+    Language lang = CustomValues.lang;
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(CustomValues.lang.settingsChangeLanguage, style: TextStyle(color: AmpColors.colorForeground)),
+          backgroundColor: AmpColors.colorBackground,
+          content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
+            return Theme(child: Row(mainAxisSize: MainAxisSize.min, children: [
+              DropdownButton(
+                underline: Container(
+                  height: 2,
+                  color: Colors.white,
+                ),
+                style: TextStyle(color: AmpColors.colorForeground),
+                value: lang,
+                items: Language.all.map<DropdownMenuItem<Language>>((value) {
+                  return DropdownMenuItem<Language>(value: value, child: Text(value.name));
+                }).toList(),
+                onChanged: (value) => setAlState(() {
+                  lang = value;
+                }),
+              ),
+            ]), data: ThemeData(canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite));
+          }),
+          actions: <Widget>[
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(CustomValues.lang.settingsChangeLoginPopupCancel),
+            ),
+            FlatButton(
+              textColor: AmpColors.colorForeground,
+              onPressed: () {
+                CustomValues.lang = lang;
                 rebuildNewBuild();
                 Navigator.of(context).pop();
               },
@@ -472,28 +521,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () {
-                    showAboutDialog(
-                      context: context,
-                      applicationName: AmpStrings.appTitle,
-                      applicationVersion: AmpStrings.version,
-                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
-                      children: [
-                        Text(CustomValues.lang.appInfo)
-                      ]
-                    );
-                  },
-                  child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
-                ),
-              ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
                     showInputEntryCredentials(context);
                   },
                   child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
@@ -509,6 +536,40 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () => showInputSelectCurrentClass(context),
                   child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
+                ),
+              ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () => showInputChangeLanguage(context),
+                  child: Widgets.setLanguageWidget(textStyle)
+                ),
+              ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () {
+                    showAboutDialog(
+                      context: context,
+                      applicationName: AmpStrings.appTitle,
+                      applicationVersion: AmpStrings.version,
+                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
+                      children: [
+                        Text(CustomValues.lang.appInfo)
+                      ]
+                    );
+                  },
+                  child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
                 ),
               ),
               Card(
@@ -576,7 +637,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ) : Container(height: 0,),
         )
       ],)
-      
     );
   }
 }
