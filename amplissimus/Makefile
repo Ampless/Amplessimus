@@ -90,7 +90,7 @@ linux64:
 	mv build/linux/release/bundle $(OUTPUT_DIR)/$(VERSION).linux
 
 macapp:
-	flutter build macos $(MAC_FLAGS) || flutter build macos $(MAC_FLAGS)
+	flutter build macos $(MAC_FLAGS) || flutter build macos $(MAC_FLAGS)
 	$(STRIP) $(MAC_STRIP_LIST) $(TRU)
 
 macdmg:
