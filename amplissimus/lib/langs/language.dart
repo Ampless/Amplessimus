@@ -46,4 +46,9 @@ abstract class Language {
         return lang;
     return _langs[0];
   }
+
+  @override
+  String toString() {
+    return '{code:"$code",name:"$name",translations:...}';
+  }
 }

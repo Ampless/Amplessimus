@@ -1,5 +1,6 @@
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/language.dart';
+import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -198,9 +199,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       style: TextStyle(color: AmpColors.colorForeground,),
                       value: CustomValues.lang,
                       items: Language.all.map<DropdownMenuItem<Language>>((value) {
+                        ampInfo(ctx: 'FirstLogin', message: 'Doing things to: $value');
                         return DropdownMenuItem<Language>(value: value, child: Text(value.name));
                       }).toList(),
-                      onChanged: (value) => setState(() => CustomValues.lang = value),
+                      onChanged: (value) => setState(() {
+                        ampInfo(ctx: 'FirstLogin', message: 'Language set. ($value)');
+                        CustomValues.lang = value;
+                      }),
                     ),
                     Padding(padding: EdgeInsets.all(10)),
                     Divider(color: Colors.transparent, height: 30),

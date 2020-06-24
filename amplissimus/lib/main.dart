@@ -21,6 +21,7 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //ampLogDebugInit(); //always comment out before committing
     return MaterialApp(title: AmpStrings.appTitle, home: SplashScreenPage());
   }
 }
