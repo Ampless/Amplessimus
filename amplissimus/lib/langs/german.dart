@@ -96,4 +96,7 @@ class German extends Language {
 
   @override
   String get widgetValidatorInvalid => 'Ungültige Eingabe!';
+
+  @override
+  String get settingsChangeLanguage => 'Sprache ändern';
 }

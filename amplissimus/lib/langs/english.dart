@@ -103,4 +103,7 @@ class English extends Language {
 
   @override
   String get widgetValidatorInvalid => 'Invalid input!';
+
+  @override
+  String get settingsChangeLanguage => 'Change language';
 }

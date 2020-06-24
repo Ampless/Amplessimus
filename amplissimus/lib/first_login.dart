@@ -192,7 +192,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         )
                       ),
                     ),
-                    Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
+                    Divider(color: AmpColors.colorForeground, height: 20,),
+                    
+                    Padding(padding: EdgeInsets.all(4)),
+                    Text(CustomValues.lang.settingsChangeLanguage, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
                     DropdownButton(
                       underline: Container(
                         height: 2,
@@ -201,11 +204,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       style: TextStyle(color: AmpColors.colorForeground,),
                       value: CustomValues.lang,
                       items: Language.all.map<DropdownMenuItem<Language>>((value) {
-                        ampInfo(ctx: 'FirstLogin', message: 'Doing things to: $value');
                         return DropdownMenuItem<Language>(value: value, child: Text(value.name));
                       }).toList(),
                       onChanged: (value) => setState(() {
-                        ampInfo(ctx: 'FirstLogin', message: 'Language set. ($value)');
                         CustomValues.lang = value;
                       }),
                     ),
@@ -252,7 +253,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       textString = errorString(e);
                       isError = true;
                     });
-                    return;
                   }
                 }, 
                 backgroundColor: AmpColors.colorBackground,

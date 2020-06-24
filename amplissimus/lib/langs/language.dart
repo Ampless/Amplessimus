@@ -14,6 +14,7 @@ abstract class Language {
   String get settingsLightsUseSystem;
   String get settingsLightsNoSystem;
   String get settingsChangeAppearance;
+  String get settingsChangeLanguage;
   String get settingsChangeLogin;
   String get settingsChangeLoginPopup;
   String get settingsChangeLoginPopupUsername;
