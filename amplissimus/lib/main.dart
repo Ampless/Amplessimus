@@ -174,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void rebuild() {
     try {
       setState(() {});
+      print('rebuilded!');
     } catch (e) {
       ampInfo(ctx: 'rebuild', message: errorString(e));
     }
@@ -504,8 +505,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ampInfo(ctx: 'MyApp', message: 'switching design mode');
                     if(Prefs.currentThemeId >= 1) Prefs.currentThemeId = 0; 
                     else Prefs.currentThemeId++;
+                    print(Prefs.currentThemeId);
                     await rebuildNewBuild();
-                    tabController.animateTo(0);
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
                 ),
@@ -518,18 +519,37 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () async {
+                  onTap: () {
                     Prefs.useSystemTheme = !Prefs.useSystemTheme;
                     if(Prefs.useSystemTheme) {
                       var brightness = SchedulerBinding.instance.window.platformBrightness;
                       bool darkModeEnabled = brightness == Brightness.dark;
                       if(darkModeEnabled != Prefs.designMode) {
                         AmpColors.changeMode();
+                        if(Prefs.useSystemTheme) Prefs.useSystemTheme = false;
+                        setState(() {
+                          fabBackgroundColor = Colors.transparent;
+                          rebuildNewBuild();
+                        });
+                        Future.delayed(Duration(milliseconds: 150), () {
+                          setState(() => fabBackgroundColor = AmpColors.colorBackground);
+                        });
                       }
                     }
-                    rebuild();
                   },
                   child: Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
+                ),
+              ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  onTap: () => showInputChangeLanguage(context),
+                  child: Widgets.setLanguageWidget(textStyle)
                 ),
               ),
               Card(
@@ -556,18 +576,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
                   onTap: () => showInputSelectCurrentClass(context),
                   child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
-                ),
-              ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () => showInputChangeLanguage(context),
-                  child: Widgets.setLanguageWidget(textStyle)
                 ),
               ),
               Card(
