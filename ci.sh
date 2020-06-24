@@ -1,16 +1,13 @@
 #!/bin/sh
 flutter channel master
 flutter upgrade
-flutter config --enable-web
-flutter config --enable-windows-desktop
-flutter config --enable-macos-desktop
-flutter config --enable-linux-desktop
+flutter config --enable-web --enable-windows-desktop --enable-macos-desktop --enable-linux-desktop
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
-flutter pub cache repair # this might fix some stupid problems with shared_preferences_macos
+#flutter pub cache repair # this might fix some stupid problems with shared_preferences_macos
 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
 cp -rf bin "/usr/local/var/www/amplissimus/$1"
 cd bin
-tar cJf "/usr/local/var/www/amplissimus/$1/$2.tar.xz" *
+tar cf "/usr/local/var/www/amplissimus/$1/$2.tar" *
 rm -rf *
 cd ../..
