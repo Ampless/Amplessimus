@@ -141,6 +141,24 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       ),
                     ]),
                     Divider(color: AmpColors.colorForeground, height: 20,),
+                    Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
+                    DropdownButton(
+                      underline: Container(
+                        height: 2,
+                        color: Colors.white,
+                      ),
+                      style: TextStyle(color: AmpColors.colorForeground,),
+                      value: CustomValues.lang,
+                      items: Language.all.map<DropdownMenuItem<Language>>((value) {
+                        ampInfo(ctx: 'FirstLogin', message: 'Doing things to: $value');
+                        return DropdownMenuItem<Language>(value: value, child: Text(value.name));
+                      }).toList(),
+                      onChanged: (value) => setState(() {
+                        ampInfo(ctx: 'FirstLogin', message: 'Language set. ($value)');
+                        CustomValues.lang = value;
+                      }),
+                    ),
+                    Divider(color: AmpColors.colorForeground, height: 20,),
                     Padding(padding: EdgeInsets.all(4)),
                     TextFormField(
                       style: TextStyle(color: AmpColors.colorForeground),
@@ -191,22 +209,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         )
                       ),
                     ),
-                    DropdownButton(
-                      underline: Container(
-                        height: 2,
-                        color: Colors.white,
-                      ),
-                      style: TextStyle(color: AmpColors.colorForeground,),
-                      value: CustomValues.lang,
-                      items: Language.all.map<DropdownMenuItem<Language>>((value) {
-                        ampInfo(ctx: 'FirstLogin', message: 'Doing things to: $value');
-                        return DropdownMenuItem<Language>(value: value, child: Text(value.name));
-                      }).toList(),
-                      onChanged: (value) => setState(() {
-                        ampInfo(ctx: 'FirstLogin', message: 'Language set. ($value)');
-                        CustomValues.lang = value;
-                      }),
-                    ),
+                    
                     Padding(padding: EdgeInsets.all(10)),
                     Divider(color: Colors.transparent, height: 30),
                     AnimatedDefaultTextStyle(

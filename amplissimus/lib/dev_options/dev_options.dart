@@ -1,10 +1,13 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../logging.dart';
 
 class MyBehavior extends ScrollBehavior {
   @override
@@ -23,6 +26,7 @@ class DevOptionsScreen extends StatelessWidget {
         },
         title: AmpStrings.appTitle,
         theme: ThemeData(
+          canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite,
           primarySwatch: AmpColors.primaryBlack,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
@@ -115,6 +119,23 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   ),
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                DropdownButton(
+                  underline: Container(
+                    height: 2,
+                    color: Colors.white,
+                  ),
+                  style: TextStyle(color: AmpColors.colorForeground,),
+                  value: CustomValues.lang,
+                  items: Language.all.map<DropdownMenuItem<Language>>((value) {
+                    ampInfo(ctx: 'FirstLogin', message: 'Doing things to: $value');
+                    return DropdownMenuItem<Language>(value: value, child: Text(value.name));
+                  }).toList(),
+                  onChanged: (value) => setState(() {
+                    ampInfo(ctx: 'FirstLogin', message: 'Language set. ($value)');
+                    CustomValues.lang = value;
+                  }),
+                ),
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 ListTile(
                   title: Text('Listenelementabstand', style: widget.textStyle,),
                   trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),
@@ -136,14 +157,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   child: Text('JSON importieren'),
                   onPressed: () async {
                     Prefs.dsbJsonCache = '['
-'{"title":"Montag","date":"15.6.2020 Montag","subs": []},'
-'{"title":"Dienstag","date":"16.6.2020 Dienstag","subs": ['
-'{"class":"5cd","lessons":[3],"teacher":"Häußler","subject":"Spo","notes": "Mitbetreuung"},'
-'{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
-'{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
-'{"class":"8c","lessons": [1],"teacher":"Wolf","subject":"E","notes":""}'
-']}'
-']';
+                      '{"title":"Montag","date":"15.6.2020 Montag","subs": []},'
+                      '{"title":"Dienstag","date":"16.6.2020 Dienstag","subs": ['
+                      '{"class":"5cd","lessons":[3],"teacher":"Häußler","subject":"Spo","notes": "Mitbetreuung"},'
+                      '{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
+                      '{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
+                      '{"class":"8c","lessons": [1],"teacher":"Wolf","subject":"E","notes":""}'
+                      ']}'
+                      ']';
                     dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: Prefs.useJsonCache);
                   }
                 ),
