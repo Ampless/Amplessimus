@@ -178,11 +178,14 @@ class DsbPlan {
       '"title":"${jsonEscape(title)}",'
       '"date":"${jsonEscape(date)}",'
       '"subs":[';
-    for(DsbSubstitution sub in subs)
-      json += sub.toJson();
-    return '${json.substring(0, json.length - 2)}'
+    if(subs.length > 0)
+      for(DsbSubstitution sub in subs)
+        json += sub.toJson();
+    else
+      json += ',';
+    return '${json.substring(0, json.length - 1)}'
       ']'
-      '},';
+    '},';
   }
 }
 
@@ -455,7 +458,7 @@ String toJson(List<DsbPlan> plans) {
     '[';
   for(var plan in plans)
     json += plan.toJson();
-  return '${json.substring(0, json.length - 2)}]\n';
+  return '${json.substring(0, json.length - 1)}]\n';
 }
 
 List<DsbPlan> fromJson(String jsontext) {

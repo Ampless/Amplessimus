@@ -145,9 +145,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                       '{"class":"5cd","lessons":[3],"teacher":"Häußler","subject":"Spo","notes": "Mitbetreuung"},'
                       '{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
                       '{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
-                      '{"class":"8c","lessons": [1],"teacher":"Wolf","subject":"E","notes":""}'
+                      '{"class":"11q","lessons": [1],"teacher":"Wolf","subject":"1sk1","notes":""}'
                       ']}'
-                      ']';
+                    ']';
                     dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: Prefs.useJsonCache);
                   }
                 ),
