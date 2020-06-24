@@ -60,7 +60,7 @@ class German extends Language {
   }
 
   @override
-  String catchDsbGetData(Error e) {
+  String catchDsbGetData(dynamic e) {
     return 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
   }
 

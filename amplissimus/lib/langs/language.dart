@@ -34,7 +34,7 @@ abstract class Language {
   String get widgetValidatorInvalid;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
-  String catchDsbGetData(Error e);
+  String catchDsbGetData(dynamic e);
 
   static final List<Language> _langs = [English(), German()];
   static List<Language> get all => _langs;

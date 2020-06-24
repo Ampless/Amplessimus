@@ -27,7 +27,7 @@ class English extends Language {
   String get settingsChangeLogin => 'Login data';
 
   @override
-  String get settingsChangeLoginPopup => 'DSBMobile login';
+  String get settingsChangeLoginPopup => 'DSBMobile Login';
 
   @override
   String get settingsLightsOff => 'Lights off';
@@ -67,7 +67,7 @@ class English extends Language {
   }
 
   @override
-  String catchDsbGetData(Error e) {
+  String catchDsbGetData(dynamic e) {
     return 'Please check your internet connection. (Error: $e)';
   }
 
