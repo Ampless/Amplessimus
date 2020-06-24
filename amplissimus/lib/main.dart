@@ -473,7 +473,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () async {
+                  onTap: () {
                     Prefs.devOptionsTimerCache();
                     if(Prefs.timesToggleDarkModePressed >= 10) {
                       Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
