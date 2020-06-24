@@ -63,7 +63,7 @@ class English extends Language {
       else if(r == 3) hour += 'rd';
       else hour += 'th';
     }
-    return '$hour lesson ${sub.realSubject}';
+    return '$hour lesson ${DsbSubstitution.realSubject(sub.subject)}';
   }
 
   @override
