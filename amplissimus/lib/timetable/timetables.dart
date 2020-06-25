@@ -5,12 +5,39 @@ import 'dart:convert';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/json.dart';
 
+
+
 enum TTDay {
   Monday,
   Tuesday,
   Wednesday,
   Thursday,
   Friday,
+}
+
+const Map<String, dynamic> DAY_LOOKUP_TABLE = {
+  'montag': TTDay.Monday,
+  'monday': TTDay.Monday,
+  'dienstag': TTDay.Tuesday,
+  'tuesday': TTDay.Tuesday,
+  'mittwoch': TTDay.Wednesday,
+  'wednesday': TTDay.Wednesday,
+  'donnerstag': TTDay.Thursday,
+  'thursday': TTDay.Thursday,
+  'freitag': TTDay.Friday,
+  'friday': TTDay.Friday,
+};
+
+List<dynamic> days = [TTDay.Monday, TTDay.Tuesday];
+void updateTimetableDays(List<DsbPlan> plans) {
+  for(DsbPlan tempPlan in plans) {
+    days = new List();
+    DAY_LOOKUP_TABLE.forEach((key, value) {
+      print(key);
+      if(tempPlan.date.split(' ').last.trim().toLowerCase() == key) days.add(value);
+    });
+  }
+  print(days);
 }
 
 class TTLesson {

@@ -7,6 +7,7 @@ import 'package:Amplissimus/intutils.dart';
 import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/xml.dart';
 import 'package:archive/archive.dart';
@@ -330,8 +331,8 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   List<Widget> widgets = [];
   _initializeTheme(widgets, plans);
-  
   widgets.add(Padding(padding: EdgeInsets.all(12)));
+  updateTimetableDays(plans);
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: widgets
