@@ -109,4 +109,7 @@ class English extends Language {
 
   @override
   String get firstStartupDone => 'Done';
+
+  @override
+  String get timetable => 'Timetable';
 }

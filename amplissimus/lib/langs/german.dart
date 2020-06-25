@@ -102,4 +102,7 @@ class German extends Language {
 
   @override
   String get firstStartupDone => 'Fertig';
+
+  @override
+  String get timetable => 'Stundenplan';
 }

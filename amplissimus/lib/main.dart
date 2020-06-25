@@ -14,6 +14,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -168,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
     SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
     super.initState();
-    tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
+    tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialIndex);
   }
 
   void rebuild() {
@@ -456,6 +457,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
         margin: EdgeInsets.all(16),
       ),
+      Container(
+        color: Colors.transparent,
+      ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
         color: Colors.transparent,
@@ -661,6 +665,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 new Tab(
                   icon: Icon(Icons.home),
                   text: CustomValues.lang.menuStart,
+                ),
+                new Tab(
+                  icon: Icon(MdiIcons.timetable),
+                  text: CustomValues.lang.timetable,
                 ),
                 new Tab(
                   icon: Icon(Icons.settings),

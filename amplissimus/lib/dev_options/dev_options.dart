@@ -58,7 +58,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
   @override
   Widget build(BuildContext context) {
     return TabBarView(controller: DevOptionsValues.tabController, children: [
-      MyApp(initialIndex: 1,),
+      MyApp(initialIndex: 2,),
       Scaffold(
         backgroundColor: AmpColors.colorBackground,
         appBar: AppBar(
