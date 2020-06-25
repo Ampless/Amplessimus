@@ -1,6 +1,7 @@
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 
 class CustomValues {
@@ -15,6 +16,7 @@ class CustomValues {
     Prefs.savedLangCode = l.code;
     _lang = l;
   }
+  static List<TTColumn> ttColums = [];
 }
 
 class AmpStrings {

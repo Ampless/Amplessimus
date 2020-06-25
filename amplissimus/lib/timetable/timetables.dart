@@ -15,29 +15,15 @@ enum TTDay {
   Friday,
 }
 
-const Map<String, dynamic> DAY_LOOKUP_TABLE = {
-  'montag': TTDay.Monday,
-  'monday': TTDay.Monday,
-  'dienstag': TTDay.Tuesday,
-  'tuesday': TTDay.Tuesday,
-  'mittwoch': TTDay.Wednesday,
-  'wednesday': TTDay.Wednesday,
-  'donnerstag': TTDay.Thursday,
-  'thursday': TTDay.Thursday,
-  'freitag': TTDay.Friday,
-  'friday': TTDay.Friday,
-};
+List<DsbPlan> timetablePlans = new List();
 
-List<dynamic> days = [TTDay.Monday, TTDay.Tuesday];
+List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
 void updateTimetableDays(List<DsbPlan> plans) {
+  timetableDays = new List();
   for(DsbPlan tempPlan in plans) {
-    days = new List();
-    DAY_LOOKUP_TABLE.forEach((key, value) {
-      print(key);
-      if(tempPlan.date.split(' ').last.trim().toLowerCase() == key) days.add(value);
-    });
+    timetableDays.add(ttMatchDay(tempPlan.title.split(' ').last.toLowerCase()));
   }
-  print(days);
+  print(timetableDays);
 }
 
 class TTLesson {
@@ -71,15 +57,25 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
 
 //NOT multi-language yet
 TTDay ttMatchDay(String s) {
-  if(s.contains('Montag'))
+  if(s.contains('montag'))
     return TTDay.Monday;
-  else if(s.contains('Dienstag'))
+  else if(s.contains('monday'))
+    return TTDay.Monday;
+  else if(s.contains('dienstag'))
     return TTDay.Tuesday;
-  else if(s.contains('Mittwoch'))
+  else if(s.contains('tuesday'))
+    return TTDay.Tuesday;
+  else if(s.contains('mittwoch'))
     return TTDay.Wednesday;
-  else if(s.contains('Donnerstag'))
+  else if(s.contains('wednesday'))
+    return TTDay.Wednesday;
+  else if(s.contains('donnerstag'))
     return TTDay.Thursday;
-  else if(s.contains('Freitag'))
+  else if(s.contains('thursday'))
+    return TTDay.Thursday;
+  else if(s.contains('freitag'))
+    return TTDay.Friday;
+  else if(s.contains('friday'))
     return TTDay.Friday;
   else
     throw '[TT] Unknown day: $s';

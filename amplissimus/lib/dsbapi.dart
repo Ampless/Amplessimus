@@ -367,6 +367,7 @@ Future dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
     if(Prefs.oneClassOnly && Prefs.username.isNotEmpty && Prefs.password.isNotEmpty)
       plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
     dsbWidget = dsbGetGoodList(plans);
+    timetablePlans = plans;
   } catch (e) {
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(child: Container(
