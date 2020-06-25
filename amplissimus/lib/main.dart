@@ -507,6 +507,17 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     else Prefs.currentThemeId++;
                     print(Prefs.currentThemeId);
                     await rebuildNewBuild();
+                    settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
+                      backgroundColor: AmpColors.colorBackground,
+                      content: Text('Aussehen des Vertretungsplans geändert!', style: widget.textStyle,),
+                      action: SnackBarAction(
+                        textColor: AmpColors.colorForeground,
+                        label: 'Anzeigen', 
+                        onPressed: () {
+                          tabController.animateTo(0);
+                        }
+                      ),
+                    ));
                   },
                   child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
                 ),
