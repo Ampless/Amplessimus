@@ -7,8 +7,6 @@ import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../logging.dart';
-
 class MyBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
@@ -27,7 +25,7 @@ class DevOptionsScreen extends StatelessWidget {
         title: AmpStrings.appTitle,
         theme: ThemeData(
           canvasColor: AmpColors.materialColorBackground,
-          primarySwatch: AmpColors.materialColorBackground,
+          primarySwatch: AmpColors.materialColorForeground,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
