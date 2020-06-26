@@ -479,7 +479,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
         margin: EdgeInsets.all(16),
       ),
-      Container(color: Colors.transparent),
+      Container(
+        color: Colors.transparent,
+        child: Center(
+          child: Text('in Entwicklung', style: widget.textStyle),
+        ),
+      ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
         color: Colors.transparent,
