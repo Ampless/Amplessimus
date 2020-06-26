@@ -416,9 +416,9 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
       IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
         dsbApiHomeScaffoldKey.currentState?.showSnackBar(
-          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground),))
+          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground))),
         );
-      },)
+      }),
     ])));
     widgets.add(_getWidget(dayWidgets, Prefs.currentThemeId));
   }
