@@ -149,7 +149,7 @@ class CachedSharedPreferences {
     }
   }
 
-  Future ctor() async {
+  Future<Null> ctor() async {
     try {
       _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
     } catch (e) {

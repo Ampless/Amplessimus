@@ -329,7 +329,7 @@ String errorString(dynamic e) {
 
 Widget dsbWidget;
 
-Future dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
+Future<Null> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
                                     bool cachePostRequests = true,
                                     bool cacheJsonPlans = false}) async {
   try {

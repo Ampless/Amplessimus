@@ -35,7 +35,6 @@ class SplashScreenPage extends StatefulWidget {
 
 class SplashScreenPageState extends State<SplashScreenPage> {
   String fileString = 'assets/anims/data-white-to-black.html';
-  Color backgroundColor = AmpColors.blankWhite;
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -44,7 +43,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
-      setState(() => backgroundColor = AmpColors.colorBackground);
       CustomValues.checkForAprilFools();
 
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
@@ -72,7 +70,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
-          color: backgroundColor,
+          color: AmpColors.colorBackground,
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
@@ -110,8 +108,8 @@ class MyApp extends StatelessWidget {
         },
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite,
-          primarySwatch: Prefs.designMode ? AmpColors.primaryWhite : AmpColors.primaryBlack,
+          canvasColor: AmpColors.materialColorBackground,
+          primarySwatch: AmpColors.materialColorForeground,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage(
@@ -181,139 +179,150 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     }
   }
 
-  Future rebuildDragDown() async {
+  Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
     await dsbUpdateWidget(rebuild, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
   }
 
-  Future rebuildNewBuild() async {
+  Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
     await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
     setState(() => circularProgressIndicatorActive = false);
   }
 
   void showInputSelectCurrentClass(BuildContext context) {
-    showDialog(
+    _showDialog(
+      title: CustomValues.lang.settingsSelectClass,
+      inputChildren: (alertContext, setAlState) => [
+        DropdownButton(
+          underline: Container(
+            height: 2,
+            color: Colors.white,
+          ),
+          style: TextStyle(color: AmpColors.colorForeground),
+          value: gradeDropDownValue,
+          items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setAlState(() {
+              gradeDropDownValue = value;
+              if(gradeDropDownValue == CustomValues.lang.classSelectorEmpty)
+                Prefs.grade = '';
+              else Prefs.grade = value;
+            });
+          },
+        ),
+        Padding(padding: EdgeInsets.all(10)),
+        DropdownButton(
+          underline: Container(
+            height: 2,
+            color: Colors.white,
+          ),
+          style: TextStyle(color: AmpColors.colorForeground),
+          value: letterDropDownValue,
+          items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setAlState(() {
+              letterDropDownValue = value;
+              if(letterDropDownValue == CustomValues.lang.classSelectorEmpty)
+                Prefs.char = '';
+              else Prefs.char = value;
+            });
+          },
+        ),
+      ],
+      actions: (context) => [
+        _dialogButton(
+          text: CustomValues.lang.settingsChangeLoginPopupCancel,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        _dialogButton(
+          text: CustomValues.lang.settingsChangeLoginPopupSave,
+          onPressed: () {
+            rebuildNewBuild();
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+
+  Future<Null> _showDialog({@required String title,
+                            @required List<Widget> Function(BuildContext, StateSetter) inputChildren,
+                            @required List<Widget> Function(BuildContext) actions}) {
+    return showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground)),
+          title: Text(title, style: TextStyle(color: AmpColors.colorForeground)),
           backgroundColor: AmpColors.colorBackground,
-          content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
-            return Theme(child: Row(mainAxisSize: MainAxisSize.min, children: [
-              DropdownButton(
-                underline: Container(
-                  height: 2,
-                  color: Colors.white,
-                ),
-                style: TextStyle(color: AmpColors.colorForeground),
-                value: gradeDropDownValue,
-                items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setAlState(() {
-                    gradeDropDownValue = value;
-                    if(gradeDropDownValue == CustomValues.lang.classSelectorEmpty)
-                      Prefs.grade = '';
-                    else Prefs.grade = value;
-                  });
-                },
+          content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) =>
+            Theme(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: inputChildren(alertContext, setAlState),
               ),
-              Padding(padding: EdgeInsets.all(10)),
-              DropdownButton(
-                underline: Container(
-                  height: 2,
-                  color: Colors.white,
-                ),
-                style: TextStyle(color: AmpColors.colorForeground),
-                value: letterDropDownValue,
-                items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setAlState(() {
-                    letterDropDownValue = value;
-                    if(letterDropDownValue == CustomValues.lang.classSelectorEmpty)
-                      Prefs.char = '';
-                    else Prefs.char = value;
-                  });
-                },
-              ),
-            ]), data: ThemeData(canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite));
-          }),
-          actions: <Widget>[
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () => {Navigator.of(context).pop()},
-              child: Text(CustomValues.lang.settingsChangeLoginPopupCancel),
+              data: ThemeData(canvasColor: AmpColors.materialColorBackground),
             ),
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () {
-                rebuildNewBuild();
-                Navigator.of(context).pop();
-              },
-              child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
-            ),
-          ],
+          ),
+          actions: actions(context),
         );
       },
     );
   }
 
+  Widget _dialogButton({String text, Function onPressed}) {
+    return FlatButton(
+      textColor: AmpColors.colorForeground,
+      onPressed: onPressed,
+      child: Text(text),
+    );
+  }
+
   void showInputChangeLanguage(BuildContext context) {
     Language lang = CustomValues.lang;
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(CustomValues.lang.settingsChangeLanguage, style: TextStyle(color: AmpColors.colorForeground)),
-          backgroundColor: AmpColors.colorBackground,
-          content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) {
-            return Theme(child: Row(mainAxisSize: MainAxisSize.min, children: [
-              DropdownButton(
-                underline: Container(
-                  height: 2,
-                  color: Colors.white,
-                ),
-                style: TextStyle(color: AmpColors.colorForeground),
-                value: lang,
-                items: Language.all.map<DropdownMenuItem<Language>>((value) {
-                  return DropdownMenuItem<Language>(value: value, child: Text(value.name));
-                }).toList(),
-                onChanged: (value) => setAlState(() {
-                  lang = value;
-                }),
-              ),
-            ]), data: ThemeData(canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite));
-          }),
-          actions: <Widget>[
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(CustomValues.lang.settingsChangeLoginPopupCancel),
+    _showDialog(
+      title: CustomValues.lang.settingsChangeLanguage,
+      inputChildren: (alertContext, setAlState) => [
+          DropdownButton(
+            underline: Container(
+              height: 2,
+              color: Colors.white,
             ),
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () {
-                CustomValues.lang = lang;
-                rebuildNewBuild();
-                Navigator.of(context).pop();
-              },
-              child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
-            ),
-          ],
-        );
-      },
+            style: TextStyle(color: AmpColors.colorForeground),
+            value: lang,
+            items: Language.all.map<DropdownMenuItem<Language>>((value) {
+              return DropdownMenuItem<Language>(value: value, child: Text(value.name));
+            }).toList(),
+            onChanged: (value) => setAlState(() {
+              lang = value;
+            }),
+          ),
+        ],
+      actions: (context) => [
+        _dialogButton(
+          text: CustomValues.lang.settingsChangeLoginPopupCancel,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        _dialogButton(
+          text: CustomValues.lang.settingsChangeLoginPopupSave,
+          onPressed: () {
+            CustomValues.lang = lang;
+            rebuildNewBuild();
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 
@@ -392,9 +401,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             FlatButton(
               textColor: AmpColors.colorForeground,
               onPressed: () {
-                bool condA = passwordInputFormKey.currentState.validate();
-                bool condB = usernameInputFormKey.currentState.validate();
-                if(!condA || !condB) return;
+                if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
                 Prefs.username = usernameInputFormController.text.trim();
                 Prefs.password = passwordInputFormController.text.trim();
                 rebuildDragDown();
@@ -420,6 +427,21 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       }), alignment: Alignment.center),
     ],) : widget = Container(height: 0);
     return widget;
+  }
+
+  Widget _settingsWidget({@required Function onTap, @required Widget child}) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0))),
+      color: Colors.transparent,
+      child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0))),
+        onTap: onTap,
+        child: child,
+      ),
+    );
   }
 
   @override
@@ -457,9 +479,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
         margin: EdgeInsets.all(16),
       ),
-      Container(
-        color: Colors.transparent,
-      ),
+      Container(color: Colors.transparent),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
         color: Colors.transparent,
@@ -496,138 +516,79 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
                 ),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () async {
-                    if(CustomValues.isAprilFools) return;
-                    ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                    if(Prefs.currentThemeId >= 1) Prefs.currentThemeId = 0; 
-                    else Prefs.currentThemeId++;
-                    print(Prefs.currentThemeId);
-                    await rebuildNewBuild();
-                    settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
-                      backgroundColor: AmpColors.colorBackground,
-                      content: Text('Aussehen des Vertretungsplans geändert!', style: widget.textStyle,),
-                      action: SnackBarAction(
-                        textColor: AmpColors.colorForeground,
-                        label: 'Anzeigen', 
-                        onPressed: () {
-                          tabController.animateTo(0);
-                        }
-                      ),
-                    ));
-                  },
-                  child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
-                ),
+              _settingsWidget(
+                onTap: () async {
+                  if(CustomValues.isAprilFools) return;
+                  ampInfo(ctx: 'MyApp', message: 'switching design mode');
+                  if(Prefs.currentThemeId >= 1) Prefs.currentThemeId = 0; 
+                  else Prefs.currentThemeId++;
+                  print(Prefs.currentThemeId);
+                  await rebuildNewBuild();
+                  settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
+                    backgroundColor: AmpColors.colorBackground,
+                    content: Text('Aussehen des Vertretungsplans geändert!', style: widget.textStyle),
+                    action: SnackBarAction(
+                      textColor: AmpColors.colorForeground,
+                      label: 'Anzeigen', 
+                      onPressed: () => tabController.animateTo(0),
+                    ),
+                  ));
+                },
+                child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
-                    Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                    if(Prefs.useSystemTheme) {
-                      var brightness = SchedulerBinding.instance.window.platformBrightness;
-                      bool darkModeEnabled = brightness == Brightness.dark;
-                      if(darkModeEnabled != Prefs.designMode) {
-                        AmpColors.changeMode();
-                        setState(() {
-                          fabBackgroundColor = Colors.transparent;
-                          rebuildNewBuild();
-                        });
-                        Future.delayed(Duration(milliseconds: 150), () {
-                          setState(() => fabBackgroundColor = AmpColors.colorBackground);
-                        });
-                      }
+              _settingsWidget(
+                onTap: () {
+                  Prefs.useSystemTheme = !Prefs.useSystemTheme;
+                  if(Prefs.useSystemTheme) {
+                    var brightness = SchedulerBinding.instance.window.platformBrightness;
+                    bool darkModeEnabled = brightness == Brightness.dark;
+                    if(darkModeEnabled != Prefs.designMode) {
+                      AmpColors.changeMode();
+                      setState(() {
+                        fabBackgroundColor = Colors.transparent;
+                        rebuildNewBuild();
+                      });
+                      Future.delayed(Duration(milliseconds: 150), () {
+                        setState(() => fabBackgroundColor = AmpColors.colorBackground);
+                      });
                     }
-                    rebuild();
-                  },
-                  child: Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
-                ),
+                  }
+                  rebuild();
+                },
+                child: Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () => showInputChangeLanguage(context),
-                  child: Widgets.setLanguageWidget(textStyle)
-                ),
+              _settingsWidget(
+                onTap: () => showInputChangeLanguage(context),
+                child: Widgets.setLanguageWidget(textStyle),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
-                    showInputEntryCredentials(context);
-                  },
-                  child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
-                ),
+              _settingsWidget(
+                onTap: () => showInputEntryCredentials(context),
+                child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () => showInputSelectCurrentClass(context),
-                  child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
-                ),
+              _settingsWidget(
+                onTap: () => showInputSelectCurrentClass(context),
+                child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
-                    showAboutDialog(
-                      context: context,
-                      applicationName: AmpStrings.appTitle,
-                      applicationVersion: AmpStrings.version,
-                      applicationIcon: Image.asset('assets/images/logo.png', height: 40,),
-                      children: [
-                        Text(CustomValues.lang.appInfo)
-                      ]
-                    );
-                  },
-                  child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
-                ),
+              _settingsWidget(
+                onTap: () {
+                  showAboutDialog(
+                    context: context,
+                    applicationName: AmpStrings.appTitle,
+                    applicationVersion: AmpStrings.version,
+                    applicationIcon: Image.asset('assets/images/logo.png', height: 40),
+                    children: [
+                      Text(CustomValues.lang.appInfo)
+                    ]
+                  );
+                },
+                child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
               ),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
-                  onTap: () {
-                    if(Prefs.devOptionsEnabled) Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
-                  },
-                  child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(textStyle) : Container(),
-                ),
+              _settingsWidget(
+                onTap: () {
+                  if(Prefs.devOptionsEnabled)
+                    Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
+                },
+                child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(textStyle) : Container(),
               ),
             ],
           ),

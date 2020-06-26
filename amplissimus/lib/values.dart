@@ -31,15 +31,22 @@ class AmpColors {
     return MaterialColor(code, {50: c, 100: c, 200: c, 300: c, 400: c, 500: c, 600: c, 700: c, 800: c, 900: c});
   }
 
-  static MaterialColor primaryBlack = _color(0xFF000000);
-  static MaterialColor primaryWhite = _color(0xFFFFFFFF);
+  static MaterialColor _primaryBlack = _color(0xFF000000);
+  static MaterialColor _primaryWhite = _color(0xFFFFFFFF);
+  static MaterialColor get materialColorForeground => isDarkMode ? _primaryWhite : _primaryBlack;
+  static MaterialColor get materialColorBackground => isDarkMode ? _primaryBlack : _primaryWhite;
 
-  static final Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
-  static final Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
-  static Color get blankGrey => isDarkMode ? Color.fromRGBO(75, 75, 75, 1) : Color.fromRGBO(200, 200, 200, 1);
-  static Color get lightForeground => isDarkMode ? Color.fromRGBO(25, 25, 25, 1) : Color.fromRGBO(220, 220, 220, 1);
-  static Color get colorBackground => isDarkMode ? blankBlack : blankWhite;
-  static Color get colorForeground => isDarkMode ? blankWhite : blankBlack;
+  static final Color _blankBlack = Color.fromRGBO(0, 0, 0, 1);
+  static final Color _blankWhite = Color.fromRGBO(255, 255, 255, 1);
+  static final Color _greyBlack = Color.fromRGBO(75, 75, 75, 1);
+  static final Color _lightWhite = Color.fromRGBO(25, 25, 25, 1);
+  static final Color _greyWhite = Color.fromRGBO(200, 200, 200, 1);
+  static final Color _lightBlack = Color.fromRGBO(220, 220, 220, 1);
+
+  static Color get blankGrey => isDarkMode ? _greyBlack : _greyWhite;
+  static Color get lightForeground => isDarkMode ? _lightWhite : _lightBlack;
+  static Color get colorBackground => isDarkMode ? _blankBlack : _blankWhite;
+  static Color get colorForeground => isDarkMode ? _blankWhite : _blankBlack;
   static bool isDarkMode = true;
   static void changeMode() => setMode(!isDarkMode);
   static void setMode(bool _isDarkMode) {

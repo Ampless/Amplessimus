@@ -26,8 +26,8 @@ class DevOptionsScreen extends StatelessWidget {
         },
         title: AmpStrings.appTitle,
         theme: ThemeData(
-          canvasColor: Prefs.designMode ? AmpColors.primaryBlack : AmpColors.primaryWhite,
-          primarySwatch: AmpColors.primaryBlack,
+          canvasColor: AmpColors.materialColorBackground,
+          primarySwatch: AmpColors.materialColorBackground,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
@@ -153,8 +153,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 ),
                 RaisedButton.icon(
                   color: Colors.red,
-                  icon: Icon(Icons.delete, color: AmpColors.blankWhite,),
-                  label: Text('App-Daten löschen', style: TextStyle(color: AmpColors.blankWhite),),
+                  icon: Icon(Icons.delete, color: AmpColors.colorForeground),
+                  label: Text('App-Daten löschen', style: TextStyle(color: AmpColors.colorForeground)),
                   onPressed: () {
                     showDialog(context: context, barrierDismissible: true, builder: (context) {
                       return AlertDialog(
