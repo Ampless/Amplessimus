@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/language.dart';
 
@@ -105,4 +107,27 @@ class German extends Language {
 
   @override
   String get timetable => 'Stundenplan';
+
+  @override
+  final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
+    'spo': 'Sport',
+    'e': 'Englisch',
+    'd': 'Deutsch',
+    'i': 'Informatik',
+    'g': 'Geschichte',
+    'geo': 'Geografie',
+    'l': 'Latein',
+    'it': 'Italienisch',
+    'f': 'Französisch',
+    'so': 'Sozialkunde',
+    'sk': 'Sozialkunde',
+    'm': 'Mathematik',
+    'mu': 'Musik',
+    'b': 'Biologie',
+    'c': 'Chemie',
+    'k': 'Kunst',
+    'p': 'Physik',
+    'w': 'Wirtschaft/Recht',
+    'spr': 'Sprechstunde',
+  });
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
@@ -67,40 +68,21 @@ class DsbSubstitution {
 
   String toString() => "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
-  static const Map<String, String> SUBJECT_LOOKUP_TABLE = {
-    'spo': 'Sport',
-    'e': 'Englisch',
-    'd': 'Deutsch',
-    'in': 'Informatik',
-    'geo': 'Geografie',
-    'ges': 'Geschichte',
-    'l': 'Latein',
-    'it': 'Italienisch',
-    'f': 'Französisch',
-    'so': 'Sozialkunde',
-    'sk': 'Sozialkunde',
-    'mu': 'Musik',
-    'ma': 'Mathematik',
-    'b': 'Biologie',
-    'c': 'Chemie',
-    'k': 'Kunst',
-    'p': 'Physik',
-    'w': 'Wirtschaft/Recht',
-    'spr': 'Sprechstunde',
-  };
-
-  static bool _isNum(int codeUnit) => codeUnit >= zero && codeUnit <= nine;
+  static bool _isNum(String s, int i) {
+    int codeUnit = s.codeUnitAt(i);
+    return codeUnit >= zero && codeUnit <= nine;
+  }
 
   static final Pattern _letters = RegExp(r'[a-zA-Z]');
   static final Pattern _numeric = RegExp(r'[0-9]');
 
   static String realSubject(String subject) {
-    if(_isNum(subject.codeUnitAt(0)) && _isNum(subject.codeUnitAt(subject.length - 1)))
+    if(_isNum(subject, 0) || _isNum(subject, subject.length - 1))
       return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1))} '
              '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';
     String sub = subject.toLowerCase();
     String s = subject;
-    SUBJECT_LOOKUP_TABLE.forEach((key, value) { if(sub.startsWith(key)) s = value; });
+    CustomValues.lang.subjectLut.forEach((key, value) { if(sub.startsWith(key)) s = value; });
     return s;
   }
 

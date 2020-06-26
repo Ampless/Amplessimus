@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/language.dart';
 
@@ -112,4 +114,27 @@ class English extends Language {
 
   @override
   String get timetable => 'Timetable';
+
+  @override
+  final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
+    'spo': 'Physical Education (sports)',
+    'e': 'English',
+    'd': 'German',
+    'i': 'Computer Science',
+    'g': 'History',
+    'geo': 'Geography',
+    'l': 'Latin',
+    'it': 'Italian',
+    'f': 'French',
+    'so': 'Social Studies (politics)',
+    'sk': 'Social Studies (politics)',
+    'm': 'Maths',
+    'mu': 'Music',
+    'b': 'Biology',
+    'c': 'Chemistry',
+    'k': 'Art',
+    'p': 'Physics',
+    'w': 'Economy/Law',
+    'spr': 'Consultation Hour',
+  });
 }

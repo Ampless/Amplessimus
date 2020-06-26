@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/english.dart';
 import 'package:Amplissimus/langs/german.dart';
@@ -38,6 +40,7 @@ abstract class Language {
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);
+  LinkedHashMap<String, String> get subjectLut;
 
   static final List<Language> _langs = [English(), German()];
   static List<Language> get all => _langs;
