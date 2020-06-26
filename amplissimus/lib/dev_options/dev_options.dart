@@ -1,5 +1,4 @@
 import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
@@ -28,12 +27,12 @@ class DevOptionsScreen extends StatelessWidget {
           primarySwatch: AmpColors.materialColorForeground,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground),),
+        home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground)),
       ), 
       onWillPop: () async {
         await dsbUpdateWidget((){});
         DevOptionsValues.tabController.animateTo(0);
-        return new Future(() => false);
+        return false;
       }
     );
   }
@@ -43,7 +42,7 @@ class DevOptionsScreenPage extends StatefulWidget {
   final String title;
   final TextStyle textStyle;
   @override
-  State<StatefulWidget> createState() {return DevOptionsScreenPageState();}
+  State<StatefulWidget> createState() => DevOptionsScreenPageState();
 }
 class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleTickerProviderStateMixin {
 
@@ -61,7 +60,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
         backgroundColor: AmpColors.colorBackground,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Entwickleroptionen', style: TextStyle(fontSize: 20, color: AmpColors.colorForeground),),
+          title: Text('Entwickleroptionen', style: TextStyle(fontSize: 20, color: AmpColors.colorForeground)),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -71,9 +70,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           child: Center(
             child: ListView(
               children: <Widget>[
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()+2,),
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble() + 2),
                 ListTile(
-                  title: Text('Entwickleroptionen aktiviert', style: widget.textStyle,),
+                  title: Text('Entwickleroptionen aktiviert', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.devOptionsEnabled, 
@@ -82,7 +81,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 ),
                 Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
                 ListTile(
-                  title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle,),
+                  title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.counterEnabled, 
@@ -90,7 +89,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   ),
                 ),
                 ListTile(
-                  title: Text('App schließt bei zurück-Taste', style: widget.textStyle,),
+                  title: Text('App schließt bei zurück-Taste', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.closeAppOnBackPress, 
@@ -98,7 +97,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   ),
                 ),
                 ListTile(
-                  title: Text('Dauerhafter Ladebalken', style: widget.textStyle,),
+                  title: Text('Dauerhafter Ladebalken', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.loadingBarEnabled, 
@@ -106,7 +105,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                   ),
                 ),
                 ListTile(
-                  title: Text('JSON Cache benutzen', style: widget.textStyle,),
+                  title: Text('JSON Cache benutzen', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
                     value: Prefs.useJsonCache, 
@@ -116,13 +115,13 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                     },
                   ),
                 ),
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()),
                 ListTile(
-                  title: Text('Listenelementabstand', style: widget.textStyle,),
-                  trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle,),
+                  title: Text('Listenelementabstand', style: widget.textStyle),
+                  trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle),
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()),
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
                   child: Text('Print Cache'),
@@ -130,9 +129,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                 ),
                 RaisedButton(
                   child: Text('Cache leeren'),
-                  onPressed: () {
-                    Prefs.clearCache();
-                  }
+                  onPressed: () => Prefs.clearCache(),
                 ),
                 RaisedButton(
                   child: Text('JSON importieren'),
@@ -162,10 +159,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                         actions: <Widget>[
                           FlatButton(
                             textColor: AmpColors.colorForeground,
-                            onPressed: () { 
-                              Navigator.of(context).pop();
-                            }, 
-                            child: Text('Abbrechen')
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text('Abbrechen'),
                           ),
                           FlatButton(
                             textColor: AmpColors.colorForeground,
@@ -178,8 +173,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                         ],
                       );
                     });
-                  }
-                )
+                  },
+                ),
               ],
             ),
           ),
@@ -226,8 +221,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
               labelText: 'Listenelementabstand',
               fillColor: AmpColors.colorForeground,
               border: OutlineInputBorder(
+                borderSide: BorderSide(color: AmpColors.colorForeground),
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: AmpColors.colorForeground)
               )
             ),
           ),
