@@ -26,92 +26,38 @@ class AmpStrings {
 }
 
 class AmpColors {
-  static MaterialColor primaryBlack = MaterialColor(
-    blackPrimaryValue,
-    <int, Color>{
-      50: Color(0xFF000000),
-      100: Color(0xFF000000),
-      200: Color(0xFF000000),
-      300: Color(0xFF000000),
-      400: Color(0xFF000000),
-      500: Color(blackPrimaryValue),
-      600: Color(0xFF000000),
-      700: Color(0xFF000000),
-      800: Color(0xFF000000),
-      900: Color(0xFF000000),
-    },
-  );
-  static int blackPrimaryValue = 0xFF000000;
-
-  static MaterialColor primaryWhite = MaterialColor(
-    whitePrimaryValue,
-    <int, Color>{
-      50: Color(0xFFFFFFFF),
-      100: Color(0xFFFFFFFF),
-      200: Color(0xFFFFFFFF),
-      300: Color(0xFFFFFFFF),
-      400: Color(0xFFFFFFFF),
-      500: Color(whitePrimaryValue),
-      600: Color(0xFFFFFFFF),
-      700: Color(0xFFFFFFFF),
-      800: Color(0xFFFFFFFF),
-      900: Color(0xFFFFFFFF),
-    },
-  );
-  static int whitePrimaryValue = 0xFFFFFFFF;
-
-  //static MaterialColor materialColor = primaryWhite;
-  static Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
-  static Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
-  static Color blankGrey = Color.fromRGBO(75, 75, 75, 1);
-  static Color lightForeground = Color.fromRGBO(25, 25, 25, 1);
-  static Color colorBackground = blankBlack;
-  static Color colorForeground = blankWhite;
-  static bool isDarkMode = true;
-  static void changeMode() {
-    setMode(!isDarkMode);
-    ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
+  static MaterialColor _color(int code) {
+    Color c = Color(code);
+    return MaterialColor(code, {50: c, 100: c, 200: c, 300: c, 400: c, 500: c, 600: c, 700: c, 800: c, 900: c});
   }
+
+  static MaterialColor primaryBlack = _color(0xFF000000);
+  static MaterialColor primaryWhite = _color(0xFFFFFFFF);
+
+  static final Color blankBlack = Color.fromRGBO(0, 0, 0, 1);
+  static final Color blankWhite = Color.fromRGBO(255, 255, 255, 1);
+  static Color get blankGrey => isDarkMode ? Color.fromRGBO(75, 75, 75, 1) : Color.fromRGBO(200, 200, 200, 1);
+  static Color get lightForeground => isDarkMode ? Color.fromRGBO(25, 25, 25, 1) : Color.fromRGBO(220, 220, 220, 1);
+  static Color get colorBackground => isDarkMode ? blankBlack : blankWhite;
+  static Color get colorForeground => isDarkMode ? blankWhite : blankBlack;
+  static bool isDarkMode = true;
+  static void changeMode() => setMode(!isDarkMode);
   static void setMode(bool _isDarkMode) {
     if(_isDarkMode == null) return;
     isDarkMode = _isDarkMode;
     Prefs.designMode = isDarkMode;
-    if(isDarkMode) {
-      blankGrey = Color.fromRGBO(75, 75, 75, 1);
-      lightForeground = Color.fromRGBO(25, 25, 25, 1);
-      colorForeground = blankWhite;
-      colorBackground = blankBlack;
-    } else {
-      blankGrey = Color.fromRGBO(200, 200, 200, 1);
-      lightForeground = Color.fromRGBO(220, 220, 220, 1);
-      colorForeground = blankBlack;
-      colorBackground = blankWhite;
-    }
+    ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
+  }
+
+  static TweenSequenceItem _rainbowSequenceElement(MaterialColor begin, MaterialColor end) {
+    return TweenSequenceItem(weight: 1.0, tween: ColorTween(begin: begin, end: end));
   }
 
   static final Animatable<Color> rainbowBackgroundAnimation = TweenSequence<Color>(
     [
-      TweenSequenceItem(
-        weight: 1.0,
-        tween: ColorTween(
-          begin: Colors.red,
-          end: Colors.green,
-        ),
-      ),
-      TweenSequenceItem(
-        weight: 1.0,
-        tween: ColorTween(
-          begin: Colors.green,
-          end: Colors.blue,
-        ),
-      ),
-      TweenSequenceItem(
-        weight: 1.0,
-        tween: ColorTween(
-          begin: Colors.blue,
-          end: Colors.pink,
-        ),
-      ),
+      _rainbowSequenceElement(Colors.red, Colors.green),
+      _rainbowSequenceElement(Colors.green, Colors.blue),
+      _rainbowSequenceElement(Colors.blue, Colors.pink),
     ],
   );
   

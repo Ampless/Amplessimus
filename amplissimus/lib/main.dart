@@ -50,8 +50,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-      if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode)
-        AmpColors.changeMode();
+      if(Prefs.useSystemTheme)
+        AmpColors.setMode(SchedulerBinding.instance.window.platformBrightness != Brightness.light);
 
       if(Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
@@ -175,18 +175,18 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void rebuild() {
     try {
       setState(() {});
-      print('rebuilded!');
+      print('rebuilt!');
     } catch (e) {
-      ampInfo(ctx: 'rebuild', message: errorString(e));
+      ampInfo(ctx: '_MyHomePageState][rebuild', message: errorString(e));
     }
   }
 
-  Future<void> rebuildDragDown() async {
+  Future rebuildDragDown() async {
     refreshKey.currentState?.show();
     await dsbUpdateWidget(rebuild, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
   }
 
-  Future<void> rebuildNewBuild() async {
+  Future rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
     await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
     setState(() => circularProgressIndicatorActive = false);
