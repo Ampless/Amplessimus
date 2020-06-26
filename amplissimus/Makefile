@@ -25,7 +25,15 @@ STRIP = strip -u -r
 BITCODE_STRIP = xcrun bitcode_strip
 TRU = || true
 
-OUTPUT_DIR  = bin
+OUTPUT_DIR = bin
+OUTPUT_APK = $(OUTPUT_DIR)/$(VERSION).apk
+OUTPUT_DEB = $(OUTPUT_DIR)/$(VERSION).deb
+OUTPUT_DMG = $(OUTPUT_DIR)/$(VERSION).dmg
+OUTPUT_IPA = $(OUTPUT_DIR)/$(VERSION).ipa
+OUTPUT_GTK = $(OUTPUT_DIR)/$(VERSION).linux
+OUTPUT_WEB = $(OUTPUT_DIR)/$(VERSION).web
+OUTPUT_WIN = $(OUTPUT_DIR)/$(VERSION).win
+
 TMP         = tmp
 TMP_SYMBOLS = $(TMP)/debug_symbols
     IPA_DIR = Payload
@@ -34,7 +42,7 @@ TMP_DEB_DIR = $(TMP)/deb
 TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
-ci: mkdirs replaceversions iosapp ipa deb apk cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
@@ -62,32 +70,32 @@ iosapp:
 ipa:
 	cp -rp $(IOS_BUILD_DIR) $(TMP_IPA_DIR)
 	rm -rf $(OUTPUT_DIR)/$(VERSION).ipa
-	cd $(TMP) && zip -r -9 ../$(OUTPUT_DIR)/$(VERSION).ipa $(IPA_DIR)
+	cd $(TMP) && zip -r -9 ../$(OUTPUT_IPA) $(IPA_DIR)
 
 # This is for Cydia: http://www.saurik.com/id/7
 deb:
 	cp -rp $(IOS_BUILD_DIR) $(TMP_DEB_DIR)/Applications/
-	grep -v "^#" control.def | \
-	  sed "s/0.0.0-1/$(VERSION)/" | \
-	  sed "s/\$$SIZE/`du -sk $(IOS_BUILD_DIR) | awk '{ print $$1 }'`/" | \
-	  sed "s/\$$ARCH/iphoneos-arm/" > $(TMP_DEB_DIR)/DEBIAN/control
-	COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= dpkg-deb -Sextreme -z9 --build $(TMP_DEB_DIR) $(OUTPUT_DIR)/$(VERSION).deb
+	VERSION=$(VERSION) BUILD_DIR=$(IOS_BUILD_DIR) INPUT=control.def OUTPUT=$(TMP_DEB_DIR)/DEBIAN/control sh sedit.sh
+	COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= dpkg-deb -Sextreme -z9 --build $(TMP_DEB_DIR) $(OUTPUT_DEB)
+cydiainfo:
+	VERSION=$(VERSION) BUILD_DIR=$(IOS_BUILD_DIR) DEB=$(OUTPUT_DEB) INPUT=Packages.def OUTPUT=$(OUTPUT_DIR)/Packages sh sedit.sh
+	gzip -9 -c $(OUTPUT_DIR)/Packages > $(OUTPUT_DIR)/Packages.gz
 
 apk:
 	flutter build apk $(APK_FLAGS)
-	mv build/app/outputs/apk/release/app-release.apk $(OUTPUT_DIR)/$(VERSION).apk
+	mv build/app/outputs/apk/release/app-release.apk $(OUTPUT_APK)
 
 webbuild:
 	flutter build web $(WEB_FLAGS)
-	mv build/web $(OUTPUT_DIR)/$(VERSION).web
+	mv build/web $(OUTPUT_WEB)
 
 winx64:
 	flutter build windows $(WIN_FLAGS)
-	mv build/windows/x64/Release/Runner $(OUTPUT_DIR)/$(VERSION).win
+	mv build/windows/x64/Release/Runner $(OUTPUT_WIN)
 
 linux64:
 	flutter build linux $(GTK_FLAGS)
-	mv build/linux/release/bundle $(OUTPUT_DIR)/$(VERSION).linux
+	mv build/linux/release/bundle $(OUTPUT_GTK)
 
 macapp:
 	flutter build macos $(MAC_FLAGS) || flutter build macos $(MAC_FLAGS)
@@ -97,7 +105,7 @@ macdmg:
 	cp -rf $(MAC_BUILD_DIR) $(TMP_DMG_DIR)
 	ln -s /Applications $(MAC_BUILD_DIR)/Applications
 	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname "Install Amplissimus"
-	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o $(OUTPUT_DIR)/$(VERSION).dmg
+	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o $(OUTPUT_DMG)
 
 mkdirs:
 	mkdir -p $(TMP_SYMBOLS) $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
