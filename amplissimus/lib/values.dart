@@ -47,6 +47,10 @@ class AmpColors {
   static Color get lightForeground => isDarkMode ? _lightWhite : _lightBlack;
   static Color get colorBackground => isDarkMode ? _blankBlack : _blankWhite;
   static Color get colorForeground => isDarkMode ? _blankWhite : _blankBlack;
+
+  static TextStyle get textStyleForeground => TextStyle(color: colorForeground);
+  static TextStyle get textStyleBackground => TextStyle(color: colorBackground);
+
   static bool isDarkMode = true;
   static void changeMode() => setMode(!isDarkMode);
   static void setMode(bool _isDarkMode) {

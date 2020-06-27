@@ -115,9 +115,6 @@ class MyApp extends StatelessWidget {
         ),
         home: MyHomePage(
           title: AmpStrings.appTitle,
-          textStyle: TextStyle(
-            color: AmpColors.colorForeground,
-          ), 
           initialIndex: initialIndex,
         ),
       ), 
@@ -129,10 +126,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.textStyle, @required this.initialIndex}) : super(key: key);
+  MyHomePage({Key key, this.title, @required this.initialIndex}) : super(key: key);
   final int initialIndex;
   final String title;
-  final TextStyle textStyle;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -381,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            title: Text('${AmpStrings.appTitle} ${Prefs.counterEnabled ? Prefs.counter : ''}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)),
+            title: Text('${AmpStrings.appTitle}${Prefs.counterEnabled ? ' ' + Prefs.counter.toString() : ''}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)),
             centerTitle: true,
           ),
           backgroundColor: Colors.transparent,
@@ -390,12 +386,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             child: !circularProgressIndicatorActive ? ListView(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              children: <Widget>[
-                dsbWidget,
-                Divider(),
-                changeSubVisibilityWidget,
-                Padding(padding: EdgeInsets.all(30)),
-              ],
+              children: [dsbWidget, Divider(), changeSubVisibilityWidget, Padding(padding: EdgeInsets.all(30))],
             ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)
           ), onRefresh: rebuildDragDown),
         ),
@@ -404,7 +395,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       Container(
         color: Colors.transparent,
         child: Center(
-          child: Text('in Entwicklung', style: widget.textStyle),
+          child: Text('in Entwicklung\r\nin development', style: AmpColors.textStyleForeground),
         ),
       ),
       AnimatedContainer(
@@ -453,7 +444,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   await rebuildNewBuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
-                    content: Text('Aussehen des Vertretungsplans geändert!', style: widget.textStyle),
+                    content: Text('Aussehen des Vertretungsplans geändert!', style: AmpColors.textStyleForeground),
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
                       label: 'Anzeigen', 
@@ -497,17 +488,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
-                onTap: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationName: AmpStrings.appTitle,
-                    applicationVersion: AmpStrings.version,
-                    applicationIcon: Image.asset('assets/images/logo.png', height: 40),
-                    children: [
-                      Text(CustomValues.lang.appInfo)
-                    ]
-                  );
-                },
+                onTap: () => showAboutDialog(
+                  context: context,
+                  applicationName: AmpStrings.appTitle,
+                  applicationVersion: AmpStrings.version,
+                  applicationIcon: Image.asset('assets/images/logo.png', height: 40),
+                  children: [Text(CustomValues.lang.appInfo)]
+                ),
                 child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
@@ -515,7 +502,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   if(Prefs.devOptionsEnabled)
                     Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
                 },
-                child: Prefs.devOptionsEnabled ? Widgets.developerOptionsWidget(textStyle) : Container(),
+                child: Widgets.developerOptionsWidget(textStyle),
               ),
             ],
           ),
@@ -569,7 +556,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
             backgroundColor: AmpColors.blankGrey,
             valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
-          ) : Container(height: 0,),
+          ) : Container(height: 0),
         )
       ],)
     );

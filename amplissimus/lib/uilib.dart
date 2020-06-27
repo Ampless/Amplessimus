@@ -79,7 +79,7 @@ Widget ampFormField({@required TextEditingController controller,
   );
 }
 
-Widget ampDialogButton({String text, Function onPressed}) {
+Widget ampDialogButton({@required String text, @required Function onPressed}) {
   return FlatButton(
     textColor: AmpColors.colorForeground,
     onPressed: onPressed,

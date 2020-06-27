@@ -120,11 +120,11 @@ class Widgets {
   }
 
   static String textFieldValidator(String value) {
-    if (value.trim().isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
-    return null;
+    return value.trim().isEmpty ? CustomValues.lang.widgetValidatorFieldEmpty : null;
   }
 
   static Widget developerOptionsWidget(TextStyle textStyle) {
+    if(!Prefs.devOptionsEnabled) return Container();
     return Center(
       child: Column(
         children: <Widget>[

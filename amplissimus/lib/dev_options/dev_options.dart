@@ -156,21 +156,19 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
                     showDialog(context: context, barrierDismissible: true, builder: (context) {
                       return AlertDialog(
                         title: Text('App-Daten löschen', style: widget.textStyle),
-                        content: Text('Löschen der App-Daten bestätigen?', style: TextStyle(color: AmpColors.colorForeground),),
+                        content: Text('Löschen der App-Daten bestätigen?', style: AmpColors.textStyleForeground),
                         backgroundColor: AmpColors.colorBackground,
                         actions: <Widget>[
-                          FlatButton(
-                            textColor: AmpColors.colorForeground,
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text('Abbrechen'),
+                          ampDialogButton(
+                            text: 'Abbrechen',
+                            onPressed: Navigator.of(context).pop,
                           ),
-                          FlatButton(
-                            textColor: AmpColors.colorForeground,
+                          ampDialogButton(
+                            text: 'Bestätigen',
                             onPressed: () {
                               Prefs.clear();
                               SystemNavigator.pop();
-                            }, 
-                            child: Text('Bestätigen'),
+                            },
                           ),
                         ],
                       );

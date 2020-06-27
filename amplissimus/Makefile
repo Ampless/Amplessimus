@@ -52,70 +52,85 @@ mac: mkdirs replaceversions macapp macdmg cleanartifacts rollbackversions
 linux: mkdirs replaceversions linux64 cleanartifacts rollbackversions
 
 replaceversions:
+	which mv sed
 	mv -f pubspec.yaml pubspec.yaml.def
 	sed "s/0.0.0-1/$(VERSION)/" pubspec.yaml.def > pubspec.yaml
 	mv -f lib/values.dart lib/values.dart.def
 	sed "s/0.0.0-1/$(VERSION)/" lib/values.dart.def > lib/values.dart
 
 rollbackversions:
+	which mv
 	mv -f pubspec.yaml.def pubspec.yaml
 	mv -f lib/values.dart.def lib/values.dart
 
 iosapp:
+	which flutter xcrun mv strip
 	flutter build ios $(IOS_FLAGS)
 	$(BITCODE_STRIP) $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
 	$(STRIP) $(IOS_STRIP_LIST) $(TRU)
 
 ipa:
+	which cp rm cd zip
 	cp -rp $(IOS_BUILD_DIR) $(TMP_IPA_DIR)
 	rm -rf $(OUTPUT_DIR)/$(VERSION).ipa
 	cd $(TMP) && zip -r -9 ../$(OUTPUT_IPA) $(IPA_DIR)
 
 # This is for Cydia: http://www.saurik.com/id/7
 deb:
+	which cp sh du grep sed md5sum echo exit awk ls dpkg-deb
 	cp -rp $(IOS_BUILD_DIR) $(TMP_DEB_DIR)/Applications/
 	VERSION=$(VERSION) BUILD_DIR=$(IOS_BUILD_DIR) INPUT=control.def OUTPUT=$(TMP_DEB_DIR)/DEBIAN/control sh sedit.sh
 	COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= dpkg-deb -Sextreme -z9 --build $(TMP_DEB_DIR) $(OUTPUT_DEB)
 
 cydiainfo:
+	which sh gzip du grep sed md5sum echo exit awk ls
 	VERSION=$(VERSION) BUILD_DIR=$(IOS_BUILD_DIR) DEB=$(OUTPUT_DEB) INPUT=Packages.def OUTPUT=$(OUTPUT_DIR)/Packages sh sedit.sh
 	gzip -9 -c $(OUTPUT_DIR)/Packages > $(OUTPUT_DIR)/Packages.gz
 
 apk:
+	which flutter mv
 	flutter build apk $(APK_FLAGS)
 	mv build/app/outputs/apk/release/app-release.apk $(OUTPUT_APK)
 
 webbuild:
+	which flutter mv
 	flutter build web $(WEB_FLAGS)
 	mv build/web $(OUTPUT_WEB)
 
 winx64:
+	which flutter mv
 	flutter build windows $(WIN_FLAGS)
 	mv build/windows/x64/Release/Runner $(OUTPUT_WIN)
 
 linux64:
+	which flutter mv
 	flutter build linux $(GTK_FLAGS)
 	mv build/linux/release/bundle $(OUTPUT_GTK)
 
 macapp:
+	which flutter strip
 	flutter build macos $(MAC_FLAGS) || flutter build macos $(MAC_FLAGS)
 	$(STRIP) $(MAC_STRIP_LIST) $(TRU)
 
 macdmg:
+	which cp ln hdiutil
 	cp -rf $(MAC_BUILD_DIR) $(TMP_DMG_DIR)
 	ln -s /Applications $(MAC_BUILD_DIR)/Applications
 	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname "Install Amplissimus"
 	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o $(OUTPUT_DMG)
 
 mkdirs:
+	which mkdir
 	mkdir -p $(TMP_SYMBOLS) $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
 
 cleanartifacts:
+	which flutter rm
 	flutter clean
 	rm -rf $(TMP)/*
 
 setup:
+	which sudo apt
 	sudo apt install -y cmake ninja-build
 
 .PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts
