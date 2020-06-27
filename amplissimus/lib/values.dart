@@ -5,11 +5,7 @@ import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 
 class CustomValues {
-  static bool isAprilFools = false;
-  static void checkForAprilFools() {
-    var now = DateTime.now();
-    isAprilFools = now.day == 1 && now.month == 4;
-  }
+  static bool get isAprilFools => DateTime.now().day == 1 && DateTime.now().month == 4;
   static Language _lang = Language.fromCode(Prefs.savedLangCode);
   static Language get lang => _lang;
   static set lang(Language l) {
@@ -51,14 +47,16 @@ class AmpColors {
   static TextStyle get textStyleForeground => TextStyle(color: colorForeground);
   static TextStyle get textStyleBackground => TextStyle(color: colorBackground);
 
-  static bool isDarkMode = true;
-  static void changeMode() => setMode(!isDarkMode);
-  static void setMode(bool _isDarkMode) {
-    if(_isDarkMode == null) return;
-    isDarkMode = _isDarkMode;
-    Prefs.designMode = isDarkMode;
+  static Brightness get brightness => isDarkMode ? Brightness.dark : Brightness.light;
+
+  static bool get isDarkMode => Prefs.isDarkMode;
+  static set isDarkMode(bool b) {
+    if(b == null) return;
+    Prefs.isDarkMode = b;
     ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
   }
+
+  static void switchMode() => isDarkMode = !isDarkMode;
 
   static TweenSequenceItem _rainbowSequenceElement(MaterialColor begin, MaterialColor end) {
     return TweenSequenceItem(weight: 1.0, tween: ColorTween(begin: begin, end: end));

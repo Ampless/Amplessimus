@@ -104,8 +104,8 @@ set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
 String get savedLangCode => _prefs.getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
 
-set designMode(bool isDarkMode) => _prefs.setBool('is_dark_mode', isDarkMode);
-bool get designMode => _prefs.getBool('is_dark_mode', true);
+set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
+bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
 
 Future<void> loadPrefs() async {
   _prefs = CachedSharedPreferences();

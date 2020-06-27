@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:Amplissimus/json.dart';
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/values.dart';
 import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -192,9 +190,6 @@ class CachedSharedPreferences {
       }
       _prefFileMutex.release();
     }
-    bool isDarkMode = getBool('is_dark_mode', true);
-    ampInfo(ctx: 'Prefs', message: 'recognized isDarkMode = $isDarkMode');
-    AmpColors.setMode(isDarkMode);
   }
 
   void clear() {

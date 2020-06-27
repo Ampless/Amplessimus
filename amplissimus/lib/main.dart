@@ -44,13 +44,12 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 50), () async {
       await Prefs.loadPrefs();
-      CustomValues.checkForAprilFools();
 
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
       else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
       if(Prefs.useSystemTheme)
-        AmpColors.setMode(SchedulerBinding.instance.window.platformBrightness != Brightness.light);
+        AmpColors.isDarkMode = SchedulerBinding.instance.window.platformBrightness != Brightness.light;
 
       if(Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
@@ -144,8 +143,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
   void checkBrightness() {
-    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.designMode) {
-      AmpColors.changeMode();
+    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.isDarkMode) {
+      AmpColors.switchMode();
       setState(() {
         fabBackgroundColor = Colors.transparent;
         rebuildNewBuild();
@@ -417,7 +416,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
                       Prefs.timesToggleDarkModePressed = 0;
                     }
-                    AmpColors.changeMode();
+                    AmpColors.switchMode();
                     if(Prefs.useSystemTheme) Prefs.useSystemTheme = false;
                     setState(() {
                       fabBackgroundColor = Colors.transparent;
@@ -455,9 +454,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   Prefs.useSystemTheme = !Prefs.useSystemTheme;
                   if(Prefs.useSystemTheme) {
                     var brightness = SchedulerBinding.instance.window.platformBrightness;
-                    bool darkModeEnabled = brightness == Brightness.dark;
-                    if(darkModeEnabled != Prefs.designMode) {
-                      AmpColors.changeMode();
+                    bool darkModeEnabled = brightness != Brightness.light;
+                    if(darkModeEnabled != Prefs.isDarkMode) {
+                      AmpColors.switchMode();
                       setState(() {
                         fabBackgroundColor = Colors.transparent;
                         rebuildNewBuild();
