@@ -40,9 +40,10 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   void initState() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
     ]);
     super.initState();
-    Future.delayed(Duration(milliseconds: 50), () async {
+    (() async {
       await Prefs.loadPrefs();
 
       if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
@@ -61,7 +62,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
         });
       }
-    });
+    })();
   }
 
   @override
@@ -70,7 +71,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
-          color: AmpColors.colorBackground,
+          color: Colors.black,
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
@@ -83,8 +84,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         ),
       ),
       bottomSheet: LinearProgressIndicator(
-        backgroundColor: AmpColors.blankGrey,
-        valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+        backgroundColor: Colors.grey,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       ),
     );
   }
