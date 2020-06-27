@@ -1,6 +1,7 @@
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/main.dart';
+import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/widgets.dart';
@@ -145,54 +146,16 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                     Divider(color: AmpColors.colorForeground, height: 20,),
                     
                     Padding(padding: EdgeInsets.all(4)),
-                    TextFormField(
-                      style: TextStyle(color: AmpColors.colorForeground),
+                    ampFormField(
                       controller: FirstLoginValues.usernameInputFormController,
                       key: FirstLoginValues.usernameInputFormKey,
                       validator: Widgets.textFieldValidator,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        labelStyle: TextStyle(color: AmpColors.colorForeground),
-                        labelText: CustomValues.lang.username,
-                        fillColor: AmpColors.colorForeground,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                          BorderSide(color: AmpColors.colorForeground)
-                        )
-                      ),
                     ),
                     Padding(padding: EdgeInsets.all(6)),
-                    TextFormField(
-                      style: TextStyle(color: AmpColors.colorForeground),
+                    ampFormField(
                       controller: FirstLoginValues.passwordInputFormController,
                       key: FirstLoginValues.passwordInputFormKey,
                       validator: Widgets.textFieldValidator,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: AmpColors.colorForeground),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        labelText: CustomValues.lang.password,
-                        fillColor: AmpColors.colorForeground,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AmpColors.colorForeground),
-                        )
-                      ),
                     ),
                     Divider(color: AmpColors.colorForeground, height: 20),
 

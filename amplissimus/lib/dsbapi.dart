@@ -333,7 +333,7 @@ Future<Null> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
                                     bool cacheJsonPlans = false}) async {
   try {
     if(Prefs.username.length == 0 || Prefs.password.length == 0)
-      throw CustomValues.lang.dsbErrorNoLogin;
+      throw CustomValues.lang.noLogin;
     String jsonCache = Prefs.dsbJsonCache;
     List<DsbPlan> plans;
     if(!cacheJsonPlans || jsonCache == null) {

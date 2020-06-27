@@ -55,6 +55,7 @@ Widget ampFormField({@required TextEditingController controller,
                                String labelText = ''}) {
   return TextFormField(
     style: TextStyle(color: AmpColors.colorForeground),
+    keyboardAppearance: AmpColors.isDarkMode ? Brightness.dark : Brightness.light,
     controller: controller,
     key: key,
     validator: validator,
