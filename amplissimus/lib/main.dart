@@ -190,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void showInputSelectCurrentClass(BuildContext context) {
     ampSelectionDialog(
       context: context,
-      title: CustomValues.lang.settingsSelectClass,
+      title: CustomValues.lang.selectClass,
       inputChildren: (alertContext, setAlState) => [
         DropdownButton(
           underline: Container(
@@ -200,10 +200,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           style: TextStyle(color: AmpColors.colorForeground),
           value: gradeDropDownValue,
           items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
+            return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
           onChanged: (value) {
             setAlState(() {
@@ -240,11 +237,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       ],
       actions: (context) => [
         ampDialogButton(
-          text: CustomValues.lang.settingsChangeLoginPopupCancel,
+          text: CustomValues.lang.cancel,
           onPressed: () => Navigator.of(context).pop(),
         ),
         ampDialogButton(
-          text: CustomValues.lang.settingsChangeLoginPopupSave,
+          text: CustomValues.lang.save,
           onPressed: () {
             rebuildNewBuild();
             Navigator.of(context).pop();
@@ -258,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     Language lang = CustomValues.lang;
     ampSelectionDialog(
       context: context,
-      title: CustomValues.lang.settingsChangeLanguage,
+      title: CustomValues.lang.changeLanguage,
       inputChildren: (alertContext, setAlState) => [
           DropdownButton(
             underline: Container(
@@ -277,11 +274,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ],
       actions: (context) => [
         ampDialogButton(
-          text: CustomValues.lang.settingsChangeLoginPopupCancel,
-          onPressed: () => Navigator.of(context).pop(),
+          text: CustomValues.lang.cancel,
+          onPressed: Navigator.of(context).pop,
         ),
         ampDialogButton(
-          text: CustomValues.lang.settingsChangeLoginPopupSave,
+          text: CustomValues.lang.save,
           onPressed: () {
             CustomValues.lang = lang;
             rebuildNewBuild();
@@ -299,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     final passwordInputFormController = TextEditingController(text: Prefs.password);
     ampTextDialog(
       context: context,
-      title: CustomValues.lang.settingsChangeLoginPopup,
+      title: CustomValues.lang.changeLoginPopup,
       children: (context) => [
           ampFormField(
             controller: usernameInputFormController,
@@ -316,10 +313,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       actions: (context) => [
         ampDialogButton(
           onPressed: () => Navigator.of(context).pop(),
-          text: CustomValues.lang.settingsChangeLoginPopupCancel,
+          text: CustomValues.lang.cancel,
         ),
-        FlatButton(
-          textColor: AmpColors.colorForeground,
+        ampDialogButton(
           onPressed: () {
             if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
             Prefs.username = usernameInputFormController.text.trim();
@@ -327,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             rebuildDragDown();
             Navigator.of(context).pop();
           },
-          child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
+          text: CustomValues.lang.save,
         ),
       ],
     );
@@ -338,7 +334,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     Widget widget;
     if(Prefs.grade == '' && Prefs.char == '') display = false;
     display ? widget = Stack(children: <Widget>[
-      ListTile(title: Text(CustomValues.lang.dsbUiAllClasses, style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
+      ListTile(title: Text(CustomValues.lang.allClasses, style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
       Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
         setState(() => Prefs.oneClassOnly = value);
         dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
@@ -537,18 +533,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               indicatorColor: AmpColors.colorForeground,
               labelColor: AmpColors.colorForeground,
               tabs: <Widget>[
-                new Tab(
-                  icon: Icon(Icons.home),
-                  text: CustomValues.lang.menuStart,
-                ),
-                new Tab(
-                  icon: Icon(MdiIcons.timetable),
-                  text: CustomValues.lang.timetable,
-                ),
-                new Tab(
-                  icon: Icon(Icons.settings),
-                  text: CustomValues.lang.menuSettings,
-                )
+                Tab(icon: Icon(Icons.home),         text: CustomValues.lang.start),
+                Tab(icon: Icon(MdiIcons.timetable), text: CustomValues.lang.timetable),
+                Tab(icon: Icon(Icons.settings),     text: CustomValues.lang.settings)
               ],
             ),
           ),

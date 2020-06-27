@@ -14,7 +14,7 @@ class Widgets {
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
           Text(
-            isDarkMode ? CustomValues.lang.settingsLightsOn : CustomValues.lang.settingsLightsOff,
+            isDarkMode ? CustomValues.lang.lightsOn : CustomValues.lang.lightsOff,
             style: textStyle,
           )
         ],
@@ -30,7 +30,7 @@ class Widgets {
           Icon(isDarkMode ? MdiIcons.clipboardList : MdiIcons.clipboardListOutline,
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.settingsChangeAppearance, style: textStyle,)
+          Text(CustomValues.lang.changeAppearance, style: textStyle,)
         ],
       ),
     );
@@ -45,7 +45,7 @@ class Widgets {
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
           Text(
-            CustomValues.lang.settingsChangeLogin,
+            CustomValues.lang.changeLogin,
             style: textStyle,
           )
         ],
@@ -61,7 +61,7 @@ class Widgets {
           Icon(isDarkMode ? MdiIcons.school : MdiIcons.schoolOutline,
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.settingsSelectClass, style: textStyle,)
+          Text(CustomValues.lang.selectClass, style: textStyle,)
         ],
       ),
     );
@@ -88,7 +88,7 @@ class Widgets {
           Padding(padding: EdgeInsets.all(24)),
           Icon(MdiIcons.brightness6, size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(Prefs.useSystemTheme ? CustomValues.lang.settingsLightsNoSystem : CustomValues.lang.settingsLightsUseSystem, style: textStyle, textAlign: TextAlign.center,)
+          Text(Prefs.useSystemTheme ? CustomValues.lang.lightsNoSystem : CustomValues.lang.lightsUseSystem, style: textStyle, textAlign: TextAlign.center)
         ],
       ),
     );
@@ -101,7 +101,7 @@ class Widgets {
           Padding(padding: EdgeInsets.all(24)),
           Icon(MdiIcons.translate, size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.settingsChangeLanguage, style: textStyle)
+          Text(CustomValues.lang.changeLanguage, style: textStyle)
         ],
       ),
     );

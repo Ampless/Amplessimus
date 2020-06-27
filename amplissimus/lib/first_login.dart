@@ -84,7 +84,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: Text(CustomValues.lang.settingsChangeLoginPopup, style: TextStyle(color: AmpColors.colorForeground, fontSize: 25),),
+                title: Text(CustomValues.lang.changeLoginPopup, style: TextStyle(color: AmpColors.colorForeground, fontSize: 25),),
                 centerTitle: true,
               ),
               body: Center(
@@ -93,7 +93,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(CustomValues.lang.settingsSelectClass, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
+                    Text(CustomValues.lang.selectClass, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
                     Row(mainAxisSize: MainAxisSize.min, children: [
                       DropdownButton(
                         underline: Container(
@@ -160,7 +160,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                           borderRadius: BorderRadius.circular(10),
                         ),
                         labelStyle: TextStyle(color: AmpColors.colorForeground),
-                        labelText: CustomValues.lang.settingsChangeLoginPopupUsername,
+                        labelText: CustomValues.lang.username,
                         fillColor: AmpColors.colorForeground,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -186,7 +186,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                           borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        labelText: CustomValues.lang.settingsChangeLoginPopupPassword,
+                        labelText: CustomValues.lang.password,
                         fillColor: AmpColors.colorForeground,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -197,7 +197,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                     Divider(color: AmpColors.colorForeground, height: 20),
 
                     Padding(padding: EdgeInsets.all(4)),
-                    Text(CustomValues.lang.settingsChangeLanguage, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20)),
+                    Text(CustomValues.lang.changeLanguage, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20)),
                     DropdownButton(
                       underline: Container(
                         height: 2,
@@ -253,8 +253,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                 }, 
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
-                label: Text(CustomValues.lang.settingsChangeLoginPopupSave, style: widget.textStyle),
-                icon: Icon(Icons.save, color: AmpColors.colorForeground,),
+                label: Text(CustomValues.lang.save, style: widget.textStyle),
+                icon: Icon(Icons.save, color: AmpColors.colorForeground),
               ),
             ),
           ),
@@ -299,7 +299,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
       )
     );
   }
-
 }
 
 class FirstLoginValues {

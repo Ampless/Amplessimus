@@ -11,10 +11,10 @@ class English extends Language {
   String get code => 'en';
 
   @override
-  String get menuSettings => 'Settings';
+  String get settings => 'Settings';
 
   @override
-  String get menuStart => 'Start';
+  String get start => 'Start';
 
   @override
   String get name => 'English';
@@ -23,28 +23,28 @@ class English extends Language {
   String get settingsAppInfo => 'App Information';
 
   @override
-  String get settingsChangeAppearance => 'Change appearance';
+  String get changeAppearance => 'Change appearance';
 
   @override
-  String get settingsChangeLogin => 'Login data';
+  String get changeLogin => 'Login data';
 
   @override
-  String get settingsChangeLoginPopup => 'DSBMobile Login';
+  String get changeLoginPopup => 'DSBMobile Login';
 
   @override
-  String get settingsLightsOff => 'Lights off';
+  String get lightsOff => 'Lights off';
 
   @override
-  String get settingsLightsOn => 'Lights on';
+  String get lightsOn => 'Lights on';
 
   @override
-  String get settingsSelectClass => 'Select class';
+  String get selectClass => 'Select class';
 
   @override
-  String get settingsLightsNoSystem => 'Don\'t use\nsystem appearance';
+  String get lightsNoSystem => 'Don\'t use\nsystem appearance';
 
   @override
-  String get settingsLightsUseSystem => 'Use\nsystem appearance';
+  String get lightsUseSystem => 'Use\nsystem appearance';
 
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
@@ -80,25 +80,25 @@ class English extends Language {
   String get dsbListErrorTitle => 'Amplissimus Error';
 
   @override
-  String get dsbErrorNoLogin => 'No login data entered.';
+  String get noLogin => 'No login data entered.';
 
   @override
   String get classSelectorEmpty => 'Empty';
 
   @override
-  String get settingsChangeLoginPopupPassword => 'Password';
+  String get password => 'Password';
 
   @override
-  String get settingsChangeLoginPopupUsername => 'Username';
+  String get username => 'Username';
 
   @override
-  String get settingsChangeLoginPopupSave => 'Save';
+  String get save => 'Save';
 
   @override
-  String get settingsChangeLoginPopupCancel => 'Cancel';
+  String get cancel => 'Cancel';
 
   @override
-  String get dsbUiAllClasses => 'All classes';
+  String get allClasses => 'All classes';
 
   @override
   String get widgetValidatorFieldEmpty => 'Field is empty!';
@@ -107,7 +107,7 @@ class English extends Language {
   String get widgetValidatorInvalid => 'Invalid input!';
 
   @override
-  String get settingsChangeLanguage => 'Change language';
+  String get changeLanguage => 'Change language';
 
   @override
   String get firstStartupDone => 'Done';

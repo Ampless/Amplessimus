@@ -51,7 +51,8 @@ Future<Null> ampTextDialog({@required String title,
 Widget ampFormField({@required TextEditingController controller,
                      @required Key key,
                      @required String Function(String) validator,
-                               TextInputType keyboardType = TextInputType.visiblePassword}) {
+                               TextInputType keyboardType = TextInputType.visiblePassword,
+                               String labelText = ''}) {
   return TextFormField(
     style: TextStyle(color: AmpColors.colorForeground),
     controller: controller,
@@ -68,7 +69,7 @@ Widget ampFormField({@required TextEditingController controller,
         borderRadius: BorderRadius.circular(10),
       ),
       labelStyle: TextStyle(color: AmpColors.colorForeground),
-      labelText: CustomValues.lang.settingsChangeLoginPopupUsername,
+      labelText: labelText,
       fillColor: AmpColors.colorForeground,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

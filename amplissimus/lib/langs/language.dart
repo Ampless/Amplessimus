@@ -11,27 +11,27 @@ abstract class Language {
   //
   //these are all of the translations hardcoded into the language classes
   //
-  String get settingsLightsOn;
-  String get settingsLightsOff;
-  String get settingsLightsUseSystem;
-  String get settingsLightsNoSystem;
-  String get settingsChangeAppearance;
-  String get settingsChangeLanguage;
-  String get settingsChangeLogin;
-  String get settingsChangeLoginPopup;
-  String get settingsChangeLoginPopupUsername;
-  String get settingsChangeLoginPopupPassword;
-  String get settingsChangeLoginPopupSave;
-  String get settingsChangeLoginPopupCancel;
-  String get settingsSelectClass;
+  String get lightsOn;
+  String get lightsOff;
+  String get lightsUseSystem;
+  String get lightsNoSystem;
+  String get changeAppearance;
+  String get changeLanguage;
+  String get changeLogin;
+  String get changeLoginPopup;
+  String get username;
+  String get password;
+  String get save;
+  String get cancel;
+  String get selectClass;
   String get settingsAppInfo;
   String get appInfo;
-  String get menuStart;
-  String get menuSettings;
+  String get start;
+  String get settings;
   String get dsbListErrorTitle;
   String get dsbListErrorSubtitle;
-  String get dsbErrorNoLogin;
-  String get dsbUiAllClasses;
+  String get noLogin;
+  String get allClasses;
   String get classSelectorEmpty;
   String get widgetValidatorFieldEmpty;
   String get widgetValidatorInvalid;
