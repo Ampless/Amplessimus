@@ -2,7 +2,7 @@ Package: de.amplus.amplissimus
 Priority: standard
 Name: Amplissimus
 Version: 0.0.0-1
-Installed-Size: $SIZE
+Installed-Size: $ISIZE
 Section: Education
 Pre-Depends: dpkg (>= 1.14.25-8)
 Depends: system-cmds

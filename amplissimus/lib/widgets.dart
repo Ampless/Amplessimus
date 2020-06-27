@@ -172,7 +172,8 @@ class Widgets {
   }
 
   static String numberValidator(String value) {
-    if (value.trim().isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
+    value = value.trim();
+    if (value.isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
     final n = num.tryParse(value);
     if (n == null || n < 0) return CustomValues.lang.widgetValidatorInvalid;
     return null;

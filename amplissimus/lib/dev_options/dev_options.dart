@@ -1,6 +1,8 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
@@ -196,55 +198,49 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
   void showInputSubListItemSpacingDialog(BuildContext context) {
     final subListSpacingInputFormKey = GlobalKey<FormFieldState>();
     final subListSpacingInputFormController = TextEditingController(text: Prefs.subListItemSpace.toString());
-    showDialog(
+    ampDialog(
       context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Listenelementabstand', style: TextStyle(color: AmpColors.colorForeground),),
-          backgroundColor: AmpColors.colorBackground,
-          content: TextFormField(
-            style: TextStyle(color: AmpColors.colorForeground),
-            controller: subListSpacingInputFormController,
-            key: subListSpacingInputFormKey,
-            validator: Widgets.numberValidator,
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelStyle: TextStyle(color: AmpColors.colorForeground),
-              labelText: 'Listenelementabstand',
-              fillColor: AmpColors.colorForeground,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AmpColors.colorForeground),
-                borderRadius: BorderRadius.circular(10),
-              )
-            ),
+      title: 'Listenelementabstand',
+      inputChildren: (context, setAlState) => [TextFormField(
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+            borderRadius: BorderRadius.circular(10),
           ),
-          actions: <Widget>[
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Abbrechen'),
-            ),
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () {
-                if(!subListSpacingInputFormKey.currentState.validate()) return;
-                Prefs.subListItemSpace = int.tryParse(subListSpacingInputFormController.text.trim());
-                setState(() => Prefs.subListItemSpace);
-                Navigator.of(context).pop();
-              },
-              child: Text('Speichern'),
-            ),
-          ],
-        );
-      },
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          labelStyle: TextStyle(color: AmpColors.colorForeground),
+          labelText: 'Listenelementabstand',
+          fillColor: AmpColors.colorForeground,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: AmpColors.colorForeground),
+            borderRadius: BorderRadius.circular(10),
+          )
+        ),
+      )],
+      actions: (context) => [
+        FlatButton(
+          textColor: AmpColors.colorForeground,
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Abbrechen'),
+        ),
+        FlatButton(
+          textColor: AmpColors.colorForeground,
+          onPressed: () {
+            String err = Widgets.numberValidator(subListSpacingInputFormController.text);
+            if(err != null) {
+              ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
+              return;
+            }
+            Prefs.subListItemSpace = int.tryParse(subListSpacingInputFormController.text.trim());
+            setState(() => Prefs.subListItemSpace);
+            Navigator.of(context).pop();
+          },
+          child: Text('Speichern'),
+        ),
+      ],
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -191,7 +192,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   void showInputSelectCurrentClass(BuildContext context) {
-    _showDialog(
+    ampDialog(
+      context: context,
       title: CustomValues.lang.settingsSelectClass,
       inputChildren: (alertContext, setAlState) => [
         DropdownButton(
@@ -241,11 +243,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
       ],
       actions: (context) => [
-        _dialogButton(
+        ampDialogButton(
           text: CustomValues.lang.settingsChangeLoginPopupCancel,
           onPressed: () => Navigator.of(context).pop(),
         ),
-        _dialogButton(
+        ampDialogButton(
           text: CustomValues.lang.settingsChangeLoginPopupSave,
           onPressed: () {
             rebuildNewBuild();
@@ -256,42 +258,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
-  Future<Null> _showDialog({@required String title,
-                            @required List<Widget> Function(BuildContext, StateSetter) inputChildren,
-                            @required List<Widget> Function(BuildContext) actions}) {
-    return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title, style: TextStyle(color: AmpColors.colorForeground)),
-          backgroundColor: AmpColors.colorBackground,
-          content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) =>
-            Theme(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: inputChildren(alertContext, setAlState),
-              ),
-              data: ThemeData(canvasColor: AmpColors.materialColorBackground),
-            ),
-          ),
-          actions: actions(context),
-        );
-      },
-    );
-  }
-
-  Widget _dialogButton({String text, Function onPressed}) {
-    return FlatButton(
-      textColor: AmpColors.colorForeground,
-      onPressed: onPressed,
-      child: Text(text),
-    );
-  }
-
   void showInputChangeLanguage(BuildContext context) {
     Language lang = CustomValues.lang;
-    _showDialog(
+    ampDialog(
+      context: context,
       title: CustomValues.lang.settingsChangeLanguage,
       inputChildren: (alertContext, setAlState) => [
           DropdownButton(
@@ -310,11 +280,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
         ],
       actions: (context) => [
-        _dialogButton(
+        ampDialogButton(
           text: CustomValues.lang.settingsChangeLoginPopupCancel,
           onPressed: () => Navigator.of(context).pop(),
         ),
-        _dialogButton(
+        ampDialogButton(
           text: CustomValues.lang.settingsChangeLoginPopupSave,
           onPressed: () {
             CustomValues.lang = lang;
