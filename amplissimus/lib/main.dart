@@ -173,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void rebuild() {
     try {
       setState(() {});
-      print('rebuilt!');
+      ampInfo(ctx: 'MyApp', message: 'rebuilt!');
     } catch (e) {
       ampInfo(ctx: '_MyHomePageState][rebuild', message: errorString(e));
     }
