@@ -8,9 +8,12 @@ import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../animations.dart';
+
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
@@ -19,22 +22,29 @@ class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: MaterialApp(
-        builder: (context, child) => ScrollConfiguration(behavior: MyBehavior(), child: child),
-        title: AmpStrings.appTitle,
-        theme: ThemeData(
-          canvasColor: AmpColors.materialColorBackground,
-          primarySwatch: AmpColors.materialColorForeground,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+        child: MaterialApp(
+          builder: (context, child) =>
+              ScrollConfiguration(behavior: MyBehavior(), child: child),
+          title: AmpStrings.appTitle,
+          theme: ThemeData(
+            canvasColor: AmpColors.materialColorBackground,
+            primarySwatch: AmpColors.materialColorForeground,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: DevOptionsScreenPage(
+              title: AmpStrings.appTitle,
+              textStyle: TextStyle(color: AmpColors.colorForeground)),
         ),
-        home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground)),
-      ), 
-      onWillPop: () async {
-        await dsbUpdateWidget(() {});
-        DevOptionsValues.tabController.animateTo(0);
-        return false;
-      }
-    );
+        onWillPop: () async {
+          await dsbUpdateWidget(() {});
+          DevOptionsValues.tabController.animateTo(0);
+          Animations.changeScreenNoAnimationReplace(
+              MyApp(
+                initialIndex: 2,
+              ),
+              context);
+          return false;
+        });
   }
 }
 
@@ -46,12 +56,22 @@ class DevOptionsScreenPage extends StatefulWidget {
   State<StatefulWidget> createState() => DevOptionsScreenPageState();
 }
 
-class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleTickerProviderStateMixin {
-
+class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    DevOptionsValues.tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+    DevOptionsValues.tabController =
+        TabController(length: 2, vsync: this, initialIndex: 1);
+    DevOptionsValues.tabController.addListener(() {
+      if (DevOptionsValues.tabController.index < 3) {
+        Animations.changeScreenNoAnimationReplace(
+            MyApp(
+              initialIndex: 2,
+            ),
+            context);
+      }
+    });
   }
 
   @override
@@ -62,7 +82,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
         backgroundColor: AmpColors.colorBackground,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Entwickleroptionen', style: TextStyle(fontSize: 20, color: AmpColors.colorForeground)),
+          title: Text('Entwickleroptionen',
+              style: TextStyle(fontSize: 20, color: AmpColors.colorForeground)),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -72,107 +93,130 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           child: Center(
             child: ListView(
               children: <Widget>[
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble() + 2),
+                Divider(
+                    color: AmpColors.colorForeground,
+                    height: Prefs.subListItemSpace.toDouble() + 2),
                 ListTile(
-                  title: Text('Entwickleroptionen aktiviert', style: widget.textStyle),
+                  title: Text('Entwickleroptionen aktiviert',
+                      style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
-                    value: Prefs.devOptionsEnabled, 
-                    onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
+                    value: Prefs.devOptionsEnabled,
+                    onChanged: (value) =>
+                        setState(() => Prefs.devOptionsEnabled = value),
                   ),
                 ),
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble(),),
+                Divider(
+                  color: AmpColors.colorForeground,
+                  height: Prefs.subListItemSpace.toDouble(),
+                ),
                 ListTile(
-                  title: Text('Hilfe für Langeweile aktiviert', style: widget.textStyle),
+                  title: Text('Hilfe für Langeweile aktiviert',
+                      style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
-                    value: Prefs.counterEnabled, 
-                    onChanged: (value) => setState(() => Prefs.counterEnabled = value),
+                    value: Prefs.counterEnabled,
+                    onChanged: (value) =>
+                        setState(() => Prefs.counterEnabled = value),
                   ),
                 ),
                 ListTile(
-                  title: Text('App schließt bei zurück-Taste', style: widget.textStyle),
+                  title: Text('App schließt bei zurück-Taste',
+                      style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
-                    value: Prefs.closeAppOnBackPress, 
-                    onChanged: (value) => setState(() => Prefs.closeAppOnBackPress = value),
+                    value: Prefs.closeAppOnBackPress,
+                    onChanged: (value) =>
+                        setState(() => Prefs.closeAppOnBackPress = value),
                   ),
                 ),
                 ListTile(
-                  title: Text('Dauerhafter Ladebalken', style: widget.textStyle),
+                  title:
+                      Text('Dauerhafter Ladebalken', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
-                    value: Prefs.loadingBarEnabled, 
-                    onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+                    value: Prefs.loadingBarEnabled,
+                    onChanged: (value) =>
+                        setState(() => Prefs.loadingBarEnabled = value),
                   ),
                 ),
                 ListTile(
                   title: Text('JSON Cache benutzen', style: widget.textStyle),
                   trailing: Switch(
                     activeColor: AmpColors.colorForeground,
-                    value: Prefs.useJsonCache, 
+                    value: Prefs.useJsonCache,
                     onChanged: (value) {
                       Prefs.useJsonCache = value;
-                      dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: value);
+                      dsbUpdateWidget(() => setState(() {}),
+                          cacheJsonPlans: value);
                     },
                   ),
                 ),
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()),
+                Divider(
+                    color: AmpColors.colorForeground,
+                    height: Prefs.subListItemSpace.toDouble()),
                 ListTile(
                   title: Text('Listenelementabstand', style: widget.textStyle),
-                  trailing: Text('${Prefs.subListItemSpace}', style: widget.textStyle),
+                  trailing: Text('${Prefs.subListItemSpace}',
+                      style: widget.textStyle),
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
-                Divider(color: AmpColors.colorForeground, height: Prefs.subListItemSpace.toDouble()),
+                Divider(
+                    color: AmpColors.colorForeground,
+                    height: Prefs.subListItemSpace.toDouble()),
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
-                  child: Text('Print Cache'),
-                  onPressed: Prefs.listCache
-                ),
+                    child: Text('Print Cache'), onPressed: Prefs.listCache),
                 RaisedButton(
                   child: Text('Cache leeren'),
                   onPressed: () => Prefs.clearCache(),
                 ),
                 RaisedButton(
-                  child: Text('JSON importieren'),
-                  onPressed: () async {
-                    Prefs.dsbJsonCache = '['
-                      '{"title":"Montag","date":"15.6.2020 Montag","subs": []},'
-                      '{"title":"Dienstag","date":"16.6.2020 Dienstag","subs": ['
-                      '{"class":"5cd","lessons":[3],"teacher":"Häußler","subject":"Spo","notes": "Mitbetreuung"},'
-                      '{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
-                      '{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
-                      '{"class":"11q","lessons": [1],"teacher":"Wolf","subject":"1sk1","notes":""}'
-                      ']}'
-                    ']';
-                    dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: Prefs.useJsonCache);
-                  }
-                ),
+                    child: Text('JSON importieren'),
+                    onPressed: () async {
+                      Prefs.dsbJsonCache = '['
+                          '{"title":"Montag","date":"15.6.2020 Montag","subs": []},'
+                          '{"title":"Dienstag","date":"16.6.2020 Dienstag","subs": ['
+                          '{"class":"5cd","lessons":[3],"teacher":"Häußler","subject":"Spo","notes": "Mitbetreuung"},'
+                          '{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
+                          '{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
+                          '{"class":"11q","lessons": [1],"teacher":"Wolf","subject":"1sk1","notes":""}'
+                          ']}'
+                          ']';
+                      dsbUpdateWidget(() => setState(() {}),
+                          cacheJsonPlans: Prefs.useJsonCache);
+                    }),
                 RaisedButton.icon(
                   color: Colors.red,
                   icon: Icon(Icons.delete, color: AmpColors.colorForeground),
-                  label: Text('App-Daten löschen', style: TextStyle(color: AmpColors.colorForeground)),
+                  label: Text('App-Daten löschen',
+                      style: TextStyle(color: AmpColors.colorForeground)),
                   onPressed: () {
-                    showDialog(context: context, barrierDismissible: true, builder: (context) {
-                      return AlertDialog(
-                        title: Text('App-Daten löschen', style: widget.textStyle),
-                        content: Text('Löschen der App-Daten bestätigen?', style: AmpColors.textStyleForeground),
-                        backgroundColor: AmpColors.colorBackground,
-                        actions: <Widget>[
-                          ampDialogButton(
-                            text: 'Abbrechen',
-                            onPressed: Navigator.of(context).pop,
-                          ),
-                          ampDialogButton(
-                            text: 'Bestätigen',
-                            onPressed: () {
-                              Prefs.clear();
-                              SystemNavigator.pop();
-                            },
-                          ),
-                        ],
-                      );
-                    });
+                    showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('App-Daten löschen',
+                                style: widget.textStyle),
+                            content: Text('Löschen der App-Daten bestätigen?',
+                                style: AmpColors.textStyleForeground),
+                            backgroundColor: AmpColors.colorBackground,
+                            actions: <Widget>[
+                              ampDialogButton(
+                                text: 'Abbrechen',
+                                onPressed: Navigator.of(context).pop,
+                              ),
+                              ampDialogButton(
+                                text: 'Bestätigen',
+                                onPressed: () {
+                                  Prefs.clear();
+                                  SystemNavigator.pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
                   },
                 ),
               ],
@@ -185,17 +229,26 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
           splashColor: AmpColors.colorForeground,
           onPressed: () {
             DevOptionsValues.tabController.animateTo(0);
-            dsbUpdateWidget(() => setState(() {}), cacheJsonPlans: Prefs.useJsonCache);
-          }, 
-          label: Text('zurück', style: TextStyle(color: AmpColors.colorForeground),),
-          icon: Icon(Icons.arrow_back, color: AmpColors.colorForeground,),
+            dsbUpdateWidget(() => setState(() {}),
+                cacheJsonPlans: Prefs.useJsonCache);
+          },
+          label: Text(
+            'zurück',
+            style: TextStyle(color: AmpColors.colorForeground),
+          ),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AmpColors.colorForeground,
+          ),
         ),
       )
     ]);
   }
+
   void showInputSubListItemSpacingDialog(BuildContext context) {
     final subListSpacingInputFormKey = GlobalKey<FormFieldState>();
-    final subListSpacingInputFormController = TextEditingController(text: Prefs.subListItemSpace.toString());
+    final subListSpacingInputFormController =
+        TextEditingController(text: Prefs.subListItemSpace.toString());
     ampTextDialog(
       context: context,
       title: 'Listenelementabstand',
@@ -215,12 +268,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
         ampDialogButton(
           text: 'Speichern',
           onPressed: () {
-            String err = Widgets.numberValidator(subListSpacingInputFormController.text);
-            if(err != null) {
+            String err =
+                Widgets.numberValidator(subListSpacingInputFormController.text);
+            if (err != null) {
               ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
               return;
             }
-            Prefs.subListItemSpace = int.tryParse(subListSpacingInputFormController.text.trim());
+            Prefs.subListItemSpace =
+                int.tryParse(subListSpacingInputFormController.text.trim());
             setState(() => Prefs.subListItemSpace);
             Navigator.of(context).pop();
           },
