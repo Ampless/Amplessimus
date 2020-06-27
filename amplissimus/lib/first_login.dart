@@ -96,12 +96,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                   children: <Widget>[
                     Text(CustomValues.lang.selectClass, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20),),
                     Row(mainAxisSize: MainAxisSize.min, children: [
-                      DropdownButton(
-                        underline: Container(
-                          height: 2,
-                          color: AmpColors.colorForeground,
-                        ),
-                        style: TextStyle(color: AmpColors.colorForeground),
+                      ampDropdownButton(
                         value: gradeDropDownValue,
                         items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -120,12 +115,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         },
                       ),
                       Padding(padding: EdgeInsets.all(10)),
-                      DropdownButton(
-                        underline: Container(
-                          height: 2,
-                          color: AmpColors.colorForeground,
-                        ),
-                        style: TextStyle(color: AmpColors.colorForeground),
+                      ampDropdownButton(
                         value: letterDropDownValue,
                         items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -143,37 +133,32 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         },
                       ),
                     ]),
-                    Divider(color: AmpColors.colorForeground, height: 20,),
-                    
+                    Divider(color: AmpColors.colorForeground, height: 20),
+
                     Padding(padding: EdgeInsets.all(4)),
                     ampFormField(
                       controller: FirstLoginValues.usernameInputFormController,
                       key: FirstLoginValues.usernameInputFormKey,
                       validator: Widgets.textFieldValidator,
+                      labelText: CustomValues.lang.username,
                     ),
                     Padding(padding: EdgeInsets.all(6)),
                     ampFormField(
                       controller: FirstLoginValues.passwordInputFormController,
                       key: FirstLoginValues.passwordInputFormKey,
                       validator: Widgets.textFieldValidator,
+                      labelText: CustomValues.lang.password,
                     ),
                     Divider(color: AmpColors.colorForeground, height: 20),
 
                     Padding(padding: EdgeInsets.all(4)),
                     Text(CustomValues.lang.changeLanguage, style: TextStyle(color: AmpColors.colorForeground, fontSize: 20)),
-                    DropdownButton(
-                      underline: Container(
-                        height: 2,
-                        color: Colors.white,
-                      ),
-                      style: TextStyle(color: AmpColors.colorForeground),
+                    ampDropdownButton(
                       value: CustomValues.lang,
                       items: Language.all.map<DropdownMenuItem<Language>>((value) {
                         return DropdownMenuItem<Language>(value: value, child: Text(value.name));
                       }).toList(),
-                      onChanged: (value) => setState(() {
-                        CustomValues.lang = value;
-                      }),
+                      onChanged: (value) => setState(() => CustomValues.lang = value),
                     ),
                     Divider(color: AmpColors.colorForeground, height: 20,),
                     Padding(padding: EdgeInsets.all(10)),

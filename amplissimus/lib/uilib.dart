@@ -88,3 +88,18 @@ Widget ampDialogButton({@required String text, @required Function onPressed}) {
     child: Text(text),
   );
 }
+
+Widget ampDropdownButton({@required dynamic value,
+                          @required List<DropdownMenuItem<dynamic>> items,
+                          @required Function(dynamic) onChanged}) {
+  return DropdownButton(
+    underline: Container(
+      height: 2,
+      color: AmpColors.colorForeground,
+    ),
+    style: AmpColors.textStyleForeground,
+    value: value,
+    items: items,
+    onChanged: onChanged,
+  );
+}

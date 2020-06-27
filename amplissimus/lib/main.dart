@@ -192,12 +192,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       context: context,
       title: CustomValues.lang.selectClass,
       inputChildren: (alertContext, setAlState) => [
-        DropdownButton(
-          underline: Container(
-            height: 2,
-            color: Colors.white,
-          ),
-          style: TextStyle(color: AmpColors.colorForeground),
+        ampDropdownButton(
           value: gradeDropDownValue,
           items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(value: value, child: Text(value));
@@ -212,12 +207,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           },
         ),
         Padding(padding: EdgeInsets.all(10)),
-        DropdownButton(
-          underline: Container(
-            height: 2,
-            color: Colors.white,
-          ),
-          style: TextStyle(color: AmpColors.colorForeground),
+        ampDropdownButton(
           value: letterDropDownValue,
           items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -257,19 +247,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       context: context,
       title: CustomValues.lang.changeLanguage,
       inputChildren: (alertContext, setAlState) => [
-          DropdownButton(
-            underline: Container(
-              height: 2,
-              color: Colors.white,
-            ),
-            style: TextStyle(color: AmpColors.colorForeground),
+          ampDropdownButton(
             value: lang,
             items: Language.all.map<DropdownMenuItem<Language>>((value) {
               return DropdownMenuItem<Language>(value: value, child: Text(value.name));
             }).toList(),
-            onChanged: (value) => setAlState(() {
-              lang = value;
-            }),
+            onChanged: (value) => setAlState(() => lang = value),
           ),
         ],
       actions: (context) => [
@@ -302,12 +285,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             controller: usernameInputFormController,
             key: usernameInputFormKey,
             validator: Widgets.textFieldValidator,
+            labelText: CustomValues.lang.username,
           ),
           Padding(padding: EdgeInsets.all(6)),
           ampFormField(
             controller: passwordInputFormController,
             key: passwordInputFormKey,
             validator: Widgets.textFieldValidator,
+            labelText: CustomValues.lang.password,
           ),
         ],
       actions: (context) => [
