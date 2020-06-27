@@ -160,7 +160,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                       }).toList(),
                       onChanged: (value) => setState(() => CustomValues.lang = value),
                     ),
-                    Divider(color: AmpColors.colorForeground, height: 20,),
+                    Divider(color: AmpColors.colorForeground, height: 20),
+                    ampSwitchWithText(
+                      text: CustomValues.lang.darkMode,
+                      value: Prefs.isDarkMode,
+                      onChanged: (value) => setState(() => AmpColors.isDarkMode = value),
+                    ),
                     Padding(padding: EdgeInsets.all(10)),
                     Divider(color: Colors.transparent, height: 30),
                     AnimatedDefaultTextStyle(

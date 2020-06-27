@@ -37,6 +37,7 @@ abstract class Language {
   String get widgetValidatorInvalid;
   String get firstStartupDone;
   String get timetable;
+  String get darkMode;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

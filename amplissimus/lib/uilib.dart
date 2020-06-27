@@ -103,3 +103,16 @@ Widget ampDropdownButton({@required dynamic value,
     onChanged: onChanged,
   );
 }
+
+Widget ampSwitchWithText({@required String text,
+                          @required bool value,
+                          @required Function(bool) onChanged}) {
+  return ListTile(
+    title: Text(text, style: AmpColors.textStyleForeground),
+    trailing: Switch(
+      activeColor: AmpColors.colorForeground,
+      value: value,
+      onChanged: onChanged,
+    ),
+  );
+}

@@ -137,4 +137,7 @@ class English extends Language {
     'w': 'Economy/Law',
     'spr': 'Consultation Hour',
   });
+
+  @override
+  String get darkMode => 'Dark mode';
 }

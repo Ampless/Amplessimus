@@ -33,7 +33,7 @@ class DevOptionsScreen extends StatelessWidget {
           ),
           home: DevOptionsScreenPage(
               title: AmpStrings.appTitle,
-              textStyle: TextStyle(color: AmpColors.colorForeground)),
+          ),
         ),
         onWillPop: () async {
           await dsbUpdateWidget(() {});
@@ -49,9 +49,8 @@ class DevOptionsScreen extends StatelessWidget {
 }
 
 class DevOptionsScreenPage extends StatefulWidget {
-  DevOptionsScreenPage({this.title, this.textStyle});
+  DevOptionsScreenPage({this.title});
   final String title;
-  final TextStyle textStyle;
   @override
   State<StatefulWidget> createState() => DevOptionsScreenPageState();
 }
@@ -92,73 +91,50 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           margin: EdgeInsets.all(16),
           child: Center(
             child: ListView(
-              children: <Widget>[
+              children: [
                 Divider(
                     color: AmpColors.colorForeground,
                     height: Prefs.subListItemSpace.toDouble() + 2),
-                ListTile(
-                  title: Text('Entwickleroptionen aktiviert',
-                      style: widget.textStyle),
-                  trailing: Switch(
-                    activeColor: AmpColors.colorForeground,
-                    value: Prefs.devOptionsEnabled,
-                    onChanged: (value) =>
-                        setState(() => Prefs.devOptionsEnabled = value),
-                  ),
+                ampSwitchWithText(
+                  text: 'Entwickleroptionen aktiviert',
+                  value: Prefs.devOptionsEnabled,
+                  onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
                 ),
                 Divider(
                   color: AmpColors.colorForeground,
                   height: Prefs.subListItemSpace.toDouble(),
                 ),
-                ListTile(
-                  title: Text('Hilfe für Langeweile aktiviert',
-                      style: widget.textStyle),
-                  trailing: Switch(
-                    activeColor: AmpColors.colorForeground,
-                    value: Prefs.counterEnabled,
-                    onChanged: (value) =>
-                        setState(() => Prefs.counterEnabled = value),
-                  ),
+                ampSwitchWithText(
+                  text: 'Hilfe für Langeweile aktiviert',
+                  value: Prefs.counterEnabled,
+                  onChanged: (value) => setState(() => Prefs.counterEnabled = value),
                 ),
-                ListTile(
-                  title: Text('App schließt bei zurück-Taste',
-                      style: widget.textStyle),
-                  trailing: Switch(
-                    activeColor: AmpColors.colorForeground,
-                    value: Prefs.closeAppOnBackPress,
-                    onChanged: (value) =>
-                        setState(() => Prefs.closeAppOnBackPress = value),
-                  ),
+                ampSwitchWithText(
+                  text: 'App schließt bei zurück-Taste',
+                  value: Prefs.closeAppOnBackPress,
+                  onChanged: (value) => setState(() => Prefs.closeAppOnBackPress = value),
                 ),
-                ListTile(
-                  title:
-                      Text('Dauerhafter Ladebalken', style: widget.textStyle),
-                  trailing: Switch(
-                    activeColor: AmpColors.colorForeground,
-                    value: Prefs.loadingBarEnabled,
-                    onChanged: (value) =>
-                        setState(() => Prefs.loadingBarEnabled = value),
-                  ),
+                ampSwitchWithText(
+                  text: 'Dauerhafter Ladebalken',
+                  value: Prefs.loadingBarEnabled,
+                  onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
                 ),
-                ListTile(
-                  title: Text('JSON Cache benutzen', style: widget.textStyle),
-                  trailing: Switch(
-                    activeColor: AmpColors.colorForeground,
-                    value: Prefs.useJsonCache,
-                    onChanged: (value) {
-                      Prefs.useJsonCache = value;
-                      dsbUpdateWidget(() => setState(() {}),
-                          cacheJsonPlans: value);
-                    },
-                  ),
+                ampSwitchWithText(
+                  text: 'JSON Cache benutzen',
+                  value: Prefs.useJsonCache,
+                  onChanged: (value) {
+                    Prefs.useJsonCache = value;
+                    dsbUpdateWidget(() => setState(() {}),
+                        cacheJsonPlans: value);
+                  },
                 ),
                 Divider(
                     color: AmpColors.colorForeground,
                     height: Prefs.subListItemSpace.toDouble()),
                 ListTile(
-                  title: Text('Listenelementabstand', style: widget.textStyle),
+                  title: Text('Listenelementabstand', style: AmpColors.textStyleForeground),
                   trailing: Text('${Prefs.subListItemSpace}',
-                      style: widget.textStyle),
+                      style: AmpColors.textStyleForeground),
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
                 Divider(
@@ -198,7 +174,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                         builder: (context) {
                           return AlertDialog(
                             title: Text('App-Daten löschen',
-                                style: widget.textStyle),
+                                style: AmpColors.textStyleForeground),
                             content: Text('Löschen der App-Daten bestätigen?',
                                 style: AmpColors.textStyleForeground),
                             backgroundColor: AmpColors.colorBackground,

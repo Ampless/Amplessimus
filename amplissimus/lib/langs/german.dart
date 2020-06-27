@@ -130,4 +130,7 @@ class German extends Language {
     'w': 'Wirtschaft/Recht',
     'spr': 'Sprechstunde',
   });
+
+  @override
+  String get darkMode => 'Dark Mode';
 }
