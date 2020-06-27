@@ -32,7 +32,7 @@ abstract class Language {
   String get dsbListErrorSubtitle;
   String get noLogin;
   String get allClasses;
-  String get classSelectorEmpty;
+  String get empty;
   String get widgetValidatorFieldEmpty;
   String get widgetValidatorInvalid;
   String get firstStartupDone;

@@ -76,7 +76,7 @@ class German extends Language {
   String get noLogin => 'Keine Login-Daten eingetragen.';
 
   @override
-  String get classSelectorEmpty => 'Leer';
+  String get empty => 'leer';
 
   @override
   String get password => 'Passwort';

@@ -83,7 +83,7 @@ class English extends Language {
   String get noLogin => 'No login data entered.';
 
   @override
-  String get classSelectorEmpty => 'Empty';
+  String get empty => 'empty';
 
   @override
   String get password => 'Password';

@@ -36,7 +36,7 @@ Future<Null> ampTextDialog({@required String title,
     barrierDismissible: true,
     builder: (context) {
       return AlertDialog(
-        title: Text(title, style: TextStyle(color: AmpColors.colorForeground)),
+        title: Text(title, style: AmpColors.textStyleForeground),
         backgroundColor: AmpColors.colorBackground,
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -54,7 +54,7 @@ Widget ampFormField({@required TextEditingController controller,
                                TextInputType keyboardType = TextInputType.visiblePassword,
                                String labelText = ''}) {
   return TextFormField(
-    style: TextStyle(color: AmpColors.colorForeground),
+    style: AmpColors.textStyleForeground,
     keyboardAppearance: AmpColors.brightness,
     controller: controller,
     key: key,

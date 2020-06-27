@@ -353,7 +353,7 @@ Future<Null> dsbUpdateWidget(Function f, {bool cacheGetRequests = true,
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(child: Container(
       child: _getThemedWidget(ListTile(
-          title: Text(errorString(e), style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
+          title: Text(errorString(e), style: AmpColors.textStyleForeground),
         ), Prefs.currentThemeId,
       ), padding: EdgeInsets.only(top: 15)),
     );
@@ -396,7 +396,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     List<Widget> dayWidgets = [];
     if(plan.subs.length == 0) {
       dayWidgets.add(ListTile(
-        title: Text('Keine Vertretungen', style: TextStyle(color: AmpColors.colorForeground)),
+        title: Text('Keine Vertretungen', style: AmpColors.textStyleForeground),
       ));
     }
     int i = 0;
@@ -405,7 +405,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       String titleSub = CustomValues.lang.dsbSubtoTitle(sub);
       if(CustomValues.isAprilFools) titleSub = '${Random().nextInt(98)+1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title:    Text(titleSub, style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
+        title:    Text(titleSub, style: AmpColors.textStyleForeground),
         subtitle: Text(CustomValues.lang.dsbSubtoSubtitle(sub), style: TextStyle(color: CustomValues.isAprilFools ? rcolor : AmpColors.colorForeground)),
         trailing: (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly) ? Text(sub.affectedClass, style: TextStyle(color: AmpColors.colorForeground)) : Text(''),
       ));
@@ -415,7 +415,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       Text(' ${plan.title}', style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
       IconButton(icon: Icon(Icons.info, color: AmpColors.colorForeground,), tooltip: plan.date.split(' ').first, onPressed: () {
         dsbApiHomeScaffoldKey.currentState?.showSnackBar(
-          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: TextStyle(color: AmpColors.colorForeground))),
+          SnackBar(backgroundColor: AmpColors.colorBackground, content: Text(plan.date, style: AmpColors.textStyleForeground)),
         );
       }),
     ])));

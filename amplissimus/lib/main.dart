@@ -159,9 +159,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   @override
   void initState() {
     if(letterDropDownValue.isEmpty)
-      letterDropDownValue = CustomValues.lang.classSelectorEmpty;
+      letterDropDownValue = CustomValues.lang.empty;
     if(gradeDropDownValue.isEmpty)
-      gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
+      gradeDropDownValue = CustomValues.lang.empty;
     SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
     super.initState();
     tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialIndex);
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           onChanged: (value) {
             setAlState(() {
               gradeDropDownValue = value;
-              if(gradeDropDownValue == CustomValues.lang.classSelectorEmpty)
+              if(gradeDropDownValue == CustomValues.lang.empty)
                 Prefs.grade = '';
               else Prefs.grade = value;
             });
@@ -218,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           onChanged: (value) {
             setAlState(() {
               letterDropDownValue = value;
-              if(letterDropDownValue == CustomValues.lang.classSelectorEmpty)
+              if(letterDropDownValue == CustomValues.lang.empty)
                 Prefs.char = '';
               else Prefs.char = value;
             });
@@ -228,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       actions: (context) => [
         ampDialogButton(
           text: CustomValues.lang.cancel,
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: Navigator.of(context).pop,
         ),
         ampDialogButton(
           text: CustomValues.lang.save,

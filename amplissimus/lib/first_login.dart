@@ -64,9 +64,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
   @override
   void initState() {
     if(Prefs.char.trim().toLowerCase().isEmpty)
-      letterDropDownValue = CustomValues.lang.classSelectorEmpty;
+      letterDropDownValue = CustomValues.lang.empty;
     if(Prefs.grade.trim().toLowerCase().isEmpty)
-      gradeDropDownValue = CustomValues.lang.classSelectorEmpty;
+      gradeDropDownValue = CustomValues.lang.empty;
     FirstLoginValues.tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -107,7 +107,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         onChanged: (value) {
                           setState(() {
                             gradeDropDownValue = value;
-                            if(gradeDropDownValue == CustomValues.lang.classSelectorEmpty)
+                            if(gradeDropDownValue == CustomValues.lang.empty)
                               Prefs.grade = '';
                             else
                               Prefs.grade = value;
@@ -126,7 +126,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
                         onChanged: (value) {
                           setState(() {
                             letterDropDownValue = value;
-                            if(letterDropDownValue == CustomValues.lang.classSelectorEmpty)
+                            if(letterDropDownValue == CustomValues.lang.empty)
                               Prefs.char = '';
                             else Prefs.char = value;
                           });
@@ -256,6 +256,6 @@ class FirstLoginValues {
   static final passwordInputFormController = TextEditingController(text: Prefs.password);
   static TabController tabController;
 
-  static final List<String> grades = [CustomValues.lang.classSelectorEmpty,'5','6','7','8','9','10','11','12','13'];
-  static final List<String> letters = [CustomValues.lang.classSelectorEmpty,'a','b','c','d','e','f','g','q'];
+  static final List<String> grades = [CustomValues.lang.empty,'5','6','7','8','9','10','11','12','13'];
+  static final List<String> letters = [CustomValues.lang.empty,'a','b','c','d','e','f','g','q'];
 }
