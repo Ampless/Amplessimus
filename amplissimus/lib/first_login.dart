@@ -41,13 +41,15 @@ class FirstLoginScreen extends StatelessWidget {
     );
   }
 }
+
 class FirstLoginScreenPage extends StatefulWidget {
   FirstLoginScreenPage({this.title, this.textStyle});
   final String title;
   final TextStyle textStyle;
   @override
-  State<StatefulWidget> createState() {return FirstLoginScreenPageState();}
+  State<StatefulWidget> createState() => FirstLoginScreenPageState();
 }
+
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleTickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool credentialsAreLoading = false;
@@ -67,6 +69,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
     FirstLoginValues.tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

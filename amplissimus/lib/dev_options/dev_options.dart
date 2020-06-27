@@ -20,9 +20,7 @@ class DevOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: MaterialApp(
-        builder: (context, child) {
-          return ScrollConfiguration(behavior: MyBehavior(), child: child);
-        },
+        builder: (context, child) => ScrollConfiguration(behavior: MyBehavior(), child: child),
         title: AmpStrings.appTitle,
         theme: ThemeData(
           canvasColor: AmpColors.materialColorBackground,
@@ -32,13 +30,14 @@ class DevOptionsScreen extends StatelessWidget {
         home: DevOptionsScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(color: AmpColors.colorForeground)),
       ), 
       onWillPop: () async {
-        await dsbUpdateWidget((){});
+        await dsbUpdateWidget(() {});
         DevOptionsValues.tabController.animateTo(0);
         return false;
       }
     );
   }
 }
+
 class DevOptionsScreenPage extends StatefulWidget {
   DevOptionsScreenPage({this.title, this.textStyle});
   final String title;
@@ -46,6 +45,7 @@ class DevOptionsScreenPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => DevOptionsScreenPageState();
 }
+
 class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleTickerProviderStateMixin {
 
   @override
@@ -57,7 +57,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
   @override
   Widget build(BuildContext context) {
     return TabBarView(controller: DevOptionsValues.tabController, children: [
-      MyApp(initialIndex: 2,),
+      MyApp(initialIndex: 2),
       Scaffold(
         backgroundColor: AmpColors.colorBackground,
         appBar: AppBar(
@@ -198,36 +198,24 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
   void showInputSubListItemSpacingDialog(BuildContext context) {
     final subListSpacingInputFormKey = GlobalKey<FormFieldState>();
     final subListSpacingInputFormController = TextEditingController(text: Prefs.subListItemSpace.toString());
-    ampDialog(
+    ampTextDialog(
       context: context,
       title: 'Listenelementabstand',
-      inputChildren: (context, setAlState) => [TextFormField(
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          labelStyle: TextStyle(color: AmpColors.colorForeground),
-          labelText: 'Listenelementabstand',
-          fillColor: AmpColors.colorForeground,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: AmpColors.colorForeground),
-            borderRadius: BorderRadius.circular(10),
-          )
+      children: (context) => [
+        ampFormField(
+          controller: subListSpacingInputFormController,
+          key: subListSpacingInputFormKey,
+          keyboardType: TextInputType.number,
+          validator: Widgets.numberValidator,
         ),
-      )],
+      ],
       actions: (context) => [
-        FlatButton(
-          textColor: AmpColors.colorForeground,
+        ampDialogButton(
+          text: 'Abbrechen',
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Abbrechen'),
         ),
-        FlatButton(
-          textColor: AmpColors.colorForeground,
+        ampDialogButton(
+          text: 'Speichern',
           onPressed: () {
             String err = Widgets.numberValidator(subListSpacingInputFormController.text);
             if(err != null) {
@@ -238,7 +226,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage> with SingleT
             setState(() => Prefs.subListItemSpace);
             Navigator.of(context).pop();
           },
-          child: Text('Speichern'),
         ),
       ],
     );

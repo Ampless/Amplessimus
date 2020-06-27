@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   void showInputSelectCurrentClass(BuildContext context) {
-    ampDialog(
+    ampSelectionDialog(
       context: context,
       title: CustomValues.lang.settingsSelectClass,
       inputChildren: (alertContext, setAlState) => [
@@ -260,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   void showInputChangeLanguage(BuildContext context) {
     Language lang = CustomValues.lang;
-    ampDialog(
+    ampSelectionDialog(
       context: context,
       title: CustomValues.lang.settingsChangeLanguage,
       inputChildren: (alertContext, setAlState) => [
@@ -301,87 +301,39 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     final passwordInputFormKey = GlobalKey<FormFieldState>();
     final usernameInputFormController = TextEditingController(text: Prefs.username);
     final passwordInputFormController = TextEditingController(text: Prefs.password);
-    showDialog(
+    ampTextDialog(
       context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(CustomValues.lang.settingsChangeLoginPopup, style: TextStyle(color: AmpColors.colorForeground),),
-          backgroundColor: AmpColors.colorBackground,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextFormField(
-                style: TextStyle(color: AmpColors.colorForeground),
-                controller: usernameInputFormController,
-                key: usernameInputFormKey,
-                validator: Widgets.textFieldValidator,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelStyle: TextStyle(color: AmpColors.colorForeground),
-                  labelText: CustomValues.lang.settingsChangeLoginPopupUsername,
-                  fillColor: AmpColors.colorForeground,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                    BorderSide(color: AmpColors.colorForeground)
-                  )
-                ),
-              ),
-              Padding(padding: EdgeInsets.all(6)),
-              TextFormField(
-                style: TextStyle(color: AmpColors.colorForeground),
-                controller: passwordInputFormController,
-                key: passwordInputFormKey,
-                validator: Widgets.textFieldValidator,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                  labelStyle: TextStyle(color: AmpColors.colorForeground),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelText: CustomValues.lang.settingsChangeLoginPopupPassword,
-                  fillColor: AmpColors.colorForeground,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: AmpColors.colorForeground),
-                  )
-                ),
-              ),
-            ],
+      title: CustomValues.lang.settingsChangeLoginPopup,
+      children: (context) => [
+          ampFormField(
+            controller: usernameInputFormController,
+            key: usernameInputFormKey,
+            validator: Widgets.textFieldValidator,
           ),
-          actions: <Widget>[
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(CustomValues.lang.settingsChangeLoginPopupCancel),
-            ),
-            FlatButton(
-              textColor: AmpColors.colorForeground,
-              onPressed: () {
-                if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
-                Prefs.username = usernameInputFormController.text.trim();
-                Prefs.password = passwordInputFormController.text.trim();
-                rebuildDragDown();
-                Navigator.of(context).pop();
-              },
-              child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
-            ),
-          ],
-        );
-      },
+          Padding(padding: EdgeInsets.all(6)),
+          ampFormField(
+            controller: passwordInputFormController,
+            key: passwordInputFormKey,
+            validator: Widgets.textFieldValidator,
+          ),
+        ],
+      actions: (context) => [
+        ampDialogButton(
+          onPressed: () => Navigator.of(context).pop(),
+          text: CustomValues.lang.settingsChangeLoginPopupCancel,
+        ),
+        FlatButton(
+          textColor: AmpColors.colorForeground,
+          onPressed: () {
+            if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
+            Prefs.username = usernameInputFormController.text.trim();
+            Prefs.password = passwordInputFormController.text.trim();
+            rebuildDragDown();
+            Navigator.of(context).pop();
+          },
+          child: Text(CustomValues.lang.settingsChangeLoginPopupSave),
+        ),
+      ],
     );
   }
 
