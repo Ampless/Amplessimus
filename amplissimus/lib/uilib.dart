@@ -81,7 +81,7 @@ Widget ampFormField({@required TextEditingController controller,
   );
 }
 
-Widget ampDialogButton({@required String text, @required void Function() onPressed}) {
+Widget ampDialogButton({@required String text, @required Function() onPressed}) {
   return FlatButton(
     textColor: AmpColors.colorForeground,
     onPressed: onPressed,
@@ -115,4 +115,18 @@ Widget ampSwitchWithText({@required String text,
       onChanged: onChanged,
     ),
   );
+}
+
+List<Widget> ampDialogButtonsSaveAndCancel({@required Function() onCancel,
+                                            @required Function() onSave}) {
+  return [
+      ampDialogButton(
+        onPressed: onCancel,
+        text: CustomValues.lang.cancel,
+      ),
+      ampDialogButton(
+        onPressed: onSave,
+        text: CustomValues.lang.save,
+      ),
+    ];
 }

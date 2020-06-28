@@ -175,7 +175,11 @@ Future<String> dsbGetData(String   username,
                           String   password,
                          {String   apiEndpoint = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData',
                           bool     cachePostRequests = true,
-                          Function httpPost = httpPost}) async {
+                          Future<String> Function(Uri url,
+                                                  Object body,
+                                                  String id,
+                                                  Map<String, String> headers,
+                                                 {bool useCache}) httpPost = httpPost}) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
     '"UserId":"$username",'
@@ -217,7 +221,9 @@ Future<String> dsbGetData(String   username,
   }
 }
 
-Future<Map<String, String>> dsbGetHtml(String jsontext, {bool cacheGetRequests = true, Function httpGet = httpGet}) async {
+Future<Map<String, String>> dsbGetHtml(String jsontext,
+                                      {bool cacheGetRequests = true,
+                                       Future<String> Function(Uri url, {bool useCache}) httpGet = httpGet}) async {
   var json = jsonDecode(jsontext);
   if(jsonGetKey(json, 'Resultcode') != 0) throw jsonGetKey(json, 'ResultStatusInfo');
   json = jsonGetIndex(
@@ -256,8 +262,12 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username,
                                     String password,
                                    {bool cacheGetRequests = true,
                                     bool cachePostRequests = true,
-                                    Function httpGet = httpGet,
-                                    Function httpPost = httpPost}) async {
+                                    Future<String> Function(Uri url, {bool useCache}) httpGet = httpGet,
+                                    Future<String> Function(Uri url,
+                                                            Object body,
+                                                            String id,
+                                                            Map<String, String> headers,
+                                                           {bool useCache}) httpPost = httpPost}) async {
   List<DsbPlan> plans = [];
   if(cacheGetRequests || cachePostRequests) Prefs.flushCache();
   String json = await dsbGetData(username, password, cachePostRequests: cachePostRequests, httpPost: httpPost);

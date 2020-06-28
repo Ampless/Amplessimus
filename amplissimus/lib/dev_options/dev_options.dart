@@ -88,8 +88,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
             child: ListView(
               children: [
                 Divider(
-                    color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace.toDouble() + 2),
+                  color: AmpColors.colorForeground,
+                  height: Prefs.subListItemSpace.toDouble() + 2
+                ),
                 ampSwitchWithText(
                   text: 'Entwickleroptionen aktiviert',
                   value: Prefs.devOptionsEnabled,
@@ -120,24 +121,32 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   onChanged: (value) {
                     Prefs.useJsonCache = value;
                     dsbUpdateWidget(() => setState(() {}),
-                        cacheJsonPlans: value);
+                      cacheJsonPlans: value);
                   },
                 ),
                 Divider(
-                    color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace.toDouble()),
+                  color: AmpColors.colorForeground,
+                  height: Prefs.subListItemSpace.toDouble()
+                ),
                 ListTile(
                   title: Text('Listenelementabstand', style: AmpColors.textStyleForeground),
-                  trailing: Text('${Prefs.subListItemSpace}',
-                      style: AmpColors.textStyleForeground),
+                  trailing: Text('${Prefs.subListItemSpace}', style: AmpColors.textStyleForeground),
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
+                ListTile(
+                  title: Text('Timer', style: AmpColors.textStyleForeground),
+                  trailing: Text('${Prefs.timer}', style: AmpColors.textStyleForeground),
+                  onTap: () => showInputTimerDialog(context),
+                ),
                 Divider(
-                    color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace.toDouble()),
+                  color: AmpColors.colorForeground,
+                  height: Prefs.subListItemSpace.toDouble()
+                ),
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
-                    child: Text('Print Cache'), onPressed: Prefs.listCache),
+                  child: Text('Print Cache'),
+                  onPressed: Prefs.listCache
+                ),
                 RaisedButton(
                   child: Text('Cache leeren'),
                   onPressed: () => Prefs.clearCache(),
@@ -152,8 +161,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                           '{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
                           '{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
                           '{"class":"11q","lessons": [1],"teacher":"Wolf","subject":"1sk1","notes":""}'
-                          ']}'
-                          ']';
+                          ']}]';
                       dsbUpdateWidget(() => setState(() {}),
                           cacheJsonPlans: Prefs.useJsonCache);
                     }),
@@ -230,27 +238,51 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           validator: Widgets.numberValidator,
         ),
       ],
-      actions: (context) => [
-        ampDialogButton(
-          text: 'Abbrechen',
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        ampDialogButton(
-          text: 'Speichern',
-          onPressed: () {
-            String err =
-                Widgets.numberValidator(subListSpacingInputFormController.text);
-            if (err != null) {
-              ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
-              return;
-            }
-            Prefs.subListItemSpace =
-                int.tryParse(subListSpacingInputFormController.text.trim());
-            setState(() => Prefs.subListItemSpace);
-            Navigator.of(context).pop();
-          },
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        onCancel: () => Navigator.of(context).pop(),
+        onSave: () {
+          String err =
+              Widgets.numberValidator(subListSpacingInputFormController.text);
+          if (err != null) {
+            ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
+            return;
+          }
+          Prefs.subListItemSpace =
+              int.parse(subListSpacingInputFormController.text.trim());
+          setState(() => Prefs.subListItemSpace);
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
+  void showInputTimerDialog(BuildContext context) {
+    final timerInputFormKey = GlobalKey<FormFieldState>();
+    final timerInputFormController =
+        TextEditingController(text: Prefs.timer.toString());
+    ampTextDialog(
+      context: context,
+      title: 'Timer (Minuten)',
+      children: (context) => [
+        ampFormField(
+          controller: timerInputFormController,
+          key: timerInputFormKey,
+          keyboardType: TextInputType.number,
+          validator: Widgets.numberValidator,
         ),
       ],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        onCancel: () => Navigator.of(context).pop(),
+        onSave: () {
+          String err = Widgets.numberValidator(timerInputFormController.text);
+          if (err != null) {
+            ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
+            return;
+          }
+          setState(() => Prefs.timer = int.parse(timerInputFormController.text.trim()));
+          Navigator.of(context).pop();
+        },
+      ),
     );
   }
 }

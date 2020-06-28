@@ -63,12 +63,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         });
       }
     })();
-    Timer.periodic(Duration(minutes: 5), (timer) async {
-      if(_MyHomePageState.tabController.index == 0) {
-        await dsbUpdateWidget(() {});
-        Animations.changeScreenNoAnimationReplace(MyApp(initialIndex: 0), context);
-      }
-    });
   }
 
   @override
@@ -171,6 +165,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
     super.initState();
     tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialIndex);
+    CustomValues.updateTimer = Timer.periodic(Duration(minutes: Prefs.timer), (timer) => rebuildNewBuild());
   }
 
   void rebuild() {
@@ -301,22 +296,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             labelText: CustomValues.lang.password,
           ),
         ],
-      actions: (context) => [
-        ampDialogButton(
-          onPressed: () => Navigator.of(context).pop(),
-          text: CustomValues.lang.cancel,
-        ),
-        ampDialogButton(
-          onPressed: () {
-            if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
-            Prefs.username = usernameInputFormController.text.trim();
-            Prefs.password = passwordInputFormController.text.trim();
-            rebuildDragDown();
-            Navigator.of(context).pop();
-          },
-          text: CustomValues.lang.save,
-        ),
-      ],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        onCancel: () => Navigator.of(context).pop(),
+        onSave: () {
+          if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
+          Prefs.username = usernameInputFormController.text.trim();
+          Prefs.password = passwordInputFormController.text.trim();
+          rebuildDragDown();
+          Navigator.of(context).pop();
+        },
+      ),
     );
   }
 
@@ -355,6 +344,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     var textStyle = TextStyle(color: AmpColors.colorForeground);
     if(dsbWidget == null) rebuildNewBuild();
+    if(CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
+    CustomValues.updateTimer = Timer.periodic(Duration(minutes: Prefs.timer), (timer) => rebuildNewBuild());
     List<Widget> containers = [
       AnimatedContainer(
         duration: Duration(milliseconds: 150),

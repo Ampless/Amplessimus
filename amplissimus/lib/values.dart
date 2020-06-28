@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -13,6 +15,7 @@ class CustomValues {
     _lang = l;
   }
   static List<TTColumn> ttColums = [];
+  static Timer updateTimer;
 }
 
 class AmpStrings {
