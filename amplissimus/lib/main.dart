@@ -35,6 +35,7 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> {
+  bool firstRefresh = true;
   String fileString = 'assets/anims/data-white-to-black.html';
   @override
   void initState() {
@@ -64,11 +65,13 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       }
     })();
     Timer.periodic(Duration(minutes: 5), (timer) async {
-      if(_MyHomePageState.tabController.index == 0) {
+      if(_MyHomePageState.tabController.index == 0 && !firstRefresh) {
+        ampInfo(ctx: 'Timer', message: 'refreshing dsbWidget...');
         await dsbUpdateWidget(() {});
-        Animations.changeScreenNoAnimationReplace(MyApp(initialIndex: 0), context);
+        Animations.changeScreenNoAnimationReplace(MyApp(initialIndex: 0), _MyHomePageState.buildContext);
       }
     });
+    firstRefresh = false;
   }
 
   @override
@@ -141,6 +144,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   static TabController tabController;
+  static BuildContext buildContext;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -496,6 +500,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
       )
     ];
+    buildContext = context;
     return SafeArea(
       child: Stack(children: <Widget>[
         AnimatedContainer(
@@ -538,5 +543,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         )
       ],)
     );
+    
   }
 }
