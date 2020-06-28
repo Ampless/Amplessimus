@@ -5,7 +5,8 @@
 #  commitid (1)
 #  name     (2)
 gh_create_release() {
-        curl -X POST -u "$(cat /etc/ampci.creds)" \
+        echo "[GitHub] Creating release: $name" >&2
+        RAW="$(curl -X POST -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 --data "{
                          \"tag_name\": \"$1\",
@@ -15,8 +16,10 @@ gh_create_release() {
                          \"draft\": true,
                          \"prerelease\": true
                         }" \
-                https://api.github.com/repos/Amplissimus/Amplissimus/releases \
-                | grep '"upload_url":' | head -n 1 | cut -d: -f2- | sed 's/ \"\(.\+\)\",/\1/'
+                                https://api.github.com/repos/Amplissimus/Amplissimus/releases)"
+        UPLOAD_URL=$(echo "$RAW" | grep '"upload_url":' | head -n 1 | cut -d: -f2- | sed 's/^.*"\(.*\)".*$/\1/' |sed 's/{?name,label}//')
+        echo "[GitHub] Created release: $UPLOAD_URL" >&2
+        echo "$UPLOAD_URL"
 }
 
 # upload a file to a github release
@@ -24,11 +27,13 @@ gh_create_release() {
 #  output of gh_create_release (1)
 #  file                        (2)
 gh_upload_binary() {
+        echo "[GitHub] Uploading binary: $file"
         curl -X POST -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Content-Type: application/octet-stream" \
-                --data-binary "@$2" \
-                "$(echo "$1" | sed "s/{?name,label}/?name=$2/")"
+                --data-binary "@$2" "$(echo "$1" | sed "s/$/?name=$2/")"
+        echo
+        echo "[GitHub] Done uploading: $file"
 }
 
 flutter channel master
