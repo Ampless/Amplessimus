@@ -35,6 +35,7 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> {
+  bool firstRefresh = true;
   String fileString = 'assets/anims/data-white-to-black.html';
   @override
   void initState() {
@@ -135,6 +136,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   static TabController tabController;
+  static BuildContext buildContext;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -487,6 +489,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
       )
     ];
+    buildContext = context;
     return SafeArea(
       child: Stack(children: <Widget>[
         AnimatedContainer(
@@ -529,5 +532,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         )
       ],)
     );
+    
   }
 }
