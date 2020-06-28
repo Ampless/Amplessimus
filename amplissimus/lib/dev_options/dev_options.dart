@@ -279,7 +279,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
             ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
             return;
           }
-          setState(() => Prefs.timer = int.parse(timerInputFormController.text.trim()));
+          setState(() => Prefs.setTimer(int.parse(timerInputFormController.text.trim()), () => null));
           Navigator.of(context).pop();
         },
       ),

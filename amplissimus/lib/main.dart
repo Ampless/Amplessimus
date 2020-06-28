@@ -159,6 +159,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   @override
   void initState() {
+    ampInfo(ctx: '_MyHomePageState', message: 'initState()');
     if(letterDropDownValue.isEmpty)
       letterDropDownValue = CustomValues.lang.empty;
     if(gradeDropDownValue.isEmpty)
@@ -166,8 +167,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
     super.initState();
     tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialIndex);
-    if(CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
-    CustomValues.updateTimer = Timer.periodic(Duration(minutes: Prefs.timer), (timer) => rebuildNewBuild());
+    Prefs.setTimer(Prefs.timer, rebuildNewBuild);
   }
 
   void rebuild() {
@@ -346,8 +346,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     var textStyle = TextStyle(color: AmpColors.colorForeground);
     if(dsbWidget == null) rebuildNewBuild();
-    if(CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
-    CustomValues.updateTimer = Timer.periodic(Duration(minutes: Prefs.timer), (timer) => rebuildNewBuild());
     List<Widget> containers = [
       AnimatedContainer(
         duration: Duration(milliseconds: 150),

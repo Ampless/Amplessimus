@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/pref_cache.dart';
+import 'package:Amplissimus/values.dart';
 import 'package:crypto/crypto.dart';
 
 CachedSharedPreferences _prefs;
@@ -73,8 +75,6 @@ int get counter => _prefs.getInt('counter', 0);
 set counter(int i) => _prefs.setInt('counter', i);
 int get subListItemSpace => _prefs.getInt('sub_list_item_space', 0);
 set subListItemSpace(int i) => _prefs.setInt('sub_list_item_space', i);
-int get timer => _prefs.getInt('update_dsb_timer', 15);
-set timer(int i) => _prefs.setInt('update_dsb_timer', i);
 int get currentThemeId => _prefs.getInt('current_theme_id', 0);
 set currentThemeId(int i) => _prefs.setInt('current_theme_id', i);
 String get username => _prefs.getString('username_dsb', '');
@@ -105,6 +105,13 @@ String get dsbJsonCache => _prefs.getString('DSB_JSON_CACHE', null);
 set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
 String get savedLangCode => _prefs.getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
+
+int get timer => _prefs.getInt('update_dsb_timer', 15);
+void setTimer(int i, Future<Null> Function() rebuildNewBuild) {
+  _prefs.setInt('update_dsb_timer', i);
+  if(CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
+  CustomValues.updateTimer = Timer.periodic(Duration(minutes: i), (timer) => rebuildNewBuild());
+}
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
 bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
