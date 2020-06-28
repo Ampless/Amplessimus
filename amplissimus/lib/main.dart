@@ -166,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
     super.initState();
     tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialIndex);
-    if(CustomValues.updateTimer.isActive) CustomValues.updateTimer.cancel();
+    if(CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
     CustomValues.updateTimer = Timer.periodic(Duration(minutes: Prefs.timer), (timer) => rebuildNewBuild());
   }
 
