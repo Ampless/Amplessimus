@@ -488,7 +488,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ),
       )
     ];
-    buildContext = context;
     return SafeArea(
       child: Stack(children: <Widget>[
         AnimatedContainer(
