@@ -36,13 +36,8 @@ class DevOptionsScreen extends StatelessWidget {
           ),
         ),
         onWillPop: () async {
-          await dsbUpdateWidget(() {});
-          DevOptionsValues.tabController.animateTo(0);
-          Animations.changeScreenNoAnimationReplace(
-              MyApp(
-                initialIndex: 2,
-              ),
-              context);
+          dsbUpdateWidget(() {});
+          Animations.changeScreenEaseOutBackReplace(MyApp(initialIndex: 2), context);
           return false;
         });
   }
@@ -62,13 +57,13 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     super.initState();
     DevOptionsValues.tabController =
         TabController(length: 2, vsync: this, initialIndex: 1);
-    DevOptionsValues.tabController.addListener(() {
-      if (DevOptionsValues.tabController.index < 3) {
+    DevOptionsValues.tabController.animation.addListener(() {
+      if (DevOptionsValues.tabController.index < 1) {
         Animations.changeScreenNoAnimationReplace(
-            MyApp(
-              initialIndex: 2,
-            ),
-            context);
+          MyApp(
+            initialIndex: 2,
+          ),
+          context);
       }
     });
   }
@@ -204,9 +199,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
           onPressed: () {
-            DevOptionsValues.tabController.animateTo(0);
-            dsbUpdateWidget(() => setState(() {}),
-                cacheJsonPlans: Prefs.useJsonCache);
+            dsbUpdateWidget(() {});
+            Animations.changeScreenEaseOutBackReplace(MyApp(initialIndex: 2), context);
           },
           label: Text(
             'zurück',

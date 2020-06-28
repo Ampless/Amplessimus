@@ -63,6 +63,12 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         });
       }
     })();
+    Timer.periodic(Duration(minutes: 5), (timer) async {
+      if(_MyHomePageState.tabController.index == 0) {
+        await dsbUpdateWidget(() {});
+        Animations.changeScreenNoAnimationReplace(MyApp(initialIndex: 0), context);
+      }
+    });
   }
 
   @override
@@ -134,7 +140,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-  TabController tabController;
+  static TabController tabController;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
