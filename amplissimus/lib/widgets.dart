@@ -107,16 +107,11 @@ class Widgets {
     );
   }
 
-  static String gradeFieldValidator(String value) {
-    List<String> grades = ['5','6','7','8','9','10','11','12','13',''];
-    if(!grades.contains(value.trim().toLowerCase())) return CustomValues.lang.widgetValidatorInvalid;
-    return null;
-  }
-
-  static String letterFieldValidator(String value) {
-    List<String> letters = ['a','b','c','d','e','f','g','h','i','q',''];
-    if(!letters.contains(value.trim().toLowerCase())) return CustomValues.lang.widgetValidatorInvalid;
-    return null;
+  //this is currently unused, possible lists:
+  //['5','6','7','8','9','10','11','12','13','']
+  //['a','b','c','d','e','f','g','h','i','q','']
+  static String Function(String) listValidator(List<String> list) {
+    return (value) => list.contains(value.trim().toLowerCase()) ? null : CustomValues.lang.widgetValidatorInvalid;
   }
 
   static String textFieldValidator(String value) {

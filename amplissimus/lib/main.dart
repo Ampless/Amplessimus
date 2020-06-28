@@ -213,10 +213,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ampDropdownButton(
           value: letterDropDownValue,
           items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
+            return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
           onChanged: (value) {
             setAlState(() {
@@ -228,19 +225,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           },
         ),
       ],
-      actions: (context) => [
-        ampDialogButton(
-          text: CustomValues.lang.cancel,
-          onPressed: Navigator.of(context).pop,
-        ),
-        ampDialogButton(
-          text: CustomValues.lang.save,
-          onPressed: () {
-            rebuildNewBuild();
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        onCancel: Navigator.of(context).pop,
+        onSave: () {
+          rebuildNewBuild();
+          Navigator.of(context).pop();
+        },
+      ),
     );
   }
 
@@ -258,20 +249,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             onChanged: (value) => setAlState(() => lang = value),
           ),
         ],
-      actions: (context) => [
-        ampDialogButton(
-          text: CustomValues.lang.cancel,
-          onPressed: Navigator.of(context).pop,
-        ),
-        ampDialogButton(
-          text: CustomValues.lang.save,
-          onPressed: () {
-            CustomValues.lang = lang;
-            rebuildNewBuild();
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        onCancel: Navigator.of(context).pop,
+        onSave: () {
+          CustomValues.lang = lang;
+          rebuildNewBuild();
+          Navigator.of(context).pop();
+        },
+      ),
     );
   }
 

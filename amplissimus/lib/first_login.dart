@@ -32,7 +32,7 @@ class FirstLoginScreen extends StatelessWidget {
         ),
         home: FirstLoginScreenPage(title: AmpStrings.appTitle, textStyle: TextStyle(
           color: AmpColors.colorForeground,
-        ),),
+        )),
       ), 
       onWillPop: () async {
         if(FirstLoginValues.tabController.index <= 0) return false;
@@ -216,10 +216,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage> with SingleT
               'assets/anims/get_ready.flr',
               animation: animString,
               callback: (name) {
-                if(name.trim().toLowerCase() == 'idle') setState(() => animString = 'idle2');
-                else setState(() => animString = 'idle');
+                setState(() => animString = name.trim().toLowerCase() == 'idle' ? 'idle2' : 'idle');
               },
-            ), color: Colors.black,),
+            ), color: Colors.black),
             Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
