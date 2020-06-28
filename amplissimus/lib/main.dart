@@ -328,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return widget;
   }
 
-  Widget _settingsWidget({@required Function onTap, @required Widget child}) {
+  Widget _settingsWidget({@required void Function() onTap, @required Widget child}) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0))),
