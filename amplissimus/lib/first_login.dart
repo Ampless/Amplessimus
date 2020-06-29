@@ -61,9 +61,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
   @override
   void initState() {
-    if (Prefs.char.trim().toLowerCase().isEmpty)
+    if (Prefs.char.trim().isEmpty)
       letterDropDownValue = CustomValues.lang.empty;
-    if (Prefs.grade.trim().toLowerCase().isEmpty)
+    if (Prefs.grade.trim().isEmpty)
       gradeDropDownValue = CustomValues.lang.empty;
     FirstLoginValues.tabController = TabController(length: 2, vsync: this);
     super.initState();
