@@ -7,13 +7,15 @@ import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 
 class CustomValues {
-  static bool get isAprilFools => DateTime.now().day == 1 && DateTime.now().month == 4;
+  static bool get isAprilFools =>
+      DateTime.now().day == 1 && DateTime.now().month == 4;
   static Language _lang = Language.fromCode(Prefs.savedLangCode);
   static Language get lang => _lang;
   static set lang(Language l) {
     Prefs.savedLangCode = l.code;
     _lang = l;
   }
+
   static List<TTColumn> ttColums = [];
   static Timer updateTimer;
 }
@@ -27,13 +29,26 @@ class AmpStrings {
 class AmpColors {
   static MaterialColor _color(int code) {
     Color c = Color(code);
-    return MaterialColor(code, {50: c, 100: c, 200: c, 300: c, 400: c, 500: c, 600: c, 700: c, 800: c, 900: c});
+    return MaterialColor(code, {
+      50: c,
+      100: c,
+      200: c,
+      300: c,
+      400: c,
+      500: c,
+      600: c,
+      700: c,
+      800: c,
+      900: c
+    });
   }
 
   static MaterialColor _primaryBlack = _color(0xFF000000);
   static MaterialColor _primaryWhite = _color(0xFFFFFFFF);
-  static MaterialColor get materialColorForeground => isDarkMode ? _primaryWhite : _primaryBlack;
-  static MaterialColor get materialColorBackground => isDarkMode ? _primaryBlack : _primaryWhite;
+  static MaterialColor get materialColorForeground =>
+      isDarkMode ? _primaryWhite : _primaryBlack;
+  static MaterialColor get materialColorBackground =>
+      isDarkMode ? _primaryBlack : _primaryWhite;
 
   static final Color _blankBlack = Color.fromRGBO(0, 0, 0, 1);
   static final Color _blankWhite = Color.fromRGBO(255, 255, 255, 1);
@@ -50,27 +65,30 @@ class AmpColors {
   static TextStyle get textStyleForeground => TextStyle(color: colorForeground);
   static TextStyle get textStyleBackground => TextStyle(color: colorBackground);
 
-  static Brightness get brightness => isDarkMode ? Brightness.dark : Brightness.light;
+  static Brightness get brightness =>
+      isDarkMode ? Brightness.dark : Brightness.light;
 
   static bool get isDarkMode => Prefs.isDarkMode;
   static set isDarkMode(bool b) {
-    if(b == null) return;
+    if (b == null) return;
     Prefs.isDarkMode = b;
     ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
   }
 
   static void switchMode() => isDarkMode = !isDarkMode;
 
-  static TweenSequenceItem _rainbowSequenceElement(MaterialColor begin, MaterialColor end) {
-    return TweenSequenceItem(weight: 1.0, tween: ColorTween(begin: begin, end: end));
+  static TweenSequenceItem _rainbowSequenceElement(
+      MaterialColor begin, MaterialColor end) {
+    return TweenSequenceItem(
+        weight: 1.0, tween: ColorTween(begin: begin, end: end));
   }
 
-  static final Animatable<Color> rainbowBackgroundAnimation = TweenSequence<Color>(
+  static final Animatable<Color> rainbowBackgroundAnimation =
+      TweenSequence<Color>(
     [
       _rainbowSequenceElement(Colors.red, Colors.green),
       _rainbowSequenceElement(Colors.green, Colors.blue),
       _rainbowSequenceElement(Colors.blue, Colors.pink),
     ],
   );
-  
 }
