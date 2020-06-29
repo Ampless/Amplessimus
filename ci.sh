@@ -48,10 +48,8 @@ date=$(date +%Y_%m_%d-%H_%M_%S)
 version_name=$date-$commitid
 output_dir="/usr/local/var/www/amplissimus/$version_name"
 cp -rf bin "$output_dir"
-cd bin
-tar cf "$output_dir/$commitid.tar" *
-rm -rf *
-cd ../..
+rm -rf bin/*
+cd ..
 [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
 cd $output_dir
 upload_url=$(gh_create_release $commitid $version_name)
