@@ -130,6 +130,9 @@ class English extends Language {
   String get setupTimetableTitle => 'Setup Timetable';
 
   @override
+  String get subject => 'subject';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Physical Education (sports)',
     'e': 'English',
