@@ -8,6 +8,7 @@ import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/screens/register_timetable.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
@@ -427,7 +428,8 @@ class _MyHomePageState extends State<MyHomePage>
                   splashColor: AmpColors.colorForeground,
                   borderRadius: BorderRadius.circular(32),
                   onTap: () {
-                    return;
+                    Animations.changeScreenEaseOutBackReplace(
+                        RegisterTimetableScreen(), context);
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

@@ -11,14 +11,6 @@ import 'package:flutter/services.dart';
 
 import '../animations.dart';
 
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
-  }
-}
-
 class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
