@@ -105,14 +105,29 @@ class RegisterTimetableScreenPageState
                     );
                   return ListTile(
                     leading: Text(
-                      '${(index + 1).toString()}',
+                      (index + 1).toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AmpColors.colorForeground,
                           fontSize: 30),
                     ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: AmpColors.colorBackground,
+                            title: Text(
+                              CustomValues.lang.editHour,
+                              style:
+                                  TextStyle(color: AmpColors.colorForeground),
+                            ),
+                          );
+                        },
+                      );
+                    },
                     title: Text(
-                      '${CustomValues.lang.subject}',
+                      CustomValues.lang.subject,
                       style: TextStyle(
                           color: AmpColors.colorForeground, fontSize: 22),
                     ),
