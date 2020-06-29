@@ -12,6 +12,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class FirstLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AmpColors.isDarkMode = true;
     return WillPopScope(
         child: MaterialApp(
           builder: (context, child) {
@@ -61,7 +62,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
   @override
   void initState() {
-    AmpColors.isDarkMode = true;
     if (Prefs.char.trim().isEmpty)
       letterDropDownValue = CustomValues.lang.empty;
     if (Prefs.grade.trim().isEmpty)
