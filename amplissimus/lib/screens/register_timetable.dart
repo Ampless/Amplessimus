@@ -40,15 +40,15 @@ class RegisterTimetableScreenPageState
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
       child: Scaffold(
-        appBar: ampAppBar(CustomValues.lang.setupTimetableTitle),
-        backgroundColor: Colors.transparent,
-        body: Container(
-          color: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Row(children: [
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: Container(
+            decoration: BoxDecoration(border: Border.all()),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   ampDropdownButton(
                     value: currentDropdownDay,
                     items: TTDay.values
@@ -61,7 +61,19 @@ class RegisterTimetableScreenPageState
                       setState(() => currentDropdownDay = value);
                     },
                   ),
-                ], mainAxisSize: MainAxisSize.min),
+                ],
+              ),
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        body: Container(
+          color: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Row(children: [], mainAxisSize: MainAxisSize.min),
               ),
             ],
           ),
