@@ -412,7 +412,7 @@ Widget _getThemedWidget(Widget child, int themeId) {
     case 0:
       return Card(
         elevation: 0,
-        color: AmpColors.lightForeground,
+        color: AmpColors.lightBackground,
         child: child,
       );
     case 1:
@@ -427,7 +427,7 @@ Widget _getThemedWidget(Widget child, int themeId) {
     case -1:
       return Card(
         elevation: 0,
-        color: AmpColors.lightForeground,
+        color: AmpColors.lightBackground,
         child: child,
       );
     default:
@@ -443,7 +443,8 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     List<Widget> dayWidgets = [];
     if (plan.subs.length == 0) {
       dayWidgets.add(ListTile(
-        title: Text(CustomValues.lang.noSubs, style: AmpColors.textStyleForeground),
+        title: Text(CustomValues.lang.noSubs,
+            style: AmpColors.textStyleForeground),
       ));
     }
     int i = 0;

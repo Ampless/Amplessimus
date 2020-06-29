@@ -60,6 +60,7 @@ Widget ampFormField(
     List<String> autofillHints}) {
   if(autofillHints == null) autofillHints = [];
   return TextFormField(
+    obscureText: obscureText,
     style: AmpColors.textStyleForeground,
     keyboardAppearance: AmpColors.brightness,
     controller: controller,
@@ -98,10 +99,11 @@ Widget ampDialogButton(
 Widget ampDropdownButton(
     {@required dynamic value,
     @required List<DropdownMenuItem<dynamic>> items,
-    @required void Function(dynamic) onChanged}) {
+    @required void Function(dynamic) onChanged,
+    bool underlineDisabled = false}) {
   return DropdownButton(
     underline: Container(
-      height: 2,
+      height: underlineDisabled ? 2 : 0,
       color: AmpColors.colorForeground,
     ),
     style: AmpColors.textStyleForeground,

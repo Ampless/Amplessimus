@@ -16,6 +16,24 @@ class CustomValues {
     _lang = l;
   }
 
+  static List<int> ttHours = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ];
+
   static List<TTColumn> ttColums = [];
   static Timer updateTimer;
 }
@@ -58,7 +76,8 @@ class AmpColors {
   static final Color _lightBlack = Color.fromRGBO(220, 220, 220, 1);
 
   static Color get blankGrey => isDarkMode ? _greyBlack : _greyWhite;
-  static Color get lightForeground => isDarkMode ? _lightWhite : _lightBlack;
+  static Color get lightBackground => isDarkMode ? _lightWhite : _lightBlack;
+  static Color get lightForeground => isDarkMode ? _greyWhite : _greyBlack;
   static Color get colorBackground => isDarkMode ? _blankBlack : _blankWhite;
   static Color get colorForeground => isDarkMode ? _blankWhite : _blankBlack;
 
