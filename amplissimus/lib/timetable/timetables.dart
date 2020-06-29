@@ -5,8 +5,6 @@ import 'dart:convert';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/json.dart';
 
-
-
 enum TTDay {
   Monday,
   Tuesday,
@@ -20,7 +18,7 @@ List<DsbPlan> timetablePlans = new List();
 List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
 void updateTimetableDays(List<DsbPlan> plans) {
   timetableDays = new List();
-  for(DsbPlan tempPlan in plans) {
+  for (DsbPlan tempPlan in plans) {
     timetableDays.add(ttMatchDay(tempPlan.title.split(' ').last.toLowerCase()));
   }
   print(timetableDays);
@@ -33,6 +31,19 @@ class TTLesson {
   bool isFree;
 
   TTLesson(this.subject, this.teacher, this.notes, this.isFree);
+
+  TTLesson.fromJson(Map<String, dynamic> json)
+      : subject = json['subject'],
+        teacher = json['teacher'],
+        notes = json['notes'],
+        isFree = json['isFree'];
+
+  Map<String, dynamic> toJson() => {
+        'subject': subject,
+        'teacher': teacher,
+        'notes': notes,
+        'isFree': isFree,
+      };
 }
 
 class TTColumn {
@@ -40,12 +51,37 @@ class TTColumn {
   TTDay day;
 
   TTColumn(this.lessons, this.day);
+
+  TTColumn.fromJson(Map<String, dynamic> json)
+      : lessons = lessonsFromJson(jsonDecode(json['lessons'])),
+        day = json['day'];
+
+  Map<String, dynamic> toJson() => {
+        'lessons': jsonEncode(lessonsToJson(lessons)),
+        'day': day,
+      };
+
+  List<String> lessonsToJson(List<TTLesson> lessons) {
+    List<String> lessonsStrings = [];
+    for (TTLesson usage in lessons) {
+      lessonsStrings.add(jsonEncode(usage.toJson()));
+    }
+    return lessonsStrings;
+  }
+
+  static List<TTLesson> lessonsFromJson(List<String> lessonsStrings) {
+    List<TTLesson> tempLessons = new List();
+    for (String tempString in lessonsStrings) {
+      tempLessons.add(TTLesson.fromJson(jsonDecode(tempString)));
+    }
+    return tempLessons;
+  }
 }
 
 TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
-  for(int i = 0; i < column.lessons.length; i++) {
-    for(DsbSubstitution sub in subs) {
-      if(sub.actualHours.contains(i)) {
+  for (int i = 0; i < column.lessons.length; i++) {
+    for (DsbSubstitution sub in subs) {
+      if (sub.actualHours.contains(i)) {
         column.lessons[i].teacher = sub.teacher;
         column.lessons[i].notes = sub.notes;
         column.lessons[i].isFree = sub.isFree;
@@ -55,36 +91,35 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
   return column;
 }
 
-//NOT multi-language yet
 TTDay ttMatchDay(String s) {
-  if(s.contains('montag'))
+  if (s.contains('montag'))
     return TTDay.Monday;
-  else if(s.contains('monday'))
+  else if (s.contains('monday'))
     return TTDay.Monday;
-  else if(s.contains('dienstag'))
+  else if (s.contains('dienstag'))
     return TTDay.Tuesday;
-  else if(s.contains('tuesday'))
+  else if (s.contains('tuesday'))
     return TTDay.Tuesday;
-  else if(s.contains('mittwoch'))
+  else if (s.contains('mittwoch'))
     return TTDay.Wednesday;
-  else if(s.contains('wednesday'))
+  else if (s.contains('wednesday'))
     return TTDay.Wednesday;
-  else if(s.contains('donnerstag'))
+  else if (s.contains('donnerstag'))
     return TTDay.Thursday;
-  else if(s.contains('thursday'))
+  else if (s.contains('thursday'))
     return TTDay.Thursday;
-  else if(s.contains('freitag'))
+  else if (s.contains('freitag'))
     return TTDay.Friday;
-  else if(s.contains('friday'))
+  else if (s.contains('friday'))
     return TTDay.Friday;
   else
     throw '[TT] Unknown day: $s';
 }
 
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
-  for(DsbPlan plan in plans) {
-    for(int i = 0; i < table.length; i++) {
-      if(table[i].day == ttMatchDay(plan.title)) {
+  for (DsbPlan plan in plans) {
+    for (int i = 0; i < table.length; i++) {
+      if (table[i].day == ttMatchDay(plan.title)) {
         table[i] = ttSubColumn(table[i], plan.subs);
       }
     }
@@ -92,41 +127,10 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   return table;
 }
 
-String ttLessonToJson(TTLesson lesson)
-  => '{"subject":"${lesson.subject}","teacher":"${lesson.teacher}","notes":"${lesson.notes}","free":"${lesson.isFree ? 1 : 0}"},';
-
-String ttColumnToJson(TTColumn column) {
-  String s = '';
-  for(TTLesson l in column.lessons)
-    s += ttLessonToJson(l);
-  return '{"day":"${column.day}","lessons":[$s]},';
-}
-
 String ttToJson(List<TTColumn> table) {
-  String s = '';
-  for(var c in table)
-    s += ttColumnToJson(c);
-  return '[$s]';
-}
-
-TTLesson ttLessonFromJson(dynamic json) {
-  return TTLesson(jsonGetKey(json, 'subject'),
-                  jsonGetKey(json, 'teacher'),
-                  jsonGetKey(json, 'notes'),
-                  jsonGetKey(json, 'free') == '1' ? true : false);
-}
-
-TTColumn ttColumnFromJson(dynamic json) {
-  TTDay day = ttMatchDay(jsonGetKey(json, 'day'));
-  List<TTLesson> lessons = [];
-  for(dynamic lesson in jsonIsList(jsonGetKey(json, 'lessons')))
-    lessons.add(ttLessonFromJson(lesson));
-  return TTColumn(lessons, day);
-}
-
-List<TTColumn> ttFromJson(String jsontext) {
-  List<TTColumn> columns = [];
-  for(dynamic column in jsonIsList(jsonDecode(jsontext)))
-    columns.add(ttColumnFromJson(column));
-  return columns;
+  List<String> tableStrings = [];
+  for (TTColumn column in table) {
+    tableStrings.add(jsonEncode(column.toJson()));
+  }
+  return jsonEncode(tableStrings);
 }
