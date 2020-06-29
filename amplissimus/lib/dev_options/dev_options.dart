@@ -275,8 +275,12 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         onCancel: () => Navigator.of(context).pop(),
         onSave: () {
           if (!timerInputFormKey.currentState.validate()) return;
-          setState(() => Prefs.setTimer(
-              int.parse(timerInputFormController.text.trim()), () => null));
+          try {
+            setState(() => Prefs.setTimer(
+                int.parse(timerInputFormController.text.trim()), () => null));
+          } catch (e) {
+            return;
+          }
           Navigator.of(context).pop();
         },
       ),

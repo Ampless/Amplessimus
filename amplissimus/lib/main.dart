@@ -416,7 +416,7 @@ class _MyHomePageState extends State<MyHomePage>
                     )),
               onRefresh: rebuildDragDown),
         ),
-        margin: EdgeInsets.all(16),
+        margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
       ),
       Container(
         color: Colors.transparent,
