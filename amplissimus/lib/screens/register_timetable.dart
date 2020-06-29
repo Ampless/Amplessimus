@@ -34,6 +34,7 @@ class RegisterTimetableScreenPageState
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
+      color: AmpColors.colorBackground,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(),
