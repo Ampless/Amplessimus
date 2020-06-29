@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/json.dart';
 
 enum TTDay {
@@ -127,10 +128,20 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   return table;
 }
 
-String ttToJson(List<TTColumn> table) {
+void saveTimetableToPrefs(List<TTColumn> table) {
   List<String> tableStrings = [];
   for (TTColumn column in table) {
     tableStrings.add(jsonEncode(column.toJson()));
   }
-  return jsonEncode(tableStrings);
+  Prefs.jsonTimetable = jsonEncode(tableStrings);
+}
+
+List<TTColumn> timetableFromPrefs() {
+  List<TTColumn> table = [];
+  if (Prefs.jsonTimetable == null) return [];
+  List<String> tableStrings = jsonDecode(Prefs.jsonTimetable);
+  for (String s in tableStrings) {
+    table.add(TTColumn.fromJson(jsonDecode(s)));
+  }
+  return table;
 }

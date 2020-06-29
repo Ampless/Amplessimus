@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/pref_cache.dart';
+import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:crypto/crypto.dart';
 
@@ -110,6 +111,8 @@ String get dsbJsonCache => _prefs.getString('DSB_JSON_CACHE', null);
 set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
 String get savedLangCode => _prefs.getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
+String get jsonTimetable => _prefs.getString('json_timetable', null);
+set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
 
 int get timer => _prefs.getInt('update_dsb_timer', 15);
 void setTimer(int i, Function() f) {
