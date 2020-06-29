@@ -172,4 +172,7 @@ class English extends Language {
         throw UnimplementedError('Unknown Day!');
     }
   }
+
+  @override
+  String get noSubs => 'No substitutions';
 }

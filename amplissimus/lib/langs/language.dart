@@ -41,6 +41,7 @@ abstract class Language {
   String get darkMode;
   String get setupTimetable;
   String get setupTimetableTitle;
+  String get noSubs;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

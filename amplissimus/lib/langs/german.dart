@@ -160,4 +160,7 @@ class German extends Language {
         throw UnimplementedError('Unbekannter Tag!');
     }
   }
+
+  @override
+  String get noSubs => 'No substitutions';
 }

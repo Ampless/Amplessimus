@@ -443,7 +443,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     List<Widget> dayWidgets = [];
     if (plan.subs.length == 0) {
       dayWidgets.add(ListTile(
-        title: Text('Keine Vertretungen', style: AmpColors.textStyleForeground),
+        title: Text(CustomValues.lang.noSubs, style: AmpColors.textStyleForeground),
       ));
     }
     int i = 0;
