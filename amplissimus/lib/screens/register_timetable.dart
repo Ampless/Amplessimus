@@ -17,16 +17,12 @@ class RegisterTimetableScreen extends StatelessWidget {
         primarySwatch: AmpColors.materialColorForeground,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: RegisterTimetableScreenPage(
-        title: AmpStrings.appTitle,
-      ),
+      home: RegisterTimetableScreenPage(),
     );
   }
 }
 
 class RegisterTimetableScreenPage extends StatefulWidget {
-  RegisterTimetableScreenPage({this.title});
-  final String title;
   @override
   State<StatefulWidget> createState() => RegisterTimetableScreenPageState();
 }

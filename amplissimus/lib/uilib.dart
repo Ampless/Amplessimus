@@ -1,10 +1,11 @@
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
-Future<Null> ampSelectionDialog({@required String title,
-                                 @required List<Widget> Function(BuildContext, StateSetter) inputChildren,
-                                 @required List<Widget> Function(BuildContext) actions,
-                                 @required BuildContext context}) {
+Future<Null> ampSelectionDialog(
+    {@required String title,
+    @required List<Widget> Function(BuildContext, StateSetter) inputChildren,
+    @required List<Widget> Function(BuildContext) actions,
+    @required BuildContext context}) {
   return showDialog(
     context: context,
     barrierDismissible: true,
@@ -12,8 +13,8 @@ Future<Null> ampSelectionDialog({@required String title,
       return AlertDialog(
         title: Text(title, style: TextStyle(color: AmpColors.colorForeground)),
         backgroundColor: AmpColors.colorBackground,
-        content: StatefulBuilder(builder: (BuildContext alertContext, StateSetter setAlState) =>
-          Theme(
+        content: StatefulBuilder(
+          builder: (BuildContext alertContext, StateSetter setAlState) => Theme(
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: inputChildren(alertContext, setAlState),
@@ -27,10 +28,11 @@ Future<Null> ampSelectionDialog({@required String title,
   );
 }
 
-Future<Null> ampTextDialog({@required String title,
-                            @required List<Widget> Function(BuildContext) children,
-                            @required List<Widget> Function(BuildContext) actions,
-                            @required BuildContext context}) {
+Future<Null> ampTextDialog(
+    {@required String title,
+    @required List<Widget> Function(BuildContext) children,
+    @required List<Widget> Function(BuildContext) actions,
+    @required BuildContext context}) {
   return showDialog(
     context: context,
     barrierDismissible: true,
@@ -48,11 +50,12 @@ Future<Null> ampTextDialog({@required String title,
   );
 }
 
-Widget ampFormField({@required TextEditingController controller,
-                     @required Key key,
-                     @required String Function(String) validator,
-                               TextInputType keyboardType = TextInputType.visiblePassword,
-                               String labelText = ''}) {
+Widget ampFormField(
+    {@required TextEditingController controller,
+    @required Key key,
+    @required String Function(String) validator,
+    TextInputType keyboardType = TextInputType.visiblePassword,
+    String labelText = ''}) {
   return TextFormField(
     style: AmpColors.textStyleForeground,
     keyboardAppearance: AmpColors.brightness,
@@ -61,27 +64,25 @@ Widget ampFormField({@required TextEditingController controller,
     validator: validator,
     keyboardType: keyboardType,
     decoration: InputDecoration(
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      labelStyle: TextStyle(color: AmpColors.colorForeground),
-      labelText: labelText,
-      fillColor: AmpColors.colorForeground,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide:
-        BorderSide(color: AmpColors.colorForeground)
-      )
-    ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        labelStyle: TextStyle(color: AmpColors.colorForeground),
+        labelText: labelText,
+        fillColor: AmpColors.colorForeground,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: AmpColors.colorForeground))),
   );
 }
 
-Widget ampDialogButton({@required String text, @required Function() onPressed}) {
+Widget ampDialogButton(
+    {@required String text, @required Function() onPressed}) {
   return FlatButton(
     textColor: AmpColors.colorForeground,
     onPressed: onPressed,
@@ -89,9 +90,10 @@ Widget ampDialogButton({@required String text, @required Function() onPressed}) 
   );
 }
 
-Widget ampDropdownButton({@required dynamic value,
-                          @required List<DropdownMenuItem<dynamic>> items,
-                          @required Function(dynamic) onChanged}) {
+Widget ampDropdownButton(
+    {@required dynamic value,
+    @required List<DropdownMenuItem<dynamic>> items,
+    @required void Function(dynamic) onChanged}) {
   return DropdownButton(
     underline: Container(
       height: 2,
@@ -104,9 +106,10 @@ Widget ampDropdownButton({@required dynamic value,
   );
 }
 
-Widget ampSwitchWithText({@required String text,
-                          @required bool value,
-                          @required Function(bool) onChanged}) {
+Widget ampSwitchWithText(
+    {@required String text,
+    @required bool value,
+    @required Function(bool) onChanged}) {
   return ListTile(
     title: Text(text, style: AmpColors.textStyleForeground),
     trailing: Switch(
@@ -117,16 +120,16 @@ Widget ampSwitchWithText({@required String text,
   );
 }
 
-List<Widget> ampDialogButtonsSaveAndCancel({@required Function() onCancel,
-                                            @required Function() onSave}) {
+List<Widget> ampDialogButtonsSaveAndCancel(
+    {@required Function() onCancel, @required Function() onSave}) {
   return [
-      ampDialogButton(
-        onPressed: onCancel,
-        text: CustomValues.lang.cancel,
-      ),
-      ampDialogButton(
-        onPressed: onSave,
-        text: CustomValues.lang.save,
-      ),
-    ];
+    ampDialogButton(
+      onPressed: onCancel,
+      text: CustomValues.lang.cancel,
+    ),
+    ampDialogButton(
+      onPressed: onSave,
+      text: CustomValues.lang.save,
+    ),
+  ];
 }
