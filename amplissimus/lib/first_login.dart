@@ -61,6 +61,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
   @override
   void initState() {
+    AmpColors.isDarkMode = true;
     if (Prefs.char.trim().isEmpty)
       letterDropDownValue = CustomValues.lang.empty;
     if (Prefs.grade.trim().isEmpty)
@@ -238,9 +239,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     });
                   }
                 },
+                highlightElevation: 0,
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
-                label: Text(CustomValues.lang.save, style: widget.textStyle),
+                label: Text(CustomValues.lang.save,
+                    style: TextStyle(color: AmpColors.colorForeground)),
                 icon: Icon(Icons.save, color: AmpColors.colorForeground),
               ),
             ),
