@@ -152,3 +152,13 @@ Widget ampSettingsWidget(
     ),
   );
 }
+
+Widget ampAppBar(String text, {double fontSize = 25}) {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    title: Text(text,
+        style: TextStyle(fontSize: fontSize, color: AmpColors.colorForeground)),
+    centerTitle: true,
+  );
+}

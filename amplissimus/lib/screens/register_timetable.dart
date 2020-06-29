@@ -40,17 +40,7 @@ class RegisterTimetableScreenPageState
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'Stundenplan einrichten',
-            style: TextStyle(
-              color: AmpColors.colorForeground,
-              fontSize: 25,
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: ampAppBar(CustomValues.lang.setupTimetableTitle),
         backgroundColor: Colors.transparent,
         body: Container(
           color: Colors.transparent,
