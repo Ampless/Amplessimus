@@ -137,6 +137,7 @@ class German extends Language {
     'k': 'Kunst',
     'p': 'Physik',
     'w': 'Wirtschaft/Recht',
+    'nut': 'Natur und Technik',
     'spr': 'Sprechstunde',
   });
 

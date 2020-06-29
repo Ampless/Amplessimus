@@ -149,6 +149,7 @@ class English extends Language {
     'k': 'Art',
     'p': 'Physics',
     'w': 'Economy/Law',
+    'nut': '"Nature and Technology"',
     'spr': 'Consultation Hour',
   });
 
