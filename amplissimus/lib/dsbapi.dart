@@ -449,8 +449,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       ));
       if (++i != iMax)
         dayWidgets.add(Divider(
-            color: AmpColors.colorForeground,
-            height: Prefs.subListItemSpace.toDouble()));
+            color: AmpColors.colorForeground, height: Prefs.subListItemSpace));
     }
     widgets.add(ListTile(
         title: Row(children: <Widget>[

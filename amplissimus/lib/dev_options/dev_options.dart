@@ -90,7 +90,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
               children: [
                 Divider(
                     color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace.toDouble() + 2),
+                    height: Prefs.subListItemSpace + 2),
                 ampSwitchWithText(
                   text: 'Entwickleroptionen aktiviert',
                   value: Prefs.devOptionsEnabled,
@@ -99,7 +99,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ),
                 Divider(
                   color: AmpColors.colorForeground,
-                  height: Prefs.subListItemSpace.toDouble(),
+                  height: Prefs.subListItemSpace,
                 ),
                 ampSwitchWithText(
                   text: 'Hilfe für Langeweile aktiviert',
@@ -130,7 +130,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ),
                 Divider(
                     color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace.toDouble()),
+                    height: Prefs.subListItemSpace),
                 ListTile(
                   title: Text('Listenelementabstand',
                       style: AmpColors.textStyleForeground),
@@ -147,7 +147,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ),
                 Divider(
                     color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace.toDouble()),
+                    height: Prefs.subListItemSpace),
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
                     child: Text('Print Cache'), onPressed: Prefs.listCache),
