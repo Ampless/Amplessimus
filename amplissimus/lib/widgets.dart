@@ -14,7 +14,9 @@ class Widgets {
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
           Text(
-            isDarkMode ? CustomValues.lang.lightsOn : CustomValues.lang.lightsOff,
+            isDarkMode
+                ? CustomValues.lang.lightsOn
+                : CustomValues.lang.lightsOff,
             style: textStyle,
           )
         ],
@@ -27,10 +29,17 @@ class Widgets {
       child: Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.all(24)),
-          Icon(isDarkMode ? MdiIcons.clipboardList : MdiIcons.clipboardListOutline,
-              size: 50, color: AmpColors.colorForeground),
+          Icon(
+              isDarkMode
+                  ? MdiIcons.clipboardList
+                  : MdiIcons.clipboardListOutline,
+              size: 50,
+              color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.changeAppearance, style: textStyle,)
+          Text(
+            CustomValues.lang.changeAppearance,
+            style: textStyle,
+          )
         ],
       ),
     );
@@ -61,7 +70,10 @@ class Widgets {
           Icon(isDarkMode ? MdiIcons.school : MdiIcons.schoolOutline,
               size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.selectClass, style: textStyle,)
+          Text(
+            CustomValues.lang.selectClass,
+            style: textStyle,
+          )
         ],
       ),
     );
@@ -72,10 +84,17 @@ class Widgets {
       child: Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.all(24)),
-          Icon(isDarkMode ? MdiIcons.folderInformation : MdiIcons.folderInformationOutline,
-              size: 50, color: AmpColors.colorForeground),
+          Icon(
+              isDarkMode
+                  ? MdiIcons.folderInformation
+                  : MdiIcons.folderInformationOutline,
+              size: 50,
+              color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.settingsAppInfo, style: textStyle,)
+          Text(
+            CustomValues.lang.settingsAppInfo,
+            style: textStyle,
+          )
         ],
       ),
     );
@@ -86,9 +105,15 @@ class Widgets {
       child: Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.all(24)),
-          Icon(MdiIcons.brightness6, size: 50, color: AmpColors.colorForeground),
+          Icon(MdiIcons.brightness6,
+              size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text(Prefs.useSystemTheme ? CustomValues.lang.lightsNoSystem : CustomValues.lang.lightsUseSystem, style: textStyle, textAlign: TextAlign.center)
+          Text(
+              Prefs.useSystemTheme
+                  ? CustomValues.lang.lightsNoSystem
+                  : CustomValues.lang.lightsUseSystem,
+              style: textStyle,
+              textAlign: TextAlign.center)
         ],
       ),
     );
@@ -107,26 +132,47 @@ class Widgets {
     );
   }
 
-  //this is currently unused, possible lists:
-  //['5','6','7','8','9','10','11','12','13','']
-  //['a','b','c','d','e','f','g','h','i','q','']
-  static String Function(String) listValidator(List<String> list) {
-    return (value) => list.contains(value.trim().toLowerCase()) ? null : CustomValues.lang.widgetValidatorInvalid;
-  }
-
-  static String textFieldValidator(String value) {
-    return value.trim().isEmpty ? CustomValues.lang.widgetValidatorFieldEmpty : null;
-  }
-
-  static Widget developerOptionsWidget(TextStyle textStyle) {
-    if(!Prefs.devOptionsEnabled) return Container();
+  static Widget addTimetableWidget(TextStyle textStyle) {
     return Center(
       child: Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.all(24)),
-          Icon(MdiIcons.codeBrackets, size: 50, color: AmpColors.colorForeground),
+          Icon(MdiIcons.translate, size: 50, color: AmpColors.colorForeground),
           Padding(padding: EdgeInsets.all(10)),
-          Text('Entwickleroptionen',style: textStyle,),
+          Text(CustomValues.lang.changeLanguage, style: textStyle)
+        ],
+      ),
+    );
+  }
+
+  //this is currently unused, possible lists:
+  //['5','6','7','8','9','10','11','12','13','']
+  //['a','b','c','d','e','f','g','h','i','q','']
+  static String Function(String) listValidator(List<String> list) {
+    return (value) => list.contains(value.trim().toLowerCase())
+        ? null
+        : CustomValues.lang.widgetValidatorInvalid;
+  }
+
+  static String textFieldValidator(String value) {
+    return value.trim().isEmpty
+        ? CustomValues.lang.widgetValidatorFieldEmpty
+        : null;
+  }
+
+  static Widget developerOptionsWidget(TextStyle textStyle) {
+    if (!Prefs.devOptionsEnabled) return Container();
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Padding(padding: EdgeInsets.all(24)),
+          Icon(MdiIcons.codeBrackets,
+              size: 50, color: AmpColors.colorForeground),
+          Padding(padding: EdgeInsets.all(10)),
+          Text(
+            'Entwickleroptionen',
+            style: textStyle,
+          ),
         ],
       ),
     );
@@ -163,7 +209,6 @@ class Widgets {
         );
         break;
     }
-    
   }
 
   static String numberValidator(String value) {
@@ -173,5 +218,4 @@ class Widgets {
     if (n == null || n < 0) return CustomValues.lang.widgetValidatorInvalid;
     return null;
   }
-  
 }

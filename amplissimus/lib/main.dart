@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:Amplissimus/animations.dart';
-import 'package:Amplissimus/dev_options/dev_options.dart';
+import 'package:Amplissimus/screens/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/langs/language.dart';
@@ -420,10 +420,37 @@ class _MyHomePageState extends State<MyHomePage>
       ),
       Container(
         color: Colors.transparent,
-        child: Center(
-          child: Text('in Entwicklung\r\nin development',
-              style: AmpColors.textStyleForeground),
-        ),
+        child: Prefs.jsonTimetable == null
+            ? Center(
+                child: InkWell(
+                  highlightColor: Colors.transparent,
+                  splashColor: AmpColors.colorForeground,
+                  borderRadius: BorderRadius.circular(32),
+                  onTap: () {
+                    return;
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        MdiIcons.timetable,
+                        color: AmpColors.colorForeground,
+                        size: 200,
+                      ),
+                      Text(
+                        'Stundenplan\neinrichten',
+                        style: TextStyle(
+                            color: AmpColors.colorForeground, fontSize: 32),
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(padding: EdgeInsets.all(10)),
+                    ],
+                  ),
+                ),
+              )
+            : ListView(
+                children: [],
+              ),
       ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
