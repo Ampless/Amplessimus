@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/english.dart';
 import 'package:Amplissimus/langs/german.dart';
+import 'package:Amplissimus/timetable/timetables.dart';
 
 abstract class Language {
   String get code;
@@ -39,6 +40,7 @@ abstract class Language {
   String get timetable;
   String get darkMode;
   String get setupTimetable;
+  String get setupTimetableTitle;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);
@@ -58,4 +60,6 @@ abstract class Language {
   String toString() {
     return '{code:"$code",name:"$name",translations:...}';
   }
+
+  String ttDayToString(TTDay day);
 }

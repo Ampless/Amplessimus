@@ -9,6 +9,7 @@ import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/screens/register_timetable.dart';
+import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/widgets.dart';
@@ -369,24 +370,6 @@ class _MyHomePageState extends State<MyHomePage>
     return widget;
   }
 
-  Widget _settingsWidget(
-      {@required void Function() onTap, @required Widget child}) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(32.0))),
-      color: Colors.transparent,
-      child: InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        customBorder: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(32.0))),
-        onTap: onTap,
-        child: child,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     dsbApiHomeScaffoldKey = homeScaffoldKey;
@@ -513,7 +496,7 @@ class _MyHomePageState extends State<MyHomePage>
                       AmpColors.isDarkMode, textStyle),
                 ),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () async {
                   if (CustomValues.isAprilFools) return;
                   ampInfo(ctx: 'MyApp', message: 'switching design mode');
@@ -537,7 +520,7 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Widgets.toggleDesignModeWidget(
                     AmpColors.isDarkMode, textStyle),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () {
                   Prefs.useSystemTheme = !Prefs.useSystemTheme;
                   if (Prefs.useSystemTheme) {
@@ -561,21 +544,21 @@ class _MyHomePageState extends State<MyHomePage>
                 child:
                     Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () => showInputChangeLanguage(context),
                 child: Widgets.setLanguageWidget(textStyle),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () => showInputEntryCredentials(context),
                 child: Widgets.entryCredentialsWidget(
                     AmpColors.isDarkMode, textStyle),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () => showInputSelectCurrentClass(context),
                 child: Widgets.setCurrentClassWidget(
                     AmpColors.isDarkMode, textStyle),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () => showAboutDialog(
                     context: context,
                     applicationName: AmpStrings.appTitle,
@@ -585,7 +568,7 @@ class _MyHomePageState extends State<MyHomePage>
                     children: [Text(CustomValues.lang.appInfo)]),
                 child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
               ),
-              _settingsWidget(
+              ampSettingsWidget(
                 onTap: () {
                   if (Prefs.devOptionsEnabled)
                     Animations.changeScreenEaseOutBackReplace(

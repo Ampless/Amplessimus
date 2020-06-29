@@ -133,3 +133,22 @@ List<Widget> ampDialogButtonsSaveAndCancel(
     ),
   ];
 }
+
+Widget ampSettingsWidget(
+    {@required void Function() onTap, @required Widget child}) {
+  return Card(
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(32.0))),
+    color: Colors.transparent,
+    child: InkWell(
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      customBorder: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(32.0))),
+      onTap: onTap,
+      child: child,
+    ),
+  );
+}

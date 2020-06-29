@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/language.dart';
+import 'package:Amplissimus/timetable/timetables.dart';
 
 class German extends Language {
   @override
@@ -114,6 +115,9 @@ class German extends Language {
   String get setupTimetable => 'Stundenplan\neinrichten';
 
   @override
+  String get setupTimetableTitle => 'Stundenplan einrichten';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Sport',
     'e': 'Englisch',
@@ -138,4 +142,22 @@ class German extends Language {
 
   @override
   String get darkMode => 'Dark Mode';
+
+  @override
+  String ttDayToString(TTDay day) {
+    switch (day) {
+      case TTDay.Monday:
+        return 'Montag';
+      case TTDay.Tuesday:
+        return 'Dienstag';
+      case TTDay.Wednesday:
+        return 'Mittwoch';
+      case TTDay.Thursday:
+        return 'Donnerstag';
+      case TTDay.Friday:
+        return 'Freitag';
+      default:
+        throw UnimplementedError('Unbekannter Tag!');
+    }
+  }
 }
