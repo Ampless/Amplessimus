@@ -39,12 +39,15 @@ class RegisterTimetableScreenPageState
 
   void initializeTTColumns() {
     if (CustomValues.ttColums.isEmpty) {
-      for (var i = 0; i < 5; i++) {}
+      for (TTDay day in TTDay.values) {
+        CustomValues.ttColums.add(TTColumn([], day));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    initializeTTColumns();
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
