@@ -52,16 +52,17 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         Prefs.currentThemeId = -1;
       else if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-      if (Prefs.useSystemTheme)
-        AmpColors.isDarkMode =
-            SchedulerBinding.instance.window.platformBrightness ==
-                Brightness.dark;
-
       if (Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
+        return;
+
+        if (Prefs.useSystemTheme)
+          AmpColors.isDarkMode =
+              SchedulerBinding.instance.window.platformBrightness ==
+                  Brightness.dark;
       } else {
         await dsbUpdateWidget(() {}, cacheJsonPlans: Prefs.useJsonCache);
         Future.delayed(Duration(milliseconds: 1000), () {
