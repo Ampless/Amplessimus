@@ -1,4 +1,5 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -155,20 +156,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   child: Text('Cache leeren'),
                   onPressed: () => Prefs.clearCache(),
                 ),
-                RaisedButton(
-                    child: Text('JSON importieren'),
-                    onPressed: () async {
-                      Prefs.dsbJsonCache = '['
-                          '{"title":"Montag","date":"15.6.2020 Montag","subs": []},'
-                          '{"title":"Dienstag","date":"16.6.2020 Dienstag","subs": ['
-                          '{"class":"5cd","lessons":[3],"teacher":"Häußler","subject":"Spo","notes": "Mitbetreuung"},'
-                          '{"class":"7b","lessons": [5],"teacher":"Rosemann","subject":"E","notes":""},'
-                          '{"class":"7b","lessons": [6],"teacher":"---","subject":"E","notes":""},'
-                          '{"class":"11q","lessons": [1],"teacher":"Wolf","subject":"1sk1","notes":""}'
-                          ']}]';
-                      dsbUpdateWidget(() => setState(() {}),
-                          cacheJsonPlans: Prefs.useJsonCache);
-                    }),
                 RaisedButton.icon(
                   color: Colors.red,
                   icon: Icon(Icons.delete, color: AmpColors.colorForeground),

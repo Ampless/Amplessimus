@@ -508,13 +508,12 @@ String plansToJson(List<DsbPlan> plans) {
   for (DsbPlan plan in plans) {
     plansStrings.add(jsonEncode(plan.toJson()));
   }
-  print(jsonEncode(plansStrings));
   return jsonEncode(plansStrings);
 }
 
 List<DsbPlan> plansFromJson(String jsonPlans) {
   List<DsbPlan> plans = [];
-  List<String> plansStrings = jsonDecode(jsonPlans);
+  List<String> plansStrings = List<String>.from(jsonDecode(jsonPlans));
   for (String tempString in plansStrings) {
     plans.add(DsbPlan.fromJson(jsonDecode(tempString)));
   }
