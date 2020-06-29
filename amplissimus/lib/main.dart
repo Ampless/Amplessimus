@@ -47,20 +47,25 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     (() async {
       await Prefs.loadPrefs();
 
-      if(CustomValues.isAprilFools) Prefs.currentThemeId = -1;
-      else if(Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+      if (CustomValues.isAprilFools)
+        Prefs.currentThemeId = -1;
+      else if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-      if(Prefs.useSystemTheme)
-        AmpColors.isDarkMode = SchedulerBinding.instance.window.platformBrightness != Brightness.light;
+      if (Prefs.useSystemTheme)
+        AmpColors.isDarkMode =
+            SchedulerBinding.instance.window.platformBrightness !=
+                Brightness.light;
 
-      if(Prefs.firstLogin) {
+      if (Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstLoginScreen()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
       } else {
         await dsbUpdateWidget(() {}, cacheJsonPlans: Prefs.useJsonCache);
         Future.delayed(Duration(milliseconds: 1000), () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
         });
       }
     })();
@@ -76,12 +81,10 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
-          child: FlareActor(
-            'assets/anims/splash_screen.flr',
-            alignment:Alignment.center, 
-            fit:BoxFit.contain, 
-            animation:'anim'
-          ),
+          child: FlareActor('assets/anims/splash_screen.flr',
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: 'anim'),
         ),
       ),
       bottomSheet: LinearProgressIndicator(
@@ -94,7 +97,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) => child;
+  Widget buildViewportChrome(
+          BuildContext context, Widget child, AxisDirection axisDirection) =>
+      child;
 }
 
 class MyApp extends StatelessWidget {
@@ -118,7 +123,7 @@ class MyApp extends StatelessWidget {
           title: AmpStrings.appTitle,
           initialIndex: initialIndex,
         ),
-      ), 
+      ),
       onWillPop: () {
         return new Future(() => Prefs.closeAppOnBackPress);
       },
@@ -127,14 +132,16 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.initialIndex}) : super(key: key);
+  MyHomePage({Key key, this.title, @required this.initialIndex})
+      : super(key: key);
   final int initialIndex;
   final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   static TabController tabController;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
@@ -145,7 +152,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
 
   void checkBrightness() {
-    if(Prefs.useSystemTheme && (SchedulerBinding.instance.window.platformBrightness != Brightness.light) != Prefs.isDarkMode) {
+    if (Prefs.useSystemTheme &&
+        (SchedulerBinding.instance.window.platformBrightness !=
+                Brightness.light) !=
+            Prefs.isDarkMode) {
       AmpColors.switchMode();
       setState(() {
         fabBackgroundColor = Colors.transparent;
@@ -160,14 +170,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   @override
   void initState() {
     ampInfo(ctx: '_MyHomePageState', message: 'initState()');
-    if(letterDropDownValue.isEmpty)
+    if (letterDropDownValue.isEmpty)
       letterDropDownValue = CustomValues.lang.empty;
-    if(gradeDropDownValue.isEmpty)
+    if (gradeDropDownValue.isEmpty)
       gradeDropDownValue = CustomValues.lang.empty;
-    SchedulerBinding.instance.window.onPlatformBrightnessChanged = checkBrightness;
+    SchedulerBinding.instance.window.onPlatformBrightnessChanged =
+        checkBrightness;
     super.initState();
-    tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialIndex);
-    Prefs.setTimer(Prefs.timer, rebuildNewBuild);
+    tabController = TabController(
+        length: 3, vsync: this, initialIndex: widget.initialIndex);
+    Prefs.setTimer(Prefs.timer, rebuildTimer);
   }
 
   void rebuild() {
@@ -179,9 +191,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     }
   }
 
+  void rebuildTimer() {
+    if (tabController.index == 0) dsbUpdateWidget(rebuild);
+  }
+
   Future<Null> rebuildDragDown() async {
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild, cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
+    await dsbUpdateWidget(rebuild,
+        cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
   }
 
   Future<Null> rebuildNewBuild() async {
@@ -197,30 +214,34 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       inputChildren: (alertContext, setAlState) => [
         ampDropdownButton(
           value: gradeDropDownValue,
-          items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((String value) {
+          items: FirstLoginValues.grades
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
           onChanged: (value) {
             setAlState(() {
               gradeDropDownValue = value;
-              if(gradeDropDownValue == CustomValues.lang.empty)
+              if (gradeDropDownValue == CustomValues.lang.empty)
                 Prefs.grade = '';
-              else Prefs.grade = value;
+              else
+                Prefs.grade = value;
             });
           },
         ),
         Padding(padding: EdgeInsets.all(10)),
         ampDropdownButton(
           value: letterDropDownValue,
-          items: FirstLoginValues.letters.map<DropdownMenuItem<String>>((String value) {
+          items: FirstLoginValues.letters
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
           onChanged: (value) {
             setAlState(() {
               letterDropDownValue = value;
-              if(letterDropDownValue == CustomValues.lang.empty)
+              if (letterDropDownValue == CustomValues.lang.empty)
                 Prefs.char = '';
-              else Prefs.char = value;
+              else
+                Prefs.char = value;
             });
           },
         ),
@@ -241,14 +262,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       context: context,
       title: CustomValues.lang.changeLanguage,
       inputChildren: (alertContext, setAlState) => [
-          ampDropdownButton(
-            value: lang,
-            items: Language.all.map<DropdownMenuItem<Language>>((value) {
-              return DropdownMenuItem<Language>(value: value, child: Text(value.name));
-            }).toList(),
-            onChanged: (value) => setAlState(() => lang = value),
-          ),
-        ],
+        ampDropdownButton(
+          value: lang,
+          items: Language.all.map<DropdownMenuItem<Language>>((value) {
+            return DropdownMenuItem<Language>(
+                value: value, child: Text(value.name));
+          }).toList(),
+          onChanged: (value) => setAlState(() => lang = value),
+        ),
+      ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: Navigator.of(context).pop,
         onSave: () {
@@ -263,30 +285,34 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void showInputEntryCredentials(BuildContext context) {
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
-    final usernameInputFormController = TextEditingController(text: Prefs.username);
-    final passwordInputFormController = TextEditingController(text: Prefs.password);
+    final usernameInputFormController =
+        TextEditingController(text: Prefs.username);
+    final passwordInputFormController =
+        TextEditingController(text: Prefs.password);
     ampTextDialog(
       context: context,
       title: CustomValues.lang.changeLoginPopup,
       children: (context) => [
-          ampFormField(
-            controller: usernameInputFormController,
-            key: usernameInputFormKey,
-            validator: Widgets.textFieldValidator,
-            labelText: CustomValues.lang.username,
-          ),
-          Padding(padding: EdgeInsets.all(6)),
-          ampFormField(
-            controller: passwordInputFormController,
-            key: passwordInputFormKey,
-            validator: Widgets.textFieldValidator,
-            labelText: CustomValues.lang.password,
-          ),
-        ],
+        ampFormField(
+          controller: usernameInputFormController,
+          key: usernameInputFormKey,
+          validator: Widgets.textFieldValidator,
+          labelText: CustomValues.lang.username,
+        ),
+        Padding(padding: EdgeInsets.all(6)),
+        ampFormField(
+          controller: passwordInputFormController,
+          key: passwordInputFormKey,
+          validator: Widgets.textFieldValidator,
+          labelText: CustomValues.lang.password,
+        ),
+      ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: () => Navigator.of(context).pop(),
         onSave: () {
-          if(!passwordInputFormKey.currentState.validate() || !usernameInputFormKey.currentState.validate()) return;
+          bool condA = passwordInputFormKey.currentState.validate();
+          bool condB = usernameInputFormKey.currentState.validate();
+          if (!condA || !condB) return;
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();
           rebuildDragDown();
@@ -299,26 +325,48 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Widget get changeSubVisibilityWidget {
     bool display = true;
     Widget widget;
-    if(Prefs.grade == '' && Prefs.char == '') display = false;
-    display ? widget = Stack(children: <Widget>[
-      ListTile(title: Text(CustomValues.lang.allClasses, style: TextStyle(color: AmpColors.colorForeground),), trailing: Text('${Prefs.grade}${Prefs.char}', style: TextStyle(color: AmpColors.colorForeground),),),
-      Align(child: Switch(activeColor: AmpColors.colorForeground, value: Prefs.oneClassOnly, onChanged: (value) {
-        setState(() => Prefs.oneClassOnly = value);
-        dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
-      }), alignment: Alignment.center),
-    ],) : widget = Container(height: 0);
+    if (Prefs.grade == '' && Prefs.char == '') display = false;
+    display
+        ? widget = Stack(
+            children: <Widget>[
+              ListTile(
+                title: Text(
+                  CustomValues.lang.allClasses,
+                  style: TextStyle(color: AmpColors.colorForeground),
+                ),
+                trailing: Text(
+                  '${Prefs.grade}${Prefs.char}',
+                  style: TextStyle(color: AmpColors.colorForeground),
+                ),
+              ),
+              Align(
+                  child: Switch(
+                      activeColor: AmpColors.colorForeground,
+                      value: Prefs.oneClassOnly,
+                      onChanged: (value) {
+                        setState(() => Prefs.oneClassOnly = value);
+                        dsbUpdateWidget(rebuild,
+                            cacheJsonPlans: Prefs.useJsonCache);
+                      }),
+                  alignment: Alignment.center),
+            ],
+          )
+        : widget = Container(height: 0);
     return widget;
   }
 
-  Widget _settingsWidget({@required void Function() onTap, @required Widget child}) {
+  Widget _settingsWidget(
+      {@required void Function() onTap, @required Widget child}) {
     return Card(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0))),
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(32.0))),
       color: Colors.transparent,
       child: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0))),
+        customBorder: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(32.0))),
         onTap: onTap,
         child: child,
       ),
@@ -330,7 +378,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     var textStyle = TextStyle(color: AmpColors.colorForeground);
-    if(dsbWidget == null) rebuildNewBuild();
+    if (dsbWidget == null) rebuildNewBuild();
     List<Widget> containers = [
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
@@ -340,25 +388,41 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            title: Text('${AmpStrings.appTitle}${Prefs.counterEnabled ? ' ' + Prefs.counter.toString() : ''}', style: TextStyle(fontSize: 25, color: AmpColors.colorForeground)),
+            title: Text(
+                '${AmpStrings.appTitle}${Prefs.counterEnabled ? ' ' + Prefs.counter.toString() : ''}',
+                style:
+                    TextStyle(fontSize: 25, color: AmpColors.colorForeground)),
             centerTitle: true,
           ),
           backgroundColor: Colors.transparent,
           body: RefreshIndicator(
-            key: refreshKey,
-            child: !circularProgressIndicatorActive ? ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: [dsbWidget, Divider(), changeSubVisibilityWidget, Padding(padding: EdgeInsets.all(30))],
-            ) : Center(child: SizedBox(child: Widgets.loadingWidget(1),height: 200, width: 200,)
-          ), onRefresh: rebuildDragDown),
+              key: refreshKey,
+              child: !circularProgressIndicatorActive
+                  ? ListView(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      children: [
+                        dsbWidget,
+                        Divider(),
+                        changeSubVisibilityWidget,
+                        Padding(padding: EdgeInsets.all(30))
+                      ],
+                    )
+                  : Center(
+                      child: SizedBox(
+                      child: Widgets.loadingWidget(1),
+                      height: 200,
+                      width: 200,
+                    )),
+              onRefresh: rebuildDragDown),
         ),
         margin: EdgeInsets.all(16),
       ),
       Container(
         color: Colors.transparent,
         child: Center(
-          child: Text('in Entwicklung\r\nin development', style: AmpColors.textStyleForeground),
+          child: Text('in Entwicklung\r\nin development',
+              style: AmpColors.textStyleForeground),
         ),
       ),
       AnimatedContainer(
@@ -372,71 +436,88 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             children: <Widget>[
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(32.0),
+                  ),
+                ),
                 color: Colors.transparent,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(32.0),),),
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(32.0),
+                    ),
+                  ),
                   onTap: () {
                     Prefs.devOptionsTimerCache();
-                    if(Prefs.timesToggleDarkModePressed >= 10) {
+                    if (Prefs.timesToggleDarkModePressed >= 10) {
                       Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
                       Prefs.timesToggleDarkModePressed = 0;
                     }
                     AmpColors.switchMode();
-                    if(Prefs.useSystemTheme) Prefs.useSystemTheme = false;
+                    if (Prefs.useSystemTheme) Prefs.useSystemTheme = false;
                     setState(() {
                       fabBackgroundColor = Colors.transparent;
                       rebuildNewBuild();
                     });
                     Future.delayed(Duration(milliseconds: 150), () {
-                      setState(() => fabBackgroundColor = AmpColors.colorBackground);
+                      setState(
+                          () => fabBackgroundColor = AmpColors.colorBackground);
                     });
                   },
-                  child: Widgets.toggleDarkModeWidget(AmpColors.isDarkMode, textStyle),
+                  child: Widgets.toggleDarkModeWidget(
+                      AmpColors.isDarkMode, textStyle),
                 ),
               ),
               _settingsWidget(
                 onTap: () async {
-                  if(CustomValues.isAprilFools) return;
+                  if (CustomValues.isAprilFools) return;
                   ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                  if(Prefs.currentThemeId >= 1) Prefs.currentThemeId = 0; 
-                  else Prefs.currentThemeId++;
+                  if (Prefs.currentThemeId >= 1)
+                    Prefs.currentThemeId = 0;
+                  else
+                    Prefs.currentThemeId++;
                   print(Prefs.currentThemeId);
                   await rebuildNewBuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
-                    content: Text('Aussehen des Vertretungsplans geändert!', style: AmpColors.textStyleForeground),
+                    content: Text('Aussehen des Vertretungsplans geändert!',
+                        style: AmpColors.textStyleForeground),
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
-                      label: 'Anzeigen', 
+                      label: 'Anzeigen',
                       onPressed: () => tabController.animateTo(0),
                     ),
                   ));
                 },
-                child: Widgets.toggleDesignModeWidget(AmpColors.isDarkMode, textStyle),
+                child: Widgets.toggleDesignModeWidget(
+                    AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
                 onTap: () {
                   Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                  if(Prefs.useSystemTheme) {
-                    var brightness = SchedulerBinding.instance.window.platformBrightness;
+                  if (Prefs.useSystemTheme) {
+                    var brightness =
+                        SchedulerBinding.instance.window.platformBrightness;
                     bool darkModeEnabled = brightness != Brightness.light;
-                    if(darkModeEnabled != Prefs.isDarkMode) {
+                    if (darkModeEnabled != Prefs.isDarkMode) {
                       AmpColors.switchMode();
                       setState(() {
                         fabBackgroundColor = Colors.transparent;
                         rebuildNewBuild();
                       });
                       Future.delayed(Duration(milliseconds: 150), () {
-                        setState(() => fabBackgroundColor = AmpColors.colorBackground);
+                        setState(() =>
+                            fabBackgroundColor = AmpColors.colorBackground);
                       });
                     }
                   }
                   rebuild();
                 },
-                child: Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
+                child:
+                    Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
                 onTap: () => showInputChangeLanguage(context),
@@ -444,26 +525,29 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               ),
               _settingsWidget(
                 onTap: () => showInputEntryCredentials(context),
-                child: Widgets.entryCredentialsWidget(AmpColors.isDarkMode, textStyle),
+                child: Widgets.entryCredentialsWidget(
+                    AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
                 onTap: () => showInputSelectCurrentClass(context),
-                child: Widgets.setCurrentClassWidget(AmpColors.isDarkMode, textStyle),
+                child: Widgets.setCurrentClassWidget(
+                    AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
                 onTap: () => showAboutDialog(
-                  context: context,
-                  applicationName: AmpStrings.appTitle,
-                  applicationVersion: AmpStrings.version,
-                  applicationIcon: Image.asset('assets/images/logo.png', height: 40),
-                  children: [Text(CustomValues.lang.appInfo)]
-                ),
+                    context: context,
+                    applicationName: AmpStrings.appTitle,
+                    applicationVersion: AmpStrings.version,
+                    applicationIcon:
+                        Image.asset('assets/images/logo.png', height: 40),
+                    children: [Text(CustomValues.lang.appInfo)]),
                 child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
               ),
               _settingsWidget(
                 onTap: () {
-                  if(Prefs.devOptionsEnabled)
-                    Animations.changeScreenEaseOutBackReplace(DevOptionsScreen(), context);
+                  if (Prefs.devOptionsEnabled)
+                    Animations.changeScreenEaseOutBackReplace(
+                        DevOptionsScreen(), context);
                 },
                 child: Widgets.developerOptionsWidget(textStyle),
               ),
@@ -473,7 +557,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       )
     ];
     return SafeArea(
-      child: Stack(children: <Widget>[
+        child: Stack(
+      children: <Widget>[
         AnimatedContainer(
           duration: Duration(milliseconds: 150),
           color: AmpColors.colorBackground,
@@ -485,14 +570,22 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             physics: ClampingScrollPhysics(),
             children: containers,
           ),
-          floatingActionButton: Prefs.counterEnabled ? FloatingActionButton.extended(
-            elevation: 0,
-            backgroundColor: fabBackgroundColor,
-            splashColor: AmpColors.colorForeground,
-            onPressed: () => setState(() => Prefs.counter += 2),
-            icon: Icon(Icons.add, color: AmpColors.colorForeground,),
-            label: Text('Zählen', style: TextStyle(color: AmpColors.colorForeground),),
-          ) : Container(),
+          floatingActionButton: Prefs.counterEnabled
+              ? FloatingActionButton.extended(
+                  elevation: 0,
+                  backgroundColor: fabBackgroundColor,
+                  splashColor: AmpColors.colorForeground,
+                  onPressed: () => setState(() => Prefs.counter += 2),
+                  icon: Icon(
+                    Icons.add,
+                    color: AmpColors.colorForeground,
+                  ),
+                  label: Text(
+                    'Zählen',
+                    style: TextStyle(color: AmpColors.colorForeground),
+                  ),
+                )
+              : Container(),
           bottomNavigationBar: SizedBox(
             height: 55,
             child: TabBar(
@@ -500,20 +593,27 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               indicatorColor: AmpColors.colorForeground,
               labelColor: AmpColors.colorForeground,
               tabs: <Widget>[
-                Tab(icon: Icon(Icons.home),         text: CustomValues.lang.start),
-                Tab(icon: Icon(MdiIcons.timetable), text: CustomValues.lang.timetable),
-                Tab(icon: Icon(Icons.settings),     text: CustomValues.lang.settings)
+                Tab(icon: Icon(Icons.home), text: CustomValues.lang.start),
+                Tab(
+                    icon: Icon(MdiIcons.timetable),
+                    text: CustomValues.lang.timetable),
+                Tab(
+                    icon: Icon(Icons.settings),
+                    text: CustomValues.lang.settings)
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          bottomSheet: Prefs.loadingBarEnabled ? LinearProgressIndicator(
-            backgroundColor: AmpColors.blankGrey,
-            valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
-          ) : Container(height: 0),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomSheet: Prefs.loadingBarEnabled
+              ? LinearProgressIndicator(
+                  backgroundColor: AmpColors.blankGrey,
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+                )
+              : Container(height: 0),
         )
-      ],)
-    );
-    
+      ],
+    ));
   }
 }

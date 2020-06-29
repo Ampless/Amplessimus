@@ -15,36 +15,38 @@ CachedSharedPreferences _prefs;
 //(and also it saves quite a bit of cpu)
 String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
 
-String getCache(String url) => _prefs.getString('CACHE_VAL_${_hashCache(url)}', null);
+String getCache(String url) =>
+    _prefs.getString('CACHE_VAL_${_hashCache(url)}', null);
 
 void setCache(String url, String html, Duration ttl) {
   String hash = _hashCache(url);
   List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  if(!cachedHashes.contains(hash)) cachedHashes.add(hash);
+  if (!cachedHashes.contains(hash)) cachedHashes.add(hash);
   _prefs.setStringList('CACHE_URLS', cachedHashes);
   _prefs.setString('CACHE_VAL_$hash', html);
-  _prefs.setInt('CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
+  _prefs.setInt(
+      'CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
 }
 
 void flushCache() {
   List<String> toRemove = [];
   List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  for(String hash in cachedHashes) {
+  for (String hash in cachedHashes) {
     int ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
-    if(ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) continue;
+    if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) continue;
     toRemove.add(hash);
     _prefs.setString('CACHE_VAL_$hash', null);
     _prefs.setInt('CACHE_TTL_$hash', null);
   }
-  if(toRemove.length == 0) return;
+  if (toRemove.length == 0) return;
   cachedHashes.removeWhere((element) => toRemove.contains(element));
   _prefs.setStringList('CACHE_URLS', cachedHashes);
 }
 
 void clearCache() {
   List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  if(cachedHashes.length == 0) return;
-  for(String hash in cachedHashes) {
+  if (cachedHashes.length == 0) return;
+  for (String hash in cachedHashes) {
     _prefs.setString('CACHE_VAL_$hash', null);
     _prefs.setInt('CACHE_TTL_$hash', null);
     ampInfo(ctx: 'CACHE', message: 'Removed $hash');
@@ -54,18 +56,20 @@ void clearCache() {
 
 void listCache() {
   print('{');
-  for(String hash in _prefs.getStringList('CACHE_URLS', []))
-    print('  {hash=\'$hash\',len=${_prefs.getString('CACHE_VAL_$hash', '').length},ttl=${_prefs.getInt('CACHE_TTL_$hash', -1)}},');
+  for (String hash in _prefs.getStringList('CACHE_URLS', []))
+    print(
+        '  {hash=\'$hash\',len=${_prefs.getString('CACHE_VAL_$hash', '').length},ttl=${_prefs.getInt('CACHE_TTL_$hash', -1)}},');
   print('}');
 }
 
 void devOptionsTimerCache() {
-  if(DateTime.now().millisecondsSinceEpoch < lastPressedToggleDarkMode + 10000) {
+  if (DateTime.now().millisecondsSinceEpoch <
+      lastPressedToggleDarkMode + 10000) {
     timesToggleDarkModePressed = timesToggleDarkModePressed + 1;
   } else {
     timesToggleDarkModePressed = 1;
   }
-  lastPressedToggleDarkMode =  DateTime.now().millisecondsSinceEpoch;
+  lastPressedToggleDarkMode = DateTime.now().millisecondsSinceEpoch;
 }
 
 int timesToggleDarkModePressed = 0;
@@ -73,8 +77,8 @@ int lastPressedToggleDarkMode = 0;
 
 int get counter => _prefs.getInt('counter', 0);
 set counter(int i) => _prefs.setInt('counter', i);
-int get subListItemSpace => _prefs.getInt('sub_list_item_space', 0);
-set subListItemSpace(int i) => _prefs.setInt('sub_list_item_space', i);
+double get subListItemSpace => _prefs.getDouble('sub_list_item_space', 0);
+set subListItemSpace(double d) => _prefs.setDouble('sub_list_item_space', d);
 int get currentThemeId => _prefs.getInt('current_theme_id', 0);
 set currentThemeId(int i) => _prefs.setInt('current_theme_id', i);
 String get username => _prefs.getString('username_dsb', '');
@@ -89,7 +93,8 @@ bool get loadingBarEnabled => _prefs.getBool('loading_bar_enabled', false);
 set loadingBarEnabled(bool b) => _prefs.setBool('loading_bar_enabled', b);
 bool get oneClassOnly => _prefs.getBool('one_class_only', true);
 set oneClassOnly(bool b) => _prefs.setBool('one_class_only', b);
-bool get closeAppOnBackPress => _prefs.getBool('close_app_on_back_press', false);
+bool get closeAppOnBackPress =>
+    _prefs.getBool('close_app_on_back_press', false);
 set closeAppOnBackPress(bool b) => _prefs.setBool('close_app_on_back_press', b);
 bool get devOptionsEnabled => _prefs.getBool('dev_options_enabled', false);
 set devOptionsEnabled(bool b) => _prefs.setBool('dev_options_enabled', b);
@@ -107,10 +112,11 @@ String get savedLangCode => _prefs.getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
 
 int get timer => _prefs.getInt('update_dsb_timer', 15);
-void setTimer(int i, Future<Null> Function() rebuildNewBuild) {
+void setTimer(int i, Function() f) {
   _prefs.setInt('update_dsb_timer', i);
-  if(CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
-  CustomValues.updateTimer = Timer.periodic(Duration(minutes: i), (timer) => rebuildNewBuild());
+  if (CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
+  CustomValues.updateTimer =
+      Timer.periodic(Duration(minutes: i), (timer) => f());
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
@@ -122,7 +128,8 @@ Future<void> loadPrefs() async {
 }
 
 void clear() {
-  if(_prefs == null) throw 'HOLY SHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
+  if (_prefs == null)
+    throw 'HOLY SHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
   _prefs.clear();
   ampInfo(ctx: 'Prefs', message: 'Cleared SharedPreferences.');
 }

@@ -32,12 +32,13 @@ class DevOptionsScreen extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: DevOptionsScreenPage(
-              title: AmpStrings.appTitle,
+            title: AmpStrings.appTitle,
           ),
         ),
         onWillPop: () async {
           dsbUpdateWidget(() {});
-          Animations.changeScreenEaseOutBackReplace(MyApp(initialIndex: 2), context);
+          Animations.changeScreenEaseOutBackReplace(
+              MyApp(initialIndex: 2), context);
           return false;
         });
   }
@@ -60,10 +61,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     DevOptionsValues.tabController.animation.addListener(() {
       if (DevOptionsValues.tabController.index < 1) {
         Animations.changeScreenNoAnimationReplace(
-          MyApp(
-            initialIndex: 2,
-          ),
-          context);
+            MyApp(
+              initialIndex: 2,
+            ),
+            context);
       }
     });
   }
@@ -88,13 +89,13 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
             child: ListView(
               children: [
                 Divider(
-                  color: AmpColors.colorForeground,
-                  height: Prefs.subListItemSpace.toDouble() + 2
-                ),
+                    color: AmpColors.colorForeground,
+                    height: Prefs.subListItemSpace.toDouble() + 2),
                 ampSwitchWithText(
                   text: 'Entwickleroptionen aktiviert',
                   value: Prefs.devOptionsEnabled,
-                  onChanged: (value) => setState(() => Prefs.devOptionsEnabled = value),
+                  onChanged: (value) =>
+                      setState(() => Prefs.devOptionsEnabled = value),
                 ),
                 Divider(
                   color: AmpColors.colorForeground,
@@ -103,17 +104,20 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ampSwitchWithText(
                   text: 'Hilfe für Langeweile aktiviert',
                   value: Prefs.counterEnabled,
-                  onChanged: (value) => setState(() => Prefs.counterEnabled = value),
+                  onChanged: (value) =>
+                      setState(() => Prefs.counterEnabled = value),
                 ),
                 ampSwitchWithText(
                   text: 'App schließt bei zurück-Taste',
                   value: Prefs.closeAppOnBackPress,
-                  onChanged: (value) => setState(() => Prefs.closeAppOnBackPress = value),
+                  onChanged: (value) =>
+                      setState(() => Prefs.closeAppOnBackPress = value),
                 ),
                 ampSwitchWithText(
                   text: 'Dauerhafter Ladebalken',
                   value: Prefs.loadingBarEnabled,
-                  onChanged: (value) => setState(() => Prefs.loadingBarEnabled = value),
+                  onChanged: (value) =>
+                      setState(() => Prefs.loadingBarEnabled = value),
                 ),
                 ampSwitchWithText(
                   text: 'JSON Cache benutzen',
@@ -121,32 +125,32 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   onChanged: (value) {
                     Prefs.useJsonCache = value;
                     dsbUpdateWidget(() => setState(() {}),
-                      cacheJsonPlans: value);
+                        cacheJsonPlans: value);
                   },
                 ),
                 Divider(
-                  color: AmpColors.colorForeground,
-                  height: Prefs.subListItemSpace.toDouble()
-                ),
+                    color: AmpColors.colorForeground,
+                    height: Prefs.subListItemSpace.toDouble()),
                 ListTile(
-                  title: Text('Listenelementabstand', style: AmpColors.textStyleForeground),
-                  trailing: Text('${Prefs.subListItemSpace}', style: AmpColors.textStyleForeground),
+                  title: Text('Listenelementabstand',
+                      style: AmpColors.textStyleForeground),
+                  trailing: Text('${Prefs.subListItemSpace}',
+                      style: AmpColors.textStyleForeground),
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
                 ListTile(
-                  title: Text('Timer', style: AmpColors.textStyleForeground),
-                  trailing: Text('${Prefs.timer}', style: AmpColors.textStyleForeground),
+                  title: Text('Refreshtimer (in Minuten)',
+                      style: AmpColors.textStyleForeground),
+                  trailing: Text('${Prefs.timer}',
+                      style: AmpColors.textStyleForeground),
                   onTap: () => showInputTimerDialog(context),
                 ),
                 Divider(
-                  color: AmpColors.colorForeground,
-                  height: Prefs.subListItemSpace.toDouble()
-                ),
+                    color: AmpColors.colorForeground,
+                    height: Prefs.subListItemSpace.toDouble()),
                 Divider(color: Colors.transparent, height: 10),
                 RaisedButton(
-                  child: Text('Print Cache'),
-                  onPressed: Prefs.listCache
-                ),
+                    child: Text('Print Cache'), onPressed: Prefs.listCache),
                 RaisedButton(
                   child: Text('Cache leeren'),
                   onPressed: () => Prefs.clearCache(),
@@ -208,7 +212,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           splashColor: AmpColors.colorForeground,
           onPressed: () {
             dsbUpdateWidget(() {});
-            Animations.changeScreenEaseOutBackReplace(MyApp(initialIndex: 2), context);
+            Animations.changeScreenEaseOutBackReplace(
+                MyApp(initialIndex: 2), context);
           },
           label: Text(
             'zurück',
@@ -241,14 +246,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: () => Navigator.of(context).pop(),
         onSave: () {
-          String err =
-              Widgets.numberValidator(subListSpacingInputFormController.text);
-          if (err != null) {
-            ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
-            return;
-          }
+          if (!subListSpacingInputFormKey.currentState.validate()) return;
           Prefs.subListItemSpace =
-              int.parse(subListSpacingInputFormController.text.trim());
+              double.parse(subListSpacingInputFormController.text.trim());
           setState(() => Prefs.subListItemSpace);
           Navigator.of(context).pop();
         },
@@ -274,12 +274,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: () => Navigator.of(context).pop(),
         onSave: () {
-          String err = Widgets.numberValidator(timerInputFormController.text);
-          if (err != null) {
-            ampErr(ctx: 'DEVOPTIONS', message: errorString(err));
-            return;
-          }
-          setState(() => Prefs.setTimer(int.parse(timerInputFormController.text.trim()), () => null));
+          if (!timerInputFormKey.currentState.validate()) return;
+          setState(() => Prefs.setTimer(
+              int.parse(timerInputFormController.text.trim()), () => null));
           Navigator.of(context).pop();
         },
       ),
