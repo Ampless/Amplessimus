@@ -71,6 +71,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
   @override
   Widget build(BuildContext context) {
+    if (Prefs.char.trim().toLowerCase().isEmpty)
+      letterDropDownValue = CustomValues.lang.empty;
+    if (Prefs.grade.trim().toLowerCase().isEmpty)
+      gradeDropDownValue = CustomValues.lang.empty;
+    FirstLoginValues.grades[0] = CustomValues.lang.empty;
+    FirstLoginValues.letters[0] = CustomValues.lang.empty;
     return Scaffold(
         body: TabBarView(
             physics: NeverScrollableScrollPhysics(),

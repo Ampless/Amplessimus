@@ -54,8 +54,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       if (Prefs.useSystemTheme)
         AmpColors.isDarkMode =
-            SchedulerBinding.instance.window.platformBrightness !=
-                Brightness.light;
+            SchedulerBinding.instance.window.platformBrightness ==
+                Brightness.dark;
 
       if (Prefs.firstLogin) {
         Future.delayed(Duration(milliseconds: 1000), () {
