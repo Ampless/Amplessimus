@@ -22,40 +22,50 @@ class CachedSharedPreferences {
 
   bool _platformSupportsSharedPrefs;
 
-  void setString(String key, String value) {
+  Future<Null> setString(String key, String value) async {
+    await _prefFileMutex.acquire();
     _cacheString[key] = value;
+    _prefFileMutex.release();
     if (_prefs != null)
       _prefs.setString(key, value);
     else if (_prefFile == null) _editsString.add(key);
     flush();
   }
 
-  void setInt(String key, int value) {
+  Future<Null> setInt(String key, int value) async {
+    await _prefFileMutex.acquire();
     _cacheInt[key] = value;
+    _prefFileMutex.release();
     if (_prefs != null)
       _prefs.setInt(key, value);
     else if (_prefFile == null) _editsInt.add(key);
     flush();
   }
 
-  void setDouble(String key, double value) {
+  Future<Null> setDouble(String key, double value) async {
+    await _prefFileMutex.acquire();
     _cacheDouble[key] = value;
+    _prefFileMutex.release();
     if (_prefs != null)
       _prefs.setDouble(key, value);
     else if (_prefFile == null) _editsDouble.add(key);
     flush();
   }
 
-  void setStringList(String key, List<String> value) {
+  Future<Null> setStringList(String key, List<String> value) async {
+    await _prefFileMutex.acquire();
     _cacheStrings[key] = value;
+    _prefFileMutex.release();
     if (_prefs != null)
       _prefs.setStringList(key, value);
     else if (_prefFile == null) _editsStrings.add(key);
     flush();
   }
 
-  void setBool(String key, bool value) {
+  Future<Null> setBool(String key, bool value) async {
+    await _prefFileMutex.acquire();
     _cacheBool[key] = value;
+    _prefFileMutex.release();
     if (_prefs != null)
       _prefs.setBool(key, value);
     else if (_prefFile != null)
@@ -223,11 +233,13 @@ class CachedSharedPreferences {
   }
 
   void clear() {
+    _prefFileMutex.acquire();
     _cacheBool.clear();
     _cacheDouble.clear();
     _cacheInt.clear();
     _cacheString.clear();
     _cacheStrings.clear();
+    _prefFileMutex.release();
     if (_prefs == null) {
       if (_platformSupportsSharedPrefs)
         throw 'PREFS NOT LODADA D A D AD';

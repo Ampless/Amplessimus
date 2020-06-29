@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/pref_cache.dart';
-import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:crypto/crypto.dart';
 
@@ -125,9 +125,13 @@ void setTimer(int i, Function() f) {
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
 bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
 
-Future<void> loadPrefs() async {
+Future<Null> loadPrefs() async {
   _prefs = CachedSharedPreferences();
-  await _prefs.ctor();
+  try {
+    await _prefs.ctor();
+  } catch(e) {
+    ampErr(ctx: 'Prefs', message: 'Initialization failed: ${errorString(e)}');
+  }
 }
 
 void clear() {
