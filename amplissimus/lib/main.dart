@@ -382,15 +382,8 @@ class _MyHomePageState extends State<MyHomePage>
         color: AmpColors.colorBackground,
         child: Scaffold(
           key: homeScaffoldKey,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            title: Text(
-                '${AmpStrings.appTitle}${Prefs.counterEnabled ? ' ' + Prefs.counter.toString() : ''}',
-                style:
-                    TextStyle(fontSize: 25, color: AmpColors.colorForeground)),
-            centerTitle: true,
-          ),
+          appBar: ampAppBar(
+              '${AmpStrings.appTitle}${Prefs.counterEnabled ? ' ' + Prefs.counter.toString() : ''}'),
           backgroundColor: Colors.transparent,
           body: RefreshIndicator(
               key: refreshKey,
