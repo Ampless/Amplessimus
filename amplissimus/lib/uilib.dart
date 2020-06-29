@@ -56,7 +56,9 @@ Widget ampFormField(
     @required String Function(String) validator,
     TextInputType keyboardType = TextInputType.visiblePassword,
     String labelText = '',
-    bool obscureText = false}) {
+    bool obscureText = false,
+    List<String> autofillHints}) {
+  if(autofillHints == null) autofillHints = [];
   return TextFormField(
     obscureText: obscureText,
     style: AmpColors.textStyleForeground,
@@ -65,6 +67,8 @@ Widget ampFormField(
     key: key,
     validator: validator,
     keyboardType: keyboardType,
+    obscureText: obscureText,
+    autofillHints: autofillHints,
     decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),

@@ -313,6 +313,8 @@ class _MyHomePageState extends State<MyHomePage>
           key: usernameInputFormKey,
           validator: Widgets.textFieldValidator,
           labelText: CustomValues.lang.username,
+          keyboardType: TextInputType.visiblePassword,
+          autofillHints: [AutofillHints.username],
         ),
         Padding(padding: EdgeInsets.all(6)),
         ampFormField(
@@ -320,6 +322,9 @@ class _MyHomePageState extends State<MyHomePage>
           key: passwordInputFormKey,
           validator: Widgets.textFieldValidator,
           labelText: CustomValues.lang.password,
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          autofillHints: [AutofillHints.password],
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
