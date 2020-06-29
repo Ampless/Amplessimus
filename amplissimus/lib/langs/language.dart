@@ -38,6 +38,7 @@ abstract class Language {
   String get firstStartupDone;
   String get timetable;
   String get darkMode;
+  String get setupTimetable;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);
@@ -47,10 +48,9 @@ abstract class Language {
   static List<Language> get all => _langs;
 
   static Language fromCode(String code) {
-    if(code == null) return _langs[0];
-    for(Language lang in _langs)
-      if(code.contains(lang.code) || lang.code.contains(code))
-        return lang;
+    if (code == null) return _langs[0];
+    for (Language lang in _langs)
+      if (code.contains(lang.code) || lang.code.contains(code)) return lang;
     return _langs[0];
   }
 

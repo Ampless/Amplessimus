@@ -5,7 +5,8 @@ import 'package:Amplissimus/langs/language.dart';
 
 class German extends Language {
   @override
-  String get appInfo => 'Amplissimus ist eine App, um Untis Vertretungspläne durch DSBMobile einfach anzusehen.';
+  String get appInfo =>
+      'Amplissimus ist eine App, um Untis Vertretungspläne durch DSBMobile einfach anzusehen.';
 
   @override
   String get code => 'de';
@@ -49,15 +50,15 @@ class German extends Language {
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
     String notesaddon = sub.notes.length > 0 ? ' (${sub.notes})' : '';
-    return sub.isFree ? 'Freistunde${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
-                      : 'Vertreten durch ${sub.teacher}$notesaddon';
+    return sub.isFree
+        ? 'Freistunde${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
+        : 'Vertreten durch ${sub.teacher}$notesaddon';
   }
 
   @override
   String dsbSubtoTitle(DsbSubstitution sub) {
     String hour = '';
-    for(int h in sub.hours)
-      hour += hour.length == 0 ? h.toString() : '-$h';
+    for (int h in sub.hours) hour += hour.length == 0 ? h.toString() : '-$h';
     return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject)}';
   }
 
@@ -67,7 +68,8 @@ class German extends Language {
   }
 
   @override
-  String get dsbListErrorSubtitle => 'Bitte an Amplus melden (https://amplus.chrissx.de/amplissimus)';
+  String get dsbListErrorSubtitle =>
+      'Bitte an Amplus melden (https://amplus.chrissx.de/amplissimus)';
 
   @override
   String get dsbListErrorTitle => 'Amplissimus-Fehler';
@@ -107,6 +109,9 @@ class German extends Language {
 
   @override
   String get timetable => 'Stundenplan';
+
+  @override
+  String get setupTimetable => 'Stundenplan\neinrichten';
 
   @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({

@@ -5,7 +5,8 @@ import 'package:Amplissimus/langs/language.dart';
 
 class English extends Language {
   @override
-  String get appInfo => 'Amplissimus is an App for easily viewing Untis substitution plans using DSBMobile.';
+  String get appInfo =>
+      'Amplissimus is an App for easily viewing Untis substitution plans using DSBMobile.';
 
   @override
   String get code => 'en';
@@ -49,21 +50,26 @@ class English extends Language {
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
     String notesaddon = sub.notes.length > 0 ? ' (${sub.notes})' : '';
-    return sub.isFree ? 'Free lesson${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
-                      : 'Substituted by ${sub.teacher}$notesaddon';
+    return sub.isFree
+        ? 'Free lesson${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
+        : 'Substituted by ${sub.teacher}$notesaddon';
   }
 
   @override
   String dsbSubtoTitle(DsbSubstitution sub) {
     String hour = '';
-    for(int h in sub.hours) {
-      if(hour.length > 0) hour += '-';
+    for (int h in sub.hours) {
+      if (hour.length > 0) hour += '-';
       hour += h.toString();
       int r = h % 10;
-      if(r == 1) hour += 'st';
-      else if(r == 2) hour += 'nd';
-      else if(r == 3) hour += 'rd';
-      else hour += 'th';
+      if (r == 1)
+        hour += 'st';
+      else if (r == 2)
+        hour += 'nd';
+      else if (r == 3)
+        hour += 'rd';
+      else
+        hour += 'th';
     }
     return '$hour lesson ${DsbSubstitution.realSubject(sub.subject)}';
   }
@@ -74,7 +80,8 @@ class English extends Language {
   }
 
   @override
-  String get dsbListErrorSubtitle => 'Please report to Amplus (https://amplus.chrissx.de/amplissimus)';
+  String get dsbListErrorSubtitle =>
+      'Please report to Amplus (https://amplus.chrissx.de/amplissimus)';
 
   @override
   String get dsbListErrorTitle => 'Amplissimus Error';
@@ -114,6 +121,9 @@ class English extends Language {
 
   @override
   String get timetable => 'Timetable';
+
+  @override
+  String get setupTimetable => 'setup\ntimetable';
 
   @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({

@@ -175,6 +175,8 @@ class _MyHomePageState extends State<MyHomePage>
       letterDropDownValue = CustomValues.lang.empty;
     if (gradeDropDownValue.isEmpty)
       gradeDropDownValue = CustomValues.lang.empty;
+    FirstLoginValues.grades[0] = CustomValues.lang.empty;
+    FirstLoginValues.letters[0] = CustomValues.lang.empty;
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
@@ -208,8 +210,16 @@ class _MyHomePageState extends State<MyHomePage>
     setState(() => circularProgressIndicatorActive = false);
   }
 
-  void showInputSelectCurrentClass(BuildContext context) {
-    ampSelectionDialog(
+  void showInputSelectCurrentClass(BuildContext context) async {
+    FirstLoginValues.grades[0] = CustomValues.lang.empty;
+    FirstLoginValues.letters[0] = CustomValues.lang.empty;
+    if (Prefs.char.trim().isEmpty)
+      letterDropDownValue = FirstLoginValues.letters[0];
+    if (Prefs.grade.trim().isEmpty)
+      gradeDropDownValue = FirstLoginValues.grades[0];
+    if (!FirstLoginValues.letters.contains(letterDropDownValue)) return;
+    if (!FirstLoginValues.grades.contains(gradeDropDownValue)) return;
+    await ampSelectionDialog(
       context: context,
       title: CustomValues.lang.selectClass,
       inputChildren: (alertContext, setAlState) => [
@@ -277,6 +287,9 @@ class _MyHomePageState extends State<MyHomePage>
         onSave: () {
           CustomValues.lang = lang;
           rebuildNewBuild();
+
+          FirstLoginValues.grades[0] = CustomValues.lang.empty;
+          FirstLoginValues.letters[0] = CustomValues.lang.empty;
           Navigator.of(context).pop();
         },
       ),
@@ -440,7 +453,7 @@ class _MyHomePageState extends State<MyHomePage>
                         size: 200,
                       ),
                       Text(
-                        'Stundenplan\neinrichten',
+                        CustomValues.lang.setupTimetable,
                         style: TextStyle(
                             color: AmpColors.colorForeground, fontSize: 32),
                         textAlign: TextAlign.center,
