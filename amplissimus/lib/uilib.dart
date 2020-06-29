@@ -58,7 +58,7 @@ Widget ampFormField(
     String labelText = '',
     bool obscureText = false,
     List<String> autofillHints}) {
-  if(autofillHints == null) autofillHints = [];
+  if (autofillHints == null) autofillHints = [];
   return TextFormField(
     obscureText: obscureText,
     style: AmpColors.textStyleForeground,
@@ -67,7 +67,6 @@ Widget ampFormField(
     key: key,
     validator: validator,
     keyboardType: keyboardType,
-    obscureText: obscureText,
     autofillHints: autofillHints,
     decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(

@@ -34,7 +34,14 @@ class RegisterTimetableScreenPageState
     extends State<RegisterTimetableScreenPage>
     with SingleTickerProviderStateMixin {
   TTDay currentDropdownDay = TTDay.Monday;
+  TTColumn ttColumn;
   int currentDropdownHour = CustomValues.ttHours[5];
+
+  void initializeTTColumns() {
+    if (CustomValues.ttColums.isEmpty) {
+      for (var i = 0; i < 5; i++) {}
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
