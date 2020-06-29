@@ -64,8 +64,8 @@ class TTColumn {
 
   List<String> lessonsToJson(List<TTLesson> lessons) {
     List<String> lessonsStrings = [];
-    for (TTLesson usage in lessons) {
-      lessonsStrings.add(jsonEncode(usage.toJson()));
+    for (TTLesson lesson in lessons) {
+      lessonsStrings.add(jsonEncode(lesson.toJson()));
     }
     return lessonsStrings;
   }

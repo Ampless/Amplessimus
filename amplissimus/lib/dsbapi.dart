@@ -34,6 +34,23 @@ class DsbSubstitution {
   DsbSubstitution(this.affectedClass, this.hours, this.teacher, this.subject,
       this.notes, this.isFree);
 
+  DsbSubstitution.fromJson(Map<String, dynamic> json)
+      : affectedClass = json['affectedClass'],
+        hours = List<int>.from(jsonDecode(json['hours'])),
+        teacher = json['teacher'],
+        subject = json['subject'],
+        notes = json['notes'],
+        isFree = json['isFree'];
+
+  Map<String, dynamic> toJson() => {
+        'affectedClass': affectedClass,
+        'hours': jsonEncode(hours),
+        'teacher': teacher,
+        'subject': subject,
+        'notes': notes,
+        'isFree': isFree,
+      };
+
   static final int zero = '0'.codeUnitAt(0), nine = '9'.codeUnitAt(0);
 
   static List<int> parseIntsFromString(String s) {
@@ -128,18 +145,6 @@ class DsbSubstitution {
         '            </dict>\n';
     return plist;
   }
-
-  String toJson() {
-    String json = '{'
-        '"class":"${jsonEscape(affectedClass)}",'
-        '"lessons":[';
-    for (int h in hours) json += '$h,';
-    return '${json.substring(0, json.length - 1)}],'
-        '"teacher":"${jsonEscape(teacher)}",'
-        '"subject":"${jsonEscape(subject)}",'
-        '"notes":"${jsonEscape(notes)}"'
-        '},';
-  }
 }
 
 class DsbPlan {
@@ -148,6 +153,33 @@ class DsbPlan {
   List<DsbSubstitution> subs;
 
   DsbPlan(this.title, this.subs, this.date);
+
+  DsbPlan.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        date = json['date'],
+        subs = subsFromJson(List<String>.from(jsonDecode(json['subs'])));
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'date': date,
+        'subs': jsonEncode(subsToJson(subs)),
+      };
+
+  List<String> subsToJson(List<DsbSubstitution> subs) {
+    List<String> lessonsStrings = [];
+    for (DsbSubstitution usage in subs) {
+      lessonsStrings.add(jsonEncode(usage.toJson()));
+    }
+    return lessonsStrings;
+  }
+
+  static List<DsbSubstitution> subsFromJson(List<String> subsStrings) {
+    List<DsbSubstitution> tempSubs = new List();
+    for (String tempString in subsStrings) {
+      tempSubs.add(DsbSubstitution.fromJson(jsonDecode(tempString)));
+    }
+    return tempSubs;
+  }
 
   String toString() => '$title: $subs';
 
@@ -163,20 +195,6 @@ class DsbPlan {
     plist += '        </array>\n'
         '    </dict>\n';
     return plist;
-  }
-
-  String toJson() {
-    String json = '{'
-        '"title":"${jsonEscape(title)}",'
-        '"date":"${jsonEscape(date)}",'
-        '"subs":[';
-    if (subs.length > 0)
-      for (DsbSubstitution sub in subs) json += sub.toJson();
-    else
-      json += ',';
-    return '${json.substring(0, json.length - 1)}'
-        ']'
-        '},';
   }
 }
 
@@ -364,9 +382,9 @@ Future<Null> dsbUpdateWidget(Function f,
       plans = await dsbGetAllSubs(Prefs.username, Prefs.password,
           cacheGetRequests: cacheGetRequests,
           cachePostRequests: cachePostRequests);
-      Prefs.dsbJsonCache = toJson(plans);
+      Prefs.dsbJsonCache = plansToJson(plans);
     } else
-      plans = fromJson(jsonCache);
+      plans = plansFromJson(jsonCache);
     if (Prefs.oneClassOnly &&
         Prefs.username.isNotEmpty &&
         Prefs.password.isNotEmpty)
@@ -474,7 +492,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
   }
 }
 
-String toPlist(List<DsbPlan> plans) {
+String plansToPlist(List<DsbPlan> plans) {
   String plist = '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
       '<plist version="1.0">\n'
@@ -485,33 +503,20 @@ String toPlist(List<DsbPlan> plans) {
       '</plist>\n';
 }
 
-String toJson(List<DsbPlan> plans) {
-  String json = '[';
-  for (var plan in plans) json += plan.toJson();
-  return '${json.substring(0, json.length - 1)}]\n';
+String plansToJson(List<DsbPlan> plans) {
+  List<String> plansStrings = [];
+  for (DsbPlan plan in plans) {
+    plansStrings.add(jsonEncode(plan.toJson()));
+  }
+  print(jsonEncode(plansStrings));
+  return jsonEncode(plansStrings);
 }
 
-List<DsbPlan> fromJson(String jsontext) {
-  dynamic json = jsonDecode(jsontext);
+List<DsbPlan> plansFromJson(String jsonPlans) {
   List<DsbPlan> plans = [];
-  for (dynamic plan in jsonIsList(json)) {
-    List<DsbSubstitution> subs = [];
-    for (dynamic sub in jsonIsList(jsonGetKey(plan, 'subs'))) {
-      String teacher = jsonGetKey(sub, 'teacher');
-      List<int> lessons = [];
-      for (dynamic lesson in jsonGetKey(sub, 'lessons')) {
-        lessons.add(lesson);
-      }
-      subs.add(DsbSubstitution(
-          jsonGetKey(sub, 'class'),
-          lessons,
-          teacher,
-          jsonGetKey(sub, 'subject'),
-          jsonGetKey(sub, 'notes'),
-          teacher.contains('---')));
-    }
-    plans.add(
-        DsbPlan(jsonGetKey(plan, 'title'), subs, jsonGetKey(plan, 'date')));
+  List<String> plansStrings = jsonDecode(jsonPlans);
+  for (String tempString in plansStrings) {
+    plans.add(DsbPlan.fromJson(jsonDecode(tempString)));
   }
   return plans;
 }
