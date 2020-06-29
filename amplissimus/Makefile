@@ -126,7 +126,6 @@ mkdirs:
 
 cleanartifacts:
 	which flutter rm
-	flutter clean
 	rm -rf $(TMP)/*
 
 setup:
