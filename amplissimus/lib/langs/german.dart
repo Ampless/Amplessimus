@@ -121,6 +121,9 @@ class German extends Language {
   String get subject => 'Fach';
 
   @override
+  String get notes => 'Notizen';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Sport',
     'e': 'Englisch',

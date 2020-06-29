@@ -55,8 +55,10 @@ Widget ampFormField(
     @required Key key,
     @required String Function(String) validator,
     TextInputType keyboardType = TextInputType.visiblePassword,
-    String labelText = ''}) {
+    String labelText = '',
+    bool obscureText = false}) {
   return TextFormField(
+    obscureText: obscureText,
     style: AmpColors.textStyleForeground,
     keyboardAppearance: AmpColors.brightness,
     controller: controller,

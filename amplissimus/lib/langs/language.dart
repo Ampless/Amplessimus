@@ -43,6 +43,7 @@ abstract class Language {
   String get setupTimetableTitle;
   String get noSubs;
   String get subject;
+  String get notes;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

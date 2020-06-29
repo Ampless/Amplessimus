@@ -81,6 +81,7 @@ class RegisterTimetableScreenPageState
         ),
         backgroundColor: Colors.transparent,
         body: Container(
+          margin: EdgeInsets.only(left: 12, right: 12),
           color: Colors.transparent,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -116,7 +117,7 @@ class RegisterTimetableScreenPageState
                           color: AmpColors.colorForeground, fontSize: 22),
                     ),
                     subtitle: Text(
-                      'Notiz',
+                      CustomValues.lang.notes,
                       style: TextStyle(
                           color: AmpColors.lightForeground, fontSize: 16),
                     ),
