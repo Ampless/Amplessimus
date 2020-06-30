@@ -36,6 +36,17 @@ class CustomValues {
 
   static List<TTColumn> ttColumns = [];
   static Timer updateTimer;
+
+  static void generateNewTTColumns() {
+    ttColumns = [];
+    List<TTLesson> tempLessons = [];
+    for (var i = 0; i < 7; i++) {
+      tempLessons.add(TTLesson('', '', '', false));
+    }
+    for (TTDay day in TTDay.values) {
+      ttColumns.add(TTColumn(tempLessons, day));
+    }
+  }
 }
 
 class AmpStrings {

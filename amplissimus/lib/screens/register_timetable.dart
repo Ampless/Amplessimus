@@ -40,14 +40,6 @@ class RegisterTimetableScreenPageState
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
 
-  void initializeTTColumns() {
-    if (CustomValues.ttColumns.isEmpty) {
-      for (TTDay day in TTDay.values) {
-        CustomValues.ttColumns.add(TTColumn([], day));
-      }
-    }
-  }
-
   void updateTTColumn(int newLength, TTDay day) {
     int index = TTDay.values.indexOf(currentDropdownDay);
     for (var i = 0; i < newLength; i++) {
@@ -58,10 +50,16 @@ class RegisterTimetableScreenPageState
   }
 
   @override
-  Widget build(BuildContext context) {
-    initializeTTColumns();
-    currentDropdownHour = ttColumn.lessons.length;
+  void initState() {
+    if (CustomValues.ttColumns.isEmpty) CustomValues.generateNewTTColumns();
     curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
+    ttColumn = CustomValues.ttColumns[curTTColumnIndex];
+    currentDropdownHour = ttColumn.lessons.length;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
@@ -146,9 +144,13 @@ class RegisterTimetableScreenPageState
                       selectedTTLesson = ttColumn.lessons[index];
                       final subjectInputFormKey = GlobalKey<FormFieldState>();
                       final notesInputFormKey = GlobalKey<FormFieldState>();
+                      final teacherInputFormKey = GlobalKey<FormFieldState>();
                       final subjectInputFormController =
-                          TextEditingController();
-                      final notesInputFormController = TextEditingController();
+                          TextEditingController(text: selectedTTLesson.subject);
+                      final notesInputFormController =
+                          TextEditingController(text: selectedTTLesson.notes);
+                      final teacherInputFormController =
+                          TextEditingController(text: selectedTTLesson.teacher);
                       showAmpTextDialog(
                         title: CustomValues.lang.editHour,
                         children: (context) => [
@@ -165,27 +167,46 @@ class RegisterTimetableScreenPageState
                             validator: Widgets.textFieldValidator,
                             labelText: CustomValues.lang.notes,
                           ),
+                          Padding(padding: EdgeInsets.all(6)),
+                          ampFormField(
+                            controller: teacherInputFormController,
+                            key: teacherInputFormKey,
+                            validator: Widgets.textFieldValidator,
+                            labelText: CustomValues.lang.teacherInput,
+                          ),
                         ],
                         actions: (context) => ampDialogButtonsSaveAndCancel(
-                          onCancel: () => Navigator.of(context).pop(),
+                          onCancel: () => Navigator.pop(context),
                           onSave: () {
-                            bool condA =
-                                subjectInputFormKey.currentState?.validate();
-                            bool condB =
-                                notesInputFormKey.currentState?.validate();
-                            if (!condA || !condB) return;
+                            selectedTTLesson.subject =
+                                subjectInputFormController.text.trim();
+                            selectedTTLesson.notes =
+                                notesInputFormController.text.trim();
+                            setState(() {});
+                            Navigator.pop(context);
                           },
                         ),
                         context: context,
                       );
                     },
                     title: Text(
-                      CustomValues.lang.subject,
+                      ttColumn.lessons[index].subject.trim().isEmpty
+                          ? CustomValues.lang.subject
+                          : ttColumn.lessons[index].subject.trim(),
                       style: TextStyle(
                           color: AmpColors.colorForeground, fontSize: 22),
                     ),
                     subtitle: Text(
-                      CustomValues.lang.notes,
+                      ttColumn.lessons[index].notes.trim().isEmpty
+                          ? CustomValues.lang.notes
+                          : ttColumn.lessons[index].notes.trim(),
+                      style: TextStyle(
+                          color: AmpColors.lightForeground, fontSize: 16),
+                    ),
+                    trailing: Text(
+                      ttColumn.lessons[index].teacher.trim().isEmpty
+                          ? CustomValues.lang.teacher
+                          : ttColumn.lessons[index].teacher.trim(),
                       style: TextStyle(
                           color: AmpColors.lightForeground, fontSize: 16),
                     ),

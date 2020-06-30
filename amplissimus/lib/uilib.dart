@@ -1,3 +1,4 @@
+import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
@@ -37,14 +38,20 @@ Future<Null> showAmpTextDialog(
     context: context,
     barrierDismissible: true,
     builder: (context) {
-      return AlertDialog(
-        title: Text(title, style: AmpColors.textStyleForeground),
-        backgroundColor: AmpColors.colorBackground,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: children(context),
+      return MaterialApp(
+        home: AlertDialog(
+          title: Text(title, style: AmpColors.textStyleForeground),
+          backgroundColor: AmpColors.colorBackground,
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: children(context),
+            ),
+          ),
+          actions: actions(context),
         ),
-        actions: actions(context),
+        builder: (context, child) =>
+            ScrollConfiguration(behavior: MyBehavior(), child: child),
       );
     },
   );

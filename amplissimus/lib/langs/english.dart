@@ -139,6 +139,12 @@ class English extends Language {
   String get editHour => 'Edit hour';
 
   @override
+  String get teacher => 'Teacher';
+
+  @override
+  String get teacherInput => 'Teacher (last name)';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Physical Education (sports)',
     'e': 'English',
