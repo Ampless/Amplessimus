@@ -39,18 +39,27 @@ class RegisterTimetableScreenPageState
   int currentDropdownHour = CustomValues.ttHours[5];
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
+  bool tempCurrentTTLessonIsFree = false;
 
   void updateTTColumn(int newLength, TTDay day) {
     int index = TTDay.values.indexOf(currentDropdownDay);
-    for (var i = 0; i < newLength; i++) {
-      if (i + 1 > CustomValues.ttColumns[index].lessons.length) {
-        CustomValues.ttColumns[index].lessons.add(TTLesson('', '', '', false));
+    if (ttColumn.lessons.length <= newLength) {
+      for (var i = 0; i < newLength; i++) {
+        if (i + 1 > CustomValues.ttColumns[index].lessons.length) {
+          CustomValues.ttColumns[index].lessons
+              .add(TTLesson('', '', '', false));
+        }
+      }
+    } else {
+      for (var i = ttColumn.lessons.length; i > newLength; --i) {
+        CustomValues.ttColumns[index].lessons.removeAt(i - 1);
       }
     }
   }
 
   @override
   void initState() {
+    CustomValues.ttColumns = timetableFromPrefs();
     if (CustomValues.ttColumns.isEmpty) CustomValues.generateNewTTColumns();
     curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
     ttColumn = CustomValues.ttColumns[curTTColumnIndex];
@@ -85,8 +94,10 @@ class RegisterTimetableScreenPageState
                         currentDropdownDay = value;
                         ttColumn = CustomValues.ttColumns[
                             TTDay.values.indexOf(currentDropdownDay)];
+                        currentDropdownHour = ttColumn.lessons.length;
                       });
                     },
+                    underlineDisabled: true,
                   ),
                   Padding(padding: EdgeInsets.all(10)),
                   ampDropdownButton(
@@ -102,6 +113,7 @@ class RegisterTimetableScreenPageState
                         updateTTColumn(value, currentDropdownDay);
                       });
                     },
+                    underlineDisabled: true,
                   ),
                 ],
               ),
@@ -132,6 +144,15 @@ class RegisterTimetableScreenPageState
                       color: AmpColors.colorBackground,
                       height: 65,
                     );
+                  String titleString;
+                  String trailingString;
+                  if (ttColumn.lessons[index].isFree) {
+                    titleString = CustomValues.lang.freeLesson;
+                    trailingString = '';
+                  } else {
+                    titleString = ttColumn.lessons[index].subject;
+                    trailingString = ttColumn.lessons[index].teacher;
+                  }
                   return ListTile(
                     leading: Text(
                       (index + 1).toString(),
@@ -142,6 +163,7 @@ class RegisterTimetableScreenPageState
                     ),
                     onTap: () {
                       selectedTTLesson = ttColumn.lessons[index];
+                      tempCurrentTTLessonIsFree = selectedTTLesson.isFree;
                       final subjectInputFormKey = GlobalKey<FormFieldState>();
                       final notesInputFormKey = GlobalKey<FormFieldState>();
                       final teacherInputFormKey = GlobalKey<FormFieldState>();
@@ -154,6 +176,7 @@ class RegisterTimetableScreenPageState
                       showAmpTextDialog(
                         title: CustomValues.lang.editHour,
                         children: (context) => [
+                          Padding(padding: EdgeInsets.all(3)),
                           ampFormField(
                             controller: subjectInputFormController,
                             key: subjectInputFormKey,
@@ -174,6 +197,18 @@ class RegisterTimetableScreenPageState
                             validator: Widgets.textFieldValidator,
                             labelText: CustomValues.lang.teacherInput,
                           ),
+                          StatefulBuilder(
+                            builder: (context, setSwitchState) {
+                              return ampSwitchWithText(
+                                text: CustomValues.lang.freeLesson,
+                                value: tempCurrentTTLessonIsFree,
+                                onChanged: (value) {
+                                  setSwitchState(
+                                      () => tempCurrentTTLessonIsFree = value);
+                                },
+                              );
+                            },
+                          ),
                         ],
                         actions: (context) => ampDialogButtonsSaveAndCancel(
                           onCancel: () => Navigator.pop(context),
@@ -182,17 +217,22 @@ class RegisterTimetableScreenPageState
                                 subjectInputFormController.text.trim();
                             selectedTTLesson.notes =
                                 notesInputFormController.text.trim();
+                            selectedTTLesson.teacher =
+                                teacherInputFormController.text.trim();
+                            selectedTTLesson.isFree = tempCurrentTTLessonIsFree;
                             setState(() {});
                             Navigator.pop(context);
+                            saveTimetableToPrefs(CustomValues.ttColumns);
                           },
                         ),
                         context: context,
                       );
                     },
                     title: Text(
-                      ttColumn.lessons[index].subject.trim().isEmpty
+                      ttColumn.lessons[index].subject.trim().isEmpty &&
+                              !ttColumn.lessons[index].isFree
                           ? CustomValues.lang.subject
-                          : ttColumn.lessons[index].subject.trim(),
+                          : titleString.trim(),
                       style: TextStyle(
                           color: AmpColors.colorForeground, fontSize: 22),
                     ),
@@ -204,9 +244,10 @@ class RegisterTimetableScreenPageState
                           color: AmpColors.lightForeground, fontSize: 16),
                     ),
                     trailing: Text(
-                      ttColumn.lessons[index].teacher.trim().isEmpty
+                      ttColumn.lessons[index].teacher.trim().isEmpty &&
+                              !ttColumn.lessons[index].isFree
                           ? CustomValues.lang.teacher
-                          : ttColumn.lessons[index].teacher.trim(),
+                          : trailingString.trim(),
                       style: TextStyle(
                           color: AmpColors.lightForeground, fontSize: 16),
                     ),
@@ -229,6 +270,7 @@ class RegisterTimetableScreenPageState
             dsbUpdateWidget(() {});
             Animations.changeScreenEaseOutBackReplace(
                 MyApp(initialIndex: 1), context);
+            saveTimetableToPrefs(CustomValues.ttColumns);
           },
           label: Text(
             'zurück',

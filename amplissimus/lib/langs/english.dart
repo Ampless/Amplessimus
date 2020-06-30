@@ -145,6 +145,9 @@ class English extends Language {
   String get teacherInput => 'Teacher (last name)';
 
   @override
+  String get freeLesson => 'Free lesson';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Physical Education (sports)',
     'e': 'English',

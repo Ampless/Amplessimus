@@ -415,7 +415,7 @@ class _MyHomePageState extends State<MyHomePage>
       ),
       Container(
         color: Colors.transparent,
-        child: Prefs.jsonTimetable == null
+        child: true
             ? Center(
                 child: InkWell(
                   highlightColor: Colors.transparent,

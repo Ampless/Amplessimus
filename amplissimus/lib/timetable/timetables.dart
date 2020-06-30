@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/json.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 enum TTDay {
   Monday,
@@ -54,12 +55,13 @@ class TTColumn {
   TTColumn(this.lessons, this.day);
 
   TTColumn.fromJson(Map<String, dynamic> json)
-      : lessons = lessonsFromJson(jsonDecode(json['lessons'])),
-        day = json['day'];
+      : lessons =
+            lessonsFromJson(List<String>.from(jsonDecode(json['lessons']))),
+        day = EnumToString.fromString(TTDay.values, json['day']);
 
   Map<String, dynamic> toJson() => {
         'lessons': jsonEncode(lessonsToJson(lessons)),
-        'day': day,
+        'day': EnumToString.parse(day),
       };
 
   List<String> lessonsToJson(List<TTLesson> lessons) {
@@ -128,7 +130,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   return table;
 }
 
-void saveTimetableToPrefs(List<TTColumn> table) {
+Future<void> saveTimetableToPrefs(List<TTColumn> table) async {
   List<String> tableStrings = [];
   for (TTColumn column in table) {
     tableStrings.add(jsonEncode(column.toJson()));
@@ -139,8 +141,10 @@ void saveTimetableToPrefs(List<TTColumn> table) {
 List<TTColumn> timetableFromPrefs() {
   List<TTColumn> table = [];
   if (Prefs.jsonTimetable == null) return [];
-  List<String> tableStrings = jsonDecode(Prefs.jsonTimetable);
+  List<String> tableStrings =
+      List<String>.from(jsonDecode(Prefs.jsonTimetable));
   for (String s in tableStrings) {
+    print(jsonDecode(s).runtimeType);
     table.add(TTColumn.fromJson(jsonDecode(s)));
   }
   return table;

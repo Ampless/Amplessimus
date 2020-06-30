@@ -40,7 +40,7 @@ class CustomValues {
   static void generateNewTTColumns() {
     ttColumns = [];
     List<TTLesson> tempLessons = [];
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < 6; i++) {
       tempLessons.add(TTLesson('', '', '', false));
     }
     for (TTDay day in TTDay.values) {

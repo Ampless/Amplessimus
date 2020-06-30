@@ -47,6 +47,7 @@ abstract class Language {
   String get editHour;
   String get teacher;
   String get teacherInput;
+  String get freeLesson;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

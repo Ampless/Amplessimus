@@ -109,7 +109,7 @@ Widget ampDropdownButton(
     bool underlineDisabled = false}) {
   return DropdownButton(
     underline: Container(
-      height: underlineDisabled ? 2 : 0,
+      height: underlineDisabled ? 0 : 2,
       color: AmpColors.colorForeground,
     ),
     style: AmpColors.textStyleForeground,
