@@ -61,7 +61,7 @@ Widget ampFormField(
     {@required TextEditingController controller,
     @required Key key,
     @required String Function(String) validator,
-    TextInputType keyboardType = TextInputType.visiblePassword,
+    TextInputType keyboardType = TextInputType.text,
     String labelText = '',
     bool obscureText = false,
     List<String> autofillHints}) {
