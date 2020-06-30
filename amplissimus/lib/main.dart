@@ -48,6 +48,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     (() async {
       await Prefs.loadPrefs();
+      CustomValues.ttColumns = timetableFromPrefs();
 
       if (CustomValues.isAprilFools)
         Prefs.currentThemeId = -1;
@@ -413,40 +414,59 @@ class _MyHomePageState extends State<MyHomePage>
         ),
         margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
       ),
-      Container(
-        color: Colors.transparent,
-        child: true
-            ? Center(
-                child: InkWell(
-                  highlightColor: Colors.transparent,
-                  splashColor: AmpColors.colorForeground,
-                  borderRadius: BorderRadius.circular(32),
-                  onTap: () {
-                    Animations.changeScreenEaseOutBackReplace(
-                        RegisterTimetableScreen(), context);
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        MdiIcons.timetable,
-                        color: AmpColors.colorForeground,
-                        size: 200,
-                      ),
-                      Text(
-                        CustomValues.lang.setupTimetable,
-                        style: TextStyle(
-                            color: AmpColors.colorForeground, fontSize: 32),
-                        textAlign: TextAlign.center,
-                      ),
-                      Padding(padding: EdgeInsets.all(10)),
-                    ],
+      Scaffold(
+        appBar: ampAppBar('Stundenplan'),
+        backgroundColor: Colors.transparent,
+        body: Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          color: Colors.transparent,
+          child: Prefs.jsonTimetable == null
+              ? Center(
+                  child: InkWell(
+                    highlightColor: Colors.transparent,
+                    splashColor: AmpColors.colorForeground,
+                    borderRadius: BorderRadius.circular(32),
+                    onTap: () {
+                      Animations.changeScreenEaseOutBackReplace(
+                          RegisterTimetableScreen(), context);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          MdiIcons.timetable,
+                          color: AmpColors.colorForeground,
+                          size: 200,
+                        ),
+                        Text(
+                          CustomValues.lang.setupTimetable,
+                          style: TextStyle(
+                              color: AmpColors.colorForeground, fontSize: 32),
+                          textAlign: TextAlign.center,
+                        ),
+                        Padding(padding: EdgeInsets.all(10)),
+                      ],
+                    ),
                   ),
+                )
+              : ListView(
+                  children: timeTableWidgetUnfiltered(timetablePlans),
                 ),
-              )
-            : ListView(
-                children: [],
-              ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Animations.changeScreenEaseOutBackReplace(
+              RegisterTimetableScreen(), context),
+          label: Text('Ändern'),
+          icon: Icon(
+            Icons.edit,
+            color: AmpColors.colorForeground,
+          ),
+          backgroundColor: AmpColors.colorBackground,
+          foregroundColor: AmpColors.colorForeground,
+          splashColor: AmpColors.colorForeground,
+          highlightElevation: 0,
+          focusColor: Colors.transparent,
+        ),
       ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),

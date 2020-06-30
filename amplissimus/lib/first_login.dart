@@ -84,7 +84,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
             controller: FirstLoginValues.tabController,
             children: <Widget>[
           AnimatedContainer(
-            duration: Duration(seconds: 1),
+            duration: Duration(milliseconds: 150),
             color: AmpColors.colorBackground,
             child: Scaffold(
               key: scaffoldKey,

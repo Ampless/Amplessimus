@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/json.dart';
+import 'package:Amplissimus/values.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/material.dart';
 
 enum TTDay {
   Monday,
@@ -148,4 +150,56 @@ List<TTColumn> timetableFromPrefs() {
     table.add(TTColumn.fromJson(jsonDecode(s)));
   }
   return table;
+}
+
+List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
+  List<Widget> widgets = [];
+  for (DsbPlan plan in plans) {
+    TTDay day = ttMatchDay(plan.title.toLowerCase());
+    int ttColumnIndex = TTDay.values.indexOf(day);
+    widgets.add(Text(
+      '   ${CustomValues.lang.ttDayToString(ttMatchDay(plan.title.toLowerCase()))}',
+      style: TextStyle(color: AmpColors.colorForeground, fontSize: 24),
+    ));
+    for (TTLesson lesson in CustomValues.ttColumns[ttColumnIndex].lessons) {
+      String titleString;
+      String trailingString;
+      if (lesson.isFree) {
+        titleString = CustomValues.lang.freeLesson;
+        trailingString = '';
+      } else {
+        titleString = lesson.subject;
+        trailingString = lesson.teacher;
+      }
+      widgets.add(ListTile(
+        title: Text(
+          lesson.subject.trim().isEmpty && !lesson.isFree
+              ? CustomValues.lang.subject
+              : titleString.trim(),
+          style: TextStyle(color: AmpColors.colorForeground, fontSize: 22),
+        ),
+        leading: Text(
+          (CustomValues.ttColumns[ttColumnIndex].lessons.indexOf(lesson) + 1)
+              .toString(),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AmpColors.colorForeground,
+              fontSize: 30),
+        ),
+        subtitle: Text(
+          lesson.notes.trim().isEmpty
+              ? CustomValues.lang.notes
+              : lesson.notes.trim(),
+          style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
+        ),
+        trailing: Text(
+          lesson.teacher.trim().isEmpty && !lesson.isFree
+              ? CustomValues.lang.teacher
+              : trailingString.trim(),
+          style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
+        ),
+      ));
+    }
+  }
+  return widgets;
 }
