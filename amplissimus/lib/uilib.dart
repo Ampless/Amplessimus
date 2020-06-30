@@ -28,7 +28,7 @@ Future<Null> ampSelectionDialog(
   );
 }
 
-Future<Null> ampTextDialog(
+Future<Null> showAmpTextDialog(
     {@required String title,
     @required List<Widget> Function(BuildContext) children,
     @required List<Widget> Function(BuildContext) actions,

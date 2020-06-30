@@ -304,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage>
         TextEditingController(text: Prefs.username);
     final passwordInputFormController =
         TextEditingController(text: Prefs.password);
-    ampTextDialog(
+    showAmpTextDialog(
       context: context,
       title: CustomValues.lang.changeLoginPopup,
       children: (context) => [

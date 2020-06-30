@@ -34,7 +34,7 @@ class CustomValues {
     15
   ];
 
-  static List<TTColumn> ttColums = [];
+  static List<TTColumn> ttColumns = [];
   static Timer updateTimer;
 }
 

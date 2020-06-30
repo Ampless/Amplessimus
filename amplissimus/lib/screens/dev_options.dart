@@ -211,7 +211,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final subListSpacingInputFormKey = GlobalKey<FormFieldState>();
     final subListSpacingInputFormController =
         TextEditingController(text: Prefs.subListItemSpace.toString());
-    ampTextDialog(
+    showAmpTextDialog(
       context: context,
       title: 'Listenelementabstand',
       children: (context) => [
@@ -239,7 +239,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final timerInputFormKey = GlobalKey<FormFieldState>();
     final timerInputFormController =
         TextEditingController(text: Prefs.timer.toString());
-    ampTextDialog(
+    showAmpTextDialog(
       context: context,
       title: 'Timer (Minuten)',
       children: (context) => [

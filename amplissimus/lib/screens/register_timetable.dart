@@ -6,6 +6,7 @@ import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
+import 'package:Amplissimus/widgets.dart';
 import 'package:flutter/material.dart';
 
 class RegisterTimetableScreen extends StatelessWidget {
@@ -36,11 +37,22 @@ class RegisterTimetableScreenPageState
   TTDay currentDropdownDay = TTDay.Monday;
   TTColumn ttColumn;
   int currentDropdownHour = CustomValues.ttHours[5];
+  TTLesson selectedTTLesson;
+  int curTTColumnIndex;
 
   void initializeTTColumns() {
-    if (CustomValues.ttColums.isEmpty) {
+    if (CustomValues.ttColumns.isEmpty) {
       for (TTDay day in TTDay.values) {
-        CustomValues.ttColums.add(TTColumn([], day));
+        CustomValues.ttColumns.add(TTColumn([], day));
+      }
+    }
+  }
+
+  void updateTTColumn(int newLength, TTDay day) {
+    int index = TTDay.values.indexOf(currentDropdownDay);
+    for (var i = 0; i < newLength; i++) {
+      if (i + 1 > CustomValues.ttColumns[index].lessons.length) {
+        CustomValues.ttColumns[index].lessons.add(TTLesson('', '', '', false));
       }
     }
   }
@@ -48,6 +60,8 @@ class RegisterTimetableScreenPageState
   @override
   Widget build(BuildContext context) {
     initializeTTColumns();
+    currentDropdownHour = ttColumn.lessons.length;
+    curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
@@ -69,7 +83,11 @@ class RegisterTimetableScreenPageState
                           child: Text(CustomValues.lang.ttDayToString(value)));
                     }).toList(),
                     onChanged: (value) {
-                      setState(() => currentDropdownDay = value);
+                      setState(() {
+                        currentDropdownDay = value;
+                        ttColumn = CustomValues.ttColumns[
+                            TTDay.values.indexOf(currentDropdownDay)];
+                      });
                     },
                   ),
                   Padding(padding: EdgeInsets.all(10)),
@@ -81,7 +99,10 @@ class RegisterTimetableScreenPageState
                           value: value, child: Text(value.toString()));
                     }).toList(),
                     onChanged: (value) {
-                      setState(() => currentDropdownHour = value);
+                      setState(() {
+                        currentDropdownHour = value;
+                        updateTTColumn(value, currentDropdownDay);
+                      });
                     },
                   ),
                 ],
@@ -106,7 +127,7 @@ class RegisterTimetableScreenPageState
               ),
               Flexible(
                   child: ListView.separated(
-                itemCount: currentDropdownHour + 1,
+                itemCount: ttColumn.lessons.length + 1,
                 itemBuilder: (context, index) {
                   if (index == currentDropdownHour)
                     return Divider(
@@ -122,18 +143,40 @@ class RegisterTimetableScreenPageState
                           fontSize: 30),
                     ),
                     onTap: () {
-                      showDialog(
+                      selectedTTLesson = ttColumn.lessons[index];
+                      final subjectInputFormKey = GlobalKey<FormFieldState>();
+                      final notesInputFormKey = GlobalKey<FormFieldState>();
+                      final subjectInputFormController =
+                          TextEditingController();
+                      final notesInputFormController = TextEditingController();
+                      showAmpTextDialog(
+                        title: CustomValues.lang.editHour,
+                        children: (context) => [
+                          ampFormField(
+                            controller: subjectInputFormController,
+                            key: subjectInputFormKey,
+                            validator: Widgets.textFieldValidator,
+                            labelText: CustomValues.lang.subject,
+                          ),
+                          Padding(padding: EdgeInsets.all(6)),
+                          ampFormField(
+                            controller: notesInputFormController,
+                            key: notesInputFormKey,
+                            validator: Widgets.textFieldValidator,
+                            labelText: CustomValues.lang.notes,
+                          ),
+                        ],
+                        actions: (context) => ampDialogButtonsSaveAndCancel(
+                          onCancel: () => Navigator.of(context).pop(),
+                          onSave: () {
+                            bool condA =
+                                subjectInputFormKey.currentState?.validate();
+                            bool condB =
+                                notesInputFormKey.currentState?.validate();
+                            if (!condA || !condB) return;
+                          },
+                        ),
                         context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            backgroundColor: AmpColors.colorBackground,
-                            title: Text(
-                              CustomValues.lang.editHour,
-                              style:
-                                  TextStyle(color: AmpColors.colorForeground),
-                            ),
-                          );
-                        },
                       );
                     },
                     title: Text(
