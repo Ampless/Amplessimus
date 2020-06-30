@@ -125,7 +125,7 @@ mkdirs:
 	mkdir -p $(TMP_SYMBOLS) $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
 
 cleanartifacts:
-	which flutter rm
+	which rm
 	rm -rf $(TMP)/*
 
 setup:
