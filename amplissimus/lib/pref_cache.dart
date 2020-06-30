@@ -27,7 +27,7 @@ class CachedSharedPreferences {
     _cacheString[key] = value;
     _prefFileMutex.release();
     if (_prefs != null)
-      _prefs.setString(key, value);
+      await _prefs.setString(key, value);
     else if (_prefFile == null) _editsString.add(key);
     flush();
   }
@@ -37,7 +37,7 @@ class CachedSharedPreferences {
     _cacheInt[key] = value;
     _prefFileMutex.release();
     if (_prefs != null)
-      _prefs.setInt(key, value);
+      await _prefs.setInt(key, value);
     else if (_prefFile == null) _editsInt.add(key);
     flush();
   }
@@ -47,7 +47,7 @@ class CachedSharedPreferences {
     _cacheDouble[key] = value;
     _prefFileMutex.release();
     if (_prefs != null)
-      _prefs.setDouble(key, value);
+      await _prefs.setDouble(key, value);
     else if (_prefFile == null) _editsDouble.add(key);
     flush();
   }
@@ -57,7 +57,7 @@ class CachedSharedPreferences {
     _cacheStrings[key] = value;
     _prefFileMutex.release();
     if (_prefs != null)
-      _prefs.setStringList(key, value);
+      await _prefs.setStringList(key, value);
     else if (_prefFile == null) _editsStrings.add(key);
     flush();
   }
@@ -67,7 +67,7 @@ class CachedSharedPreferences {
     _cacheBool[key] = value;
     _prefFileMutex.release();
     if (_prefs != null)
-      _prefs.setBool(key, value);
+      await _prefs.setBool(key, value);
     else if (_prefFile != null)
       flush();
     else
