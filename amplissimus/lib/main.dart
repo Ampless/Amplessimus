@@ -489,42 +489,26 @@ class _MyHomePageState extends State<MyHomePage>
           body: GridView.count(
             crossAxisCount: 2,
             children: <Widget>[
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                ),
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(32.0),
-                    ),
-                  ),
-                  onTap: () {
-                    Prefs.devOptionsTimerCache();
-                    if (Prefs.timesToggleDarkModePressed >= 10) {
-                      Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
-                      Prefs.timesToggleDarkModePressed = 0;
-                    }
-                    AmpColors.switchMode();
-                    if (Prefs.useSystemTheme) Prefs.useSystemTheme = false;
-                    setState(() {
-                      fabBackgroundColor = Colors.transparent;
-                      rebuildNewBuild();
-                    });
-                    Future.delayed(Duration(milliseconds: 150), () {
-                      setState(
-                          () => fabBackgroundColor = AmpColors.colorBackground);
-                    });
-                  },
-                  child: Widgets.toggleDarkModeWidget(
-                      AmpColors.isDarkMode, textStyle),
-                ),
+              ampSettingsWidget(
+                onTap: () {
+                  Prefs.devOptionsTimerCache();
+                  if (Prefs.timesToggleDarkModePressed >= 10) {
+                    Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
+                    Prefs.timesToggleDarkModePressed = 0;
+                  }
+                  AmpColors.switchMode();
+                  if (Prefs.useSystemTheme) Prefs.useSystemTheme = false;
+                  setState(() {
+                    fabBackgroundColor = Colors.transparent;
+                    rebuildNewBuild();
+                  });
+                  Future.delayed(Duration(milliseconds: 150), () {
+                    setState(
+                        () => fabBackgroundColor = AmpColors.colorBackground);
+                  });
+                },
+                child: Widgets.toggleDarkModeWidget(
+                    AmpColors.isDarkMode, textStyle),
               ),
               ampSettingsWidget(
                 onTap: () async {
