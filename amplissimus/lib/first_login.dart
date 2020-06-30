@@ -281,6 +281,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   FocusScope.of(context).unfocus();
                   Prefs.firstLogin = false;
                   setState(() => dsbWidgetIsLoading = false);
+                  await dsbUpdateWidget(() => setState(() {}));
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
