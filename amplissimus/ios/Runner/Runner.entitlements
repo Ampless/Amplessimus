@@ -6,10 +6,5 @@
 	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
-	<key>com.apple.developer.associated-domains</key>
-	<array>
-		<key>webcredentials</key>
-		<string>dsbmobile.de</string>
-	</array>
 </dict>
 </plist>
