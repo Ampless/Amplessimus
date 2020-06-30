@@ -17,6 +17,7 @@ class CustomValues {
   }
 
   static List<int> ttHours = [
+    0,
     1,
     2,
     3,
