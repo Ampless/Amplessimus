@@ -92,7 +92,7 @@ String get char => _prefs.getString('char', 'a').toLowerCase();
 set char(String s) => _prefs.setString('char', s.toLowerCase());
 bool get loadingBarEnabled => _prefs.getBool('loading_bar_enabled', false);
 set loadingBarEnabled(bool b) => _prefs.setBool('loading_bar_enabled', b);
-bool get oneClassOnly => _prefs.getBool('one_class_only', true);
+bool get oneClassOnly => _prefs.getBool('one_class_only', false);
 set oneClassOnly(bool b) => _prefs.setBool('one_class_only', b);
 bool get closeAppOnBackPress =>
     _prefs.getBool('close_app_on_back_press', false);
