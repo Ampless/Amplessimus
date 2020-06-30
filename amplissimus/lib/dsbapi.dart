@@ -395,7 +395,7 @@ Future<Null> dsbUpdateWidget(Function f,
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-          child: _getThemedWidget(
+          child: getThemedWidget(
             ListTile(
               title: Text(errorString(e), style: AmpColors.textStyleForeground),
             ),
@@ -407,7 +407,7 @@ Future<Null> dsbUpdateWidget(Function f,
   f();
 }
 
-Widget _getThemedWidget(Widget child, int themeId) {
+Widget getThemedWidget(Widget child, int themeId) {
   switch (themeId) {
     case 0:
       return Card(
@@ -431,11 +431,11 @@ Widget _getThemedWidget(Widget child, int themeId) {
         child: child,
       );
     default:
-      return _getThemedWidget(child, 0);
+      return getThemedWidget(child, 0);
   }
 }
 
-Widget _getWidget(List<Widget> dayW, int theme) => _getThemedWidget(
+Widget _getWidget(List<Widget> dayW, int theme) => getThemedWidget(
     Column(mainAxisSize: MainAxisSize.min, children: dayW), theme);
 
 void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {

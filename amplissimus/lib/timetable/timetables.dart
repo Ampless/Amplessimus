@@ -161,7 +161,10 @@ List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
       '   ${CustomValues.lang.ttDayToString(ttMatchDay(plan.title.toLowerCase()))}',
       style: TextStyle(color: AmpColors.colorForeground, fontSize: 24),
     ));
-    for (TTLesson lesson in CustomValues.ttColumns[ttColumnIndex].lessons) {
+    List<Widget> unthemedWidgets = [];
+    List<TTLesson> lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
+    int tempLength = lessons.length;
+    for (TTLesson lesson in lessons) {
       String titleString;
       String trailingString;
       if (lesson.isFree) {
@@ -171,7 +174,7 @@ List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
         titleString = lesson.subject;
         trailingString = lesson.teacher;
       }
-      widgets.add(ListTile(
+      unthemedWidgets.add(ListTile(
         title: Text(
           lesson.subject.trim().isEmpty && !lesson.isFree
               ? CustomValues.lang.subject
@@ -179,8 +182,7 @@ List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
           style: TextStyle(color: AmpColors.colorForeground, fontSize: 22),
         ),
         leading: Text(
-          (CustomValues.ttColumns[ttColumnIndex].lessons.indexOf(lesson) + 1)
-              .toString(),
+          (lessons.indexOf(lesson) + 1).toString(),
           style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AmpColors.colorForeground,
@@ -199,7 +201,15 @@ List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
           style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
         ),
       ));
+      if (lessons.indexOf(lesson) < tempLength)
+        unthemedWidgets.add(Divider(
+          color: AmpColors.colorForeground,
+          height: 0,
+        ));
     }
+    widgets.add(getThemedWidget(
+        Column(children: unthemedWidgets), Prefs.currentThemeId));
+    widgets.add(Padding(padding: EdgeInsets.all(12)));
   }
   return widgets;
 }
