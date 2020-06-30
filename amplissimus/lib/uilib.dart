@@ -64,7 +64,13 @@ Widget ampFormField(
     TextInputType keyboardType = TextInputType.visiblePassword,
     String labelText = '',
     bool obscureText = false,
-    List<String> autofillHints}) {
+    List<String> autofillHints,
+    Widget suffixIcon}) {
+  if (suffixIcon == null)
+    suffixIcon = Container(
+      height: 0,
+      width: 0,
+    );
   if (autofillHints == null) autofillHints = [];
   return TextFormField(
     obscureText: obscureText,
@@ -76,6 +82,7 @@ Widget ampFormField(
     keyboardType: keyboardType,
     autofillHints: autofillHints,
     decoration: InputDecoration(
+        suffixIcon: suffixIcon,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
           borderRadius: BorderRadius.circular(10),

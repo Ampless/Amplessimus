@@ -59,13 +59,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   String animString = 'intro';
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
+  bool passwordHidden = true;
 
   @override
   void initState() {
-    if (Prefs.char.trim().isEmpty)
-      letterDropDownValue = CustomValues.lang.empty;
-    if (Prefs.grade.trim().isEmpty)
-      gradeDropDownValue = CustomValues.lang.empty;
     FirstLoginValues.tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -73,11 +70,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   @override
   Widget build(BuildContext context) {
     if (Prefs.char.trim().isEmpty)
-      letterDropDownValue = CustomValues.lang.empty;
+      letterDropDownValue = FirstLoginValues.letters[0];
     if (Prefs.grade.trim().isEmpty)
-      gradeDropDownValue = CustomValues.lang.empty;
-    FirstLoginValues.grades[0] = CustomValues.lang.empty;
-    FirstLoginValues.letters[0] = CustomValues.lang.empty;
+      gradeDropDownValue = FirstLoginValues.grades[0];
     return Scaffold(
         body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
@@ -114,7 +109,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       ),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         ampDropdownButton(
-                          value: gradeDropDownValue,
+                          value: FirstLoginValues.grades[0],
                           items: FirstLoginValues.grades
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -134,7 +129,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ),
                         Padding(padding: EdgeInsets.all(10)),
                         ampDropdownButton(
-                          value: letterDropDownValue,
+                          value: FirstLoginValues.letters[0],
                           items: FirstLoginValues.letters
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -167,13 +162,29 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       ),
                       Padding(padding: EdgeInsets.all(6)),
                       ampFormField(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              passwordHidden = !passwordHidden;
+                            });
+                          },
+                          icon: passwordHidden
+                              ? Icon(
+                                  Icons.visibility,
+                                  color: AmpColors.colorForeground,
+                                )
+                              : Icon(
+                                  Icons.visibility_off,
+                                  color: AmpColors.colorForeground,
+                                ),
+                        ),
                         controller:
                             FirstLoginValues.passwordInputFormController,
                         key: FirstLoginValues.passwordInputFormKey,
                         validator: Widgets.textFieldValidator,
                         labelText: CustomValues.lang.password,
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
+                        obscureText: passwordHidden,
                         autofillHints: [AutofillHints.password],
                       ),
                       Divider(color: AmpColors.colorForeground, height: 20),
@@ -319,7 +330,6 @@ class FirstLoginValues {
   static TabController tabController;
 
   static final List<String> grades = [
-    CustomValues.lang.empty,
     '5',
     '6',
     '7',
@@ -330,15 +340,5 @@ class FirstLoginValues {
     '12',
     '13'
   ];
-  static final List<String> letters = [
-    CustomValues.lang.empty,
-    'a',
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-    'g',
-    'q'
-  ];
+  static final List<String> letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'q'];
 }

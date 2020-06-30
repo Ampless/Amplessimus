@@ -174,11 +174,9 @@ class _MyHomePageState extends State<MyHomePage>
   void initState() {
     ampInfo(ctx: '_MyHomePageState', message: 'initState()');
     if (letterDropDownValue.isEmpty)
-      letterDropDownValue = CustomValues.lang.empty;
+      letterDropDownValue = FirstLoginValues.grades[0];
     if (gradeDropDownValue.isEmpty)
-      gradeDropDownValue = CustomValues.lang.empty;
-    FirstLoginValues.grades[0] = CustomValues.lang.empty;
-    FirstLoginValues.letters[0] = CustomValues.lang.empty;
+      gradeDropDownValue = FirstLoginValues.grades[0];
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
@@ -213,8 +211,6 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void showInputSelectCurrentClass(BuildContext context) async {
-    FirstLoginValues.grades[0] = CustomValues.lang.empty;
-    FirstLoginValues.letters[0] = CustomValues.lang.empty;
     if (Prefs.char.trim().isEmpty)
       letterDropDownValue = FirstLoginValues.letters[0];
     if (Prefs.grade.trim().isEmpty)
@@ -234,10 +230,7 @@ class _MyHomePageState extends State<MyHomePage>
           onChanged: (value) {
             setAlState(() {
               gradeDropDownValue = value;
-              if (gradeDropDownValue == CustomValues.lang.empty)
-                Prefs.grade = '';
-              else
-                Prefs.grade = value;
+              Prefs.grade = value;
             });
           },
         ),
@@ -251,10 +244,7 @@ class _MyHomePageState extends State<MyHomePage>
           onChanged: (value) {
             setAlState(() {
               letterDropDownValue = value;
-              if (letterDropDownValue == CustomValues.lang.empty)
-                Prefs.char = '';
-              else
-                Prefs.char = value;
+              Prefs.char = value;
             });
           },
         ),
@@ -450,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                 )
               : ListView(
-                  children: timeTableWidgetUnfiltered(timetablePlans),
+                  children: timetableWidget(timetablePlans),
                 ),
         ),
         floatingActionButton: FloatingActionButton.extended(

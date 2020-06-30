@@ -86,9 +86,9 @@ String get username => _prefs.getString('username_dsb', '');
 set username(String s) => _prefs.setString('username_dsb', s);
 String get password => _prefs.getString('password_dsb', '');
 set password(String s) => _prefs.setString('password_dsb', s);
-String get grade => _prefs.getString('grade', '').toLowerCase();
+String get grade => _prefs.getString('grade', '5').toLowerCase();
 set grade(String s) => _prefs.setString('grade', s.toLowerCase());
-String get char => _prefs.getString('char', '').toLowerCase();
+String get char => _prefs.getString('char', 'a').toLowerCase();
 set char(String s) => _prefs.setString('char', s.toLowerCase());
 bool get loadingBarEnabled => _prefs.getBool('loading_bar_enabled', false);
 set loadingBarEnabled(bool b) => _prefs.setBool('loading_bar_enabled', b);
@@ -129,7 +129,7 @@ Future<Null> loadPrefs() async {
   _prefs = CachedSharedPreferences();
   try {
     await _prefs.ctor();
-  } catch(e) {
+  } catch (e) {
     ampErr(ctx: 'Prefs', message: 'Initialization failed: ${errorString(e)}');
   }
 }

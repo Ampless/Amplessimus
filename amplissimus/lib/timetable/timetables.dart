@@ -16,24 +16,36 @@ enum TTDay {
 }
 
 TTDay ttDayFromInt(int i) {
-  switch(i) {
-    case 0: return TTDay.Monday;
-    case 1: return TTDay.Tuesday;
-    case 2: return TTDay.Wednesday;
-    case 3: return TTDay.Thursday;
-    case 4: return TTDay.Friday;
-    default: throw UnimplementedError();
+  switch (i) {
+    case 0:
+      return TTDay.Monday;
+    case 1:
+      return TTDay.Tuesday;
+    case 2:
+      return TTDay.Wednesday;
+    case 3:
+      return TTDay.Thursday;
+    case 4:
+      return TTDay.Friday;
+    default:
+      throw UnimplementedError();
   }
 }
 
 int ttDayToInt(TTDay day) {
-  switch(day) {
-    case TTDay.Monday: return 0;
-    case TTDay.Tuesday: return 1;
-    case TTDay.Wednesday: return 2;
-    case TTDay.Thursday: return 3;
-    case TTDay.Friday: return 4;
-    default: throw UnimplementedError();
+  switch (day) {
+    case TTDay.Monday:
+      return 0;
+    case TTDay.Tuesday:
+      return 1;
+    case TTDay.Wednesday:
+      return 2;
+    case TTDay.Thursday:
+      return 3;
+    case TTDay.Friday:
+      return 4;
+    default:
+      throw UnimplementedError();
   }
 }
 
@@ -172,7 +184,7 @@ List<TTColumn> timetableFromPrefs() {
   return table;
 }
 
-List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
+List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
   List<Widget> widgets = [];
   for (DsbPlan plan in plans) {
     TTDay day = ttMatchDay(plan.title.toLowerCase());
@@ -187,13 +199,17 @@ List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
     for (TTLesson lesson in lessons) {
       String titleString;
       String trailingString;
-      if (lesson.isFree) {
-        titleString = CustomValues.lang.freeLesson;
-        trailingString = '';
+      if (filtered) {
       } else {
-        titleString = lesson.subject;
-        trailingString = lesson.teacher;
+        if (lesson.isFree) {
+          titleString = CustomValues.lang.freeLesson;
+          trailingString = '';
+        } else {
+          titleString = lesson.subject;
+          trailingString = lesson.teacher;
+        }
       }
+
       unthemedWidgets.add(ListTile(
         title: Text(
           lesson.subject.trim().isEmpty && !lesson.isFree
@@ -221,7 +237,7 @@ List<Widget> timeTableWidgetUnfiltered(List<DsbPlan> plans) {
           style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
         ),
       ));
-      if (lessons.indexOf(lesson) < tempLength)
+      if (lessons.indexOf(lesson) < tempLength - 1)
         unthemedWidgets.add(Divider(
           color: AmpColors.colorForeground,
           height: 0,
