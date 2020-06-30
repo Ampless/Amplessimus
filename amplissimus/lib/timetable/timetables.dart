@@ -4,9 +4,7 @@ import 'dart:convert';
 
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/json.dart';
 import 'package:Amplissimus/values.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 
 enum TTDay {
@@ -15,6 +13,28 @@ enum TTDay {
   Wednesday,
   Thursday,
   Friday,
+}
+
+TTDay ttDayFromInt(int i) {
+  switch(i) {
+    case 0: return TTDay.Monday;
+    case 1: return TTDay.Tuesday;
+    case 2: return TTDay.Wednesday;
+    case 3: return TTDay.Thursday;
+    case 4: return TTDay.Friday;
+    default: throw UnimplementedError();
+  }
+}
+
+int ttDayToInt(TTDay day) {
+  switch(day) {
+    case TTDay.Monday: return 0;
+    case TTDay.Tuesday: return 1;
+    case TTDay.Wednesday: return 2;
+    case TTDay.Thursday: return 3;
+    case TTDay.Friday: return 4;
+    default: throw UnimplementedError();
+  }
 }
 
 List<DsbPlan> timetablePlans = new List();
@@ -59,11 +79,11 @@ class TTColumn {
   TTColumn.fromJson(Map<String, dynamic> json)
       : lessons =
             lessonsFromJson(List<String>.from(jsonDecode(json['lessons']))),
-        day = EnumToString.fromString(TTDay.values, json['day']);
+        day = ttDayFromInt(json['day']);
 
   Map<String, dynamic> toJson() => {
         'lessons': jsonEncode(lessonsToJson(lessons)),
-        'day': EnumToString.parse(day),
+        'day': ttDayToInt(day),
       };
 
   List<String> lessonsToJson(List<TTLesson> lessons) {
