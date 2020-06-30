@@ -153,6 +153,7 @@ class _MyHomePageState extends State<MyHomePage>
   bool circularProgressIndicatorActive = false;
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
+  bool passwordHidden = true;
 
   void checkBrightness() {
     if (Prefs.useSystemTheme &&
@@ -299,6 +300,7 @@ class _MyHomePageState extends State<MyHomePage>
       context: context,
       title: CustomValues.lang.changeLoginPopup,
       children: (context) => [
+        Padding(padding: EdgeInsets.all(2)),
         ampFormField(
           controller: usernameInputFormController,
           key: usernameInputFormKey,
@@ -308,14 +310,34 @@ class _MyHomePageState extends State<MyHomePage>
           autofillHints: [AutofillHints.username],
         ),
         Padding(padding: EdgeInsets.all(6)),
-        ampFormField(
-          controller: passwordInputFormController,
-          key: passwordInputFormKey,
-          validator: Widgets.textFieldValidator,
-          labelText: CustomValues.lang.password,
-          keyboardType: TextInputType.visiblePassword,
-          obscureText: true,
-          autofillHints: [AutofillHints.password],
+        StatefulBuilder(
+          builder: (context, setFieldState) {
+            return ampFormField(
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setFieldState(() {
+                    passwordHidden = !passwordHidden;
+                  });
+                },
+                icon: passwordHidden
+                    ? Icon(
+                        Icons.visibility,
+                        color: AmpColors.colorForeground,
+                      )
+                    : Icon(
+                        Icons.visibility_off,
+                        color: AmpColors.colorForeground,
+                      ),
+              ),
+              controller: passwordInputFormController,
+              key: passwordInputFormKey,
+              validator: Widgets.textFieldValidator,
+              labelText: CustomValues.lang.password,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: passwordHidden,
+              autofillHints: [AutofillHints.password],
+            );
+          },
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
