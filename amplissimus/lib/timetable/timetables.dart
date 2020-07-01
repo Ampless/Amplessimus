@@ -192,14 +192,13 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
   for (DsbPlan plan in tempPlans) {
     TTDay day = ttMatchDay(plan.title.toLowerCase());
     int ttColumnIndex = TTDay.values.indexOf(day);
-    widgets.add(Text(
-      '   ${CustomValues.lang.ttDayToString(ttMatchDay(plan.title.toLowerCase()))}',
-      style: TextStyle(
-        color: AmpColors.colorForeground,
-        fontSize: 24,
-      ),
-      textAlign: TextAlign.left,
-    ));
+    widgets.add(
+      ListTile(
+          title: Text(
+              ' ${CustomValues.lang.ttDayToString(ttMatchDay(plan.title.toLowerCase()))}',
+              style:
+                  TextStyle(color: AmpColors.colorForeground, fontSize: 24))),
+    );
     List<Widget> unthemedWidgets = [];
     List<TTLesson> lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
     int tempLength = lessons.length;
