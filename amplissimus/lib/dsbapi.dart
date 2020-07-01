@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/intutils.dart';
 import 'package:Amplissimus/json.dart';
+import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
@@ -204,7 +205,8 @@ Future<String> dsbGetData(String username, String password,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers,
             {bool useCache})
-        httpPost = httpPost}) async {
+        httpPost = httpPost,
+    @required Language lang}) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   String json = '{'
       '"UserId":"$username",'
@@ -243,7 +245,7 @@ Future<String> dsbGetData(String username, String password,
     );
   } catch (e) {
     ampErr(ctx: 'DSB][dsbGetData', message: errorString(e));
-    throw CustomValues.lang.catchDsbGetData(e);
+    throw lang.catchDsbGetData(e);
   }
 }
 
@@ -294,11 +296,12 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers,
             {bool useCache})
-        httpPost = httpPost}) async {
+        httpPost = httpPost,
+    @required Language lang}) async {
   List<DsbPlan> plans = [];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
   String json = await dsbGetData(username, password,
-      cachePostRequests: cachePostRequests, httpPost: httpPost);
+      cachePostRequests: cachePostRequests, httpPost: httpPost, lang: lang);
   var htmls = await dsbGetHtml(json,
       cacheGetRequests: cacheGetRequests, httpGet: httpGet);
   for (var title in htmls.keys) {
@@ -334,6 +337,8 @@ DsbPlan dsbParseHtml(String title, String res) {
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
+  if(stage == null) stage = '';
+  if(char == null) char = '';
   for (DsbPlan plan in plans) {
     List<DsbSubstitution> subs = [];
     for (DsbSubstitution sub in plan.subs) {
@@ -380,6 +385,7 @@ Future<Null> dsbUpdateWidget(Function f,
     List<DsbPlan> plans;
     if (!cacheJsonPlans || jsonCache == null) {
       plans = await dsbGetAllSubs(Prefs.username, Prefs.password,
+          lang: CustomValues.lang,
           cacheGetRequests: cacheGetRequests,
           cachePostRequests: cachePostRequests);
       Prefs.dsbJsonCache = plansToJson(plans);
