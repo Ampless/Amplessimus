@@ -483,20 +483,25 @@ class _MyHomePageState extends State<MyHomePage>
                   ],
                 ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Animations.changeScreenEaseOutBackReplace(
-              RegisterTimetableScreen(), context),
-          label: Text(CustomValues.lang.edit),
-          icon: Icon(
-            Icons.edit,
-            color: AmpColors.colorForeground,
-          ),
-          backgroundColor: AmpColors.colorBackground,
-          foregroundColor: AmpColors.colorForeground,
-          splashColor: AmpColors.colorForeground,
-          highlightElevation: 0,
-          focusColor: Colors.transparent,
-        ),
+        floatingActionButton: Prefs.jsonTimetable != null
+            ? FloatingActionButton.extended(
+                onPressed: () => Animations.changeScreenEaseOutBackReplace(
+                    RegisterTimetableScreen(), context),
+                label: Text(CustomValues.lang.edit),
+                icon: Icon(
+                  Icons.edit,
+                  color: AmpColors.colorForeground,
+                ),
+                backgroundColor: AmpColors.colorBackground,
+                foregroundColor: AmpColors.colorForeground,
+                splashColor: AmpColors.colorForeground,
+                highlightElevation: 0,
+                focusColor: Colors.transparent,
+              )
+            : Container(
+                height: 0,
+                width: 0,
+              ),
       ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
