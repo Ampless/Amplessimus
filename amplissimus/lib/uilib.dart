@@ -158,30 +158,33 @@ Widget ampSettingsWidget(
     {@required void Function() onTap,
     @required IconData icon,
     @required String text,
-    TextStyle textStyle}) {
-  if(textStyle == null) textStyle = AmpColors.textStyleForeground;
+    bool visible = true}) {
   return Card(
     elevation: 0,
     shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(32.0))
-    ),
+        borderRadius: const BorderRadius.all(Radius.circular(32.0))),
     color: Colors.transparent,
     child: InkWell(
       hoverColor: Colors.transparent,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       customBorder: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(32.0))
-      ),
+          borderRadius: const BorderRadius.all(Radius.circular(32.0))),
       onTap: onTap,
       child: Center(
         child: Column(
           children: <Widget>[
             Padding(padding: EdgeInsets.all(24)),
-            Icon(icon, size: 50, color: textStyle.color),
+            Icon(icon,
+                size: 50,
+                color: visible
+                    ? AmpColors.colorForeground
+                    : AmpColors.colorBackground),
             Padding(padding: EdgeInsets.all(10)),
             Text(text,
-                style: textStyle,
+                style: visible
+                    ? AmpColors.textStyleForeground
+                    : AmpColors.textStyleBackground,
                 textAlign: TextAlign.center)
           ],
         ),

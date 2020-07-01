@@ -626,9 +626,7 @@ class _MyHomePageState extends State<MyHomePage>
                 },
                 icon: MdiIcons.codeBrackets,
                 text: 'Entwickleroptionen',
-                textStyle: Prefs.devOptionsEnabled
-                    ? AmpColors.textStyleForeground
-                    : AmpColors.textStyleBackground,
+                visible: Prefs.devOptionsEnabled,
               ),
             ],
           ),
