@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
@@ -185,21 +186,55 @@ List<TTColumn> timetableFromPrefs() {
 }
 
 List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
+  List<DsbPlan> tempPlans =
+      dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   List<Widget> widgets = [];
-  for (DsbPlan plan in plans) {
+  for (DsbPlan plan in tempPlans) {
     TTDay day = ttMatchDay(plan.title.toLowerCase());
     int ttColumnIndex = TTDay.values.indexOf(day);
     widgets.add(Text(
       '   ${CustomValues.lang.ttDayToString(ttMatchDay(plan.title.toLowerCase()))}',
-      style: TextStyle(color: AmpColors.colorForeground, fontSize: 24),
+      style: TextStyle(
+        color: AmpColors.colorForeground,
+        fontSize: 24,
+      ),
+      textAlign: TextAlign.left,
     ));
     List<Widget> unthemedWidgets = [];
     List<TTLesson> lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
     int tempLength = lessons.length;
     for (TTLesson lesson in lessons) {
-      String titleString;
-      String trailingString;
+      bool finishedFiltering = false;
+      int lessonIndex = lessons.indexOf(lesson) + 1;
+      String titleString = '';
+      String trailingString = '';
+      String notesString = '';
+      bool isReplaced = false;
       if (filtered) {
+        for (DsbSubstitution sub in plan.subs) {
+          if (!finishedFiltering) {
+            if (sub.hours.contains(lessonIndex)) {
+              titleString = DsbSubstitution.realSubject(sub.subject);
+              notesString = CustomValues.lang.dsbSubtoSubtitle(sub);
+              if (!sub.isFree) {
+                trailingString = sub.teacher;
+                String notesaddon =
+                    sub.notes.length > 0 ? ' (${sub.notes})' : '';
+                notesString = CustomValues.lang.substitution + notesaddon;
+              }
+              isReplaced = true;
+              finishedFiltering = true;
+            } else {
+              if (lesson.isFree)
+                titleString = CustomValues.lang.freeLesson;
+              else {
+                titleString = lesson.subject;
+                trailingString = lesson.teacher;
+              }
+              notesString = lesson.notes;
+            }
+          }
+        }
       } else {
         if (lesson.isFree) {
           titleString = CustomValues.lang.freeLesson;
@@ -208,11 +243,12 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
           titleString = lesson.subject;
           trailingString = lesson.teacher;
         }
+        notesString = lesson.notes;
       }
 
       unthemedWidgets.add(ListTile(
         title: Text(
-          lesson.subject.trim().isEmpty && !lesson.isFree
+          titleString.trim().isEmpty && !lesson.isFree
               ? CustomValues.lang.subject
               : titleString.trim(),
           style: TextStyle(color: AmpColors.colorForeground, fontSize: 22),
@@ -225,13 +261,13 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
               fontSize: 30),
         ),
         subtitle: Text(
-          lesson.notes.trim().isEmpty
+          notesString.trim().isEmpty
               ? CustomValues.lang.notes
-              : lesson.notes.trim(),
+              : notesString.trim(),
           style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
         ),
         trailing: Text(
-          lesson.teacher.trim().isEmpty && !lesson.isFree
+          trailingString.trim().isEmpty && !isReplaced
               ? CustomValues.lang.teacher
               : trailingString.trim(),
           style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),

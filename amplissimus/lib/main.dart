@@ -462,13 +462,31 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                 )
               : ListView(
-                  children: timetableWidget(timetablePlans),
+                  children: [
+                    Column(
+                      children: timetableWidget(
+                        timetablePlans,
+                        filtered: Prefs.filterTimetables,
+                      ),
+                    ),
+                    Divider(
+                      color: AmpColors.colorForeground,
+                    ),
+                    ampSwitchWithText(
+                      text: CustomValues.lang.filterTimetables,
+                      value: Prefs.filterTimetables,
+                      onChanged: (value) {
+                        setState(() => Prefs.filterTimetables = value);
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.all(24)),
+                  ],
                 ),
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => Animations.changeScreenEaseOutBackReplace(
               RegisterTimetableScreen(), context),
-          label: Text('Ändern'),
+          label: Text(CustomValues.lang.edit),
           icon: Icon(
             Icons.edit,
             color: AmpColors.colorForeground,

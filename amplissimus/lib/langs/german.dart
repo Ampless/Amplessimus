@@ -49,6 +49,15 @@ class German extends Language {
   String get lightsUseSystem => 'System-Aussehen\nverwenden';
 
   @override
+  String get filterTimetables => 'Stundenplan filtern';
+
+  @override
+  String get edit => 'Bearbeiten';
+
+  @override
+  String get substitution => 'Vertretung';
+
+  @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
     String notesaddon = sub.notes.length > 0 ? ' (${sub.notes})' : '';
     return sub.isFree

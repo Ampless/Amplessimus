@@ -148,6 +148,15 @@ class English extends Language {
   String get freeLesson => 'Free lesson';
 
   @override
+  String get filterTimetables => 'Filter timetables';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get substitution => 'Substitution';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Physical Education (sports)',
     'e': 'English',
