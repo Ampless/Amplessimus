@@ -241,7 +241,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Prefs.password = FirstLoginValues
                         .passwordInputFormController.text
                         .trim();
-                    await dsbUpdateWidget(() {});
+                    await dsbGetAllSubs(
+                        FirstLoginValues.usernameInputFormController.text
+                            .trim(),
+                        FirstLoginValues.passwordInputFormController.text
+                            .trim(),
+                        lang: CustomValues.lang);
                     isError = true;
                     setState(
                         () => {credentialsAreLoading = false, textString = ''});
