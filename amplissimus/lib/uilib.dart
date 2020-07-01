@@ -178,7 +178,7 @@ Widget ampSettingsWidget(
         child: Column(
           children: <Widget>[
             Padding(padding: EdgeInsets.all(24)),
-            Icon(icon, size: 50, color: AmpColors.colorForeground),
+            Icon(icon, size: 50, color: textStyle.color),
             Padding(padding: EdgeInsets.all(10)),
             Text(text,
                 style: textStyle,
