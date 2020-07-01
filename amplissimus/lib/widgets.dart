@@ -2,22 +2,8 @@ import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Widgets {
-
-  static Widget addTimetableWidget(TextStyle textStyle) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Padding(padding: EdgeInsets.all(24)),
-          Icon(MdiIcons.translate, size: 50, color: AmpColors.colorForeground),
-          Padding(padding: EdgeInsets.all(10)),
-          Text(CustomValues.lang.changeLanguage, style: textStyle)
-        ],
-      ),
-    );
-  }
 
   //this is currently unused, possible lists:
   //['5','6','7','8','9','10','11','12','13','']
@@ -32,6 +18,14 @@ class Widgets {
     return value.trim().isEmpty
         ? CustomValues.lang.widgetValidatorFieldEmpty
         : null;
+  }
+
+  static String numberValidator(String value) {
+    value = value.trim();
+    if (value.isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
+    final n = num.tryParse(value);
+    if (n == null || n < 0) return CustomValues.lang.widgetValidatorInvalid;
+    return null;
   }
 
   static Widget loadingWidget(int id) {
@@ -65,13 +59,5 @@ class Widgets {
         );
         break;
     }
-  }
-
-  static String numberValidator(String value) {
-    value = value.trim();
-    if (value.isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
-    final n = num.tryParse(value);
-    if (n == null || n < 0) return CustomValues.lang.widgetValidatorInvalid;
-    return null;
   }
 }

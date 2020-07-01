@@ -511,7 +511,7 @@ class _MyHomePageState extends State<MyHomePage>
           body: GridView.count(
             crossAxisCount: 2,
             children: <Widget>[
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () {
                   Prefs.devOptionsTimerCache();
                   if (Prefs.timesToggleDarkModePressed >= 10) {
@@ -536,7 +536,7 @@ class _MyHomePageState extends State<MyHomePage>
                     ? CustomValues.lang.lightsOn
                     : CustomValues.lang.lightsOff,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () async {
                   if (CustomValues.isAprilFools) return;
                   ampInfo(ctx: 'MyApp', message: 'switching design mode');
@@ -562,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage>
                     : MdiIcons.clipboardListOutline,
                 text: CustomValues.lang.changeAppearance,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () {
                   Prefs.useSystemTheme = !Prefs.useSystemTheme;
                   if (Prefs.useSystemTheme) {
@@ -588,24 +588,24 @@ class _MyHomePageState extends State<MyHomePage>
                     ? CustomValues.lang.lightsNoSystem
                     : CustomValues.lang.lightsUseSystem,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () => showInputChangeLanguage(context),
                 icon: MdiIcons.translate,
                 text: CustomValues.lang.changeLanguage,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () => showInputEntryCredentials(context),
                 icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
                 text: CustomValues.lang.changeLogin,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () => showInputSelectCurrentClass(context),
                 icon: AmpColors.isDarkMode
                     ? MdiIcons.school
                     : MdiIcons.schoolOutline,
                 text: CustomValues.lang.selectClass,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () => showAboutDialog(
                     context: context,
                     applicationName: AmpStrings.appTitle,
@@ -618,7 +618,7 @@ class _MyHomePageState extends State<MyHomePage>
                     : MdiIcons.folderInformationOutline,
                 text: CustomValues.lang.settingsAppInfo,
               ),
-              ampSettingsWidget(
+              ampBigAmpButton(
                 onTap: () {
                   if (Prefs.devOptionsEnabled)
                     Animations.changeScreenEaseOutBackReplace(
