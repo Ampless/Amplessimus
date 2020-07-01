@@ -392,7 +392,6 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
-    var textStyle = TextStyle(color: AmpColors.colorForeground);
     if (dsbWidget == null) rebuildNewBuild();
     List<Widget> containers = [
       AnimatedContainer(
@@ -530,8 +529,12 @@ class _MyHomePageState extends State<MyHomePage>
                         () => fabBackgroundColor = AmpColors.colorBackground);
                   });
                 },
-                child: Widgets.toggleDarkModeWidget(
-                    AmpColors.isDarkMode, textStyle),
+                icon: AmpColors.isDarkMode
+                    ? MdiIcons.lightbulbOn
+                    : MdiIcons.lightbulbOnOutline,
+                text: AmpColors.isDarkMode
+                    ? CustomValues.lang.lightsOn
+                    : CustomValues.lang.lightsOff,
               ),
               ampSettingsWidget(
                 onTap: () async {
@@ -554,8 +557,10 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                   ));
                 },
-                child: Widgets.toggleDesignModeWidget(
-                    AmpColors.isDarkMode, textStyle),
+                icon: AmpColors.isDarkMode
+                    ? MdiIcons.clipboardList
+                    : MdiIcons.clipboardListOutline,
+                text: CustomValues.lang.changeAppearance,
               ),
               ampSettingsWidget(
                 onTap: () {
@@ -578,22 +583,27 @@ class _MyHomePageState extends State<MyHomePage>
                   }
                   rebuild();
                 },
-                child:
-                    Widgets.lockOnSystemTheme(AmpColors.isDarkMode, textStyle),
+                icon: MdiIcons.brightness6,
+                text: Prefs.useSystemTheme
+                    ? CustomValues.lang.lightsNoSystem
+                    : CustomValues.lang.lightsUseSystem,
               ),
               ampSettingsWidget(
                 onTap: () => showInputChangeLanguage(context),
-                child: Widgets.setLanguageWidget(textStyle),
+                icon: MdiIcons.translate,
+                text: CustomValues.lang.changeLanguage,
               ),
               ampSettingsWidget(
                 onTap: () => showInputEntryCredentials(context),
-                child: Widgets.entryCredentialsWidget(
-                    AmpColors.isDarkMode, textStyle),
+                icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
+                text: CustomValues.lang.changeLogin,
               ),
               ampSettingsWidget(
                 onTap: () => showInputSelectCurrentClass(context),
-                child: Widgets.setCurrentClassWidget(
-                    AmpColors.isDarkMode, textStyle),
+                icon: AmpColors.isDarkMode
+                    ? MdiIcons.school
+                    : MdiIcons.schoolOutline,
+                text: CustomValues.lang.selectClass,
               ),
               ampSettingsWidget(
                 onTap: () => showAboutDialog(
@@ -603,7 +613,10 @@ class _MyHomePageState extends State<MyHomePage>
                     applicationIcon:
                         Image.asset('assets/images/logo.png', height: 40),
                     children: [Text(CustomValues.lang.appInfo)]),
-                child: Widgets.appInfoWidget(AmpColors.isDarkMode, textStyle),
+                icon: AmpColors.isDarkMode
+                    ? MdiIcons.folderInformation
+                    : MdiIcons.folderInformationOutline,
+                text: CustomValues.lang.settingsAppInfo,
               ),
               ampSettingsWidget(
                 onTap: () {
@@ -611,7 +624,8 @@ class _MyHomePageState extends State<MyHomePage>
                     Animations.changeScreenEaseOutBackReplace(
                         DevOptionsScreen(), context);
                 },
-                child: Widgets.developerOptionsWidget(textStyle),
+                icon: Prefs.devOptionsEnabled ? Icons.code : IconData(0x20),
+                text: Prefs.devOptionsEnabled ? 'Entwickleroptionen' : '',
               ),
             ],
           ),
