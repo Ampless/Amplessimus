@@ -241,7 +241,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Prefs.password = FirstLoginValues
                         .passwordInputFormController.text
                         .trim();
-                    await dsbGetAllSubs(
+                    await dsbGetData(
                         FirstLoginValues.usernameInputFormController.text
                             .trim(),
                         FirstLoginValues.passwordInputFormController.text
