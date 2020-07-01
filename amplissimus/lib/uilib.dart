@@ -157,7 +157,9 @@ List<Widget> ampDialogButtonsSaveAndCancel(
 Widget ampSettingsWidget(
     {@required void Function() onTap,
     @required IconData icon,
-    @required String text}) {
+    @required String text,
+    TextStyle textStyle}) {
+  if(textStyle == null) textStyle = AmpColors.textStyleForeground;
   return Card(
     elevation: 0,
     shape: RoundedRectangleBorder(
@@ -179,7 +181,7 @@ Widget ampSettingsWidget(
             Icon(icon, size: 50, color: AmpColors.colorForeground),
             Padding(padding: EdgeInsets.all(10)),
             Text(text,
-                style: AmpColors.textStyleForeground,
+                style: textStyle,
                 textAlign: TextAlign.center)
           ],
         ),
