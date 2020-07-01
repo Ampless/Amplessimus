@@ -28,7 +28,7 @@ void _log(String level, String ctx, Object message) {
   if(_logFile != null) {
     _logFileMutex.acquire();
     _logFile.writeString(msg);
-    _logFile.writeString('\r\n');
+    _logFile.writeString('\n');
     _logFileMutex.release();
   }
 }

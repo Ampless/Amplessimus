@@ -363,7 +363,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
 }
 
 String errorString(dynamic e) {
-  if (e is Error) return '$e\r\n${e.stackTrace}';
+  if (e is Error) return '$e\n${e.stackTrace}';
   return e.toString();
 }
 
