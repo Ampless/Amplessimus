@@ -1,7 +1,6 @@
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/main.dart';
-import 'package:Amplissimus/screens/dev_options.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/uilib.dart';

@@ -1,10 +1,7 @@
-//this file is very much in early alpha stage, not finished and has bad performance
-
 import 'dart:convert';
 
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
