@@ -624,7 +624,9 @@ class _MyHomePageState extends State<MyHomePage>
                     Animations.changeScreenEaseOutBackReplace(
                         DevOptionsScreen(), context);
                 },
-                icon: Prefs.devOptionsEnabled ? Icons.code : IconData(0x20),
+                icon: Prefs.devOptionsEnabled
+                    ? MdiIcons.codeBrackets
+                    : IconData(0x20),
                 text: Prefs.devOptionsEnabled ? 'Entwickleroptionen' : '',
               ),
             ],
