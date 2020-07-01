@@ -146,6 +146,12 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   child: Text('Cache leeren'),
                   onPressed: () => Prefs.clearCache(),
                 ),
+                RaisedButton(
+                    child: Text('Stundenplan löschen'),
+                    onPressed: () {
+                      Prefs.jsonTimetable = null;
+                      setState(() {});
+                    }),
                 RaisedButton.icon(
                   color: Colors.red,
                   icon: Icon(Icons.delete, color: AmpColors.colorForeground),
