@@ -207,6 +207,15 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
       String notesString = '';
       bool isReplaced = false;
       if (filtered) {
+        if (plan.subs.isEmpty) {
+          if (lesson.isFree)
+            titleString = CustomValues.lang.freeLesson;
+          else {
+            titleString = lesson.subject;
+            trailingString = lesson.teacher;
+          }
+          notesString = lesson.notes;
+        }
         for (DsbSubstitution sub in plan.subs) {
           if (!finishedFiltering) {
             if (sub.hours.contains(lessonIndex)) {
@@ -234,7 +243,6 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
       } else {
         if (lesson.isFree) {
           titleString = CustomValues.lang.freeLesson;
-          trailingString = '';
         } else {
           titleString = lesson.subject;
           trailingString = lesson.teacher;
@@ -263,7 +271,7 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
           style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
         ),
         trailing: Text(
-          trailingString.trim().isEmpty && !isReplaced
+          trailingString.trim().isEmpty && !isReplaced && !lesson.isFree
               ? CustomValues.lang.teacher
               : trailingString.trim(),
           style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
