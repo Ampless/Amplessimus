@@ -51,6 +51,8 @@ abstract class Language {
   String get filterTimetables;
   String get edit;
   String get substitution;
+  String get changedAppearance;
+  String get show;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

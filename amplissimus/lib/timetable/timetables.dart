@@ -127,7 +127,9 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
 }
 
 TTDay ttMatchDay(String s) {
-  if (s.contains('montag'))
+  if(s == null)
+    return null;
+  else if (s.contains('montag'))
     return TTDay.Monday;
   else if (s.contains('monday'))
     return TTDay.Monday;

@@ -203,7 +203,7 @@ class CachedSharedPreferences {
       _editsStrings.clear();
     } else {
       await _prefFileMutex.acquire();
-      _prefFile = await File('.amplissimus_desktop_prealpha_shared_prefs')
+      _prefFile = await File('.amplissimus_prealpha_data')
           .open(mode: FileMode.append);
       if (await _prefFile.length() > 1) {
         await _prefFile.setPosition(0);

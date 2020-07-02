@@ -203,4 +203,10 @@ class English extends Language {
 
   @override
   String get noSubs => 'No substitutions';
+
+  @override
+  String get changedAppearance => 'Changed the appearance of the substitution plan!';
+
+  @override
+  String get show => 'Show';
 }

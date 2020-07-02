@@ -1,4 +1,4 @@
-// this code is based on the pub packages 'uuid', 'html_unescape' and 'connectivity'
+// this code is based on the pub packages 'uuid' and 'html_unescape'
 
 import 'dart:convert';
 import 'dart:io';

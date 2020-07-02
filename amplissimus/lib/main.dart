@@ -548,11 +548,11 @@ class _MyHomePageState extends State<MyHomePage>
                   await rebuildNewBuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
-                    content: Text('Aussehen des Vertretungsplans geändert!',
+                    content: Text(CustomValues.lang.changedAppearance,
                         style: AmpColors.textStyleForeground),
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
-                      label: 'Anzeigen',
+                      label: CustomValues.lang.show,
                       onPressed: () => tabController.animateTo(0),
                     ),
                   ));
