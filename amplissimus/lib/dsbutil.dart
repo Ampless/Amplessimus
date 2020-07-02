@@ -20,7 +20,8 @@ String get _408 => _x(_r(0x40) | 0x80);
 int get rbyte => _r(256);
 Color get rcolor => Color.fromARGB(255, rbyte, rbyte, rbyte);
 
-String v4() => '$_100$_100$_100$_100-$_100$_100-$_104$_100-$_408$_100-$_100$_100$_100$_100$_100$_100';
+String v4() =>
+    '$_100$_100$_100$_100-$_100$_100-$_104$_100-$_408$_100-$_100$_100$_100$_100$_100$_100';
 
 String htmlUnescape(String data) {
   if (data.indexOf('&') == -1) return data;
@@ -67,14 +68,15 @@ String htmlUnescape(String data) {
   return buf.toString();
 }
 
-
 var _httpClient = HttpClient();
 
-Future<String> httpPost(Uri url, Object body, String id,
-                        Map<String, String> headers, {bool useCache = true}) async {
-  if(useCache) {
-    String cachedResp = Prefs.getCache(id);
-    if(cachedResp != null) return cachedResp;
+Future<String> httpPost(
+    Uri url, Object body, String id, Map<String, String> headers,
+    {String Function(String) getCache = Prefs.getCache,
+    void Function(String, String, Duration) setCache = Prefs.setCache}) async {
+  if (getCache != null) {
+    String cachedResp = getCache(id);
+    if (cachedResp != null) return cachedResp;
   }
   ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
   var req = await _httpClient.postUrl(url);
@@ -84,17 +86,19 @@ Future<String> httpPost(Uri url, Object body, String id,
   var bytes = await res.toList();
   ampInfo(ctx: 'HTTP][POST', message: 'Done.');
   List<int> actualBytes = [];
-  for(var b in bytes)
-    actualBytes.addAll(b);
+  for (var b in bytes) actualBytes.addAll(b);
   var r = utf8.decode(actualBytes);
-  if(res.statusCode == 200) Prefs.setCache(id, r, Duration(minutes: 15));
+  if (res.statusCode == 200 && setCache != null)
+    setCache(id, r, Duration(minutes: 15));
   return r;
 }
 
-Future<String> httpGet(Uri url, {bool useCache = true}) async {
-  if(useCache) {
-    String cachedResp = Prefs.getCache('$url');
-    if(cachedResp != null) return cachedResp;
+Future<String> httpGet(Uri url,
+    {String Function(String) getCache = Prefs.getCache,
+    void Function(String, String, Duration) setCache = Prefs.setCache}) async {
+  if (getCache != null) {
+    String cachedResp = getCache('$url');
+    if (cachedResp != null) return cachedResp;
   }
   ampInfo(ctx: 'HTTP][GET', message: '$url');
   var req = await _httpClient.getUrl(url);
@@ -102,31 +106,31 @@ Future<String> httpGet(Uri url, {bool useCache = true}) async {
   var res = await req.close();
   var bytes = await res.toList();
   List<int> actualBytes = [];
-  for(var b in bytes)
-    actualBytes.addAll(b);
+  for (var b in bytes) actualBytes.addAll(b);
   String r = htmlUnescape(String.fromCharCodes(actualBytes))
-    .replaceAll('\n', '')
-    .replaceAll('\r', '')
-    //just fyi: these regexes only work because there are no more newlines
-    .replaceAll(RegExp(r'<h1.*?</h1>'), '')
-    .replaceAll(RegExp(r'</?p.*?>'), '')
-    .replaceAll(RegExp(r'<th.*?</th>'), '')
-    .replaceAll(RegExp(r'<head.*?</head>'), '')
-    .replaceAll(RegExp(r'<script.*?</script>'), '')
-    .replaceAll(RegExp(r'<style.*?</style>'), '')
-    .replaceAll(RegExp(r'</?html.*?>'), '')
-    .replaceAll(RegExp(r'</?body.*?>'), '')
-    .replaceAll(RegExp(r'</?font.*?>'), '')
-    .replaceAll(RegExp(r'</?span.*?>'), '')
-    .replaceAll(RegExp(r'</?center.*?>'), '')
-    .replaceAll(RegExp(r'</?a.*?>'), '')
-    .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
-    .replaceAll(RegExp(r'<td.*?>'), '<td>')
-    .replaceAll(RegExp(r'<th.*?>'), '<th>')
-    .replaceAll(RegExp(r' +'), ' ')
-    .replaceAll(RegExp(r'<br />'), '')
-    .replaceAll(RegExp(r'<!-- .*? -->'), '');
+      .replaceAll('\n', '')
+      .replaceAll('\r', '')
+      //just fyi: these regexes only work because there are no more newlines
+      .replaceAll(RegExp(r'<h1.*?</h1>'), '')
+      .replaceAll(RegExp(r'</?p.*?>'), '')
+      .replaceAll(RegExp(r'<th.*?</th>'), '')
+      .replaceAll(RegExp(r'<head.*?</head>'), '')
+      .replaceAll(RegExp(r'<script.*?</script>'), '')
+      .replaceAll(RegExp(r'<style.*?</style>'), '')
+      .replaceAll(RegExp(r'</?html.*?>'), '')
+      .replaceAll(RegExp(r'</?body.*?>'), '')
+      .replaceAll(RegExp(r'</?font.*?>'), '')
+      .replaceAll(RegExp(r'</?span.*?>'), '')
+      .replaceAll(RegExp(r'</?center.*?>'), '')
+      .replaceAll(RegExp(r'</?a.*?>'), '')
+      .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
+      .replaceAll(RegExp(r'<td.*?>'), '<td>')
+      .replaceAll(RegExp(r'<th.*?>'), '<th>')
+      .replaceAll(RegExp(r' +'), ' ')
+      .replaceAll(RegExp(r'<br />'), '')
+      .replaceAll(RegExp(r'<!-- .*? -->'), '');
   ampInfo(ctx: 'HTTP][GET', message: 'Done.');
-  if(res.statusCode == 200) Prefs.setCache('$url', r, Duration(days: 4));
+  if (res.statusCode == 200 && setCache != null)
+    setCache('$url', r, Duration(days: 4));
   return r;
 }

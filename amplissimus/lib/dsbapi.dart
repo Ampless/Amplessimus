@@ -204,7 +204,8 @@ Future<String> dsbGetData(String username, String password,
     bool cachePostRequests = true,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers,
-            {bool useCache})
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
         httpPost = httpPost,
     @required Language lang}) async {
   String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
@@ -236,7 +237,7 @@ Future<String> dsbGetData(String username, String password,
                       '}',
                   '$apiEndpoint\t$username\t$password',
                   {"content-type": "application/json"},
-                  useCache: cachePostRequests,
+                  getCache: cachePostRequests ? Prefs.getCache : null,
                 ),
               ),
               'd'),
@@ -251,8 +252,10 @@ Future<String> dsbGetData(String username, String password,
 
 Future<Map<String, String>> dsbGetHtml(String jsontext,
     {bool cacheGetRequests = true,
-    Future<String> Function(Uri url, {bool useCache}) httpGet =
-        httpGet}) async {
+    Future<String> Function(Uri url,
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
+        httpGet = httpGet}) async {
   var json = jsonDecode(jsontext);
   if (jsonGetKey(json, 'Resultcode') != 0)
     throw jsonGetKey(json, 'ResultStatusInfo');
@@ -274,7 +277,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext,
     );
     map[jsonGetKey(plan, 'Title')] = await httpGet(
       Uri.parse(url),
-      useCache: cacheGetRequests,
+      getCache: cacheGetRequests ? Prefs.getCache : null,
     );
   }
   return map;
@@ -292,11 +295,16 @@ dom.Element _searchHtml(List<dom.Element> rootNode, String className) {
 Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
     {bool cacheGetRequests = true,
     bool cachePostRequests = true,
-    Future<String> Function(Uri url, {bool useCache}) httpGet = httpGet,
+    Future<String> Function(Uri url,
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
+        httpGet = httpGet,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers,
-            {bool useCache})
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
         httpPost = httpPost,
+    void Function({String ctx, Object message}) logInfo = ampInfo,
     @required Language lang}) async {
   List<DsbPlan> plans = [];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
@@ -306,7 +314,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
       cacheGetRequests: cacheGetRequests, httpGet: httpGet);
   for (var title in htmls.keys) {
     try {
-      plans.add(dsbParseHtml(title, htmls[title]));
+      plans.add(dsbParseHtml(title, htmls[title], logInfo: logInfo));
     } catch (e) {
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(
@@ -321,8 +329,9 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
   return plans;
 }
 
-DsbPlan dsbParseHtml(String title, String res) {
-  ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
+DsbPlan dsbParseHtml(String title, String res,
+    {void Function({String ctx, Object message}) logInfo = ampInfo}) {
+  logInfo(ctx: 'DSB', message: 'Trying to parse $title...');
   List<dom.Element> html =
       HtmlParser(res).parse().children[0].children[1].children; //body
   String planTitle = _searchHtml(html, 'mon_title').innerHtml;
@@ -337,8 +346,8 @@ DsbPlan dsbParseHtml(String title, String res) {
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
-  if(stage == null) stage = '';
-  if(char == null) char = '';
+  if (stage == null) stage = '';
+  if (char == null) char = '';
   for (DsbPlan plan in plans) {
     List<DsbSubstitution> subs = [];
     for (DsbSubstitution sub in plan.subs) {

@@ -64,9 +64,11 @@ class DsbTestCase {
     var plans = dsbSearchClass(
         await dsbGetAllSubs(username, password,
             lang: Language.all.first,
-            httpGet: (url, {useCache}) => _getFromCache(url.toString()),
-            httpPost: (url, _, __, ___, {useCache}) =>
+            httpGet: (url, {getCache, setCache}) =>
                 _getFromCache(url.toString()),
+            httpPost: (url, _, __, ___, {getCache, setCache}) =>
+                _getFromCache(url.toString()),
+            logInfo: ({ctx, message}) {},
             cacheGetRequests: false,
             cachePostRequests: false),
         stage,
@@ -108,9 +110,8 @@ List<DsbTestCase> dsbTestCases = [
 ];
 
 void main() {
-  group('DSB', () {
+  group('dsbapi', () {
     int i = 1;
-    for (var testCase in dsbTestCases)
-      test('case ${i++}', testCase.run);
+    for (var testCase in dsbTestCases) test('case ${i++}', testCase.run);
   });
 }

@@ -132,10 +132,12 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
 }
 
 TTDay ttMatchDay(String s) {
-  s = s.toLowerCase();
-  if(s == null)
+  if (s == null)
     return TTDay.Null;
-  else if(s.contains('null'))
+  else if (s.length == 0)
+    return TTDay.Null;
+  s = s.toLowerCase();
+  if (s.contains('null'))
     return TTDay.Null;
   else if (s.contains('montag'))
     return TTDay.Monday;
@@ -200,8 +202,7 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
     int ttColumnIndex = TTDay.values.indexOf(plan.day);
     widgets.add(
       ListTile(
-          title: Text(
-              ' ${CustomValues.lang.ttDayToString(plan.day)}',
+          title: Text(' ${CustomValues.lang.ttDayToString(plan.day)}',
               style:
                   TextStyle(color: AmpColors.colorForeground, fontSize: 24))),
     );
