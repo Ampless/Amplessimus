@@ -36,7 +36,7 @@ class DsbSubstitution {
 
   DsbSubstitution.fromJson(Map<String, dynamic> json)
       : affectedClass = json['affectedClass'],
-        hours = List<int>.from(jsonDecode(json['hours'])),
+        hours = json['hours'],
         teacher = json['teacher'],
         subject = json['subject'],
         notes = json['notes'],
@@ -44,7 +44,7 @@ class DsbSubstitution {
 
   Map<String, dynamic> toJson() => {
         'affectedClass': affectedClass,
-        'hours': jsonEncode(hours),
+        'hours': hours,
         'teacher': teacher,
         'subject': subject,
         'notes': notes,
@@ -188,7 +188,7 @@ class DsbPlan {
         '        <key>day</key>\n'
         '        <string>${ttDayToInt(day)}</string>\n'
         '        <key>date</key>\n'
-        '        <string>${jsonEscape(date)}</string>\n'
+        '        <string>${xmlEscape(date)}</string>\n'
         '        <key>subs</key>\n'
         '        <array>\n';
     for (DsbSubstitution sub in subs) plist += sub.toPlist();

@@ -93,26 +93,26 @@ class TTColumn {
 
   TTColumn.fromJson(Map<String, dynamic> json)
       : lessons =
-            lessonsFromJson(List<String>.from(jsonDecode(json['lessons']))),
+            lessonsFromJson(json['lessons']),
         day = ttDayFromInt(json['day']);
 
   Map<String, dynamic> toJson() => {
-        'lessons': jsonEncode(lessonsToJson(lessons)),
+        'lessons': lessonsToJson(lessons),
         'day': ttDayToInt(day),
       };
 
-  List<String> lessonsToJson(List<TTLesson> lessons) {
-    List<String> lessonsStrings = [];
+  List<dynamic> lessonsToJson(List<TTLesson> lessons) {
+    List<dynamic> lessonsStrings = [];
     for (TTLesson lesson in lessons) {
-      lessonsStrings.add(jsonEncode(lesson.toJson()));
+      lessonsStrings.add(lesson.toJson());
     }
     return lessonsStrings;
   }
 
-  static List<TTLesson> lessonsFromJson(List<String> lessonsStrings) {
+  static List<TTLesson> lessonsFromJson(List<dynamic> lessonsStrings) {
     List<TTLesson> tempLessons = new List();
-    for (String tempString in lessonsStrings) {
-      tempLessons.add(TTLesson.fromJson(jsonDecode(tempString)));
+    for (dynamic tempString in lessonsStrings) {
+      tempLessons.add(TTLesson.fromJson(tempString));
     }
     return tempLessons;
   }
@@ -175,9 +175,9 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
 }
 
 Future<Null> saveTimetableToPrefs(List<TTColumn> table) async {
-  List<String> tableStrings = [];
+  List<dynamic> tableStrings = [];
   for (TTColumn column in table) {
-    tableStrings.add(jsonEncode(column.toJson()));
+    tableStrings.add(column.toJson());
   }
   Prefs.jsonTimetable = jsonEncode(tableStrings);
 }
@@ -185,11 +185,9 @@ Future<Null> saveTimetableToPrefs(List<TTColumn> table) async {
 List<TTColumn> timetableFromPrefs() {
   List<TTColumn> table = [];
   if (Prefs.jsonTimetable == null) return [];
-  List<String> tableStrings =
-      List<String>.from(jsonDecode(Prefs.jsonTimetable));
-  for (String s in tableStrings) {
-    print(jsonDecode(s).runtimeType);
-    table.add(TTColumn.fromJson(jsonDecode(s)));
+  List<dynamic> tableStrings = jsonDecode(Prefs.jsonTimetable);
+  for (dynamic s in tableStrings) {
+    table.add(TTColumn.fromJson(s));
   }
   return table;
 }

@@ -1,3 +1,4 @@
+@deprecated
 String jsonEscape(String s) => s
     .replaceAll('\\', '\\\\')
     .replaceAll('"', '\\"')
