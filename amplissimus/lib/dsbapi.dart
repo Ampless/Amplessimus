@@ -158,26 +158,26 @@ class DsbPlan {
   DsbPlan.fromJson(Map<String, dynamic> json)
       : day = ttDayFromInt(json['day']),
         date = json['date'],
-        subs = subsFromJson(List<String>.from(jsonDecode(json['subs'])));
+        subs = subsFromJson(json['subs']);
 
   Map<String, dynamic> toJson() => {
         'day': ttDayToInt(day),
         'date': date,
-        'subs': jsonEncode(subsToJson(subs)),
+        'subs': subsToJson(),
       };
 
-  List<String> subsToJson(List<DsbSubstitution> subs) {
-    List<String> lessonsStrings = [];
-    for (DsbSubstitution usage in subs) {
-      lessonsStrings.add(jsonEncode(usage.toJson()));
+  List<Map<String, dynamic>> subsToJson() {
+    List<Map<String, dynamic>> lessonsStrings = [];
+    for (DsbSubstitution sub in subs) {
+      lessonsStrings.add(sub.toJson());
     }
     return lessonsStrings;
   }
 
-  static List<DsbSubstitution> subsFromJson(List<String> subsStrings) {
+  static List<DsbSubstitution> subsFromJson(dynamic subsStrings) {
     List<DsbSubstitution> tempSubs = new List();
-    for (String tempString in subsStrings) {
-      tempSubs.add(DsbSubstitution.fromJson(jsonDecode(tempString)));
+    for (dynamic tempString in subsStrings) {
+      tempSubs.add(DsbSubstitution.fromJson(tempString));
     }
     return tempSubs;
   }
@@ -511,18 +511,17 @@ String plansToPlist(List<DsbPlan> plans) {
 }
 
 String plansToJson(List<DsbPlan> plans) {
-  List<String> plansStrings = [];
+  List<Map<String, dynamic>> plansStrings = [];
   for (DsbPlan plan in plans) {
-    plansStrings.add(jsonEncode(plan.toJson()));
+    plansStrings.add(plan.toJson());
   }
   return jsonEncode(plansStrings);
 }
 
 List<DsbPlan> plansFromJson(String jsonPlans) {
   List<DsbPlan> plans = [];
-  List<String> plansStrings = List<String>.from(jsonDecode(jsonPlans));
-  for (String tempString in plansStrings) {
-    plans.add(DsbPlan.fromJson(jsonDecode(tempString)));
+  for (dynamic tempString in jsonDecode(jsonPlans)) {
+    plans.add(DsbPlan.fromJson(tempString));
   }
   return plans;
 }
