@@ -426,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage>
         margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
       ),
       Scaffold(
-        appBar: ampAppBar('Stundenplan'),
+        appBar: ampAppBar(CustomValues.lang.timetable),
         backgroundColor: Colors.transparent,
         body: Container(
           margin: EdgeInsets.only(left: 10, right: 10),
