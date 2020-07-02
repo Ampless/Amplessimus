@@ -4,7 +4,7 @@ import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/widgets.dart';
+import 'package:Amplissimus/validators.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -155,7 +155,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         controller:
                             FirstLoginValues.usernameInputFormController,
                         key: FirstLoginValues.usernameInputFormKey,
-                        validator: Widgets.textFieldValidator,
+                        validator: textFieldValidator,
                         labelText: CustomValues.lang.username,
                         keyboardType: TextInputType.visiblePassword,
                         autofillHints: [AutofillHints.username],
@@ -181,7 +181,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         controller:
                             FirstLoginValues.passwordInputFormController,
                         key: FirstLoginValues.passwordInputFormKey,
-                        validator: Widgets.textFieldValidator,
+                        validator: textFieldValidator,
                         labelText: CustomValues.lang.password,
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: passwordHidden,

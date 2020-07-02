@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Amplissimus/json.dart';
+import 'package:Amplissimus/formatutil.dart';
 import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -209,10 +209,10 @@ class CachedSharedPreferences {
         await _prefFile.setPosition(0);
         var bytes = await _prefFile.read(await _prefFile.length());
         //this kind of creates a race condition, but that doesn't really matter lol
-        for (dynamic json in jsonIsList(jsonDecode(utf8.decode(bytes)))) {
-          dynamic key = jsonGetKey(json, 'k');
-          dynamic val = jsonGetKey(json, 'v');
-          dynamic typ = jsonGetKey(json, 't');
+        for (dynamic json in jsonDecode(utf8.decode(bytes))) {
+          dynamic key = json['k'];
+          dynamic val = json['v'];
+          dynamic typ = json['t'];
           if (typ == 0)
             _cacheString[key] = val;
           else if (typ == 1)
@@ -223,7 +223,7 @@ class CachedSharedPreferences {
             _cacheBool[key] = val == 1;
           else if (typ == 4) {
             _cacheStrings[key] = [];
-            for (dynamic s in jsonIsList(val)) _cacheStrings[key].add(s);
+            for (dynamic s in val) _cacheStrings[key].add(s);
           } else
             throw 'Prefs doesn\'t know the pref type "$typ".';
         }

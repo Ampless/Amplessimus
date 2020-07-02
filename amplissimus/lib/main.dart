@@ -12,11 +12,12 @@ import 'package:Amplissimus/screens/register_timetable.dart';
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/widgets.dart';
+import 'package:Amplissimus/validators.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() {
@@ -304,7 +305,7 @@ class _MyHomePageState extends State<MyHomePage>
         ampFormField(
           controller: usernameInputFormController,
           key: usernameInputFormKey,
-          validator: Widgets.textFieldValidator,
+          validator: textFieldValidator,
           labelText: CustomValues.lang.username,
           keyboardType: TextInputType.visiblePassword,
           autofillHints: [AutofillHints.username],
@@ -331,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage>
               ),
               controller: passwordInputFormController,
               key: passwordInputFormKey,
-              validator: Widgets.textFieldValidator,
+              validator: textFieldValidator,
               labelText: CustomValues.lang.password,
               keyboardType: TextInputType.visiblePassword,
               obscureText: passwordHidden,
@@ -417,7 +418,11 @@ class _MyHomePageState extends State<MyHomePage>
                     )
                   : Center(
                       child: SizedBox(
-                      child: Widgets.loadingWidget(1),
+                      child: SpinKitWave(
+                        size: 100,
+                        duration: Duration(milliseconds: 1050),
+                        color: AmpColors.colorForeground,
+                      ),
                       height: 200,
                       width: 200,
                     )),

@@ -3,7 +3,7 @@ import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/widgets.dart';
+import 'package:Amplissimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -223,7 +223,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           controller: subListSpacingInputFormController,
           key: subListSpacingInputFormKey,
           keyboardType: TextInputType.number,
-          validator: Widgets.numberValidator,
+          validator: numberValidator,
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
@@ -251,7 +251,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           controller: timerInputFormController,
           key: timerInputFormKey,
           keyboardType: TextInputType.number,
-          validator: Widgets.numberValidator,
+          validator: numberValidator,
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(

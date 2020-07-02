@@ -5,7 +5,7 @@ import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/widgets.dart';
+import 'package:Amplissimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -201,21 +201,21 @@ class RegisterTimetableScreenPageState
                               ampFormField(
                                 controller: subjectInputFormController,
                                 key: subjectInputFormKey,
-                                validator: Widgets.textFieldValidator,
+                                validator: textFieldValidator,
                                 labelText: CustomValues.lang.subject,
                               ),
                               Padding(padding: EdgeInsets.all(6)),
                               ampFormField(
                                 controller: notesInputFormController,
                                 key: notesInputFormKey,
-                                validator: Widgets.textFieldValidator,
+                                validator: textFieldValidator,
                                 labelText: CustomValues.lang.notes,
                               ),
                               Padding(padding: EdgeInsets.all(6)),
                               ampFormField(
                                 controller: teacherInputFormController,
                                 key: teacherInputFormKey,
-                                validator: Widgets.textFieldValidator,
+                                validator: textFieldValidator,
                                 labelText: CustomValues.lang.teacherInput,
                               ),
                               StatefulBuilder(

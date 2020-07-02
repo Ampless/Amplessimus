@@ -4,13 +4,12 @@ import 'dart:math';
 
 import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/intutils.dart';
-import 'package:Amplissimus/json.dart';
+import 'package:Amplissimus/formatutil.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/xml.dart';
 import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
@@ -225,22 +224,20 @@ Future<String> dsbGetData(String username, String password,
     return utf8.decode(
       GZipDecoder().decodeBytes(
         base64.decode(
-          jsonGetKey(
-              jsonDecode(
-                await httpPost(
-                  Uri.parse(apiEndpoint),
-                  '{'
-                      '"req": {'
-                      '"Data": "${base64.encode(GZipEncoder().encode(utf8.encode(json)))}", '
-                      '"DataType": 1'
-                      '}'
-                      '}',
-                  '$apiEndpoint\t$username\t$password',
-                  {"content-type": "application/json"},
-                  getCache: cachePostRequests ? Prefs.getCache : null,
-                ),
-              ),
-              'd'),
+          jsonDecode(
+            await httpPost(
+              Uri.parse(apiEndpoint),
+              '{'
+                  '"req": {'
+                  '"Data": "${base64.encode(GZipEncoder().encode(utf8.encode(json)))}", '
+                  '"DataType": 1'
+                  '}'
+                  '}',
+              '$apiEndpoint\t$username\t$password',
+              {"content-type": "application/json"},
+              getCache: cachePostRequests ? Prefs.getCache : null,
+            ),
+          )['d'],
         ),
       ),
     );
@@ -257,25 +254,12 @@ Future<Map<String, String>> dsbGetHtml(String jsontext,
             void Function(String, String, Duration) setCache})
         httpGet = httpGet}) async {
   var json = jsonDecode(jsontext);
-  if (jsonGetKey(json, 'Resultcode') != 0)
-    throw jsonGetKey(json, 'ResultStatusInfo');
-  json = jsonGetIndex(
-    jsonGetKey(
-      jsonGetIndex(
-        jsonGetKey(json, 'ResultMenuItems'),
-      ),
-      'Childs',
-    ),
-  );
+  if (json['Resultcode'] != 0) throw json['ResultStatusInfo'];
+  json = json['ResultMenuItems'][0]['Childs'][0];
   Map<String, String> map = {};
-  for (var plan in jsonGetKey(jsonGetKey(json, 'Root'), 'Childs')) {
-    String url = jsonGetKey(
-      jsonGetIndex(
-        jsonGetKey(plan, 'Childs'),
-      ),
-      'Detail',
-    );
-    map[jsonGetKey(plan, 'Title')] = await httpGet(
+  for (var plan in json['Root']['Childs']) {
+    String url = plan['Childs'][0]['Detail'];
+    map[plan['Title']] = await httpGet(
       Uri.parse(url),
       getCache: cacheGetRequests ? Prefs.getCache : null,
     );
