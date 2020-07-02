@@ -21,4 +21,4 @@ doc/api/
 *.js.map
 
 .DS_Store
-.amplissimus_desktop_prealpha_shared_prefs
+.amplissimus_prealpha_data

@@ -149,19 +149,19 @@ class DsbSubstitution {
 }
 
 class DsbPlan {
-  String title;
+  TTDay day;
   String date;
   List<DsbSubstitution> subs;
 
-  DsbPlan(this.title, this.subs, this.date);
+  DsbPlan(this.day, this.subs, this.date);
 
   DsbPlan.fromJson(Map<String, dynamic> json)
-      : title = json['title'],
+      : day = ttDayFromInt(json['day']),
         date = json['date'],
         subs = subsFromJson(List<String>.from(jsonDecode(json['subs'])));
 
   Map<String, dynamic> toJson() => {
-        'title': title,
+        'day': ttDayToInt(day),
         'date': date,
         'subs': jsonEncode(subsToJson(subs)),
       };
@@ -182,12 +182,12 @@ class DsbPlan {
     return tempSubs;
   }
 
-  String toString() => '$title: $subs';
+  String toString() => '$day: $subs';
 
   String toPlist() {
     String plist = '    <dict>\n'
-        '        <key>title</key>\n'
-        '        <string>${xmlEscape(title)}</string>\n'
+        '        <key>day</key>\n'
+        '        <string>${ttDayToInt(day)}</string>\n'
         '        <key>date</key>\n'
         '        <string>${jsonEscape(date)}</string>\n'
         '        <key>subs</key>\n'
@@ -310,10 +310,10 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
     } catch (e) {
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(
-          title,
+          TTDay.Null,
           [
-            DsbSubstitution('', [0], '', CustomValues.lang.dsbListErrorTitle,
-                CustomValues.lang.dsbListErrorSubtitle, true)
+            DsbSubstitution('', [0], '', lang.dsbListErrorTitle,
+                lang.dsbListErrorSubtitle, true)
           ],
           title));
     }
@@ -333,7 +333,7 @@ DsbPlan dsbParseHtml(String title, String res) {
   List<DsbSubstitution> subs = [];
   for (int i = 1; i < html.length; i++)
     subs.add(DsbSubstitution.fromElementArray(html[i].children));
-  return DsbPlan(planTitle.split(' ').last, subs, planTitle);
+  return DsbPlan(ttMatchDay(planTitle), subs, planTitle);
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
@@ -478,7 +478,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     }
     widgets.add(ListTile(
         title: Row(children: <Widget>[
-      Text(' ${plan.title}',
+      Text(' ${CustomValues.lang.ttDayToString(plan.day)}',
           style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
       IconButton(
           icon: Icon(

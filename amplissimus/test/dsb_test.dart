@@ -1,4 +1,5 @@
 import 'package:Amplissimus/langs/language.dart';
+import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Amplissimus/dsbapi.dart';
 
@@ -13,14 +14,14 @@ final Map<String, String> dsbTest1Cache = {
 
 final List<DsbPlan> dsbTest1Expct = [
   DsbPlan(
-    'Dienstag',
+    TTDay.Tuesday,
     [
       DsbSubstitution('11q', [7], '---', '1sk1', '', true),
     ],
     '23.6.2020 Dienstag',
   ),
   DsbPlan(
-    'Mittwoch',
+    TTDay.Wednesday,
     [],
     '24.6.2020 Mittwoch',
   ),
@@ -37,12 +38,12 @@ final Map<String, String> dsbTest2Cache = {
 
 final List<DsbPlan> dsbTest2Expct = [
   DsbPlan(
-    'Dienstag',
+    TTDay.Tuesday,
     [],
     '23.6.2020 Dienstag',
   ),
   DsbPlan(
-    'Mittwoch',
+    TTDay.Wednesday,
     [],
     '24.6.2020 Mittwoch',
   ),
@@ -72,7 +73,7 @@ class DsbTestCase {
     assert(plans.length == expectedPlans.length);
     for (int i = 0; i < plans.length; i++) {
       assert(plans[i].date == expectedPlans[i].date);
-      assert(plans[i].title == expectedPlans[i].title);
+      assert(plans[i].day == expectedPlans[i].day);
       assert(plans[i].subs.length == expectedPlans[i].subs.length);
       for (int j = 0; j < plans[i].subs.length; j++) {
         assert(plans[i].subs[j].affectedClass ==
@@ -101,10 +102,11 @@ class DsbTestCase {
 List<DsbTestCase> dsbTestCases = [
   DsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, '11', 'q'),
   DsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, '11', null),
-  DsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, null, 'q'),
+  DsbTestCase(null, null, dsbTest2Cache, dsbTest2Expct, null, 'q'),
   DsbTestCase('invalid', 'none', dsbTest2Cache, dsbTest2Expct, null, null),
 ];
 
 void main() {
-  for (var testCase in dsbTestCases) test('dsbTest', testCase.run);
+  int i = 0;
+  for (var testCase in dsbTestCases) test('dsbTestCases[${i++}]', testCase.run);
 }

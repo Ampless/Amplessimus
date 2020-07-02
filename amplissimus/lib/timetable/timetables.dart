@@ -11,6 +11,7 @@ enum TTDay {
   Wednesday,
   Thursday,
   Friday,
+  Null,
 }
 
 TTDay ttDayFromInt(int i) {
@@ -25,6 +26,8 @@ TTDay ttDayFromInt(int i) {
       return TTDay.Thursday;
     case 4:
       return TTDay.Friday;
+    case -1:
+      return TTDay.Null;
     default:
       throw UnimplementedError();
   }
@@ -42,6 +45,8 @@ int ttDayToInt(TTDay day) {
       return 3;
     case TTDay.Friday:
       return 4;
+    case TTDay.Null:
+      return -1;
     default:
       throw UnimplementedError();
   }
@@ -53,7 +58,7 @@ List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
 void updateTimetableDays(List<DsbPlan> plans) {
   timetableDays = new List();
   for (DsbPlan tempPlan in plans) {
-    timetableDays.add(ttMatchDay(tempPlan.title.split(' ').last.toLowerCase()));
+    timetableDays.add(tempPlan.day);
   }
   print(timetableDays);
 }
@@ -127,8 +132,11 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
 }
 
 TTDay ttMatchDay(String s) {
+  s = s.toLowerCase();
   if(s == null)
-    return null;
+    return TTDay.Null;
+  else if(s.contains('null'))
+    return TTDay.Null;
   else if (s.contains('montag'))
     return TTDay.Monday;
   else if (s.contains('monday'))
@@ -156,7 +164,7 @@ TTDay ttMatchDay(String s) {
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   for (DsbPlan plan in plans) {
     for (int i = 0; i < table.length; i++) {
-      if (table[i].day == ttMatchDay(plan.title)) {
+      if (table[i].day == plan.day) {
         table[i] = ttSubColumn(table[i], plan.subs);
       }
     }
@@ -164,7 +172,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   return table;
 }
 
-Future<void> saveTimetableToPrefs(List<TTColumn> table) async {
+Future<Null> saveTimetableToPrefs(List<TTColumn> table) async {
   List<String> tableStrings = [];
   for (TTColumn column in table) {
     tableStrings.add(jsonEncode(column.toJson()));
@@ -189,12 +197,11 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
       dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   List<Widget> widgets = [];
   for (DsbPlan plan in tempPlans) {
-    TTDay day = ttMatchDay(plan.title.toLowerCase());
-    int ttColumnIndex = TTDay.values.indexOf(day);
+    int ttColumnIndex = TTDay.values.indexOf(plan.day);
     widgets.add(
       ListTile(
           title: Text(
-              ' ${CustomValues.lang.ttDayToString(ttMatchDay(plan.title.toLowerCase()))}',
+              ' ${CustomValues.lang.ttDayToString(plan.day)}',
               style:
                   TextStyle(color: AmpColors.colorForeground, fontSize: 24))),
     );
