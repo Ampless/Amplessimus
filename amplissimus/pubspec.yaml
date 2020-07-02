@@ -33,7 +33,6 @@ dependencies:
   archive: ^2.0.13
   crypto: ^2.1.5
   mutex: ^1.1.0
-  json_serializable: ^3.3.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.5
