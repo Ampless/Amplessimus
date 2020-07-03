@@ -28,11 +28,12 @@ void main() {
     for (var testCase in httpTestCases)
       test('case ${i++}', () {
         if (testCase.method == HttpMethod.GET)
-          httpGet(Uri.parse(testCase.url), setCache: null, getCache: null);
+          httpGet(Uri.parse(testCase.url),
+              setCache: null, getCache: null, log: false);
         else if (testCase.method == HttpMethod.POST)
           httpPost(
               Uri.parse(testCase.url), testCase.body, null, testCase.headers,
-              getCache: null, setCache: null);
+              getCache: null, setCache: null, log: false);
         else
           throw 'The test is broken.';
       });

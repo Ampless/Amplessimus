@@ -39,8 +39,7 @@ class RegisterTimetableScreen extends StatelessWidget {
 }
 
 class RegisterTimetableScreenPage extends StatefulWidget {
-  RegisterTimetableScreenPage({this.textStyle});
-  final textStyle;
+  RegisterTimetableScreenPage();
   @override
   State<StatefulWidget> createState() => RegisterTimetableScreenPageState();
 }
