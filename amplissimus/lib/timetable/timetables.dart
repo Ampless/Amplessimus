@@ -85,6 +85,9 @@ class TTLesson {
         'notes': notes,
         'isFree': isFree,
       };
+
+  @override
+  String toString() => '{"$subject", "$teacher", "$notes", $isFree}';
 }
 
 class TTColumn {
@@ -117,6 +120,9 @@ class TTColumn {
     }
     return tempLessons;
   }
+
+  @override
+  String toString() => '{$day, $lessons}';
 }
 
 const List<TTDay> ttWeek = [
@@ -146,6 +152,14 @@ TTDay ttMatchDay(String s) {
     throw '[TT] Unknown day: $s';
 }
 
+bool _subjectsEqual(String s1, String s2) {
+  if(s1 == null) return s2 == null;
+  if(s2 == null) return false;
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+  return s1.contains(s2) || s2.contains(s1);
+}
+
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   for (DsbPlan plan in plans) {
     for (int i = 0; i < table.length; i++) {
@@ -153,13 +167,8 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
         TTColumn column = table[i];
         for (int i = 0; i < column.lessons.length; i++) {
           for (DsbSubstitution sub in plan.subs) {
-            if (sub.actualHours.contains(i) &&
-                (sub.subject
-                        .toLowerCase()
-                        .contains(column.lessons[i].subject.toLowerCase()) ||
-                    column.lessons[i].subject
-                        .toLowerCase()
-                        .contains(sub.subject.toLowerCase()))) {
+            if (sub.actualHours.contains(i + 1) &&
+                _subjectsEqual(sub.subject, column.lessons[i].subject)) {
               column.lessons[i].teacher = sub.teacher;
               column.lessons[i].notes = sub.notes;
               column.lessons[i].isFree = sub.isFree;
