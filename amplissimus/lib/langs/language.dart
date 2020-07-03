@@ -4,6 +4,7 @@ import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/english.dart';
 import 'package:Amplissimus/langs/german.dart';
 import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:flutter/rendering.dart';
 
 abstract class Language {
   String get code;
@@ -68,10 +69,8 @@ abstract class Language {
     return _langs[0];
   }
 
-  @override
-  String toString() {
-    return '{code:"$code",name:"$name",translations:...}';
-  }
-
   String ttDayToString(TTDay day);
+
+  @override
+  String toString() => name;
 }

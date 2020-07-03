@@ -15,6 +15,7 @@ enum TTDay {
 }
 
 TTDay ttDayFromInt(int i) {
+  if(i == null) return TTDay.Null;
   switch (i) {
     case 0:
       return TTDay.Monday;
@@ -34,6 +35,7 @@ TTDay ttDayFromInt(int i) {
 }
 
 int ttDayToInt(TTDay day) {
+  if(day == null) return -1;
   switch (day) {
     case TTDay.Monday:
       return 0;
@@ -57,8 +59,8 @@ List<DsbPlan> timetablePlans = new List();
 List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
 void updateTimetableDays(List<DsbPlan> plans) {
   timetableDays = new List();
-  for (DsbPlan tempPlan in plans) {
-    timetableDays.add(tempPlan.day);
+  for (DsbPlan plan in plans) {
+    timetableDays.add(plan.day);
   }
   print(timetableDays);
 }
@@ -141,7 +143,7 @@ const List<TTDay> ttWeek = [
 TTDay ttMatchDay(String s) {
   if (s == null || s.length == 0) return TTDay.Null;
   s = s.toLowerCase();
-  if (s.contains('null'))
+  if (s.contains('null') || s.contains('none'))
     return TTDay.Null;
   else if (s.contains('montag') || s.contains('monday'))
     return TTDay.Monday;
