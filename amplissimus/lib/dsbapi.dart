@@ -36,7 +36,7 @@ class DsbSubstitution {
 
   DsbSubstitution.fromJson(Map<String, dynamic> json)
       : affectedClass = json['affectedClass'],
-        hours = json['hours'],
+        hours = List<int>.from(json['hours']),
         teacher = json['teacher'],
         subject = json['subject'],
         notes = json['notes'],
