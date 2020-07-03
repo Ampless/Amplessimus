@@ -174,6 +174,8 @@ class German extends Language {
   @override
   String ttDayToString(TTDay day) {
     switch (day) {
+      case TTDay.Null:
+        return '';
       case TTDay.Monday:
         return 'Montag';
       case TTDay.Tuesday:

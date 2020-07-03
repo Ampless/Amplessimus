@@ -101,8 +101,8 @@ class RegisterTimetableScreenPageState
                     children: [
                       ampDropdownButton(
                         value: currentDropdownDay,
-                        items: TTDay.values
-                            .map<DropdownMenuItem<TTDay>>((TTDay value) {
+                        items:
+                            ttWeek.map<DropdownMenuItem<TTDay>>((TTDay value) {
                           return DropdownMenuItem<TTDay>(
                               value: value,
                               child:

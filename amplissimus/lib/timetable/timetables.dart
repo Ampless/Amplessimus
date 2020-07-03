@@ -92,8 +92,7 @@ class TTColumn {
   TTColumn(this.lessons, this.day);
 
   TTColumn.fromJson(Map<String, dynamic> json)
-      : lessons =
-            lessonsFromJson(json['lessons']),
+      : lessons = lessonsFromJson(json['lessons']),
         day = ttDayFromInt(json['day']);
 
   Map<String, dynamic> toJson() => {
@@ -131,33 +130,28 @@ TTColumn ttSubColumn(TTColumn column, List<DsbSubstitution> subs) {
   return column;
 }
 
+const List<TTDay> ttWeek = [
+  TTDay.Monday,
+  TTDay.Tuesday,
+  TTDay.Wednesday,
+  TTDay.Thursday,
+  TTDay.Friday
+];
+
 TTDay ttMatchDay(String s) {
-  if (s == null)
-    return TTDay.Null;
-  else if (s.length == 0)
-    return TTDay.Null;
+  if (s == null || s.length == 0) return TTDay.Null;
   s = s.toLowerCase();
   if (s.contains('null'))
     return TTDay.Null;
-  else if (s.contains('montag'))
+  else if (s.contains('montag') || s.contains('monday'))
     return TTDay.Monday;
-  else if (s.contains('monday'))
-    return TTDay.Monday;
-  else if (s.contains('dienstag'))
+  else if (s.contains('dienstag') || s.contains('tuesday'))
     return TTDay.Tuesday;
-  else if (s.contains('tuesday'))
-    return TTDay.Tuesday;
-  else if (s.contains('mittwoch'))
+  else if (s.contains('mittwoch') || s.contains('wednesday'))
     return TTDay.Wednesday;
-  else if (s.contains('wednesday'))
-    return TTDay.Wednesday;
-  else if (s.contains('donnerstag'))
+  else if (s.contains('donnerstag') || s.contains('thursday'))
     return TTDay.Thursday;
-  else if (s.contains('thursday'))
-    return TTDay.Thursday;
-  else if (s.contains('freitag'))
-    return TTDay.Friday;
-  else if (s.contains('friday'))
+  else if (s.contains('freitag') || s.contains('friday'))
     return TTDay.Friday;
   else
     throw '[TT] Unknown day: $s';
