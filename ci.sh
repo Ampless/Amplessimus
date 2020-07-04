@@ -55,5 +55,7 @@ cd ..
 
 [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
 cd $output_dir
-upload_url=$(gh_create_release $commitid $version_name)
-for fn in * ; do gh_upload_binary $upload_url $fn ; done
+upload_url="$(gh_create_release $commitid $version_name)"
+for fn in * ; do
+        gh_upload_binary "$upload_url" "$fn"
+done
