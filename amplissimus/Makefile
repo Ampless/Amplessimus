@@ -132,7 +132,4 @@ setup:
 	which sudo apt
 	sudo apt install -y cmake ninja-build
 
-version:
-	echo $(VERSION)
-
 .PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts
