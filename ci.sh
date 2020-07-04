@@ -9,7 +9,7 @@ gh_create_release() {
         RAW="$(curl -X POST -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 --data "{
-                         \"tag_name\": \"$1\",
+                         \"tag_name\": \"$2\",
                          \"target_commitish\": \"$1\",
                          \"name\": \"$2\",
                          \"body\": \"This is an automatic release by the ci.\\n\\n###### Changelog\\n\\n\\n###### Related Issues\\n\\n\\n###### Known Bugs\\n\",
@@ -46,7 +46,7 @@ make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
 
 commitid=$(git rev-parse @)
 date=$(date +%Y_%m_%d-%H_%M_%S)
-version_name=$date-$commitid
+version_name=$(make version).$(echo commitid | cut -c 1-4)
 output_dir="/usr/local/var/www/amplissimus/$version_name"
 
 cp -rf bin "$output_dir"
