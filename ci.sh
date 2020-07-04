@@ -43,16 +43,21 @@ flutter config --enable-web --enable-macos-desktop
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
+echo 1
 
 commitid=$(git rev-parse @)
 date=$(date +%Y_%m_%d-%H_%M_%S)
+echo 2
 version_name="$(make version).$(echo $commitid | cut -c 1-4)"
+echo 3
 echo "$version_name"
+echo 4
 output_dir="/usr/local/var/www/amplissimus/$version_name"
 
 cp -rf bin "$output_dir"
 rm -rf bin/*
 cd ..
+echo 5
 
 [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
 cd $output_dir
