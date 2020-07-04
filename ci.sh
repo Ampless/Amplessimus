@@ -46,7 +46,8 @@ make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
 
 commitid=$(git rev-parse @)
 date=$(date +%Y_%m_%d-%H_%M_%S)
-version_name=$(make version).$(echo $commitid | cut -c 1-4)
+version_name="$(make version).$(echo $commitid | cut -c 1-4)"
+echo "$version_name"
 output_dir="/usr/local/var/www/amplissimus/$version_name"
 
 cp -rf bin "$output_dir"
