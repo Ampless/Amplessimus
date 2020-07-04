@@ -13,7 +13,7 @@ gh_create_release() {
                          \"target_commitish\": \"$1\",
                          \"name\": \"$2\",
                          \"body\": \"This is an automatic release by the ci.\\n\\n###### Changelog\\n\\n\\n###### Related Issues\\n\\n\\n###### Known Bugs\\n\",
-                         \"draft\": true,
+                         \"draft\": false,
                          \"prerelease\": true
                         }" \
                                 https://api.github.com/repos/Amplissimus/Amplissimus/releases)"
@@ -38,21 +38,22 @@ gh_upload_binary() {
 
 flutter channel master
 flutter upgrade
-flutter config --enable-web --enable-windows-desktop --enable-macos-desktop --enable-linux-desktop
+flutter config --enable-web --enable-macos-desktop
+
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
-#flutter pub cache repair # this might fix some stupid problems with shared_preferences_macos
 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
+
 commitid=$(git rev-parse @)
 date=$(date +%Y_%m_%d-%H_%M_%S)
 version_name=$date-$commitid
 output_dir="/usr/local/var/www/amplissimus/$version_name"
+
 cp -rf bin "$output_dir"
 rm -rf bin/*
 cd ..
+
 [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
 cd $output_dir
 upload_url=$(gh_create_release $commitid $version_name)
-for fn in * ; do
-        gh_upload_binary $upload_url $fn
-done
+for fn in * ; do gh_upload_binary $upload_url $fn ; done
