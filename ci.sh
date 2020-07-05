@@ -43,6 +43,7 @@ flutter config --enable-web --enable-macos-desktop
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
+make mac || { make cleanartifacts rollbackversions ; }
 
 commitid=$(git rev-parse @)
 date=$(date +%Y_%m_%d-%H_%M_%S)

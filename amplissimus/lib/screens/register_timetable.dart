@@ -72,7 +72,7 @@ class RegisterTimetableScreenPageState
 
   @override
   void initState() {
-    CustomValues.ttColumns = timetableFromPrefs();
+    CustomValues.ttColumns = ttLoadFromPrefs();
     if (CustomValues.ttColumns.isEmpty) CustomValues.generateNewTTColumns();
     curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
     ttColumn = CustomValues.ttColumns[curTTColumnIndex];
@@ -243,7 +243,7 @@ class RegisterTimetableScreenPageState
                                     tempCurrentTTLessonIsFree;
                                 setState(() {});
                                 Navigator.pop(context);
-                                saveTimetableToPrefs(CustomValues.ttColumns);
+                                ttSaveToPrefs(CustomValues.ttColumns);
                               },
                             ),
                             context: context,
@@ -289,7 +289,7 @@ class RegisterTimetableScreenPageState
               splashColor: AmpColors.colorForeground,
               onPressed: () async {
                 dsbUpdateWidget(() {});
-                await saveTimetableToPrefs(CustomValues.ttColumns);
+                ttSaveToPrefs(CustomValues.ttColumns);
                 Animations.changeScreenEaseOutBackReplace(
                   MyApp(
                     initialIndex: 1,
@@ -314,7 +314,7 @@ class RegisterTimetableScreenPageState
               splashColor: AmpColors.colorForeground,
               onPressed: () {
                 RegisterTimetableValues.tabController.animateTo(0);
-                saveTimetableToPrefs(CustomValues.ttColumns);
+                ttSaveToPrefs(CustomValues.ttColumns);
               },
               label: Text(
                 CustomValues.lang.firstStartupDone,

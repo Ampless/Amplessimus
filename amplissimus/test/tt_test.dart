@@ -3,14 +3,14 @@ import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class TTTestCase {
-  List<TTColumn> expct;
+  dynamic expct;
   bool error;
   Function() tfunc;
 
   TTTestCase(this.tfunc, this.expct, this.error);
 
   void run() {
-    List<TTColumn> res;
+    dynamic res;
     try {
       res = tfunc();
     } catch (e) {
@@ -30,34 +30,44 @@ class TTTestCase {
   }
 }
 
+final List<TTColumn> ttTest1Input1 = [
+  TTColumn([
+    TTLesson('Mathe', 'Wolf', 'lostes Fach', false),
+    TTLesson(null, null, null, true),
+  ], TTDay.Monday),
+  TTColumn([
+    TTLesson('Deutsch', 'Rosemann', 'mega lost', false),
+    TTLesson(null, null, null, true),
+  ], TTDay.Tuesday),
+];
+
+final List<DsbPlan> ttTest1Input2 = [
+  DsbPlan(
+      TTDay.Monday,
+      [
+        DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false),
+      ],
+      '13.12.-1'),
+  DsbPlan(TTDay.Tuesday, [], 'drölf'),
+];
+
+final List<TTColumn> ttTest1Output = [
+  TTColumn([
+    TTLesson('Mathe', 'Gnan', 'Mitbetreuung', false),
+    TTLesson(null, null, null, true),
+  ], TTDay.Monday),
+  TTColumn([
+    TTLesson('Deutsch', 'Rosemann', 'mega lost', false),
+    TTLesson(null, null, null, true),
+  ], TTDay.Tuesday),
+];
+
 final List<TTTestCase> ttTestCases = [
-  TTTestCase(() => ttSubTable([
-    TTColumn([
-      TTLesson('Mathe', 'Wolf', 'lostes Fach', false),
-      TTLesson(null, null, null, true),
-    ], TTDay.Monday),
-    TTColumn([
-      TTLesson('Deutsch', 'Rosemann', 'mega lost', false),
-      TTLesson(null, null, null, true),
-    ], TTDay.Tuesday),
-  ], [
-    DsbPlan(
-        TTDay.Monday,
-        [
-          DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false),
-        ],
-        '13.12.-1'),
-    DsbPlan(TTDay.Tuesday, [], 'drölf'),
-  ]), [
-    TTColumn([
-      TTLesson('Mathe', 'Gnan', 'Mitbetreuung', false),
-      TTLesson(null, null, null, true),
-    ], TTDay.Monday),
-    TTColumn([
-      TTLesson('Deutsch', 'Rosemann', 'mega lost', false),
-      TTLesson(null, null, null, true),
-    ], TTDay.Tuesday),
-  ], false),
+  TTTestCase(
+      () => ttSubTable(ttTest1Input1, ttTest1Input2), ttTest1Output, false),
+  TTTestCase(() => ttFromJson(ttToJson(ttTest1Input1)), ttTest1Output, false),
+  TTTestCase(() => ttFromJson(null), [], false),
+  TTTestCase(() => ttToJson(null), '[]', false),
 ];
 
 void main() {

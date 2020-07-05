@@ -153,8 +153,8 @@ TTDay ttMatchDay(String s) {
 }
 
 bool _subjectsEqual(String s1, String s2) {
-  if(s1 == null) return s2 == null;
-  if(s2 == null) return false;
+  if (s1 == null) return s2 == null;
+  if (s2 == null) return false;
   s1 = s1.toLowerCase();
   s2 = s2.toLowerCase();
   return s1.contains(s2) || s2.contains(s1);
@@ -181,23 +181,23 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   return table;
 }
 
-Future<Null> saveTimetableToPrefs(List<TTColumn> table) async {
-  List<dynamic> tableStrings = [];
-  for (TTColumn column in table) {
-    tableStrings.add(column.toJson());
-  }
-  Prefs.jsonTimetable = jsonEncode(tableStrings);
+String ttToJson(List<TTColumn> tt) {
+  if(tt == null) return '[]';
+  List columns = [];
+  for (var column in tt) columns.add(column.toJson());
+  return jsonEncode(columns);
 }
 
-List<TTColumn> timetableFromPrefs() {
+List<TTColumn> ttFromJson(String jsontext) {
+  if (jsontext == null) return [];
   List<TTColumn> table = [];
-  if (Prefs.jsonTimetable == null) return [];
-  List<dynamic> tableStrings = jsonDecode(Prefs.jsonTimetable);
-  for (dynamic s in tableStrings) {
-    table.add(TTColumn.fromJson(s));
-  }
+  List columns = jsonDecode(jsontext);
+  for (dynamic s in columns) table.add(TTColumn.fromJson(s));
   return table;
 }
+
+void ttSaveToPrefs(List<TTColumn> table) => Prefs.jsonTimetable = ttToJson(table);
+List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
 List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
   List<DsbPlan> tempPlans =
@@ -234,7 +234,8 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
         for (DsbSubstitution sub in plan.subs) {
           if (!finishedFiltering) {
             if (sub.hours.contains(lessonIndex)) {
-              titleString = DsbSubstitution.realSubject(sub.subject, lang: CustomValues.lang);
+              titleString = DsbSubstitution.realSubject(sub.subject,
+                  lang: CustomValues.lang);
               notesString = CustomValues.lang.dsbSubtoSubtitle(sub);
               if (!sub.isFree) {
                 trailingString = sub.teacher;
