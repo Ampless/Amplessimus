@@ -126,8 +126,6 @@ void main() {
   group('dsbapi', () {
     int i = 1;
     for (var testCase in dsbTestCases) test('case ${i++}', testCase.run);
-    test('plist case 1', () => plansToPlist(dsbTest1Expct));
-    test('plist case 2', () => plansToPlist(dsbTest2Expct));
     test('json case 1', () {
       assertDsbPlanListsEqual(
           plansFromJson(plansToJson(dsbTest1Expct)), dsbTest1Expct);

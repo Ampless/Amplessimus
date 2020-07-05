@@ -129,24 +129,6 @@ class DsbSubstitution {
     for (int i = min(hours); i <= max(hours); i++) h.add(i);
     return h;
   }
-
-  String toPlist() {
-    String plist = '            <dict>\n'
-        '                <key>class</key>\n'
-        '                <string>${xmlEscape(affectedClass)}</string>\n'
-        '                <key>lessons</key>\n'
-        '                <array>\n';
-    for (int h in hours) plist += '                    <integer>$h</integer>\n';
-    plist += '                </array>\n'
-        '                <key>teacher</key>\n'
-        '                <string>${xmlEscape(teacher)}</string>\n'
-        '                <key>subject</key>\n'
-        '                <string>${xmlEscape(subject)}</string>\n'
-        '                <key>notes</key>\n'
-        '                <string>${xmlEscape(notes)}</string>\n'
-        '            </dict>\n';
-    return plist;
-  }
 }
 
 class DsbPlan {
@@ -184,20 +166,6 @@ class DsbPlan {
   }
 
   String toString() => '$day: $subs';
-
-  String toPlist() {
-    String plist = '    <dict>\n'
-        '        <key>day</key>\n'
-        '        <string>${ttDayToInt(day)}</string>\n'
-        '        <key>date</key>\n'
-        '        <string>${xmlEscape(date)}</string>\n'
-        '        <key>subs</key>\n'
-        '        <array>\n';
-    for (DsbSubstitution sub in subs) plist += sub.toPlist();
-    plist += '        </array>\n'
-        '    </dict>\n';
-    return plist;
-  }
 }
 
 Future<String> dsbGetData(String username, String password,
@@ -492,17 +460,6 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     ])));
     widgets.add(_getWidget(dayWidgets, Prefs.currentThemeId));
   }
-}
-
-String plansToPlist(List<DsbPlan> plans) {
-  String plist = '<?xml version="1.0" encoding="UTF-8"?>\n'
-      '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
-      '<plist version="1.0">\n'
-      '<array>\n';
-  for (var plan in plans) plist += plan.toPlist();
-  return '$plist'
-      '</array>\n'
-      '</plist>\n';
 }
 
 String plansToJson(List<DsbPlan> plans) {
