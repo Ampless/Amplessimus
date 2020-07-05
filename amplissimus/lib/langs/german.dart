@@ -198,7 +198,7 @@ class German extends Language {
   }
 
   @override
-  String get noSubs => 'No substitutions';
+  String get noSubs => 'Keine Vertretungen';
 
   @override
   String get changedAppearance => 'Aussehen des Vertretungsplans geändert!';
