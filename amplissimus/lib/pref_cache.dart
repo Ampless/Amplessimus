@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Amplissimus/formatutil.dart';
 import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -140,43 +139,27 @@ class CachedSharedPreferences {
   }
 
   void flush() async {
-    if (_prefFile != null &&
-        (_cacheString.length > 0 ||
-            _cacheInt.length > 0 ||
-            _cacheDouble.length > 0 ||
-            _cacheBool.length > 0 ||
-            _cacheStrings.length > 0)) {
+    if (_prefFile != null) {
       await _prefFileMutex.acquire();
       await _prefFile.setPosition(0);
       await _prefFile.truncate(0);
-      await _prefFile.writeString('[');
+      List<dynamic> prefs = [];
       for (var k in _cacheString.keys)
         if (_cacheString[k] != null)
-          await _prefFile.writeString(
-              '{"k":"${jsonEscape(k)}","v":"${jsonEscape(_cacheString[k])}","t":0},');
+          prefs.add({"k": k, "v": _cacheString[k], "t": 0});
       for (var k in _cacheInt.keys)
         if (_cacheInt[k] != null)
-          await _prefFile.writeString(
-              '{"k":"${jsonEscape(k)}","v":${_cacheInt[k]},"t":1},');
+          prefs.add({"k": k, "v": _cacheInt[k], "t": 1});
       for (var k in _cacheDouble.keys)
         if (_cacheDouble[k] != null)
-          await _prefFile.writeString(
-              '{"k":"${jsonEscape(k)}","v":${_cacheDouble[k]},"t":2},');
+          prefs.add({"k": k, "v": _cacheDouble[k], "t": 2});
       for (var k in _cacheBool.keys)
         if (_cacheBool[k] != null)
-          await _prefFile.writeString(
-              '{"k":"${jsonEscape(k)}","v":${_cacheBool[k] ? 1 : 0},"t":3},');
-      for (var k in _cacheStrings.keys) {
-        if (_cacheStrings[k] == null) continue;
-        await _prefFile.writeString('{"k":"${jsonEscape(k)}","v":[');
-        for (var s in _cacheStrings[k])
-          await _prefFile.writeString('"${jsonEscape(s)}",');
-        if (_cacheStrings[k].length > 0)
-          await _prefFile.setPosition((await _prefFile.position()) - 1);
-        await _prefFile.writeString('],"t":4},');
-      }
-      await _prefFile.setPosition((await _prefFile.position()) - 1);
-      await _prefFile.writeString(']\n');
+          prefs.add({"k": k, "v": _cacheBool[k] ? 1 : 0, "t": 3});
+      for (var k in _cacheStrings.keys)
+        if (_cacheStrings[k] != null)
+          prefs.add({"k": k, "v": _cacheStrings[k], "t": 4});
+      await _prefFile.writeString(jsonEncode(prefs));
       await _prefFile.flush();
       _prefFileMutex.release();
     }
@@ -203,8 +186,8 @@ class CachedSharedPreferences {
       _editsStrings.clear();
     } else {
       await _prefFileMutex.acquire();
-      _prefFile = await File('.amplissimus_prealpha_data')
-          .open(mode: FileMode.append);
+      _prefFile =
+          await File('.amplissimus_prealpha_data').open(mode: FileMode.append);
       if (await _prefFile.length() > 1) {
         await _prefFile.setPosition(0);
         var bytes = await _prefFile.read(await _prefFile.length());

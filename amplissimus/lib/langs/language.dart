@@ -4,7 +4,6 @@ import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/langs/english.dart';
 import 'package:Amplissimus/langs/german.dart';
 import 'package:Amplissimus/timetable/timetables.dart';
-import 'package:flutter/rendering.dart';
 
 abstract class Language {
   String get code;
