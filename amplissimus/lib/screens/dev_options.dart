@@ -27,7 +27,7 @@ class DevOptionsScreen extends StatelessWidget {
           ),
         ),
         onWillPop: () async {
-          dsbUpdateWidget(() {});
+          await dsbUpdateWidget(() {});
           Animations.changeScreenEaseOutBackReplace(
               MyApp(initialIndex: 2), context);
           return false;

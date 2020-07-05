@@ -21,7 +21,7 @@ class TTTestCase {
     }
     if (error) throw 'No error.';
     expect(expct.length, res.length);
-    for (int i = 0; i < res.length; i++)
+    for (var i = 0; i < res.length; i++)
       expect(res[i].toString(), expct[i].toString());
   }
 }
@@ -68,7 +68,7 @@ final List<TTTestCase> ttTestCases = [
 
 void main() {
   group('timetables', () {
-    int i = 1;
+    var i = 1;
     for (var testCase in ttTestCases) test('case ${i++}', testCase.run);
   });
 }

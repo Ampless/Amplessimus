@@ -51,8 +51,8 @@ class English extends Language {
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
     if (sub == null) return 'null';
-    String notesaddon =
-        sub.notes != null && sub.notes.length > 0 ? ' (${sub.notes})' : '';
+    var notesaddon =
+        sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Free lesson${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
         : 'Substituted by ${sub.teacher}$notesaddon';
@@ -61,12 +61,12 @@ class English extends Language {
   @override
   String dsbSubtoTitle(DsbSubstitution sub) {
     if (sub == null) return 'null';
-    String hour = '';
+    var hour = '';
     if (sub.hours != null) {
-      for (int h in sub.hours) {
-        if (hour.length > 0) hour += '-';
+      for (var h in sub.hours) {
+        if (hour.isNotEmpty) hour += '-';
         hour += h.toString();
-        int r = h % 10;
+        var r = h % 10;
         if (r == 1)
           hour += 'st';
         else if (r == 2)

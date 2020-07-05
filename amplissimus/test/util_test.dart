@@ -28,7 +28,7 @@ List<HttpTestCase> httpTestCases = [
 
 void main() {
   group('dsbutil', () {
-    int i = 1;
+    var i = 1;
     for (var testCase in httpTestCases)
       test('http case ${i++}', () {
         if (testCase.method == HttpMethod.GET)
@@ -42,10 +42,10 @@ void main() {
           throw 'The test is broken.';
       });
     test('htmlcodes', () {
-      String keys = '&lulwdisisnocode;&#9773;';
-      for (String key in htmlcodes.keys) keys += key + 'kekw ';
-      String values = '&lulwdisisnocode;☭';
-      for (String value in htmlcodes.values) values += value + 'kekw ';
+      var keys = '&lulwdisisnocode;&#9773;';
+      for (var key in htmlcodes.keys) keys += key + 'kekw ';
+      var values = '&lulwdisisnocode;☭';
+      for (var value in htmlcodes.values) values += value + 'kekw ';
       assert(htmlUnescape(keys) == values);
     });
   });

@@ -66,12 +66,11 @@ Widget ampFormField(
     bool obscureText = false,
     List<String> autofillHints,
     Widget suffixIcon}) {
-  if (suffixIcon == null)
-    suffixIcon = Container(
+  suffixIcon ??= Container(
       height: 0,
       width: 0,
     );
-  if (autofillHints == null) autofillHints = [];
+  autofillHints ??= [];
   return TextFormField(
     obscureText: obscureText,
     style: AmpColors.textStyleForeground,

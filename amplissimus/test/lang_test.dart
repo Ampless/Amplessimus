@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 List<void Function(Language)> foreachLangTestCases = [
   (lang) {
-    for (TTDay day in TTDay.values) lang.ttDayToString(day);
+    for (var day in TTDay.values) lang.ttDayToString(day);
   },
   (lang) {
     assert(Language.fromCode(lang.code) == lang);
@@ -42,7 +42,7 @@ List<void Function(Language)> foreachLangTestCases = [
 
 void main() {
   group('lang', () {
-    for (int i = 0; i < foreachLangTestCases.length; i++)
+    for (var i = 0; i < foreachLangTestCases.length; i++)
       for (var lang in Language.all)
         test('case ${i + 1} for $lang', () => foreachLangTestCases[i](lang));
     test('case 2 for null', () {

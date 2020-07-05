@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/intutils.dart';
-import 'package:Amplissimus/formatutil.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
@@ -15,11 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 
-const String _DSB_BUNDLE_ID = "de.heinekingmedia.dsbmobile";
-const String _DSB_DEVICE = "SM-G950F";
-const String _DSB_VERSION = "2.5.9";
-const String _DSB_OS_VERSION = "29 10.0";
-const String _DSB_LANGUAGE = "de";
+const String _DSB_BUNDLE_ID = 'de.heinekingmedia.dsbmobile';
+const String _DSB_DEVICE = 'SM-G950F';
+const String _DSB_VERSION = '2.5.9';
+const String _DSB_OS_VERSION = '29 10.0';
+const String _DSB_LANGUAGE = 'de';
 
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -54,10 +53,10 @@ class DsbSubstitution {
   static final int zero = '0'.codeUnitAt(0), nine = '9'.codeUnitAt(0);
 
   static List<int> parseIntsFromString(String s) {
-    List<int> out = [];
-    int lastindex = 0;
-    for (int i = 0; i < s.length; i++) {
-      int c = s[i].codeUnitAt(0);
+    var out = <int>[];
+    var lastindex = 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i].codeUnitAt(0);
       if (c < zero || c > nine) {
         if (lastindex != i) out.add(int.parse(s.substring(lastindex, i)));
         lastindex = i + 1;
@@ -99,12 +98,13 @@ class DsbSubstitution {
     return e.innerHtml.replaceAll(RegExp(r'</?.+?>'), '').trim();
   }
 
+  @override
   String toString() =>
       "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
   static bool _isNum(String s, int i) {
     if (s == null) return false;
-    int codeUnit = s.codeUnitAt(i);
+    var codeUnit = s.codeUnitAt(i);
     return codeUnit >= zero && codeUnit <= nine;
   }
 
@@ -116,8 +116,8 @@ class DsbSubstitution {
     if (_isNum(subject, 0) || _isNum(subject, subject.length - 1))
       return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang: lang)} '
           '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';
-    String sub = subject.toLowerCase();
-    String s = subject;
+    var sub = subject.toLowerCase();
+    var s = subject;
     lang.subjectLut.forEach((key, value) {
       if (sub.startsWith(key)) s = value;
     });
@@ -125,8 +125,8 @@ class DsbSubstitution {
   }
 
   List<int> get actualHours {
-    List<int> h = [];
-    for (int i = min(hours); i <= max(hours); i++) h.add(i);
+    var h = <int>[];
+    for (var i = min(hours); i <= max(hours); i++) h.add(i);
     return h;
   }
 }
@@ -150,21 +150,22 @@ class DsbPlan {
       };
 
   List<Map<String, dynamic>> subsToJson() {
-    List<Map<String, dynamic>> lessonsStrings = [];
-    for (DsbSubstitution sub in subs) {
+    var lessonsStrings = <Map<String, dynamic>>[];
+    for (var sub in subs) {
       lessonsStrings.add(sub.toJson());
     }
     return lessonsStrings;
   }
 
   static List<DsbSubstitution> subsFromJson(dynamic subsStrings) {
-    List<DsbSubstitution> tempSubs = new List();
+    var tempSubs = <DsbSubstitution>[];
     for (dynamic tempString in subsStrings) {
       tempSubs.add(DsbSubstitution.fromJson(tempString));
     }
     return tempSubs;
   }
 
+  @override
   String toString() => '$day: $subs';
 }
 
@@ -177,8 +178,8 @@ Future<String> dsbGetData(String username, String password,
             void Function(String, String, Duration) setCache})
         httpPost = httpPost,
     @required Language lang}) async {
-  String datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
-  String json = '{'
+  var datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
+  var json = '{'
       '"UserId":"$username",'
       '"UserPw":"$password",'
       '"AppVersion":"$_DSB_VERSION",'
@@ -204,7 +205,7 @@ Future<String> dsbGetData(String username, String password,
                   '}'
                   '}',
               '$apiEndpoint\t$username\t$password',
-              {"content-type": "application/json"},
+              {'content-type': 'application/json'},
               getCache: cachePostRequests ? Prefs.getCache : null,
             ),
           )['d'],
@@ -226,7 +227,7 @@ Future<Map<String, String>> dsbGetHtml(String jsontext,
   var json = jsonDecode(jsontext);
   if (json['Resultcode'] != 0) throw json['ResultStatusInfo'];
   json = json['ResultMenuItems'][0]['Childs'][0];
-  Map<String, String> map = {};
+  var map = <String, String>{};
   for (var plan in json['Root']['Childs']) {
     String url = plan['Childs'][0]['Detail'];
     map[plan['Title']] = await httpGet(
@@ -260,9 +261,9 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
         httpPost = httpPost,
     void Function({String ctx, Object message}) logInfo = ampInfo,
     @required Language lang}) async {
-  List<DsbPlan> plans = [];
+  var plans = <DsbPlan>[];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
-  String json = await dsbGetData(username, password,
+  var json = await dsbGetData(username, password,
       cachePostRequests: cachePostRequests, httpPost: httpPost, lang: lang);
   var htmls = await dsbGetHtml(json,
       cacheGetRequests: cacheGetRequests, httpGet: httpGet);
@@ -286,25 +287,25 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
 DsbPlan dsbParseHtml(String title, String res,
     {void Function({String ctx, Object message}) logInfo = ampInfo}) {
   logInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-  List<dom.Element> html =
+  var html =
       HtmlParser(res).parse().children[0].children[1].children; //body
-  String planTitle = _searchHtml(html, 'mon_title').innerHtml;
+  var planTitle = _searchHtml(html, 'mon_title').innerHtml;
   html = _searchHtml(html, 'mon_list')
       .children
       .first
       .children; //for some reason <table>s like to contain <tbody>s
-  List<DsbSubstitution> subs = [];
-  for (int i = 1; i < html.length; i++)
+  var subs = <DsbSubstitution>[];
+  for (var i = 1; i < html.length; i++)
     subs.add(DsbSubstitution.fromElementArray(html[i].children));
   return DsbPlan(ttMatchDay(planTitle), subs, planTitle);
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
-  if (stage == null) stage = '';
-  if (char == null) char = '';
-  for (DsbPlan plan in plans) {
-    List<DsbSubstitution> subs = [];
-    for (DsbSubstitution sub in plan.subs) {
+  stage ??= '';
+  char ??= '';
+  for (var plan in plans) {
+    var subs = <DsbSubstitution>[];
+    for (var sub in plan.subs) {
       if (sub.affectedClass.contains(stage) &&
           sub.affectedClass.contains(char)) {
         subs.add(sub);
@@ -316,14 +317,14 @@ List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
 }
 
 List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
-  for (DsbPlan plan in plans)
+  for (var plan in plans)
     plan.subs.sort((a, b) => max(a.hours).compareTo(max(b.hours)));
   return plans;
 }
 
 Widget dsbGetGoodList(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
-  List<Widget> widgets = [];
+  var widgets = <Widget>[];
   _initializeTheme(widgets, plans);
   widgets.add(Padding(padding: EdgeInsets.all(12)));
   updateTimetableDays(plans);
@@ -342,9 +343,9 @@ Future<Null> dsbUpdateWidget(Function f,
     bool cachePostRequests = true,
     bool cacheJsonPlans = false}) async {
   try {
-    if (Prefs.username.length == 0 || Prefs.password.length == 0)
+    if (Prefs.username.isEmpty || Prefs.password.isEmpty)
       throw CustomValues.lang.noLogin;
-    String jsonCache = Prefs.dsbJsonCache;
+    var jsonCache = Prefs.dsbJsonCache;
     List<DsbPlan> plans;
     if (!cacheJsonPlans || jsonCache == null) {
       plans = await dsbGetAllSubs(Prefs.username, Prefs.password,
@@ -408,18 +409,18 @@ Widget _getWidget(List<Widget> dayW, int theme) => getThemedWidget(
     Column(mainAxisSize: MainAxisSize.min, children: dayW), theme);
 
 void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
-  for (DsbPlan plan in plans) {
-    List<Widget> dayWidgets = [];
-    if (plan.subs.length == 0) {
+  for (var plan in plans) {
+    var dayWidgets = <Widget>[];
+    if (plan.subs.isEmpty) {
       dayWidgets.add(ListTile(
         title: Text(CustomValues.lang.noSubs,
             style: AmpColors.textStyleForeground),
       ));
     }
-    int i = 0;
-    int iMax = plan.subs.length;
-    for (DsbSubstitution sub in plan.subs) {
-      String titleSub = CustomValues.lang.dsbSubtoTitle(sub);
+    var i = 0;
+    var iMax = plan.subs.length;
+    for (var sub in plan.subs) {
+      var titleSub = CustomValues.lang.dsbSubtoTitle(sub);
       if (CustomValues.isAprilFools)
         titleSub = '${Random().nextInt(98) + 1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
@@ -463,15 +464,15 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
 }
 
 String plansToJson(List<DsbPlan> plans) {
-  List<dynamic> plansStrings = [];
-  for (DsbPlan plan in plans) {
+  var plansStrings = [];
+  for (var plan in plans) {
     plansStrings.add(plan.toJson());
   }
   return jsonEncode(plansStrings);
 }
 
 List<DsbPlan> plansFromJson(String jsonPlans) {
-  List<DsbPlan> plans = [];
+  var plans = <DsbPlan>[];
   for (dynamic tempString in jsonDecode(jsonPlans)) {
     plans.add(DsbPlan.fromJson(tempString));
   }

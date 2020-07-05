@@ -55,7 +55,7 @@ class RegisterTimetableScreenPageState
   bool tempCurrentTTLessonIsFree = false;
 
   void updateTTColumn(int newLength, TTDay day) {
-    int index = TTDay.values.indexOf(currentDropdownDay);
+    var index = TTDay.values.indexOf(currentDropdownDay);
     if (ttColumn.lessons.length <= newLength) {
       for (var i = 0; i < newLength; i++) {
         if (i + 1 > CustomValues.ttColumns[index].lessons.length) {
@@ -288,7 +288,7 @@ class RegisterTimetableScreenPageState
               backgroundColor: AmpColors.colorBackground,
               splashColor: AmpColors.colorForeground,
               onPressed: () async {
-                dsbUpdateWidget(() {});
+                await dsbUpdateWidget(() {});
                 ttSaveToPrefs(CustomValues.ttColumns);
                 Animations.changeScreenEaseOutBackReplace(
                   MyApp(

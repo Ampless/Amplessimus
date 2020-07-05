@@ -20,8 +20,8 @@ String getCache(String url) =>
     _prefs.getString('CACHE_VAL_${_hashCache(url)}', null);
 
 void setCache(String url, String html, Duration ttl) {
-  String hash = _hashCache(url);
-  List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  var hash = _hashCache(url);
+  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
   if (!cachedHashes.contains(hash)) cachedHashes.add(hash);
   _prefs.setStringList('CACHE_URLS', cachedHashes);
   _prefs.setString('CACHE_VAL_$hash', html);
@@ -30,24 +30,24 @@ void setCache(String url, String html, Duration ttl) {
 }
 
 void flushCache() {
-  List<String> toRemove = [];
-  List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  for (String hash in cachedHashes) {
-    int ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
+  var toRemove = <String>[];
+  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  for (var hash in cachedHashes) {
+    var ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
     if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) continue;
     toRemove.add(hash);
     _prefs.setString('CACHE_VAL_$hash', null);
     _prefs.setInt('CACHE_TTL_$hash', null);
   }
-  if (toRemove.length == 0) return;
+  if (toRemove.isEmpty) return;
   cachedHashes.removeWhere((element) => toRemove.contains(element));
   _prefs.setStringList('CACHE_URLS', cachedHashes);
 }
 
 void clearCache() {
-  List<String> cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  if (cachedHashes.length == 0) return;
-  for (String hash in cachedHashes) {
+  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  if (cachedHashes.isEmpty) return;
+  for (var hash in cachedHashes) {
     _prefs.setString('CACHE_VAL_$hash', null);
     _prefs.setInt('CACHE_TTL_$hash', null);
     ampInfo(ctx: 'CACHE', message: 'Removed $hash');
@@ -57,7 +57,7 @@ void clearCache() {
 
 void listCache() {
   print('{');
-  for (String hash in _prefs.getStringList('CACHE_URLS', []))
+  for (var hash in _prefs.getStringList('CACHE_URLS', []))
     print(
         '  {hash=\'$hash\',len=${_prefs.getString('CACHE_VAL_$hash', '').length},ttl=${_prefs.getInt('CACHE_TTL_$hash', -1)}},');
   print('}');

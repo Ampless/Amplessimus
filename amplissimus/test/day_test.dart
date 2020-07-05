@@ -49,7 +49,7 @@ List<DayTestCase> dayTestCases = [
 
 void main() {
   group('day', () {
-    int i = 1;
+    var i = 1;
     for (var testCase in dayTestCases) test('case ${i++}', testCase.run);
   });
 }

@@ -40,11 +40,11 @@ class CustomValues {
 
   static void generateNewTTColumns() {
     ttColumns = [];
-    List<TTLesson> tempLessons = [];
+    var tempLessons = <TTLesson>[];
     for (var i = 0; i < 6; i++) {
       tempLessons.add(TTLesson('', '', '', false));
     }
-    for (TTDay day in TTDay.values) {
+    for (var day in TTDay.values) {
       ttColumns.add(TTColumn(tempLessons, day));
     }
   }
@@ -58,7 +58,7 @@ class AmpStrings {
 
 class AmpColors {
   static MaterialColor _color(int code) {
-    Color c = Color(code);
+    var c = Color(code);
     return MaterialColor(code, {
       50: c,
       100: c,
@@ -73,8 +73,8 @@ class AmpColors {
     });
   }
 
-  static MaterialColor _primaryBlack = _color(0xFF000000);
-  static MaterialColor _primaryWhite = _color(0xFFFFFFFF);
+  static final MaterialColor _primaryBlack = _color(0xFF000000);
+  static final MaterialColor _primaryWhite = _color(0xFFFFFFFF);
   static MaterialColor get materialColorForeground =>
       isDarkMode ? _primaryWhite : _primaryBlack;
   static MaterialColor get materialColorBackground =>

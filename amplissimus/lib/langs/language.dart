@@ -63,7 +63,7 @@ abstract class Language {
 
   static Language fromCode(String code) {
     if (code == null) return _langs[0];
-    for (Language lang in _langs)
+    for (var lang in _langs)
       if (code.contains(lang.code) || lang.code.contains(code)) return lang;
     return _langs[0];
   }

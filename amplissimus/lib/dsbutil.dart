@@ -23,11 +23,11 @@ Color get rcolor => Color.fromARGB(255, _r(256), _r(256), _r(256));
 String v4() => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
 
 String htmlUnescape(String data) {
-  if (data.indexOf('&') == -1) return data;
-  StringBuffer buf = new StringBuffer();
-  int offset = 0;
+  if (!data.contains('&')) return data;
+  var buf = StringBuffer();
+  var offset = 0;
   while (true) {
-    int nextAmp = data.indexOf('&', offset);
+    var nextAmp = data.indexOf('&', offset);
     if (nextAmp == -1) {
       buf.write(data.substring(offset));
       break;
@@ -36,20 +36,20 @@ String htmlUnescape(String data) {
     offset = nextAmp;
     var chunk = data.substring(offset, min(data.length, offset + 18));
     if (chunk.length > 4 && chunk.codeUnitAt(1) == 35) {
-      int nextSemicolon = chunk.indexOf(';');
+      var nextSemicolon = chunk.indexOf(';');
       if (nextSemicolon != -1) {
         var hex = chunk.codeUnitAt(2) == 120;
         var str = chunk.substring(hex ? 3 : 2, nextSemicolon);
-        int ord = int.tryParse(str, radix: hex ? 16 : 10);
+        var ord = int.tryParse(str, radix: hex ? 16 : 10);
         if (ord != null) {
-          buf.write(new String.fromCharCode(ord));
+          buf.write(String.fromCharCode(ord));
           offset += nextSemicolon + 1;
           continue;
         }
       }
     }
     var replaced = false;
-    for (int i = 0; i < htmlcodes.keys.length; i++) {
+    for (var i = 0; i < htmlcodes.keys.length; i++) {
       var key = htmlcodes.keys[i];
       if (chunk.startsWith(key)) {
         var replacement = htmlcodes.values[i];
@@ -75,7 +75,7 @@ Future<String> httpPost(
     void Function(String, String, Duration) setCache = Prefs.setCache,
     bool log = true}) async {
   if (getCache != null) {
-    String cachedResp = getCache(id);
+    var cachedResp = getCache(id);
     if (cachedResp != null) return cachedResp;
   }
   if (log) ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
@@ -85,7 +85,7 @@ Future<String> httpPost(
   var res = await req.close();
   var bytes = await res.toList();
   if (log) ampInfo(ctx: 'HTTP][POST', message: 'Done.');
-  List<int> actualBytes = [];
+  var actualBytes = <int>[];
   for (var b in bytes) actualBytes.addAll(b);
   var r = utf8.decode(actualBytes);
   if (res.statusCode == 200 && setCache != null)
@@ -98,7 +98,7 @@ Future<String> httpGet(Uri url,
     void Function(String, String, Duration) setCache = Prefs.setCache,
     bool log = true}) async {
   if (getCache != null) {
-    String cachedResp = getCache('$url');
+    var cachedResp = getCache('$url');
     if (cachedResp != null) return cachedResp;
   }
   if (log) ampInfo(ctx: 'HTTP][GET', message: '$url');
@@ -106,9 +106,9 @@ Future<String> httpGet(Uri url,
   await req.flush();
   var res = await req.close();
   var bytes = await res.toList();
-  List<int> actualBytes = [];
+  var actualBytes = <int>[];
   for (var b in bytes) actualBytes.addAll(b);
-  String r = htmlUnescape(String.fromCharCodes(actualBytes))
+  var r = htmlUnescape(String.fromCharCodes(actualBytes))
       .replaceAll('\n', '')
       .replaceAll('\r', '')
       //just fyi: these regexes only work because there are no more newlines

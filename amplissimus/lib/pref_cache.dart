@@ -7,17 +7,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CachedSharedPreferences {
   SharedPreferences _prefs;
   RandomAccessFile _prefFile;
-  Mutex _prefFileMutex = Mutex();
-  List<String> _editsString = [];
-  List<String> _editsInt = [];
-  List<String> _editsDouble = [];
-  List<String> _editsBool = [];
-  List<String> _editsStrings = [];
-  Map<String, String> _cacheString = {};
-  Map<String, int> _cacheInt = {};
-  Map<String, double> _cacheDouble = {};
-  Map<String, bool> _cacheBool = {};
-  Map<String, List<String>> _cacheStrings = {};
+  final Mutex _prefFileMutex = Mutex();
+  final List<String> _editsString = [];
+  final List<String> _editsInt = [];
+  final List<String> _editsDouble = [];
+  final List<String> _editsBool = [];
+  final List<String> _editsStrings = [];
+  final Map<String, String> _cacheString = {};
+  final Map<String, int> _cacheInt = {};
+  final Map<String, double> _cacheDouble = {};
+  final Map<String, bool> _cacheBool = {};
+  final Map<String, List<String>> _cacheStrings = {};
 
   bool _platformSupportsSharedPrefs;
 
@@ -81,8 +81,8 @@ class CachedSharedPreferences {
       else
         return defaultValue;
     }
-    int i = _prefs.getInt(key);
-    if (i == null) i = defaultValue;
+    var i = _prefs.getInt(key);
+    i ??= defaultValue;
     return i;
   }
 
@@ -94,8 +94,8 @@ class CachedSharedPreferences {
       else
         return defaultValue;
     }
-    double d = _prefs.getDouble(key);
-    if (d == null) d = defaultValue;
+    var d = _prefs.getDouble(key);
+    d ??= defaultValue;
     return d;
   }
 
@@ -107,8 +107,8 @@ class CachedSharedPreferences {
       else
         return defaultValue;
     }
-    String s = _prefs.getString(key);
-    if (s == null) s = defaultValue;
+    var s = _prefs.getString(key);
+    s ??= defaultValue;
     return s;
   }
 
@@ -120,8 +120,8 @@ class CachedSharedPreferences {
       else
         return defaultValue;
     }
-    bool b = _prefs.getBool(key);
-    if (b == null) b = defaultValue;
+    var b = _prefs.getBool(key);
+    b ??= defaultValue;
     return b;
   }
 
@@ -133,8 +133,8 @@ class CachedSharedPreferences {
       else
         return defaultValue;
     }
-    List<String> s = _prefs.getStringList(key);
-    if (s == null) s = defaultValue;
+    var s = _prefs.getStringList(key);
+    s ??= defaultValue;
     return s;
   }
 
@@ -143,22 +143,22 @@ class CachedSharedPreferences {
       await _prefFileMutex.acquire();
       await _prefFile.setPosition(0);
       await _prefFile.truncate(0);
-      List<dynamic> prefs = [];
+      var prefs = [];
       for (var k in _cacheString.keys)
         if (_cacheString[k] != null)
-          prefs.add({"k": k, "v": _cacheString[k], "t": 0});
+          prefs.add({'k': k, 'v': _cacheString[k], 't': 0});
       for (var k in _cacheInt.keys)
         if (_cacheInt[k] != null)
-          prefs.add({"k": k, "v": _cacheInt[k], "t": 1});
+          prefs.add({'k': k, 'v': _cacheInt[k], 't': 1});
       for (var k in _cacheDouble.keys)
         if (_cacheDouble[k] != null)
-          prefs.add({"k": k, "v": _cacheDouble[k], "t": 2});
+          prefs.add({'k': k, 'v': _cacheDouble[k], 't': 2});
       for (var k in _cacheBool.keys)
         if (_cacheBool[k] != null)
-          prefs.add({"k": k, "v": _cacheBool[k] ? 1 : 0, "t": 3});
+          prefs.add({'k': k, 'v': _cacheBool[k] ? 1 : 0, 't': 3});
       for (var k in _cacheStrings.keys)
         if (_cacheStrings[k] != null)
-          prefs.add({"k": k, "v": _cacheStrings[k], "t": 4});
+          prefs.add({'k': k, 'v': _cacheStrings[k], 't': 4});
       await _prefFile.writeString(jsonEncode(prefs));
       await _prefFile.flush();
       _prefFileMutex.release();
@@ -174,11 +174,11 @@ class CachedSharedPreferences {
     }
     if (_platformSupportsSharedPrefs) {
       _prefs = await SharedPreferences.getInstance();
-      for (String key in _editsString) setString(key, _cacheString[key]);
-      for (String key in _editsInt) setInt(key, _cacheInt[key]);
-      for (String key in _editsDouble) setDouble(key, _cacheDouble[key]);
-      for (String key in _editsBool) setBool(key, _cacheBool[key]);
-      for (String key in _editsStrings) setStringList(key, _cacheStrings[key]);
+      for (var key in _editsString) await setString(key, _cacheString[key]);
+      for (var key in _editsInt) await setInt(key, _cacheInt[key]);
+      for (var key in _editsDouble) await setDouble(key, _cacheDouble[key]);
+      for (var key in _editsBool) await setBool(key, _cacheBool[key]);
+      for (var key in _editsStrings) await setStringList(key, _cacheStrings[key]);
       _editsString.clear();
       _editsInt.clear();
       _editsDouble.clear();

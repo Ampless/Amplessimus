@@ -54,12 +54,12 @@ int ttDayToInt(TTDay day) {
   }
 }
 
-List<DsbPlan> timetablePlans = new List();
+List<DsbPlan> timetablePlans = [];
 
 List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
 void updateTimetableDays(List<DsbPlan> plans) {
-  timetableDays = new List();
-  for (DsbPlan plan in plans) {
+  timetableDays = [];
+  for (var plan in plans) {
     timetableDays.add(plan.day);
   }
   print(timetableDays);
@@ -106,15 +106,15 @@ class TTColumn {
       };
 
   List<dynamic> lessonsToJson(List<TTLesson> lessons) {
-    List<dynamic> lessonsStrings = [];
-    for (TTLesson lesson in lessons) {
+    var lessonsStrings = <dynamic>[];
+    for (var lesson in lessons) {
       lessonsStrings.add(lesson.toJson());
     }
     return lessonsStrings;
   }
 
   static List<TTLesson> lessonsFromJson(List<dynamic> lessonsStrings) {
-    List<TTLesson> tempLessons = new List();
+    var tempLessons = <TTLesson>[];
     for (dynamic tempString in lessonsStrings) {
       tempLessons.add(TTLesson.fromJson(tempString));
     }
@@ -134,7 +134,7 @@ const List<TTDay> ttWeek = [
 ];
 
 TTDay ttMatchDay(String s) {
-  if (s == null || s.length == 0) return TTDay.Null;
+  if (s == null || s.isEmpty) return TTDay.Null;
   s = s.toLowerCase();
   if (s.contains('null') || s.contains('none'))
     return TTDay.Null;
@@ -161,12 +161,12 @@ bool _subjectsEqual(String s1, String s2) {
 }
 
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
-  for (DsbPlan plan in plans) {
-    for (int i = 0; i < table.length; i++) {
+  for (var plan in plans) {
+    for (var i = 0; i < table.length; i++) {
       if (table[i].day == plan.day) {
-        TTColumn column = table[i];
-        for (int i = 0; i < column.lessons.length; i++) {
-          for (DsbSubstitution sub in plan.subs) {
+        var column = table[i];
+        for (var i = 0; i < column.lessons.length; i++) {
+          for (var sub in plan.subs) {
             if (sub.actualHours.contains(i + 1) &&
                 _subjectsEqual(sub.subject, column.lessons[i].subject)) {
               column.lessons[i].teacher = sub.teacher;
@@ -183,14 +183,14 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
 
 String ttToJson(List<TTColumn> tt) {
   if(tt == null) return '[]';
-  List columns = [];
+  var columns = [];
   for (var column in tt) columns.add(column.toJson());
   return jsonEncode(columns);
 }
 
 List<TTColumn> ttFromJson(String jsontext) {
   if (jsontext == null) return [];
-  List<TTColumn> table = [];
+  var table = <TTColumn>[];
   List columns = jsonDecode(jsontext);
   for (dynamic s in columns) table.add(TTColumn.fromJson(s));
   return table;
@@ -200,27 +200,27 @@ void ttSaveToPrefs(List<TTColumn> table) => Prefs.jsonTimetable = ttToJson(table
 List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
 List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
-  List<DsbPlan> tempPlans =
+  var tempPlans =
       dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
-  List<Widget> widgets = [];
-  for (DsbPlan plan in tempPlans) {
-    int ttColumnIndex = TTDay.values.indexOf(plan.day);
+  var widgets = <Widget>[];
+  for (var plan in tempPlans) {
+    var ttColumnIndex = TTDay.values.indexOf(plan.day);
     widgets.add(
       ListTile(
           title: Text(' ${CustomValues.lang.ttDayToString(plan.day)}',
               style:
                   TextStyle(color: AmpColors.colorForeground, fontSize: 24))),
     );
-    List<Widget> unthemedWidgets = [];
-    List<TTLesson> lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
-    int tempLength = lessons.length;
-    for (TTLesson lesson in lessons) {
-      bool finishedFiltering = false;
-      int lessonIndex = lessons.indexOf(lesson) + 1;
-      String titleString = '';
-      String trailingString = '';
-      String notesString = '';
-      bool isReplaced = false;
+    var unthemedWidgets = <Widget>[];
+    var lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
+    var tempLength = lessons.length;
+    for (var lesson in lessons) {
+      var finishedFiltering = false;
+      var lessonIndex = lessons.indexOf(lesson) + 1;
+      var titleString = '';
+      var trailingString = '';
+      var notesString = '';
+      var isReplaced = false;
       if (filtered) {
         if (plan.subs.isEmpty) {
           if (lesson.isFree)
@@ -231,7 +231,7 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
           }
           notesString = lesson.notes;
         }
-        for (DsbSubstitution sub in plan.subs) {
+        for (var sub in plan.subs) {
           if (!finishedFiltering) {
             if (sub.hours.contains(lessonIndex)) {
               titleString = DsbSubstitution.realSubject(sub.subject,
@@ -239,8 +239,8 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
               notesString = CustomValues.lang.dsbSubtoSubtitle(sub);
               if (!sub.isFree) {
                 trailingString = sub.teacher;
-                String notesaddon =
-                    sub.notes.length > 0 ? ' (${sub.notes})' : '';
+                var notesaddon =
+                    sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
                 notesString = CustomValues.lang.substitution + notesaddon;
               }
               isReplaced = true;

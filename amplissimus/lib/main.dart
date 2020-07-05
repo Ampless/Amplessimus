@@ -128,9 +128,7 @@ class MyApp extends StatelessWidget {
           initialIndex: initialIndex,
         ),
       ),
-      onWillPop: () {
-        return new Future(() => Prefs.closeAppOnBackPress);
-      },
+      onWillPop: () => Future(() => Prefs.closeAppOnBackPress),
     );
   }
 }
@@ -201,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Future<Null> rebuildDragDown() async {
+    // ignore: unawaited_futures
     refreshKey.currentState?.show();
     await dsbUpdateWidget(rebuild,
         cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
@@ -262,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void showInputChangeLanguage(BuildContext context) {
-    Language lang = CustomValues.lang;
+    var lang = CustomValues.lang;
     ampSelectionDialog(
       context: context,
       title: CustomValues.lang.changeLanguage,
@@ -344,8 +343,8 @@ class _MyHomePageState extends State<MyHomePage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: () => Navigator.of(context).pop(),
         onSave: () {
-          bool condA = passwordInputFormKey.currentState.validate();
-          bool condB = usernameInputFormKey.currentState.validate();
+          var condA = passwordInputFormKey.currentState.validate();
+          var condB = usernameInputFormKey.currentState.validate();
           if (!condA || !condB) return;
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();
@@ -357,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Widget get changeSubVisibilityWidget {
-    bool display = true;
+    var display = true;
     Widget widget;
     if (Prefs.grade == '' && Prefs.char == '') display = false;
     display
@@ -394,7 +393,7 @@ class _MyHomePageState extends State<MyHomePage>
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     if (dsbWidget == null) rebuildNewBuild();
-    List<Widget> containers = [
+    var containers = [
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
         color: AmpColors.colorBackground,
@@ -573,7 +572,7 @@ class _MyHomePageState extends State<MyHomePage>
                   if (Prefs.useSystemTheme) {
                     var brightness =
                         SchedulerBinding.instance.window.platformBrightness;
-                    bool darkModeEnabled = brightness != Brightness.light;
+                    var darkModeEnabled = brightness != Brightness.light;
                     if (darkModeEnabled != Prefs.isDarkMode) {
                       AmpColors.switchMode();
                       setState(() {

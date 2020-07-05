@@ -226,10 +226,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               floatingActionButton: FloatingActionButton.extended(
                 elevation: 0,
                 onPressed: () async {
-                  bool condA = FirstLoginValues
+                  var condA = FirstLoginValues
                       .passwordInputFormKey.currentState
                       .validate();
-                  bool condB = FirstLoginValues
+                  var condB = FirstLoginValues
                       .usernameInputFormKey.currentState
                       .validate();
                   if (!condA || !condB) return;
@@ -298,7 +298,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   Prefs.firstLogin = false;
                   setState(() => dsbWidgetIsLoading = false);
                   await dsbUpdateWidget(() => setState(() {}));
-                  Navigator.pushReplacement(
+                  await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => MyApp(initialIndex: 0)));
