@@ -32,7 +32,7 @@ List<void Function(Language)> foreachLangTestCases = [
   },
   (lang) {
     lang.dsbSubtoTitle(
-        DsbSubstitution('lul', [1, 3, 5], 'kek', 'sub', 'not', false));
+        DsbSubstitution('lul', [1, 3, 5], 'kek', '1sk1', 'not', false));
   },
   (lang) {
     lang.dsbSubtoSubtitle(

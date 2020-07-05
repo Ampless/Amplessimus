@@ -13,15 +13,14 @@ String _x(int i) => (i < 16 ? '0' : '') + i.toRadixString(16);
 
 var rand = Random();
 int _r(int max) => rand.nextInt(max);
-String get _100 => _x(_r(0x100));
-String get _104 => _x(_r(0x10) | 0x40);
-String get _408 => _x(_r(0x40) | 0x80);
+String get _r0 => _x(_r(0x100));
+String get _r2 => _r0 + _r0;
+String get _r4 => _x(_r(0x10) | 0x40);
+String get _r8 => _x(_r(0x40) | 0x80);
 
-int get rbyte => _r(256);
-Color get rcolor => Color.fromARGB(255, rbyte, rbyte, rbyte);
+Color get rcolor => Color.fromARGB(255, _r(256), _r(256), _r(256));
 
-String v4() =>
-    '$_100$_100$_100$_100-$_100$_100-$_104$_100-$_408$_100-$_100$_100$_100$_100$_100$_100';
+String v4() => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
 
 String htmlUnescape(String data) {
   if (data.indexOf('&') == -1) return data;
@@ -79,13 +78,13 @@ Future<String> httpPost(
     String cachedResp = getCache(id);
     if (cachedResp != null) return cachedResp;
   }
-  if(log) ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
+  if (log) ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
   var req = await _httpClient.postUrl(url);
   headers.forEach((key, value) => req.headers.add(key, value));
   req.writeln(body);
   var res = await req.close();
   var bytes = await res.toList();
-  if(log) ampInfo(ctx: 'HTTP][POST', message: 'Done.');
+  if (log) ampInfo(ctx: 'HTTP][POST', message: 'Done.');
   List<int> actualBytes = [];
   for (var b in bytes) actualBytes.addAll(b);
   var r = utf8.decode(actualBytes);
@@ -102,7 +101,7 @@ Future<String> httpGet(Uri url,
     String cachedResp = getCache('$url');
     if (cachedResp != null) return cachedResp;
   }
-  if(log) ampInfo(ctx: 'HTTP][GET', message: '$url');
+  if (log) ampInfo(ctx: 'HTTP][GET', message: '$url');
   var req = await _httpClient.getUrl(url);
   await req.flush();
   var res = await req.close();
@@ -131,7 +130,7 @@ Future<String> httpGet(Uri url,
       .replaceAll(RegExp(r' +'), ' ')
       .replaceAll(RegExp(r'<br />'), '')
       .replaceAll(RegExp(r'<!-- .*? -->'), '');
-  if(log) ampInfo(ctx: 'HTTP][GET', message: 'Done.');
+  if (log) ampInfo(ctx: 'HTTP][GET', message: 'Done.');
   if (res.statusCode == 200 && setCache != null)
     setCache('$url', r, Duration(days: 4));
   return r;

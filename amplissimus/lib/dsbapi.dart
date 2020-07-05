@@ -161,7 +161,7 @@ class DsbPlan {
         date = json['date'],
         subs = subsFromJson(json['subs']);
 
-  Map<String, dynamic> toJson() => {
+  dynamic toJson() => {
         'day': ttDayToInt(day),
         'date': date,
         'subs': subsToJson(),
@@ -506,7 +506,7 @@ String plansToPlist(List<DsbPlan> plans) {
 }
 
 String plansToJson(List<DsbPlan> plans) {
-  List<Map<String, dynamic>> plansStrings = [];
+  List<dynamic> plansStrings = [];
   for (DsbPlan plan in plans) {
     plansStrings.add(plan.toJson());
   }

@@ -49,6 +49,25 @@ final List<DsbPlan> dsbTest2Expct = [
   ),
 ];
 
+void assertDsbPlanListsEqual(List<DsbPlan> l1, List<DsbPlan> l2) {
+  assert(l1.length == l2.length);
+  for (int i = 0; i < l1.length; i++) {
+    assert(l1[i].date == l2[i].date);
+    assert(l1[i].day == l2[i].day);
+    assert(l1[i].subs.length == l2[i].subs.length);
+    for (int j = 0; j < l1[i].subs.length; j++) {
+      assert(l1[i].subs[j].affectedClass == l2[i].subs[j].affectedClass);
+      assert(l1[i].subs[j].hours.length == l2[i].subs[j].hours.length);
+      for (int k = 0; k < l1[i].subs[j].hours.length; k++)
+        assert(l1[i].subs[j].hours[k] == l2[i].subs[j].hours[k]);
+      assert(l1[i].subs[j].isFree == l2[i].subs[j].isFree);
+      assert(l1[i].subs[j].notes == l2[i].subs[j].notes);
+      assert(l1[i].subs[j].subject == l2[i].subs[j].subject);
+      assert(l1[i].subs[j].teacher == l2[i].subs[j].teacher);
+    }
+  }
+}
+
 class DsbTestCase {
   String username;
   String password;
@@ -56,42 +75,36 @@ class DsbTestCase {
   List<DsbPlan> expectedPlans;
   String stage;
   String char;
+  Future<List<DsbPlan>> Function(
+      String, String, Function, Function, String, String) tfunc;
 
   DsbTestCase(this.username, this.password, this.htmlCache, this.expectedPlans,
-      this.stage, this.char);
+      this.stage, this.char,
+      {this.tfunc});
 
   void run() async {
-    var plans = dsbSearchClass(
-        await dsbGetAllSubs(username, password,
-            lang: Language.all.first,
-            httpGet: (url, {getCache, setCache}) =>
-                _getFromCache(url.toString()),
-            httpPost: (url, _, __, ___, {getCache, setCache}) =>
-                _getFromCache(url.toString()),
-            logInfo: ({ctx, message}) {},
-            cacheGetRequests: false,
-            cachePostRequests: false),
+    if (tfunc == null)
+      tfunc = (username, password, httpGet, httpPost, stage, char) async {
+        return dsbSortAllByHour(dsbSearchClass(
+            await dsbGetAllSubs(username, password,
+                lang: Language.all.first,
+                httpGet: httpGet,
+                httpPost: httpPost,
+                logInfo: ({ctx, message}) {},
+                cacheGetRequests: false,
+                cachePostRequests: false),
+            stage,
+            char));
+      };
+    var plans = await tfunc(
+        username,
+        password,
+        (url, {getCache, setCache}) => _getFromCache(url.toString()),
+        (url, _, __, ___, {getCache, setCache}) =>
+            _getFromCache(url.toString()),
         stage,
         char);
-    assert(plans.length == expectedPlans.length);
-    for (int i = 0; i < plans.length; i++) {
-      assert(plans[i].date == expectedPlans[i].date);
-      assert(plans[i].day == expectedPlans[i].day);
-      assert(plans[i].subs.length == expectedPlans[i].subs.length);
-      for (int j = 0; j < plans[i].subs.length; j++) {
-        assert(plans[i].subs[j].affectedClass ==
-            expectedPlans[i].subs[j].affectedClass);
-        assert(plans[i].subs[j].hours.length ==
-            expectedPlans[i].subs[j].hours.length);
-        for (int k = 0; k < plans[i].subs[j].hours.length; k++)
-          assert(
-              plans[i].subs[j].hours[k] == expectedPlans[i].subs[j].hours[k]);
-        assert(plans[i].subs[j].isFree == expectedPlans[i].subs[j].isFree);
-        assert(plans[i].subs[j].notes == expectedPlans[i].subs[j].notes);
-        assert(plans[i].subs[j].subject == expectedPlans[i].subs[j].subject);
-        assert(plans[i].subs[j].teacher == expectedPlans[i].subs[j].teacher);
-      }
-    }
+    assertDsbPlanListsEqual(plans, expectedPlans);
   }
 
   Future<String> _getFromCache(String url) async {
@@ -113,5 +126,15 @@ void main() {
   group('dsbapi', () {
     int i = 1;
     for (var testCase in dsbTestCases) test('case ${i++}', testCase.run);
+    test('plist case 1', () => plansToPlist(dsbTest1Expct));
+    test('plist case 2', () => plansToPlist(dsbTest2Expct));
+    test('json case 1', () {
+      assertDsbPlanListsEqual(
+          plansFromJson(plansToJson(dsbTest1Expct)), dsbTest1Expct);
+    });
+    test('json case 2', () {
+      assertDsbPlanListsEqual(
+          plansFromJson(plansToJson(dsbTest2Expct)), dsbTest2Expct);
+    });
   });
 }

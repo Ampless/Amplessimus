@@ -1,5 +1,6 @@
 import 'package:Amplissimus/dsbutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
 
 enum HttpMethod {
   GET,
@@ -29,7 +30,7 @@ void main() {
   group('dsbutil', () {
     int i = 1;
     for (var testCase in httpTestCases)
-      test('case ${i++}', () {
+      test('http case ${i++}', () {
         if (testCase.method == HttpMethod.GET)
           httpGet(Uri.parse(testCase.url),
               setCache: null, getCache: null, log: false);
@@ -40,5 +41,12 @@ void main() {
         else
           throw 'The test is broken.';
       });
+    test('htmlcodes', () {
+      String keys = '&lulwdisisnocode;&#9773;';
+      for (String key in htmlcodes.keys) keys += key + 'kekw ';
+      String values = '&lulwdisisnocode;☭';
+      for (String value in htmlcodes.values) values += value + 'kekw ';
+      assert(htmlUnescape(keys) == values);
+    });
   });
 }
