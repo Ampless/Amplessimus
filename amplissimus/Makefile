@@ -132,4 +132,8 @@ setup:
 	which sudo apt
 	sudo apt install -y cmake ninja-build
 
+test:
+	flutter test --coverage
+	lcov -l coverage/lcov.info
+
 .PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts
