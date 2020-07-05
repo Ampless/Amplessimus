@@ -49,7 +49,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     (() async {
       await Prefs.loadPrefs();
-      CustomValues.ttColumns = timetableFromPrefs();
+      CustomValues.ttColumns = ttLoadFromPrefs();
 
       if (CustomValues.isAprilFools)
         Prefs.currentThemeId = -1;
