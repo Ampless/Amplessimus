@@ -136,4 +136,4 @@ test:
 	flutter test --coverage
 	lcov -l coverage/lcov.info
 
-.PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts
+.PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts test
