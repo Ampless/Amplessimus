@@ -14,11 +14,13 @@ class DayTestCase {
     try {
       res = tfunc(input);
     } catch (e) {
-      if (!error) rethrow;
-      else return;
+      if (!error)
+        rethrow;
+      else
+        return;
     }
     if (error) throw 'No error.';
-    if (res != expct) throw '"$input" cannot be matched to $expct';
+    expect(res, expct);
   }
 }
 

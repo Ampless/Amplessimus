@@ -50,20 +50,20 @@ final List<DsbPlan> dsbTest2Expct = [
 ];
 
 void assertDsbPlanListsEqual(List<DsbPlan> l1, List<DsbPlan> l2) {
-  assert(l1.length == l2.length);
+  expect(l1.length, l2.length);
   for (int i = 0; i < l1.length; i++) {
-    assert(l1[i].date == l2[i].date);
-    assert(l1[i].day == l2[i].day);
-    assert(l1[i].subs.length == l2[i].subs.length);
+    expect(l1[i].date, l2[i].date);
+    expect(l1[i].day, l2[i].day);
+    expect(l1[i].subs.length, l2[i].subs.length);
     for (int j = 0; j < l1[i].subs.length; j++) {
-      assert(l1[i].subs[j].affectedClass == l2[i].subs[j].affectedClass);
-      assert(l1[i].subs[j].hours.length == l2[i].subs[j].hours.length);
+      expect(l1[i].subs[j].affectedClass, l2[i].subs[j].affectedClass);
+      expect(l1[i].subs[j].hours.length, l2[i].subs[j].hours.length);
       for (int k = 0; k < l1[i].subs[j].hours.length; k++)
-        assert(l1[i].subs[j].hours[k] == l2[i].subs[j].hours[k]);
-      assert(l1[i].subs[j].isFree == l2[i].subs[j].isFree);
-      assert(l1[i].subs[j].notes == l2[i].subs[j].notes);
-      assert(l1[i].subs[j].subject == l2[i].subs[j].subject);
-      assert(l1[i].subs[j].teacher == l2[i].subs[j].teacher);
+        expect(l1[i].subs[j].hours[k], l2[i].subs[j].hours[k]);
+      expect(l1[i].subs[j].isFree, l2[i].subs[j].isFree);
+      expect(l1[i].subs[j].notes, l2[i].subs[j].notes);
+      expect(l1[i].subs[j].subject, l2[i].subs[j].subject);
+      expect(l1[i].subs[j].teacher, l2[i].subs[j].teacher);
     }
   }
 }

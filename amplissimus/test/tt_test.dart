@@ -20,13 +20,9 @@ class TTTestCase {
         return;
     }
     if (error) throw 'No error.';
-    bool fail = false;
-    if (expct.length == res.length) {
-      for (int i = 0; i < res.length; i++)
-        if (res[i].toString() != expct[i].toString()) fail = true;
-    } else
-      fail = true;
-    if (fail) throw 'got:      $res\nexpected: $expct';
+    expect(expct.length, res.length);
+    for (int i = 0; i < res.length; i++)
+      expect(res[i].toString(), expct[i].toString());
   }
 }
 
