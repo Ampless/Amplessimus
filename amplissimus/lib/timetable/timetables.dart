@@ -182,7 +182,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
 }
 
 String ttToJson(List<TTColumn> tt) {
-  if(tt == null) return '[]';
+  if (tt == null) return '[]';
   var columns = [];
   for (var column in tt) columns.add(column.toJson());
   return jsonEncode(columns);
@@ -196,7 +196,8 @@ List<TTColumn> ttFromJson(String jsontext) {
   return table;
 }
 
-void ttSaveToPrefs(List<TTColumn> table) => Prefs.jsonTimetable = ttToJson(table);
+void ttSaveToPrefs(List<TTColumn> table) =>
+    Prefs.jsonTimetable = ttToJson(table);
 List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
 List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
@@ -239,8 +240,7 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
               notesString = CustomValues.lang.dsbSubtoSubtitle(sub);
               if (!sub.isFree) {
                 trailingString = sub.teacher;
-                var notesaddon =
-                    sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
+                var notesaddon = sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
                 notesString = CustomValues.lang.substitution + notesaddon;
               }
               isReplaced = true;

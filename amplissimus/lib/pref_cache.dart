@@ -178,7 +178,8 @@ class CachedSharedPreferences {
       for (var key in _editsInt) await setInt(key, _cacheInt[key]);
       for (var key in _editsDouble) await setDouble(key, _cacheDouble[key]);
       for (var key in _editsBool) await setBool(key, _cacheBool[key]);
-      for (var key in _editsStrings) await setStringList(key, _cacheStrings[key]);
+      for (var key in _editsStrings)
+        await setStringList(key, _cacheStrings[key]);
       _editsString.clear();
       _editsInt.clear();
       _editsDouble.clear();

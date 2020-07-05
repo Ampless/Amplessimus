@@ -67,9 +67,9 @@ Widget ampFormField(
     List<String> autofillHints,
     Widget suffixIcon}) {
   suffixIcon ??= Container(
-      height: 0,
-      width: 0,
-    );
+    height: 0,
+    width: 0,
+  );
   autofillHints ??= [];
   return TextFormField(
     obscureText: obscureText,

@@ -226,11 +226,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               floatingActionButton: FloatingActionButton.extended(
                 elevation: 0,
                 onPressed: () async {
-                  var condA = FirstLoginValues
-                      .passwordInputFormKey.currentState
+                  var condA = FirstLoginValues.passwordInputFormKey.currentState
                       .validate();
-                  var condB = FirstLoginValues
-                      .usernameInputFormKey.currentState
+                  var condB = FirstLoginValues.usernameInputFormKey.currentState
                       .validate();
                   if (!condA || !condB) return;
                   setState(() => credentialsAreLoading = true);

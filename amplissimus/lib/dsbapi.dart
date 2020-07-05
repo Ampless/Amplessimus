@@ -287,8 +287,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
 DsbPlan dsbParseHtml(String title, String res,
     {void Function({String ctx, Object message}) logInfo = ampInfo}) {
   logInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-  var html =
-      HtmlParser(res).parse().children[0].children[1].children; //body
+  var html = HtmlParser(res).parse().children[0].children[1].children; //body
   var planTitle = _searchHtml(html, 'mon_title').innerHtml;
   html = _searchHtml(html, 'mon_list')
       .children
