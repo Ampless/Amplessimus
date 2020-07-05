@@ -110,7 +110,7 @@ linux64:
 
 macapp:
 	which flutter strip
-	flutter build macos $(MAC_FLAGS) || flutter build macos $(MAC_FLAGS)
+	flutter build macos $(MAC_FLAGS)
 	$(STRIP) $(MAC_STRIP_LIST) $(TRU)
 
 macdmg:
