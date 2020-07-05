@@ -103,6 +103,7 @@ class DsbSubstitution {
       "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
   static bool _isNum(String s, int i) {
+    if (s == null) return false;
     int codeUnit = s.codeUnitAt(i);
     return codeUnit >= zero && codeUnit <= nine;
   }
@@ -110,13 +111,14 @@ class DsbSubstitution {
   static final Pattern _letters = RegExp(r'[a-zA-Z]');
   static final Pattern _numeric = RegExp(r'[0-9]');
 
-  static String realSubject(String subject) {
+  static String realSubject(String subject, {@required Language lang}) {
+    if (subject == null) return null;
     if (_isNum(subject, 0) || _isNum(subject, subject.length - 1))
-      return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1))} '
+      return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang: lang)} '
           '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';
     String sub = subject.toLowerCase();
     String s = subject;
-    CustomValues.lang.subjectLut.forEach((key, value) {
+    lang.subjectLut.forEach((key, value) {
       if (sub.startsWith(key)) s = value;
     });
     return s;

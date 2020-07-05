@@ -59,7 +59,9 @@ class German extends Language {
 
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
-    String notesaddon = sub.notes.length > 0 ? ' (${sub.notes})' : '';
+    if (sub == null) return 'null';
+    String notesaddon =
+        sub.notes != null && sub.notes.length > 0 ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Freistunde${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
         : 'Vertreten durch ${sub.teacher}$notesaddon';
@@ -67,9 +69,13 @@ class German extends Language {
 
   @override
   String dsbSubtoTitle(DsbSubstitution sub) {
+    if (sub == null) return 'null';
     String hour = '';
-    for (int h in sub.hours) hour += hour.length == 0 ? h.toString() : '-$h';
-    return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject)}';
+    if (sub.hours != null) {
+      for (int h in sub.hours) hour += hour.length == 0 ? h.toString() : '-$h';
+    } else
+      hour = 'null';
+    return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
   }
 
   @override

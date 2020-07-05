@@ -50,7 +50,9 @@ class English extends Language {
 
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
-    String notesaddon = sub.notes.length > 0 ? ' (${sub.notes})' : '';
+    if (sub == null) return 'null';
+    String notesaddon =
+        sub.notes != null && sub.notes.length > 0 ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Free lesson${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
         : 'Substituted by ${sub.teacher}$notesaddon';
@@ -58,21 +60,25 @@ class English extends Language {
 
   @override
   String dsbSubtoTitle(DsbSubstitution sub) {
+    if (sub == null) return 'null';
     String hour = '';
-    for (int h in sub.hours) {
-      if (hour.length > 0) hour += '-';
-      hour += h.toString();
-      int r = h % 10;
-      if (r == 1)
-        hour += 'st';
-      else if (r == 2)
-        hour += 'nd';
-      else if (r == 3)
-        hour += 'rd';
-      else
-        hour += 'th';
-    }
-    return '$hour lesson ${DsbSubstitution.realSubject(sub.subject)}';
+    if (sub.hours != null) {
+      for (int h in sub.hours) {
+        if (hour.length > 0) hour += '-';
+        hour += h.toString();
+        int r = h % 10;
+        if (r == 1)
+          hour += 'st';
+        else if (r == 2)
+          hour += 'nd';
+        else if (r == 3)
+          hour += 'rd';
+        else
+          hour += 'th';
+      }
+    } else
+      hour = 'null';
+    return '$hour lesson ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
   }
 
   @override
@@ -207,7 +213,8 @@ class English extends Language {
   String get noSubs => 'No substitutions';
 
   @override
-  String get changedAppearance => 'Changed the appearance of the substitution plan!';
+  String get changedAppearance =>
+      'Changed the appearance of the substitution plan!';
 
   @override
   String get show => 'Show';

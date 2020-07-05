@@ -13,13 +13,16 @@ class HttpTestCase {
   Map<String, String> headers;
 
   HttpTestCase(this.url, this.method, this.body, this.headers);
-
-  static HttpTestCase getCase(String url) =>
-      HttpTestCase(url, HttpMethod.GET, null, null);
 }
 
+HttpTestCase getCase(String url) =>
+    HttpTestCase(url, HttpMethod.GET, null, null);
+
+HttpTestCase postCase(String url, Object body, Map<String, String> headers) =>
+    HttpTestCase(url, HttpMethod.POST, body, headers);
+
 List<HttpTestCase> httpTestCases = [
-  HttpTestCase.getCase('https://example.com/'),
+  getCase('https://example.com/'),
 ];
 
 void main() {
