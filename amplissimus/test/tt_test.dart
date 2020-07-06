@@ -2,13 +2,16 @@ import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class TTTestCase {
+import 'testlib.dart';
+
+class TTTestCase extends SyncTestCase {
   dynamic expct;
   bool error;
   Function() tfunc;
 
   TTTestCase(this.tfunc, this.expct, this.error);
 
+  @override
   void run() {
     dynamic res;
     try {
@@ -69,6 +72,6 @@ final List<TTTestCase> ttTestCases = [
 void main() {
   group('timetables', () {
     var i = 1;
-    for (var testCase in ttTestCases) test('case ${i++}', testCase.run);
+    for (var testCase in ttTestCases) runSyncTest('case ${i++}', testCase);
   });
 }

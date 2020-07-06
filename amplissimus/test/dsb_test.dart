@@ -3,6 +3,8 @@ import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Amplissimus/dsbapi.dart';
 
+import 'testlib.dart';
+
 final Map<String, String> dsbTest1Cache = {
   'GetData':
       '{\"d\":\"H4sIAAAAAAAEAOWX3W6bMBSA7yftHSKuS/gxBOjd1G1apaaqlmo301QZfEhQiYmwaTdVfZu9yV5sJm4oP4ayLO00NTco5/98dk4Od2/fTCbaZ2BFyqOMgHY8MY9qsgXHvGCnNM6ERtOkSghzfkoJfBdC3arbz4EWpxzWTGi+lvLJ5E4+hMnORWaQoiijZwm9foy+FV8mPC1rES4rnHKoqU5WSUpq4RspetJ0Uq0437Bjw8CbzZSwUGh4nqVTAgYTDSeRgSnJs4QkQsOMy2QNHIcpTDd0qTWjVpVepL9+UmhpP2cZF8pGfWUppNnvg/g95qBUVEm6LqKwJFU74SVTKk4yevljAx1CQnWRJ5lKrkbacxryc9cWVH07DvYIxI6OMUa6Y3meHrgB0cEObMvyZhGBoF10g4+NpuZsapu2OTH9Y9dVGlfMvkDOc+AFXV7Nrz5BwUEdvJfkIM0WUVul7qEqkfSQlXF76ZYfBWEZ8q8oSxh/QFri2dFmRcj4lWla0xVf98evYPf/Egnm2PAdK/CxG+pBFIsu/NjWMbiublrENy2YAYp8Y0yro4wGax66AfK0qluA+kwGboI8uoHbIHNUN+Jbfw64SeC2LPVw9DYy6HYAqvLed4WqAuvFdeLcdxz6Z4jrO7YTzjzdgjAWRbu27kdIfPV8y4E4QJ6nHgsHmCHzLF8CfRVDZF/MEsZ/NUTGtDrK6FUOkVH0XmSINAVt/17f5vDpRaTNga8yco7X24vKd5tha+87h9uTrKC8u4Uu8A2cYbZdrMsQPC/g0aCq/jFrK2NtE1YmGUiwa7G7kFvjF/KFWIh5sgT2b1fyBXCe0CUb2sg/JKJUSFMxtdvjeuz5soc0ex9vjFNWP9+jpwhZhyL0EYCEOLoeIrSz2Q9OrPZ+Rjj2oeC8C7OCD5HZvvHuRQWXoV8OCToUkrNs+QQTabEflVTluz+WZx2T5UMGFt1hSiFtvC5rc8ENUy43JBO5KA58pEOMZrrjOVgPUBDpQYjQjER+6CBH/NHc/wbNrhqraREAAA==\"}',
@@ -68,7 +70,7 @@ void assertDsbPlanListsEqual(List<DsbPlan> l1, List<DsbPlan> l2) {
   }
 }
 
-class DsbTestCase {
+class DsbTestCase extends AsyncTestCase {
   String username;
   String password;
   Map<String, String> htmlCache;
@@ -82,14 +84,14 @@ class DsbTestCase {
       this.stage, this.char,
       {this.tfunc});
 
-  void run() async {
+  @override
+  Future<Null> run() async {
     tfunc ??= (username, password, httpGet, httpPost, stage, char) async {
       return dsbSortAllByHour(dsbSearchClass(
           await dsbGetAllSubs(username, password,
               lang: Language.all.first,
               httpGet: httpGet,
               httpPost: httpPost,
-              logInfo: ({ctx, message}) {},
               cacheGetRequests: false,
               cachePostRequests: false),
           stage,
@@ -121,17 +123,28 @@ List<DsbTestCase> dsbTestCases = [
   DsbTestCase('invalid', 'none', dsbTest2Cache, dsbTest2Expct, null, null),
 ];
 
+class JsonTestCase extends SyncTestCase {
+  List<DsbPlan> plans;
+
+  JsonTestCase(this.plans);
+
+  @override
+  void run() {
+    assertDsbPlanListsEqual(plansFromJson(plansToJson(plans)), plans);
+  }
+}
+
+List<JsonTestCase> jsonTestCases = [
+  JsonTestCase(dsbTest1Expct),
+  JsonTestCase(dsbTest2Expct),
+];
+
 void main() {
   group('dsbapi', () {
     var i = 1;
-    for (var testCase in dsbTestCases) test('case ${i++}', testCase.run);
-    test('json case 1', () {
-      assertDsbPlanListsEqual(
-          plansFromJson(plansToJson(dsbTest1Expct)), dsbTest1Expct);
-    });
-    test('json case 2', () {
-      assertDsbPlanListsEqual(
-          plansFromJson(plansToJson(dsbTest2Expct)), dsbTest2Expct);
-    });
+    for (var testCase in dsbTestCases) runAsyncTest('case ${i++}', testCase);
+    i = 1;
+    for (var testCase in jsonTestCases)
+      runSyncTest('json case ${i++}', testCase);
   });
 }

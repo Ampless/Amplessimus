@@ -9,6 +9,8 @@ GTK_FLAGS = $(BIN_FLAGS)
 MAC_FLAGS = $(BIN_FLAGS)
 WEB_FLAGS = $(FLAGS) --csp
 
+TEST_FLAGS = --coverage -j 100 --test-randomize-ordering-seed random
+
 IOS_BUILD_DIR = build/ios/Release-iphoneos/Runner.app
 IOS_STRIP_LIST = $(IOS_BUILD_DIR)/Runner \
 				 $(IOS_BUILD_DIR)/Frameworks/App.framework/App \
@@ -133,7 +135,7 @@ setup:
 	sudo apt install -y cmake ninja-build
 
 test:
-	flutter test --coverage -j 100 --test-randomize-ordering-seed random
+	flutter test $(TEST_FLAGS) || flutter test $(TEST_FLAGS)
 	genhtml -o coverage/html coverage/lcov.info
 	lcov -l coverage/lcov.info
 

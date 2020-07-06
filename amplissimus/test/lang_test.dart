@@ -3,53 +3,81 @@ import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-List<void Function(Language)> foreachLangTestCases = [
-  (lang) {
+import 'testlib.dart';
+
+class LanguageTestCase extends SyncTestCase {
+  void Function(Language) func;
+  Language lang;
+
+  LanguageTestCase(this.func);
+
+  @override
+  void run() {
+    func(lang);
+  }
+}
+
+class LanguageCodeTestCase extends SyncTestCase {
+  String code;
+
+  LanguageCodeTestCase(this.code);
+
+  @override
+  void run() {
+    assert(Language.fromCode(code) != null);
+  }
+}
+
+List<LanguageTestCase> foreachLangTestCases = [
+  LanguageTestCase((lang) {
     for (var day in TTDay.values) lang.ttDayToString(day);
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     assert(Language.fromCode(lang.code) == lang);
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoTitle(null);
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoSubtitle(null);
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoTitle(DsbSubstitution(null, null, null, null, null, false));
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoSubtitle(DsbSubstitution(null, null, null, null, null, false));
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoTitle(
         DsbSubstitution('lul', [], 'kek', 'subJEeKE', 'notesnotes', false));
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoSubtitle(
         DsbSubstitution('lul', [], 'kek', 'subJEeKE', 'notesnotes', false));
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoTitle(
         DsbSubstitution('lul', [1, 3, 5], 'kek', '1sk1', 'not', false));
-  },
-  (lang) {
+  }),
+  LanguageTestCase((lang) {
     lang.dsbSubtoSubtitle(
         DsbSubstitution('lul', [1, 3, 5], '---', 'sub', 'not', true));
-  },
+  }),
+];
+
+List<LanguageCodeTestCase> languageCodeTestCases = [
+  LanguageCodeTestCase(null),
+  LanguageCodeTestCase('none'),
 ];
 
 void main() {
   group('lang', () {
     for (var i = 0; i < foreachLangTestCases.length; i++)
-      for (var lang in Language.all)
-        test('case ${i + 1} for $lang', () => foreachLangTestCases[i](lang));
-    test('case 2 for null', () {
-      assert(Language.fromCode(null) != null);
-    });
-    test('case 2 for none', () {
-      assert(Language.fromCode('none') != null);
-    });
+      for (var lang in Language.all) {
+        foreachLangTestCases[i].lang = lang;
+        runSyncTest('case ${i + 1} for $lang', foreachLangTestCases[i]);
+      }
+    for (var testCase in languageCodeTestCases)
+      runSyncTest('case 2 for null', testCase);
   });
 }

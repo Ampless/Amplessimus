@@ -72,19 +72,18 @@ var _httpClient = HttpClient();
 Future<String> httpPost(
     Uri url, Object body, String id, Map<String, String> headers,
     {String Function(String) getCache = Prefs.getCache,
-    void Function(String, String, Duration) setCache = Prefs.setCache,
-    bool log = true}) async {
+    void Function(String, String, Duration) setCache = Prefs.setCache}) async {
   if (getCache != null) {
     var cachedResp = getCache(id);
     if (cachedResp != null) return cachedResp;
   }
-  if (log) ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
+  ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
   var req = await _httpClient.postUrl(url);
   headers.forEach((key, value) => req.headers.add(key, value));
   req.writeln(body);
   var res = await req.close();
   var bytes = await res.toList();
-  if (log) ampInfo(ctx: 'HTTP][POST', message: 'Done.');
+  ampInfo(ctx: 'HTTP][POST', message: 'Done.');
   var actualBytes = <int>[];
   for (var b in bytes) actualBytes.addAll(b);
   var r = utf8.decode(actualBytes);
@@ -95,13 +94,12 @@ Future<String> httpPost(
 
 Future<String> httpGet(Uri url,
     {String Function(String) getCache = Prefs.getCache,
-    void Function(String, String, Duration) setCache = Prefs.setCache,
-    bool log = true}) async {
+    void Function(String, String, Duration) setCache = Prefs.setCache}) async {
   if (getCache != null) {
     var cachedResp = getCache('$url');
     if (cachedResp != null) return cachedResp;
   }
-  if (log) ampInfo(ctx: 'HTTP][GET', message: '$url');
+  ampInfo(ctx: 'HTTP][GET', message: '$url');
   var req = await _httpClient.getUrl(url);
   await req.flush();
   var res = await req.close();
@@ -130,7 +128,7 @@ Future<String> httpGet(Uri url,
       .replaceAll(RegExp(r' +'), ' ')
       .replaceAll(RegExp(r'<br />'), '')
       .replaceAll(RegExp(r'<!-- .*? -->'), '');
-  if (log) ampInfo(ctx: 'HTTP][GET', message: 'Done.');
+  ampInfo(ctx: 'HTTP][GET', message: 'Done.');
   if (res.statusCode == 200 && setCache != null)
     setCache('$url', r, Duration(days: 4));
   return r;

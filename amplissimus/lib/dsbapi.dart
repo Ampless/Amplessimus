@@ -259,7 +259,6 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
         httpPost = httpPost,
-    void Function({String ctx, Object message}) logInfo = ampInfo,
     @required Language lang}) async {
   var plans = <DsbPlan>[];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
@@ -269,7 +268,7 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
       cacheGetRequests: cacheGetRequests, httpGet: httpGet);
   for (var title in htmls.keys) {
     try {
-      plans.add(dsbParseHtml(title, htmls[title], logInfo: logInfo));
+      plans.add(dsbParseHtml(title, htmls[title]));
     } catch (e) {
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(
@@ -284,9 +283,8 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
   return plans;
 }
 
-DsbPlan dsbParseHtml(String title, String res,
-    {void Function({String ctx, Object message}) logInfo = ampInfo}) {
-  logInfo(ctx: 'DSB', message: 'Trying to parse $title...');
+DsbPlan dsbParseHtml(String title, String res) {
+  ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
   var html = HtmlParser(res).parse().children[0].children[1].children; //body
   var planTitle = _searchHtml(html, 'mon_title').innerHtml;
   html = _searchHtml(html, 'mon_list')

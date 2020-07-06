@@ -1,7 +1,9 @@
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class DayTestCase {
+import 'testlib.dart';
+
+class DayTestCase extends SyncTestCase {
   dynamic input;
   dynamic expct;
   bool error;
@@ -9,6 +11,7 @@ class DayTestCase {
 
   DayTestCase(this.input, this.expct, this.error, {this.tfunc = ttMatchDay});
 
+  @override
   void run() {
     dynamic res;
     try {
@@ -50,6 +53,6 @@ List<DayTestCase> dayTestCases = [
 void main() {
   group('day', () {
     var i = 1;
-    for (var testCase in dayTestCases) test('case ${i++}', testCase.run);
+    for (var testCase in dayTestCases) runSyncTest('case ${i++}', testCase);
   });
 }

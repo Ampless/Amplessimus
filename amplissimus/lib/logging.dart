@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+bool _loggingEnabled = true;
+void disableLogging() => _loggingEnabled = false;
+
 void _log(String level, String ctx, Object message) {
   var now = DateTime.now(),
       s = now.second.toString(),
@@ -11,8 +14,7 @@ void _log(String level, String ctx, Object message) {
   if (h.length == 1) h = '0' + h;
   if (ms.length == 1) ms = '0' + ms;
   if (ms.length == 2) ms = '0' + ms;
-  var msg = '$h:$m:$s.$ms [$level][$ctx] $message';
-  print(msg);
+  if (_loggingEnabled) print('$h:$m:$s.$ms [$level][$ctx] $message');
 }
 
 void ampErr({@required String ctx, @required Object message}) =>

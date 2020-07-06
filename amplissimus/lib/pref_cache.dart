@@ -138,28 +138,31 @@ class CachedSharedPreferences {
     return s;
   }
 
+  String toJson() {
+    var prefs = [];
+    for (var k in _cacheString.keys)
+      if (_cacheString[k] != null)
+        prefs.add({'k': k, 'v': _cacheString[k], 't': 0});
+    for (var k in _cacheInt.keys)
+      if (_cacheInt[k] != null) prefs.add({'k': k, 'v': _cacheInt[k], 't': 1});
+    for (var k in _cacheDouble.keys)
+      if (_cacheDouble[k] != null)
+        prefs.add({'k': k, 'v': _cacheDouble[k], 't': 2});
+    for (var k in _cacheBool.keys)
+      if (_cacheBool[k] != null)
+        prefs.add({'k': k, 'v': _cacheBool[k] ? 1 : 0, 't': 3});
+    for (var k in _cacheStrings.keys)
+      if (_cacheStrings[k] != null)
+        prefs.add({'k': k, 'v': _cacheStrings[k], 't': 4});
+    return jsonEncode(prefs);
+  }
+
   void flush() async {
     if (_prefFile != null) {
       await _prefFileMutex.acquire();
       await _prefFile.setPosition(0);
       await _prefFile.truncate(0);
-      var prefs = [];
-      for (var k in _cacheString.keys)
-        if (_cacheString[k] != null)
-          prefs.add({'k': k, 'v': _cacheString[k], 't': 0});
-      for (var k in _cacheInt.keys)
-        if (_cacheInt[k] != null)
-          prefs.add({'k': k, 'v': _cacheInt[k], 't': 1});
-      for (var k in _cacheDouble.keys)
-        if (_cacheDouble[k] != null)
-          prefs.add({'k': k, 'v': _cacheDouble[k], 't': 2});
-      for (var k in _cacheBool.keys)
-        if (_cacheBool[k] != null)
-          prefs.add({'k': k, 'v': _cacheBool[k] ? 1 : 0, 't': 3});
-      for (var k in _cacheStrings.keys)
-        if (_cacheStrings[k] != null)
-          prefs.add({'k': k, 'v': _cacheStrings[k], 't': 4});
-      await _prefFile.writeString(jsonEncode(prefs));
+      await _prefFile.writeString(toJson());
       await _prefFile.flush();
       _prefFileMutex.release();
     }
@@ -209,13 +212,21 @@ class CachedSharedPreferences {
     _prefFileMutex.release();
   }
 
-  Future<Null> ctor() async {
+  void checkPlatformSharedPrefSupport() {
     try {
       _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
     } catch (e) {
       //it should only fail on web
       _platformSupportsSharedPrefs = true;
     }
+  }
+
+  void platformSharedPrefSupportFalse() {
+    _platformSupportsSharedPrefs = false;
+  }
+
+  Future<Null> ctor() async {
+    checkPlatformSharedPrefSupport();
     await (_platformSupportsSharedPrefs
         ? ctorSharedPrefs
         : ctorPrealphaDesktop)();
