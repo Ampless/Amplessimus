@@ -42,15 +42,6 @@ class HttpTestCase extends TestCase {
   }
 }
 
-class GenericTestCase extends TestCase {
-  Future<Null> Function() func;
-
-  GenericTestCase(this.func);
-
-  @override
-  Future<Null> run() => func();
-}
-
 HttpTestCase getCase(String url) =>
     HttpTestCase(url, HttpMethod.GET, null, null);
 

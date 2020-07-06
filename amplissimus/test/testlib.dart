@@ -6,6 +6,15 @@ abstract class TestCase {
   Future<Null> run();
 }
 
+class GenericTestCase extends TestCase {
+  Future<Null> Function() func;
+
+  GenericTestCase(this.func);
+
+  @override
+  Future<Null> run() => func();
+}
+
 void runTests(List<TestCase> testCases, String groupName) {
   group(groupName, () {
     var i = 1;
