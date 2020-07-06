@@ -14,7 +14,6 @@ void runTests(List<TestCase> testCases, String groupName) {
         Prefs.initTestPrefs();
         disableLogging();
         await testCase.run();
-        expect(Prefs.toJson(), '[]');
       });
   });
 }

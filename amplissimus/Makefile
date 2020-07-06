@@ -135,7 +135,7 @@ setup:
 	sudo apt install -y cmake ninja-build
 
 test:
-	flutter test $(TEST_FLAGS) || flutter test $(TEST_FLAGS)
+	flutter test $(TEST_FLAGS) || make test
 	genhtml -o coverage/html coverage/lcov.info
 	lcov -l coverage/lcov.info
 

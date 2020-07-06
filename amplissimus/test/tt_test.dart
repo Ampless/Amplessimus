@@ -1,4 +1,5 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -7,7 +8,7 @@ import 'testlib.dart';
 class TTTestCase extends TestCase {
   dynamic expct;
   bool error;
-  Function() tfunc;
+  Future<dynamic> Function() tfunc;
 
   TTTestCase(this.tfunc, this.expct, this.error);
 
@@ -15,7 +16,7 @@ class TTTestCase extends TestCase {
   Future<Null> run() async {
     dynamic res;
     try {
-      res = tfunc();
+      res = await tfunc();
     } catch (e) {
       if (!error)
         rethrow;
@@ -23,7 +24,7 @@ class TTTestCase extends TestCase {
         return;
     }
     if (error) throw 'No error.';
-    expect(expct.length, res.length);
+    expect(res.length, expct.length);
     for (var i = 0; i < res.length; i++)
       expect(res[i].toString(), expct[i].toString());
   }
@@ -62,11 +63,15 @@ final List<TTColumn> ttTest1Output = [
 ];
 
 final List<TTTestCase> ttTestCases = [
-  TTTestCase(
-      () => ttSubTable(ttTest1Input1, ttTest1Input2), ttTest1Output, false),
-  TTTestCase(() => ttFromJson(ttToJson(ttTest1Input1)), ttTest1Output, false),
-  TTTestCase(() => ttFromJson(null), [], false),
-  TTTestCase(() => ttToJson(null), '[]', false),
+  TTTestCase(() async => ttSubTable(ttTest1Input1, ttTest1Input2),
+      ttTest1Output, false),
+  TTTestCase(() async {
+    ttSaveToPrefs(ttTest1Input1);
+    await Prefs.flush();
+    return ttLoadFromPrefs();
+  }, ttTest1Output, false),
+  TTTestCase(() async => ttFromJson(null), [], false),
+  TTTestCase(() async => ttToJson(null), '[]', false),
 ];
 
 void main() {
