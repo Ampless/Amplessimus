@@ -181,7 +181,7 @@ class English extends Language {
     'c': 'Chemistry',
     'k': 'Art',
     'p': 'Physics',
-    'w': 'Economy/Law',
+    'w': 'Economics/Law',
     'nut': '"Nature and Technology"',
     'spr': 'Consultation Hour',
   });
