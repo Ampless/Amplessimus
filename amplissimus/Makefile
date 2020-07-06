@@ -134,6 +134,7 @@ setup:
 
 test:
 	flutter test --coverage -j 100 --test-randomize-ordering-seed random
+	genhtml -o coverage/html coverage/lcov.info
 	lcov -l coverage/lcov.info
 
 .PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts test
