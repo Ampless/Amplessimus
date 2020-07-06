@@ -157,15 +157,15 @@ class CachedSharedPreferences {
     return jsonEncode(prefs);
   }
 
-  void flush() async {
+  Future<Null> flush() async {
+    await _prefFileMutex.acquire();
     if (_prefFile != null) {
-      await _prefFileMutex.acquire();
       await _prefFile.setPosition(0);
       await _prefFile.truncate(0);
       await _prefFile.writeString(toJson());
       await _prefFile.flush();
-      _prefFileMutex.release();
     }
+    _prefFileMutex.release();
   }
 
   Future<Null> ctorSharedPrefs() async {

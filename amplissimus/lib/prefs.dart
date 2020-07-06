@@ -129,6 +129,10 @@ bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
 
 String toJson() => _prefs.toJson();
 
+//This does practically nothing (it is internally called when setting
+//any value), but it waits for any set operations in progress to finish.
+Future<Null> flush() => _prefs.flush();
+
 void initTestPrefs() {
   _prefs = CachedSharedPreferences();
   _prefs.platformSharedPrefSupportFalse();
