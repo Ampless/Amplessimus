@@ -165,6 +165,50 @@ class CachedSharedPreferences {
     }
   }
 
+  Future<Null> ctorSharedPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+    for (var key in _editsString) await setString(key, _cacheString[key]);
+    for (var key in _editsInt) await setInt(key, _cacheInt[key]);
+    for (var key in _editsDouble) await setDouble(key, _cacheDouble[key]);
+    for (var key in _editsBool) await setBool(key, _cacheBool[key]);
+    for (var key in _editsStrings) await setStringList(key, _cacheStrings[key]);
+    _editsString.clear();
+    _editsInt.clear();
+    _editsDouble.clear();
+    _editsBool.clear();
+    _editsStrings.clear();
+  }
+
+  Future<Null> ctorPrealphaDesktop() async {
+    await _prefFileMutex.acquire();
+    _prefFile =
+        await File('.amplissimus_prealpha_data').open(mode: FileMode.append);
+    if (await _prefFile.length() > 1) {
+      await _prefFile.setPosition(0);
+      var bytes = await _prefFile.read(await _prefFile.length());
+      //this kind of creates a race condition, but that doesn't really matter lol
+      for (dynamic json in jsonDecode(utf8.decode(bytes))) {
+        dynamic key = json['k'];
+        dynamic val = json['v'];
+        dynamic typ = json['t'];
+        if (typ == 0)
+          _cacheString[key] = val;
+        else if (typ == 1)
+          _cacheInt[key] = val;
+        else if (typ == 2)
+          _cacheDouble[key] = val;
+        else if (typ == 3)
+          _cacheBool[key] = val == 1;
+        else if (typ == 4) {
+          _cacheStrings[key] = [];
+          for (dynamic s in val) _cacheStrings[key].add(s);
+        } else
+          throw 'Prefs doesn\'t know the pref type "$typ".';
+      }
+    }
+    _prefFileMutex.release();
+  }
+
   Future<Null> ctor() async {
     try {
       _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
@@ -172,48 +216,9 @@ class CachedSharedPreferences {
       //it should only fail on web
       _platformSupportsSharedPrefs = true;
     }
-    if (_platformSupportsSharedPrefs) {
-      _prefs = await SharedPreferences.getInstance();
-      for (var key in _editsString) await setString(key, _cacheString[key]);
-      for (var key in _editsInt) await setInt(key, _cacheInt[key]);
-      for (var key in _editsDouble) await setDouble(key, _cacheDouble[key]);
-      for (var key in _editsBool) await setBool(key, _cacheBool[key]);
-      for (var key in _editsStrings)
-        await setStringList(key, _cacheStrings[key]);
-      _editsString.clear();
-      _editsInt.clear();
-      _editsDouble.clear();
-      _editsBool.clear();
-      _editsStrings.clear();
-    } else {
-      await _prefFileMutex.acquire();
-      _prefFile =
-          await File('.amplissimus_prealpha_data').open(mode: FileMode.append);
-      if (await _prefFile.length() > 1) {
-        await _prefFile.setPosition(0);
-        var bytes = await _prefFile.read(await _prefFile.length());
-        //this kind of creates a race condition, but that doesn't really matter lol
-        for (dynamic json in jsonDecode(utf8.decode(bytes))) {
-          dynamic key = json['k'];
-          dynamic val = json['v'];
-          dynamic typ = json['t'];
-          if (typ == 0)
-            _cacheString[key] = val;
-          else if (typ == 1)
-            _cacheInt[key] = val;
-          else if (typ == 2)
-            _cacheDouble[key] = val;
-          else if (typ == 3)
-            _cacheBool[key] = val == 1;
-          else if (typ == 4) {
-            _cacheStrings[key] = [];
-            for (dynamic s in val) _cacheStrings[key].add(s);
-          } else
-            throw 'Prefs doesn\'t know the pref type "$typ".';
-        }
-      }
-      _prefFileMutex.release();
-    }
+    await (_platformSupportsSharedPrefs
+        ? ctorSharedPrefs
+        : ctorPrealphaDesktop)();
   }
 
   void clear() {
