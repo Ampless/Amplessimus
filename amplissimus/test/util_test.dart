@@ -9,7 +9,7 @@ enum HttpMethod {
   POST,
 }
 
-class HttpTestCase extends AsyncTestCase {
+class HttpTestCase extends TestCase {
   String url;
   HttpMethod method;
   Object body;
@@ -20,24 +20,22 @@ class HttpTestCase extends AsyncTestCase {
   @override
   Future<Null> run() async {
     if (method == HttpMethod.GET)
-      await httpGet(Uri.parse(url),
-          setCache: null, getCache: null);
+      await httpGet(Uri.parse(url), setCache: null, getCache: null);
     else if (method == HttpMethod.POST)
-      await httpPost(
-          Uri.parse(url), body, null, headers,
+      await httpPost(Uri.parse(url), body, null, headers,
           getCache: null, setCache: null);
     else
       throw 'The test is broken.';
   }
 }
 
-class HtmlCodeTestCase extends SyncTestCase {
+class HtmlCodeTestCase extends TestCase {
   void Function() func;
 
   HtmlCodeTestCase(this.func);
 
   @override
-  void run() => func();
+  Future<Null> run() async => func();
 }
 
 HttpTestCase getCase(String url) =>
@@ -51,16 +49,14 @@ List<HttpTestCase> httpTestCases = [
 ];
 
 void main() {
-  group('dsbutil', () {
-    var i = 1;
-    for (var testCase in httpTestCases)
-      runAsyncTest('http case ${i++}', testCase);
-    runSyncTest('htmlcodes', HtmlCodeTestCase(() {
+  runTests(httpTestCases, 'dsbutil http');
+  runTests([
+    HtmlCodeTestCase(() {
       var keys = '&lulwdisisnocode;&#9773;';
       for (var key in htmlcodes.keys) keys += key + 'kekw ';
       var values = '&lulwdisisnocode;☭';
       for (var value in htmlcodes.values) values += value + 'kekw ';
       assert(htmlUnescape(keys) == values);
-    }));
-  });
+    })
+  ], 'dsbutil htmlcodes');
 }

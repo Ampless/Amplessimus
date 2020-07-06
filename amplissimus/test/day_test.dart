@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
 
-class DayTestCase extends SyncTestCase {
+class DayTestCase extends TestCase {
   dynamic input;
   dynamic expct;
   bool error;
@@ -12,7 +12,7 @@ class DayTestCase extends SyncTestCase {
   DayTestCase(this.input, this.expct, this.error, {this.tfunc = ttMatchDay});
 
   @override
-  void run() {
+  Future<Null> run() async {
     dynamic res;
     try {
       res = tfunc(input);
@@ -51,8 +51,5 @@ List<DayTestCase> dayTestCases = [
 ];
 
 void main() {
-  group('day', () {
-    var i = 1;
-    for (var testCase in dayTestCases) runSyncTest('case ${i++}', testCase);
-  });
+  runTests(dayTestCases, 'day');
 }

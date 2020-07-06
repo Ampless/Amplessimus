@@ -70,7 +70,7 @@ void assertDsbPlanListsEqual(List<DsbPlan> l1, List<DsbPlan> l2) {
   }
 }
 
-class DsbTestCase extends AsyncTestCase {
+class DsbTestCase extends TestCase {
   String username;
   String password;
   Map<String, String> htmlCache;
@@ -123,13 +123,13 @@ List<DsbTestCase> dsbTestCases = [
   DsbTestCase('invalid', 'none', dsbTest2Cache, dsbTest2Expct, null, null),
 ];
 
-class JsonTestCase extends SyncTestCase {
+class JsonTestCase extends TestCase {
   List<DsbPlan> plans;
 
   JsonTestCase(this.plans);
 
   @override
-  void run() {
+  Future<Null> run() async {
     assertDsbPlanListsEqual(plansFromJson(plansToJson(plans)), plans);
   }
 }
@@ -140,11 +140,6 @@ List<JsonTestCase> jsonTestCases = [
 ];
 
 void main() {
-  group('dsbapi', () {
-    var i = 1;
-    for (var testCase in dsbTestCases) runAsyncTest('case ${i++}', testCase);
-    i = 1;
-    for (var testCase in jsonTestCases)
-      runSyncTest('json case ${i++}', testCase);
-  });
+  runTests(dsbTestCases, 'dsbapi dsb');
+  runTests(jsonTestCases, 'dsbapi json');
 }

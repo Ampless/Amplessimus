@@ -5,30 +5,29 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
 
-class LanguageTestCase extends SyncTestCase {
+class LanguageTestCase extends TestCase {
   void Function(Language) func;
-  Language lang;
 
   LanguageTestCase(this.func);
 
   @override
-  void run() {
-    func(lang);
+  Future<Null> run() async {
+    for (var lang in Language.all) func(lang);
   }
 }
 
-class LanguageCodeTestCase extends SyncTestCase {
+class LanguageCodeTestCase extends TestCase {
   String code;
 
   LanguageCodeTestCase(this.code);
 
   @override
-  void run() {
+  Future<Null> run() async {
     assert(Language.fromCode(code) != null);
   }
 }
 
-List<LanguageTestCase> foreachLangTestCases = [
+List<LanguageTestCase> languageTestCases = [
   LanguageTestCase((lang) {
     for (var day in TTDay.values) lang.ttDayToString(day);
   }),
@@ -71,13 +70,6 @@ List<LanguageCodeTestCase> languageCodeTestCases = [
 ];
 
 void main() {
-  group('lang', () {
-    for (var i = 0; i < foreachLangTestCases.length; i++)
-      for (var lang in Language.all) {
-        foreachLangTestCases[i].lang = lang;
-        runSyncTest('case ${i + 1} for $lang', foreachLangTestCases[i]);
-      }
-    for (var testCase in languageCodeTestCases)
-      runSyncTest('case 2 for null', testCase);
-  });
+  runTests(languageTestCases, 'lang');
+  runTests(languageCodeTestCases, 'lang code');
 }

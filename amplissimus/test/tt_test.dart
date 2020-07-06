@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
 
-class TTTestCase extends SyncTestCase {
+class TTTestCase extends TestCase {
   dynamic expct;
   bool error;
   Function() tfunc;
@@ -12,7 +12,7 @@ class TTTestCase extends SyncTestCase {
   TTTestCase(this.tfunc, this.expct, this.error);
 
   @override
-  void run() {
+  Future<Null> run() async {
     dynamic res;
     try {
       res = tfunc();
@@ -70,8 +70,5 @@ final List<TTTestCase> ttTestCases = [
 ];
 
 void main() {
-  group('timetables', () {
-    var i = 1;
-    for (var testCase in ttTestCases) runSyncTest('case ${i++}', testCase);
-  });
+  runTests(ttTestCases, 'timetable');
 }
