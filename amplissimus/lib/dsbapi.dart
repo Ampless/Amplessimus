@@ -338,7 +338,16 @@ Widget dsbWidget;
 Future<Null> dsbUpdateWidget(Function f,
     {bool cacheGetRequests = true,
     bool cachePostRequests = true,
-    bool cacheJsonPlans = false}) async {
+    bool cacheJsonPlans = false,
+    Future<String> Function(
+            Uri url, Object body, String id, Map<String, String> headers,
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
+        httpPost = httpPost,
+    Future<String> Function(Uri url,
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
+        httpGet = httpGet}) async {
   try {
     if (Prefs.username.isEmpty || Prefs.password.isEmpty)
       throw CustomValues.lang.noLogin;
@@ -348,7 +357,9 @@ Future<Null> dsbUpdateWidget(Function f,
       plans = await dsbGetAllSubs(Prefs.username, Prefs.password,
           lang: CustomValues.lang,
           cacheGetRequests: cacheGetRequests,
-          cachePostRequests: cachePostRequests);
+          cachePostRequests: cachePostRequests,
+          httpPost: httpPost,
+          httpGet: httpGet);
       Prefs.dsbJsonCache = plansToJson(plans);
     } else
       plans = plansFromJson(jsonCache);

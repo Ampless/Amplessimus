@@ -57,7 +57,7 @@ Future<Null> showAmpTextDialog(
   );
 }
 
-Widget ampFormField(
+TextFormField ampFormField(
     {@required TextEditingController controller,
     @required Key key,
     @required String Function(String) validator,
@@ -153,7 +153,7 @@ List<Widget> ampDialogButtonsSaveAndCancel(
   ];
 }
 
-Widget ampBigAmpButton(
+Card ampBigAmpButton(
     {@required void Function() onTap,
     @required IconData icon,
     @required String text,

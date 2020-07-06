@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/pref_cache.dart';
 import 'package:Amplissimus/values.dart';
@@ -120,8 +121,9 @@ int get timer => _prefs.getInt('update_dsb_timer', 15);
 void setTimer(int i, Function() f) {
   _prefs.setInt('update_dsb_timer', i);
   if (CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
-  CustomValues.updateTimer =
-      Timer.periodic(Duration(minutes: i), (timer) => f());
+  CustomValues.updateTimer = FirstLoginValues.testing
+      ? null
+      : Timer.periodic(Duration(minutes: i), (timer) => f());
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);

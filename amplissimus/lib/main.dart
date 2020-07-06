@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:Amplissimus/animations.dart';
+import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/screens/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/first_login.dart';
@@ -66,7 +67,14 @@ class SplashScreenPageState extends State<SplashScreenPage> {
               MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
       } else {
-        await dsbUpdateWidget(() {}, cacheJsonPlans: Prefs.useJsonCache);
+        await dsbUpdateWidget(() {},
+            cacheJsonPlans: Prefs.useJsonCache,
+            httpPost: FirstLoginValues.testing
+                ? FirstLoginValues.httpPostReplacement
+                : httpPost,
+            httpGet: FirstLoginValues.testing
+                ? FirstLoginValues.httpGetReplacement
+                : httpGet);
         Future.delayed(Duration(milliseconds: 1000), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
@@ -195,19 +203,40 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void rebuildTimer() {
-    if (tabController.index == 0) dsbUpdateWidget(rebuild);
+    if (tabController.index == 0)
+      dsbUpdateWidget(rebuild,
+          httpPost: FirstLoginValues.testing
+              ? FirstLoginValues.httpPostReplacement
+              : httpPost,
+          httpGet: FirstLoginValues.testing
+              ? FirstLoginValues.httpGetReplacement
+              : httpGet);
   }
 
   Future<Null> rebuildDragDown() async {
     // ignore: unawaited_futures
     refreshKey.currentState?.show();
     await dsbUpdateWidget(rebuild,
-        cachePostRequests: false, cacheJsonPlans: Prefs.useJsonCache);
+        cachePostRequests: false,
+        cacheJsonPlans: Prefs.useJsonCache,
+        httpPost: FirstLoginValues.testing
+            ? FirstLoginValues.httpPostReplacement
+            : httpPost,
+        httpGet: FirstLoginValues.testing
+            ? FirstLoginValues.httpGetReplacement
+            : httpGet);
   }
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
-    await dsbUpdateWidget(rebuild, cacheJsonPlans: Prefs.useJsonCache);
+    await dsbUpdateWidget(rebuild,
+        cacheJsonPlans: Prefs.useJsonCache,
+        httpPost: FirstLoginValues.testing
+            ? FirstLoginValues.httpPostReplacement
+            : httpPost,
+        httpGet: FirstLoginValues.testing
+            ? FirstLoginValues.httpGetReplacement
+            : httpGet);
     setState(() => circularProgressIndicatorActive = false);
   }
 
@@ -379,7 +408,13 @@ class _MyHomePageState extends State<MyHomePage>
                       onChanged: (value) {
                         setState(() => Prefs.oneClassOnly = value);
                         dsbUpdateWidget(rebuild,
-                            cacheJsonPlans: Prefs.useJsonCache);
+                            cacheJsonPlans: Prefs.useJsonCache,
+                            httpPost: FirstLoginValues.testing
+                                ? FirstLoginValues.httpPostReplacement
+                                : httpPost,
+                            httpGet: FirstLoginValues.testing
+                                ? FirstLoginValues.httpGetReplacement
+                                : httpGet);
                       }),
                   alignment: Alignment.center),
             ],
@@ -514,7 +549,7 @@ class _MyHomePageState extends State<MyHomePage>
           backgroundColor: Colors.transparent,
           body: GridView.count(
             crossAxisCount: 2,
-            children: <Widget>[
+            children: FirstLoginValues.settingsButtons = <Widget>[
               ampBigAmpButton(
                 onTap: () {
                   Prefs.devOptionsTimerCache();

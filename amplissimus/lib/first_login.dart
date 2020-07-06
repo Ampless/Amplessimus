@@ -1,4 +1,5 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/uilib.dart';
@@ -9,7 +10,25 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+// ignore: must_be_immutable
 class FirstLoginScreen extends StatelessWidget {
+  FirstLoginScreen(
+      {bool testing = false,
+      Future<String> Function(
+              Uri url, Object body, String id, Map<String, String> headers,
+              {String Function(String) getCache,
+              void Function(String, String, Duration) setCache})
+          httpPostReplacement,
+      Future<String> Function(Uri url,
+              {String Function(String) getCache,
+              void Function(String, String, Duration) setCache})
+          httpGetReplacement}) {
+    FirstLoginValues.testing = testing;
+    FirstLoginValues.httpPostReplacement = httpPostReplacement;
+    FirstLoginValues.httpGetReplacement = httpGetReplacement;
+  }
+  FirstLoginScreenPage _page;
+  FirstLoginScreenPage get page => _page;
   @override
   Widget build(BuildContext context) {
     AmpColors.isDarkMode = true;
@@ -24,11 +43,9 @@ class FirstLoginScreen extends StatelessWidget {
             primarySwatch: AmpColors.materialColorBackground,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: FirstLoginScreenPage(
-              title: AmpStrings.appTitle,
-              textStyle: TextStyle(
-                color: AmpColors.colorForeground,
-              )),
+          home: _page = FirstLoginScreenPage(
+            title: AmpStrings.appTitle,
+          ),
         ),
         onWillPop: () async {
           if (FirstLoginValues.tabController.index <= 0)
@@ -41,12 +58,14 @@ class FirstLoginScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class FirstLoginScreenPage extends StatefulWidget {
-  FirstLoginScreenPage({this.title, this.textStyle});
+  FirstLoginScreenPage({this.title});
   final String title;
-  final TextStyle textStyle;
+  FirstLoginScreenPageState _state;
+  FirstLoginScreenPageState get state => _state;
   @override
-  State<StatefulWidget> createState() => FirstLoginScreenPageState();
+  State<StatefulWidget> createState() => _state = FirstLoginScreenPageState();
 }
 
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
@@ -60,6 +79,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
   bool passwordHidden = true;
+  Widget _saveButton, _doneButton;
+  FloatingActionButton get saveButton => _saveButton;
+  FloatingActionButton get doneButton => _doneButton;
 
   @override
   void initState() {
@@ -101,7 +123,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: [
                       Text(
                         CustomValues.lang.selectClass,
                         style: TextStyle(
@@ -223,7 +245,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   : Container(
                       height: 0,
                     ),
-              floatingActionButton: FloatingActionButton.extended(
+              floatingActionButton: _saveButton = FloatingActionButton.extended(
                 elevation: 0,
                 onPressed: () async {
                   var condA = FirstLoginValues.passwordInputFormKey.currentState
@@ -244,7 +266,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             .trim(),
                         FirstLoginValues.passwordInputFormController.text
                             .trim(),
-                        lang: CustomValues.lang);
+                        lang: CustomValues.lang,
+                        httpPost: FirstLoginValues.testing
+                            ? FirstLoginValues.httpPostReplacement
+                            : httpPost);
                     isError = true;
                     setState(
                         () => {credentialsAreLoading = false, textString = ''});
@@ -289,13 +314,19 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 ),
                 centerTitle: true,
               ),
-              floatingActionButton: FloatingActionButton.extended(
+              floatingActionButton: _doneButton = FloatingActionButton.extended(
                 elevation: 0,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
                   Prefs.firstLogin = false;
                   setState(() => dsbWidgetIsLoading = false);
-                  await dsbUpdateWidget(() => setState(() {}));
+                  await dsbUpdateWidget(() => setState(() {}),
+                      httpPost: FirstLoginValues.testing
+                          ? FirstLoginValues.httpPostReplacement
+                          : httpPost,
+                      httpGet: FirstLoginValues.testing
+                          ? FirstLoginValues.httpGetReplacement
+                          : httpGet);
                   await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -304,7 +335,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
                 label: Text(CustomValues.lang.firstStartupDone,
-                    style: widget.textStyle),
+                    style: AmpColors.textStyleForeground),
                 icon: Icon(
                   MdiIcons.arrowRight,
                   color: AmpColors.colorForeground,
@@ -331,6 +362,15 @@ class FirstLoginValues {
   static final passwordInputFormController =
       TextEditingController(text: Prefs.password);
   static TabController tabController;
+  static bool testing;
+  static Future<String> Function(
+      Uri url, Object body, String id, Map<String, String> headers,
+      {String Function(String) getCache,
+      void Function(String, String, Duration) setCache}) httpPostReplacement;
+  static Future<String> Function(Uri url,
+      {String Function(String) getCache,
+      void Function(String, String, Duration) setCache}) httpGetReplacement;
+  static List<Widget> settingsButtons;
 
   static final List<String> grades = [
     '5',
