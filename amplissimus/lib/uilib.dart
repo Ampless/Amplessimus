@@ -64,13 +64,11 @@ TextFormField ampFormField(
     TextInputType keyboardType = TextInputType.text,
     String labelText = '',
     bool obscureText = false,
-    List<String> autofillHints,
     Widget suffixIcon}) {
   suffixIcon ??= Container(
     height: 0,
     width: 0,
   );
-  autofillHints ??= [];
   return TextFormField(
     obscureText: obscureText,
     style: AmpColors.textStyleForeground,
@@ -79,7 +77,6 @@ TextFormField ampFormField(
     key: key,
     validator: validator,
     keyboardType: keyboardType,
-    autofillHints: autofillHints,
     decoration: InputDecoration(
         suffixIcon: suffixIcon,
         enabledBorder: OutlineInputBorder(

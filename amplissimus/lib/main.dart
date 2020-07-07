@@ -336,7 +336,6 @@ class _MyHomePageState extends State<MyHomePage>
           validator: textFieldValidator,
           labelText: CustomValues.lang.username,
           keyboardType: TextInputType.visiblePassword,
-          autofillHints: [AutofillHints.username],
         ),
         Padding(padding: EdgeInsets.all(6)),
         StatefulBuilder(
@@ -364,7 +363,6 @@ class _MyHomePageState extends State<MyHomePage>
               labelText: CustomValues.lang.password,
               keyboardType: TextInputType.visiblePassword,
               obscureText: passwordHidden,
-              autofillHints: [AutofillHints.password],
             );
           },
         ),
@@ -657,16 +655,18 @@ class _MyHomePageState extends State<MyHomePage>
                     : MdiIcons.folderInformationOutline,
                 text: CustomValues.lang.settingsAppInfo,
               ),
-              ampBigAmpButton(
-                onTap: () {
-                  if (Prefs.devOptionsEnabled)
-                    Animations.changeScreenEaseOutBackReplace(
-                        DevOptionsScreen(), context);
-                },
-                icon: MdiIcons.codeBrackets,
-                text: 'Entwickleroptionen',
-                visible: Prefs.devOptionsEnabled,
-              ),
+              Prefs.devOptionsEnabled
+                  ? Container()
+                  : ampBigAmpButton(
+                      onTap: () {
+                        if (Prefs.devOptionsEnabled)
+                          Animations.changeScreenEaseOutBackReplace(
+                              DevOptionsScreen(), context);
+                      },
+                      icon: MdiIcons.codeBrackets,
+                      text: 'Entwickleroptionen',
+                      visible: Prefs.devOptionsEnabled,
+                    ),
             ],
           ),
         ),
