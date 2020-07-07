@@ -655,18 +655,16 @@ class _MyHomePageState extends State<MyHomePage>
                     : MdiIcons.folderInformationOutline,
                 text: CustomValues.lang.settingsAppInfo,
               ),
-              Prefs.devOptionsEnabled
-                  ? Container()
-                  : ampBigAmpButton(
-                      onTap: () {
-                        if (Prefs.devOptionsEnabled)
-                          Animations.changeScreenEaseOutBackReplace(
-                              DevOptionsScreen(), context);
-                      },
-                      icon: MdiIcons.codeBrackets,
-                      text: 'Entwickleroptionen',
-                      visible: Prefs.devOptionsEnabled,
-                    ),
+              ampBigAmpButton(
+                onTap: () {
+                  if (Prefs.devOptionsEnabled)
+                    Animations.changeScreenEaseOutBackReplace(
+                        DevOptionsScreen(), context);
+                },
+                icon: MdiIcons.codeBrackets,
+                text: 'Entwickleroptionen',
+                visible: Prefs.devOptionsEnabled,
+              ),
             ],
           ),
         ),
