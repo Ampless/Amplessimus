@@ -360,7 +360,7 @@ class FirstLoginValues {
   static final passwordInputFormController =
       TextEditingController(text: Prefs.password);
   static TabController tabController;
-  static bool testing;
+  static bool testing = false;
   static Future<String> Function(
       Uri url, Object body, String id, Map<String, String> headers,
       {String Function(String) getCache,
