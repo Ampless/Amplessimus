@@ -63,7 +63,7 @@ for fn in * ; do
 done
 
 cd ~/amplus.chrissx.de/altstore
-sed -E 's/^      "version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json > temp.json
+sed -E 's/^      "version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json | sed -E 's/^      "versionDate": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}",$/      "versionDate": "'"$(date '+%FT%T%:z')"'",/' > temp.json
 mv temp.json alpha.json
 git add alpha.json
 git commit -m "automatic ci update to ios alpha version $version_name"
