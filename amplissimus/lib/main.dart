@@ -336,6 +336,7 @@ class _MyHomePageState extends State<MyHomePage>
           validator: textFieldValidator,
           labelText: CustomValues.lang.username,
           keyboardType: TextInputType.visiblePassword,
+          autofillHints: [AutofillHints.username],
         ),
         Padding(padding: EdgeInsets.all(6)),
         StatefulBuilder(
@@ -363,6 +364,7 @@ class _MyHomePageState extends State<MyHomePage>
               labelText: CustomValues.lang.password,
               keyboardType: TextInputType.visiblePassword,
               obscureText: passwordHidden,
+              autofillHints: [AutofillHints.password],
             );
           },
         ),

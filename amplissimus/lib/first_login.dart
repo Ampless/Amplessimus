@@ -180,6 +180,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         validator: textFieldValidator,
                         labelText: CustomValues.lang.username,
                         keyboardType: TextInputType.visiblePassword,
+                        autofillHints: [AutofillHints.username],
                       ),
                       Padding(padding: EdgeInsets.all(6)),
                       ampFormField(
@@ -206,6 +207,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         labelText: CustomValues.lang.password,
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: passwordHidden,
+                        autofillHints: [AutofillHints.password],
                       ),
                       Divider(color: AmpColors.colorForeground, height: 20),
                       Padding(padding: EdgeInsets.all(4)),
