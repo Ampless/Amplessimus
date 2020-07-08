@@ -47,7 +47,8 @@ make mac || { make cleanartifacts rollbackversions ; }
 
 commitid=$(git rev-parse @)
 date=$(date +%Y_%m_%d-%H_%M_%S)
-version_name="$(head -n 1 Makefile | cut -d' ' -f3).$(echo $commitid | cut -c 1-4)"
+raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
+version_name="$raw_version.$(echo $commitid | cut -c 1-4)"
 echo "$version_name"
 output_dir="/usr/local/var/www/amplissimus/$version_name"
 
@@ -63,7 +64,9 @@ for fn in * ; do
 done
 
 cd ~/amplus.chrissx.de/altstore
-sed -E 's/^      "version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json | sed -E 's/^      "versionDate": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}",$/      "versionDate": "'"$(date '+%FT%T%:z')"'",/' > temp.json
+sed -E 's/^      "version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json | \
+sed -E 's/^      "versionDate": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}",$/      "versionDate": "'"$(date '+%FT%T%:z')"'",/' | \
+sed -E 's/^      "downloadURL": "https://github.com/Amplissimus/Amplissimus/releases/download/.+?/.+?.ipa",$/      "downloadURL": "https://github.com/Amplissimus/Amplissimus/releases/download/'"$version_name"'/'"$raw_version"'.ipa",/' > temp.json
 mv temp.json alpha.json
 git add alpha.json
 git commit -m "automatic ci update to ios alpha version $version_name"
