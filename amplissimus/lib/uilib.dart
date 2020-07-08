@@ -150,7 +150,7 @@ List<Widget> ampDialogButtonsSaveAndCancel(
   ];
 }
 
-Card ampBigAmpButton(
+Widget ampBigAmpButton(
     {@required void Function() onTap,
     @required IconData icon,
     @required String text,
