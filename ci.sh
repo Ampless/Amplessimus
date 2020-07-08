@@ -61,3 +61,9 @@ upload_url="$(gh_create_release $commitid $version_name)"
 for fn in * ; do
         gh_upload_binary "$upload_url" "$fn"
 done
+
+cd ~/amplus.chrissx.de/altstore
+sed -E 's/^      "version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json > temp.json
+mv temp.json alpha.json
+git add alpha.json
+git commit -m "automatic ci update to ios alpha version $version_name"
