@@ -40,6 +40,8 @@ flutter channel master
 flutter upgrade
 flutter config --enable-web --enable-macos-desktop
 
+ls ~
+
 mkdir -p /usr/local/var/www/amplissimus
 cd amplissimus
 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
@@ -63,7 +65,6 @@ for fn in * ; do
         gh_upload_binary "$upload_url" "$fn"
 done
 
-ls ~
 cd ~/amplus.chrissx.de/altstore
 sed -E 's/^      "version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json | \
 sed -E 's/^      "versionDate": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}",$/      "versionDate": "'"$(date '+%FT%T%:z')"'",/' | \
