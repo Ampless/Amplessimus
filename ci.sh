@@ -63,13 +63,15 @@ for fn in * ; do
         gh_upload_binary "$upload_url" "$fn"
 done
 
-cd ~/amplus.chrissx.de
+cd
+[ ! -d amplus.chrissx.de ] && git clone https://github.com/Amplissimus/amplus.chrissx.de
+cd amplus.chrissx.de
 git pull
 cd altstore
 sed -E 's/^ *"version": "[0-9]+.[0-9]+.[0-9]+.[0-9a-f]{4}",$/      "version": "'"$version_name"'",/' alpha.json | \
-sed -E 's/^ *"versionDate": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}",$/      "versionDate": "'"$(date '+%FT%T%:z')"'",/' | \
-sed -E 's/^ *"downloadURL": ".+",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
+sed -E 's/^ *"versionDate": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
+sed -E 's/^ *"downloadURL": "https.+\.ipa",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
 mv temp.json alpha.json
 git add alpha.json
-git commit -m "automatic ci update to ios alpha version $version_name"
+git commit -m "automatic ci update to amplissimus ios alpha version $version_name"
 git push
