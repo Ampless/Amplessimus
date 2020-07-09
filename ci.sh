@@ -6,7 +6,7 @@
 #  name     (2)
 gh_create_release() {
         echo "[GitHub] Creating release: $2" >&2
-        RAW="$(curl -X POST -u "$(cat /etc/ampci.creds)" \
+        RAW="$(curl -X POST '-#' -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 --data "{
                          \"tag_name\": \"$2\",
@@ -16,7 +16,7 @@ gh_create_release() {
                          \"draft\": false,
                          \"prerelease\": true
                         }" \
-                                https://api.github.com/repos/Amplissimus/Amplissimus/releases)"
+               https://api.github.com/repos/Amplissimus/Amplissimus/releases)"
         UPLOAD_URL=$(echo "$RAW" | grep '"upload_url":' | head -n 1 | cut -d: -f2- | sed 's/^.*"\(.*\)".*$/\1/' | sed 's/{?name,label}//')
         echo "[GitHub] Created release: $UPLOAD_URL" >&2
         echo "$UPLOAD_URL"
@@ -28,7 +28,7 @@ gh_create_release() {
 #  file                        (2)
 gh_upload_binary() {
         echo "[GitHub] Uploading binary: $2"
-        curl -X POST -u "$(cat /etc/ampci.creds)" \
+        curl -X POST -'#' -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Content-Type: application/octet-stream" \
                 --data-binary "@$2" "$(echo "$1" | sed "s/$/?name=$2/")"
