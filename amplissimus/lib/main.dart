@@ -67,7 +67,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
               MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
       } else {
-        await dsbUpdateWidget(() {},
+        await dsbUpdateWidget(
             cacheJsonPlans: Prefs.useJsonCache,
             httpPost: FirstLoginValues.testing
                 ? FirstLoginValues.httpPostReplacement
@@ -204,7 +204,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   void rebuildTimer() {
     if (tabController.index == 0)
-      dsbUpdateWidget(rebuild,
+      dsbUpdateWidget(
+          callback: rebuild,
           httpPost: FirstLoginValues.testing
               ? FirstLoginValues.httpPostReplacement
               : httpPost,
@@ -216,7 +217,8 @@ class _MyHomePageState extends State<MyHomePage>
   Future<Null> rebuildDragDown() async {
     // ignore: unawaited_futures
     refreshKey.currentState?.show();
-    await dsbUpdateWidget(rebuild,
+    await dsbUpdateWidget(
+        callback: rebuild,
         cachePostRequests: false,
         cacheJsonPlans: Prefs.useJsonCache,
         httpPost: FirstLoginValues.testing
@@ -229,7 +231,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
-    await dsbUpdateWidget(rebuild,
+    await dsbUpdateWidget(
+        callback: rebuild,
         cacheJsonPlans: Prefs.useJsonCache,
         httpPost: FirstLoginValues.testing
             ? FirstLoginValues.httpPostReplacement
@@ -407,7 +410,8 @@ class _MyHomePageState extends State<MyHomePage>
                       value: Prefs.oneClassOnly,
                       onChanged: (value) {
                         setState(() => Prefs.oneClassOnly = value);
-                        dsbUpdateWidget(rebuild,
+                        dsbUpdateWidget(
+                            callback: rebuild,
                             cacheJsonPlans: Prefs.useJsonCache,
                             httpPost: FirstLoginValues.testing
                                 ? FirstLoginValues.httpPostReplacement
