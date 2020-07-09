@@ -28,7 +28,7 @@ class CachedSharedPreferences {
     if (_prefs != null)
       await _prefs.setString(key, value);
     else if (_prefFile == null) _editsString.add(key);
-    flush();
+    await flush();
   }
 
   Future<Null> setInt(String key, int value) async {
@@ -38,7 +38,7 @@ class CachedSharedPreferences {
     if (_prefs != null)
       await _prefs.setInt(key, value);
     else if (_prefFile == null) _editsInt.add(key);
-    flush();
+    await flush();
   }
 
   Future<Null> setDouble(String key, double value) async {
@@ -48,7 +48,7 @@ class CachedSharedPreferences {
     if (_prefs != null)
       await _prefs.setDouble(key, value);
     else if (_prefFile == null) _editsDouble.add(key);
-    flush();
+    await flush();
   }
 
   Future<Null> setStringList(String key, List<String> value) async {
@@ -58,7 +58,7 @@ class CachedSharedPreferences {
     if (_prefs != null)
       await _prefs.setStringList(key, value);
     else if (_prefFile == null) _editsStrings.add(key);
-    flush();
+    await flush();
   }
 
   Future<Null> setBool(String key, bool value) async {
@@ -67,10 +67,8 @@ class CachedSharedPreferences {
     _prefFileMutex.release();
     if (_prefs != null)
       await _prefs.setBool(key, value);
-    else if (_prefFile != null)
-      flush();
-    else
-      _editsBool.add(key);
+    else if (_prefFile == null) _editsBool.add(key);
+    await flush();
   }
 
   int getInt(String key, int defaultValue) {
@@ -168,8 +166,14 @@ class CachedSharedPreferences {
     _prefFileMutex.release();
   }
 
+  Future<Null> waitForMutex() async {
+    await _prefFileMutex.acquire();
+    _prefFileMutex.release();
+  }
+
   Future<Null> ctorSharedPrefs() async {
     _prefs = await SharedPreferences.getInstance();
+    await waitForMutex();
     for (var key in _editsString) await setString(key, _cacheString[key]);
     for (var key in _editsInt) await setInt(key, _cacheInt[key]);
     for (var key in _editsDouble) await setDouble(key, _cacheDouble[key]);

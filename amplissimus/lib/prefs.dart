@@ -133,7 +133,7 @@ String toJson() => _prefs.toJson();
 
 //This does practically nothing (it is internally called when setting
 //any value), but it waits for any set operations in progress to finish.
-Future<Null> flush() => _prefs.flush();
+Future<Null> waitForMutex() => _prefs.waitForMutex();
 
 void initTestPrefs() {
   _prefs = CachedSharedPreferences();
