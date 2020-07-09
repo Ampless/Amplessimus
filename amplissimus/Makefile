@@ -130,9 +130,11 @@ cleanartifacts:
 	which rm
 	rm -rf $(TMP)/*
 
+# by now this is actually taken straight from the flutter docs
+# (linux alpha gang)
 setup:
 	which sudo apt
-	sudo apt install -y cmake ninja-build
+	sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev
 
 test:
 	flutter test $(TEST_FLAGS) || make test

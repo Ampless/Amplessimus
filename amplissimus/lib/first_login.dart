@@ -320,7 +320,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   FocusScope.of(context).unfocus();
                   Prefs.firstLogin = false;
                   setState(() => dsbWidgetIsLoading = false);
-                  await dsbUpdateWidget(() => setState(() {}),
+                  await dsbUpdateWidget(
+                      callback: () => setState(() {}),
                       httpPost: FirstLoginValues.testing
                           ? FirstLoginValues.httpPostReplacement
                           : httpPost,

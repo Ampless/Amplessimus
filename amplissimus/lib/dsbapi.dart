@@ -335,10 +335,11 @@ String errorString(dynamic e) {
 
 Widget dsbWidget;
 
-Future<Null> dsbUpdateWidget(Function f,
-    {bool cacheGetRequests = true,
+Future<Null> dsbUpdateWidget(
+    {void Function() callback,
+    bool cacheGetRequests = true,
     bool cachePostRequests = true,
-    bool cacheJsonPlans = false,
+    bool cacheJsonPlans,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers,
             {String Function(String) getCache,
@@ -348,12 +349,13 @@ Future<Null> dsbUpdateWidget(Function f,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
         httpGet = httpGet}) async {
+  cacheJsonPlans ??= Prefs.useJsonCache;
+  callback ??= () {};
   try {
     if (Prefs.username.isEmpty || Prefs.password.isEmpty)
       throw CustomValues.lang.noLogin;
-    var jsonCache = Prefs.dsbJsonCache;
     List<DsbPlan> plans;
-    if (!cacheJsonPlans || jsonCache == null) {
+    if (!cacheJsonPlans || Prefs.dsbJsonCache == null) {
       plans = await dsbGetAllSubs(Prefs.username, Prefs.password,
           lang: CustomValues.lang,
           cacheGetRequests: cacheGetRequests,
@@ -362,7 +364,7 @@ Future<Null> dsbUpdateWidget(Function f,
           httpGet: httpGet);
       Prefs.dsbJsonCache = plansToJson(plans);
     } else
-      plans = plansFromJson(jsonCache);
+      plans = plansFromJson(Prefs.dsbJsonCache);
     if (Prefs.oneClassOnly &&
         Prefs.username.isNotEmpty &&
         Prefs.password.isNotEmpty)
@@ -382,7 +384,7 @@ Future<Null> dsbUpdateWidget(Function f,
           padding: EdgeInsets.only(top: 15)),
     );
   }
-  f();
+  callback();
 }
 
 Widget getThemedWidget(Widget child, int themeId) {

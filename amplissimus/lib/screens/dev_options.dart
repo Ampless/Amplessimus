@@ -27,7 +27,7 @@ class DevOptionsScreen extends StatelessWidget {
           ),
         ),
         onWillPop: () async {
-          await dsbUpdateWidget(() {});
+          await dsbUpdateWidget();
           Animations.changeScreenEaseOutBackReplace(
               MyApp(initialIndex: 2), context);
           return false;
@@ -115,8 +115,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   value: Prefs.useJsonCache,
                   onChanged: (value) {
                     Prefs.useJsonCache = value;
-                    dsbUpdateWidget(() => setState(() {}),
-                        cacheJsonPlans: value);
+                    dsbUpdateWidget(
+                        callback: () => setState(() {}), cacheJsonPlans: value);
                   },
                 ),
                 Divider(
@@ -210,7 +210,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           backgroundColor: AmpColors.colorBackground,
           splashColor: AmpColors.colorForeground,
           onPressed: () {
-            dsbUpdateWidget(() {});
+            dsbUpdateWidget();
             Animations.changeScreenEaseOutBackReplace(
                 MyApp(initialIndex: 2), context);
           },
@@ -275,7 +275,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         onSave: () {
           if (!inputFormKey.currentState.validate()) return;
           Prefs.dsbJsonCache = inputFormController.text.trim();
-          setState(() => Prefs.dsbJsonCache);
           Navigator.of(context).pop();
         },
       ),

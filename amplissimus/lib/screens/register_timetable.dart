@@ -288,7 +288,7 @@ class RegisterTimetableScreenPageState
               backgroundColor: AmpColors.colorBackground,
               splashColor: AmpColors.colorForeground,
               onPressed: () async {
-                await dsbUpdateWidget(() {});
+                await dsbUpdateWidget();
                 ttSaveToPrefs(CustomValues.ttColumns);
                 Animations.changeScreenEaseOutBackReplace(
                   MyApp(
