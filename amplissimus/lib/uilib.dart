@@ -193,6 +193,13 @@ Widget ampBigAmpButton(
       : Container();
 }
 
+Widget ampRaisedButton({String text, void Function() onPressed}) {
+  return RaisedButton(
+    child: Text(text),
+    onPressed: onPressed,
+  );
+}
+
 Widget ampAppBar(String text, {double fontSize = 25}) {
   return AppBar(
     elevation: 0,

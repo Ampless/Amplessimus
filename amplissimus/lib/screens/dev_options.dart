@@ -146,8 +146,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   child: Text('Clear Cache'),
                   onPressed: Prefs.clearCache,
                 ),
-                RaisedButton(
-                  child: Text('_ _ SET CACHE _ _'),
+                ampRaisedButton(
+                  text: 'Set Cache to Kekw',
                   onPressed: () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"3.7.2020 Freitag\",\"subs\":['
                       '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
@@ -159,8 +159,11 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
                       '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
                 ),
-                RaisedButton(
-                    child: Text('Stundenplan löschen'),
+                ampRaisedButton(
+                    text: 'Set Cache to Input',
+                    onPressed: () => showCacheDialog(context)),
+                ampRaisedButton(
+                    text: 'Stundenplan löschen',
                     onPressed: () {
                       Prefs.jsonTimetable = null;
                       setState(() {});
@@ -225,16 +228,16 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
   }
 
   void showInputSubListItemSpacingDialog(BuildContext context) {
-    final subListSpacingInputFormKey = GlobalKey<FormFieldState>();
-    final subListSpacingInputFormController =
+    final inputFormKey = GlobalKey<FormFieldState>();
+    final inputFormController =
         TextEditingController(text: Prefs.subListItemSpace.toString());
     showAmpTextDialog(
       context: context,
       title: 'Listenelementabstand',
       children: (context) => [
         ampFormField(
-          controller: subListSpacingInputFormController,
-          key: subListSpacingInputFormKey,
+          controller: inputFormController,
+          key: inputFormKey,
           keyboardType: TextInputType.number,
           validator: numberValidator,
         ),
@@ -242,10 +245,37 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: () => Navigator.of(context).pop(),
         onSave: () {
-          if (!subListSpacingInputFormKey.currentState.validate()) return;
+          if (!inputFormKey.currentState.validate()) return;
           Prefs.subListItemSpace =
-              double.parse(subListSpacingInputFormController.text.trim());
+              double.parse(inputFormController.text.trim());
           setState(() => Prefs.subListItemSpace);
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
+  void showCacheDialog(BuildContext context) {
+    final inputFormKey = GlobalKey<FormFieldState>();
+    final inputFormController =
+        TextEditingController(text: Prefs.dsbJsonCache.toString());
+    showAmpTextDialog(
+      context: context,
+      title: 'Cache',
+      children: (context) => [
+        ampFormField(
+          controller: inputFormController,
+          key: inputFormKey,
+          keyboardType: TextInputType.multiline,
+          validator: textFieldValidator,
+        ),
+      ],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        onCancel: () => Navigator.of(context).pop(),
+        onSave: () {
+          if (!inputFormKey.currentState.validate()) return;
+          Prefs.dsbJsonCache = inputFormController.text.trim();
+          setState(() => Prefs.dsbJsonCache);
           Navigator.of(context).pop();
         },
       ),
