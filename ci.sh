@@ -36,6 +36,8 @@ gh_upload_binary() {
         echo "[GitHub] Done uploading: $2"
 }
 
+date --help
+
 flutter channel master
 flutter upgrade
 flutter config --enable-web --enable-macos-desktop
