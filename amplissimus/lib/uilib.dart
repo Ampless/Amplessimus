@@ -215,9 +215,12 @@ Text ampText(String text, {double size, TextAlign textAlign}) {
         );
 }
 
-Icon ampIcon(IconData data, {double size}) => size != null
-    ? Icon(data, color: AmpColors.colorForeground, size: size)
-    : Icon(data, color: AmpColors.colorForeground);
+Icon ampIcon(IconData data, {double size, Color color}) {
+  color ??= AmpColors.colorForeground;
+  return size != null
+      ? Icon(data, color: color, size: size)
+      : Icon(data, color: color);
+}
 
 Widget ampAppBar(String text, {double fontSize = 25}) {
   return AppBar(

@@ -700,15 +700,15 @@ class _MyHomePageState extends State<MyHomePage>
               labelColor: AmpColors.colorForeground,
               tabs: <Widget>[
                 Tab(
-                  icon: ampIcon(Icons.home),
+                  icon: Icon(Icons.home),
                   text: CustomValues.lang.start,
                 ),
                 Tab(
-                  icon: ampIcon(MdiIcons.timetable),
+                  icon: Icon(MdiIcons.timetable),
                   text: CustomValues.lang.timetable,
                 ),
                 Tab(
-                  icon: ampIcon(Icons.settings),
+                  icon: Icon(Icons.settings),
                   text: CustomValues.lang.settings,
                 )
               ],
