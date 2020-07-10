@@ -69,9 +69,9 @@ cd amplus.chrissx.de
 git pull
 cd altstore
 sed -E 's/^ *"version": ".+",$/      "version": "'"$version_name"'",/' alpha.json | \
-sed -E 's/^ *"versionDate": "[0-9\-T:]{19}.+",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
+sed -E 's/^ *"versionDate": ".+",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
 sed -E 's/^ *"versionDescription": ".+",$/      "versionDescription": "As of '"$(date)"'",/' | \
-sed -E 's/^ *"downloadURL": "https...github+\.ipa",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
+sed -E 's/^ *"downloadURL": ".+",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
 mv temp.json alpha.json
 git add alpha.json
 git commit -m "automatic ci update to amplissimus ios alpha version $version_name"
