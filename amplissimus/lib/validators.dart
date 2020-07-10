@@ -9,16 +9,12 @@ String Function(String) makeListValidator(List<String> list) {
       : CustomValues.lang.widgetValidatorInvalid;
 }
 
-String textFieldValidator(String value) {
-  return value.trim().isEmpty
-      ? CustomValues.lang.widgetValidatorFieldEmpty
-      : null;
-}
+String textFieldValidator(String value) =>
+    value.trim().isEmpty ? CustomValues.lang.widgetValidatorFieldEmpty : null;
 
 String numberValidator(String value) {
   value = value.trim();
   if (value.isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
   final n = num.tryParse(value);
-  if (n == null || n < 0) return CustomValues.lang.widgetValidatorInvalid;
-  return null;
+  return n == null || n < 0 ? CustomValues.lang.widgetValidatorInvalid : null;
 }

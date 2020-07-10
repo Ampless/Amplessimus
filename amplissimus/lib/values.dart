@@ -40,12 +40,15 @@ class CustomValues {
 
   static void generateNewTTColumns() {
     ttColumns = [];
-    var tempLessons = <TTLesson>[];
-    for (var i = 0; i < 6; i++) {
-      tempLessons.add(TTLesson('', '', '', false));
-    }
-    for (var day in TTDay.values) {
-      ttColumns.add(TTColumn(tempLessons, day));
+    for (var day in ttWeek) {
+      ttColumns.add(TTColumn(<TTLesson>[
+        TTLesson.empty,
+        TTLesson.empty,
+        TTLesson.empty,
+        TTLesson.empty,
+        TTLesson.empty,
+        TTLesson.empty,
+      ], day));
     }
   }
 }

@@ -89,6 +89,8 @@ class TTLesson {
 
   @override
   String toString() => '{"$subject", "$teacher", "$notes", $isFree}';
+
+  static TTLesson get empty => TTLesson('', '', '', false);
 }
 
 class TTColumn {

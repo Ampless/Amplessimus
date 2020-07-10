@@ -101,7 +101,7 @@ TextFormField ampFormField(
   );
 }
 
-Widget ampDialogButton(
+FlatButton ampDialogButton(
     {@required String text, @required Function() onPressed}) {
   return FlatButton(
     textColor: AmpColors.colorForeground,
@@ -110,7 +110,7 @@ Widget ampDialogButton(
   );
 }
 
-Widget ampDropdownButton(
+DropdownButton ampDropdownButton(
     {@required dynamic value,
     @required List<DropdownMenuItem<dynamic>> items,
     @required void Function(dynamic) onChanged,
@@ -127,7 +127,7 @@ Widget ampDropdownButton(
   );
 }
 
-Widget ampSwitchWithText(
+ListTile ampSwitchWithText(
     {@required String text,
     @required bool value,
     @required Function(bool) onChanged}) {
@@ -193,7 +193,7 @@ Widget ampBigAmpButton(
       : Container();
 }
 
-Widget ampRaisedButton({String text, void Function() onPressed}) {
+RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
   return RaisedButton(
     child: ampText(text),
     onPressed: onPressed,
@@ -222,7 +222,7 @@ Icon ampIcon(IconData data, {double size, Color color}) {
       : Icon(data, color: color);
 }
 
-Widget ampAppBar(String text, {double fontSize = 25}) {
+AppBar ampAppBar(String text, {double fontSize = 25}) {
   return AppBar(
     elevation: 0,
     backgroundColor: Colors.transparent,
