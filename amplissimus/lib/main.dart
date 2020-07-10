@@ -294,6 +294,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   void showInputChangeLanguage(BuildContext context) {
     var lang = CustomValues.lang;
+    var use = Prefs.dsbUseLanguage;
     ampSelectionDialog(
       context: context,
       title: CustomValues.lang.changeLanguage,
@@ -306,11 +307,17 @@ class _MyHomePageState extends State<MyHomePage>
           }).toList(),
           onChanged: (value) => setAlState(() => lang = value),
         ),
+        ampSwitchWithText(
+          text: 'Use for DSB',
+          value: use,
+          onChanged: (value) => setAlState(() => use),
+        ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: Navigator.of(context).pop,
         onSave: () {
           CustomValues.lang = lang;
+          Prefs.dsbUseLanguage = use;
           rebuildNewBuild();
 
           FirstLoginValues.grades[0] = CustomValues.lang.empty;
