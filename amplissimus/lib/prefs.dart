@@ -117,6 +117,11 @@ set savedLangCode(String s) => _prefs.setString('lang', s);
 String get jsonTimetable => _prefs.getString('json_timetable', null);
 set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
 
+bool get dsbUseLanguage => _prefs.getBool('dsb_use_language', false);
+set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', true);
+
+String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
+
 int get timer => _prefs.getInt('update_dsb_timer', 15);
 void setTimer(int i, Function() f) {
   _prefs.setInt('update_dsb_timer', i);

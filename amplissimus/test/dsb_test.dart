@@ -92,6 +92,7 @@ class DsbTestCase extends TestCase {
               lang: Language.all.first,
               httpGet: httpGet,
               httpPost: httpPost,
+              dsbLanguage: 'de',
               cacheGetRequests: false,
               cachePostRequests: false),
           stage,

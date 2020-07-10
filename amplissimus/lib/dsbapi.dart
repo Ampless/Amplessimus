@@ -18,7 +18,6 @@ const String _DSB_BUNDLE_ID = 'de.heinekingmedia.dsbmobile';
 const String _DSB_DEVICE = 'SM-G950F';
 const String _DSB_VERSION = '2.5.9';
 const String _DSB_OS_VERSION = '29 10.0';
-const String _DSB_LANGUAGE = 'de';
 
 var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -177,13 +176,14 @@ Future<String> dsbGetData(String username, String password,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
         httpPost = httpPost,
+    String dsbLanguage = 'de',
     @required Language lang}) async {
   var datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   var json = '{'
       '"UserId":"$username",'
       '"UserPw":"$password",'
       '"AppVersion":"$_DSB_VERSION",'
-      '"Language":"$_DSB_LANGUAGE",'
+      '"Language":"$dsbLanguage",'
       '"OsVersion":"$_DSB_OS_VERSION",'
       '"AppId":"${v4()}",'
       '"Device":"$_DSB_DEVICE",'
@@ -259,11 +259,15 @@ Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
         httpPost = httpPost,
+    @required String dsbLanguage,
     @required Language lang}) async {
   var plans = <DsbPlan>[];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
   var json = await dsbGetData(username, password,
-      cachePostRequests: cachePostRequests, httpPost: httpPost, lang: lang);
+      cachePostRequests: cachePostRequests,
+      httpPost: httpPost,
+      dsbLanguage: dsbLanguage,
+      lang: lang);
   var htmls = await dsbGetHtml(json,
       cacheGetRequests: cacheGetRequests, httpGet: httpGet);
   for (var title in htmls.keys) {
@@ -348,27 +352,43 @@ Future<Null> dsbUpdateWidget(
     Future<String> Function(Uri url,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
-        httpGet = httpGet}) async {
+        httpGet = httpGet,
+    String dsbLanguage,
+    String dsbJsonCache,
+    String username,
+    String password,
+    bool oneClassOnly,
+    String grade,
+    String char,
+    int currentThemeId,
+    Language lang}) async {
   cacheJsonPlans ??= Prefs.useJsonCache;
   callback ??= () {};
+  dsbLanguage ??= Prefs.dsbLanguage;
+  dsbJsonCache ??= Prefs.dsbJsonCache;
+  username ??= Prefs.username;
+  password ??= Prefs.password;
+  lang ??= CustomValues.lang;
+  oneClassOnly ??= oneClassOnly;
+  grade ??= Prefs.grade;
+  char ??= Prefs.char;
+  currentThemeId ??= Prefs.currentThemeId;
   try {
-    if (Prefs.username.isEmpty || Prefs.password.isEmpty)
-      throw CustomValues.lang.noLogin;
+    if (username.isEmpty || password.isEmpty) throw lang.noLogin;
     List<DsbPlan> plans;
-    if (!cacheJsonPlans || Prefs.dsbJsonCache == null) {
-      plans = await dsbGetAllSubs(Prefs.username, Prefs.password,
-          lang: CustomValues.lang,
+    if (!cacheJsonPlans || dsbJsonCache == null) {
+      plans = await dsbGetAllSubs(username, password,
+          lang: lang,
           cacheGetRequests: cacheGetRequests,
           cachePostRequests: cachePostRequests,
           httpPost: httpPost,
-          httpGet: httpGet);
-      Prefs.dsbJsonCache = plansToJson(plans);
+          httpGet: httpGet,
+          dsbLanguage: dsbLanguage);
+      dsbJsonCache = plansToJson(plans);
     } else
-      plans = plansFromJson(Prefs.dsbJsonCache);
-    if (Prefs.oneClassOnly &&
-        Prefs.username.isNotEmpty &&
-        Prefs.password.isNotEmpty)
-      plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+      plans = plansFromJson(dsbJsonCache);
+    if (oneClassOnly && username.isNotEmpty && password.isNotEmpty)
+      plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
     dsbWidget = dsbGetGoodList(plans);
     timetablePlans = plans;
   } catch (e) {
@@ -379,7 +399,7 @@ Future<Null> dsbUpdateWidget(
             ListTile(
               title: Text(errorString(e), style: AmpColors.textStyleForeground),
             ),
-            Prefs.currentThemeId,
+            currentThemeId,
           ),
           padding: EdgeInsets.only(top: 15)),
     );
