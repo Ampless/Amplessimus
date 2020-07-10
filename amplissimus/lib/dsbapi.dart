@@ -369,7 +369,7 @@ Future<Null> dsbUpdateWidget(
   username ??= Prefs.username;
   password ??= Prefs.password;
   lang ??= CustomValues.lang;
-  oneClassOnly ??= oneClassOnly;
+  oneClassOnly ??= Prefs.oneClassOnly;
   grade ??= Prefs.grade;
   char ??= Prefs.char;
   currentThemeId ??= Prefs.currentThemeId;
