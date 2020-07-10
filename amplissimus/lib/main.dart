@@ -307,6 +307,10 @@ class _MyHomePageState extends State<MyHomePage>
           }).toList(),
           onChanged: (value) => setAlState(() => lang = value),
         ),
+        Divider(
+          color: AmpColors.colorForeground,
+          height: Prefs.subListItemSpace,
+        ),
         ampSwitchWithText(
           text: 'Use for DSB',
           value: use,
