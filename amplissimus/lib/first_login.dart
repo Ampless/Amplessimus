@@ -109,7 +109,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: ampText(CustomValues.lang.changeLoginPopup, size: 25),
+                title: Text(
+                  CustomValues.lang.changeLoginPopup,
+                  style:
+                      TextStyle(color: AmpColors.colorForeground, fontSize: 25),
+                ),
                 centerTitle: true,
               ),
               body: Center(
@@ -120,7 +124,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ampText(CustomValues.lang.selectClass, size: 20),
+                      Text(
+                        CustomValues.lang.selectClass,
+                        style: TextStyle(
+                            color: AmpColors.colorForeground, fontSize: 20),
+                      ),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         ampDropdownButton(
                           value: FirstLoginValues.grades[0],
@@ -128,7 +136,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: ampText(value),
+                              child: Text(value),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -141,14 +149,14 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             });
                           },
                         ),
-                        ampPadding(10),
+                        Padding(padding: EdgeInsets.all(10)),
                         ampDropdownButton(
                           value: FirstLoginValues.letters[0],
                           items: FirstLoginValues.letters
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: ampText(value),
+                              child: Text(value),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -177,11 +185,20 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       Padding(padding: EdgeInsets.all(6)),
                       ampFormField(
                         suffixIcon: IconButton(
-                          onPressed: () =>
-                              setState(() => passwordHidden = !passwordHidden),
+                          onPressed: () {
+                            setState(() {
+                              passwordHidden = !passwordHidden;
+                            });
+                          },
                           icon: passwordHidden
-                              ? ampIcon(Icons.visibility)
-                              : ampIcon(Icons.visibility_off),
+                              ? Icon(
+                                  Icons.visibility,
+                                  color: AmpColors.colorForeground,
+                                )
+                              : Icon(
+                                  Icons.visibility_off,
+                                  color: AmpColors.colorForeground,
+                                ),
                         ),
                         controller:
                             FirstLoginValues.passwordInputFormController,
@@ -192,29 +209,29 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         obscureText: passwordHidden,
                         autofillHints: [AutofillHints.password],
                       ),
-                      ampSizedDivider(20),
-                      ampPadding(4),
-                      ampText(CustomValues.lang.changeLanguage, size: 20),
+                      Divider(color: AmpColors.colorForeground, height: 20),
+                      Padding(padding: EdgeInsets.all(4)),
+                      Text(CustomValues.lang.changeLanguage,
+                          style: TextStyle(
+                              color: AmpColors.colorForeground, fontSize: 20)),
                       ampDropdownButton(
                         value: CustomValues.lang,
                         items: Language.all
                             .map<DropdownMenuItem<Language>>((value) {
                           return DropdownMenuItem<Language>(
-                              value: value, child: ampText(value.name));
+                              value: value, child: Text(value.name));
                         }).toList(),
                         onChanged: (value) =>
                             setState(() => CustomValues.lang = value),
                       ),
-                      ampPadding(10),
+                      Padding(padding: EdgeInsets.all(10)),
                       Divider(color: Colors.transparent, height: 30),
                       AnimatedDefaultTextStyle(
-                        child: ampText(textString),
-                        style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: isError ? 20 : 0,
-                        ),
-                        duration: Duration(milliseconds: 350),
-                      ),
+                          child: Text(textString),
+                          style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: isError ? 20 : 0),
+                          duration: Duration(milliseconds: 350)),
                     ],
                   ),
                 ),
@@ -225,7 +242,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       valueColor: AlwaysStoppedAnimation<Color>(
                           AmpColors.colorForeground),
                     )
-                  : Container(),
+                  : Container(
+                      height: 0,
+                    ),
               floatingActionButton: _saveButton = FloatingActionButton.extended(
                 elevation: 0,
                 onPressed: () async {
@@ -267,8 +286,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 highlightElevation: 0,
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
-                label: ampText(CustomValues.lang.save),
-                icon: ampIcon(Icons.save),
+                label: Text(CustomValues.lang.save,
+                    style: TextStyle(color: AmpColors.colorForeground)),
+                icon: Icon(Icons.save, color: AmpColors.colorForeground),
               ),
             ),
           ),
@@ -288,7 +308,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.transparent,
-                title: ampText(AmpStrings.appTitle, size: 24),
+                title: Text(
+                  AmpStrings.appTitle,
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
                 centerTitle: true,
               ),
               floatingActionButton: _doneButton = FloatingActionButton.extended(
@@ -312,8 +335,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 },
                 backgroundColor: AmpColors.colorBackground,
                 splashColor: AmpColors.colorForeground,
-                label: ampText(CustomValues.lang.firstStartupDone),
-                icon: ampIcon(MdiIcons.arrowRight),
+                label: Text(CustomValues.lang.firstStartupDone,
+                    style: AmpColors.textStyleForeground),
+                icon: Icon(
+                  MdiIcons.arrowRight,
+                  color: AmpColors.colorForeground,
+                ),
               ),
               bottomSheet: dsbWidgetIsLoading
                   ? LinearProgressIndicator(
