@@ -54,7 +54,7 @@ class English extends Language {
     var notesaddon =
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
-        ? 'Free lesson${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
+        ? 'Free lesson${sub.hours.length == 1 ? '' : 's'}$notesaddon'
         : 'Substituted by ${sub.teacher}$notesaddon';
   }
 
