@@ -94,7 +94,14 @@ class AmpColors {
   static Color get colorForeground => isDarkMode ? _blankWhite : _blankBlack;
 
   static TextStyle get textStyleForeground => TextStyle(color: colorForeground);
-  static TextStyle get textStyleBackground => TextStyle(color: colorBackground);
+  static TextStyle sizedTextStyleForeground(double size) => size != null
+      ? TextStyle(color: colorForeground, fontSize: size)
+      : textStyleForeground;
+  static TextStyle get styleLightForeground =>
+      TextStyle(color: lightForeground);
+  static TextStyle sizedStyleLightForeground(double size) => size != null
+      ? TextStyle(color: lightForeground, fontSize: size)
+      : styleLightForeground;
 
   static Brightness get brightness =>
       isDarkMode ? Brightness.dark : Brightness.light;

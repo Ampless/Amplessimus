@@ -1,7 +1,6 @@
 import 'package:Amplissimus/animations.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/main.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
@@ -103,9 +102,10 @@ class RegisterTimetableScreenPageState
                         items:
                             ttWeek.map<DropdownMenuItem<TTDay>>((TTDay value) {
                           return DropdownMenuItem<TTDay>(
-                              value: value,
-                              child:
-                                  Text(CustomValues.lang.ttDayToString(value)));
+                            value: value,
+                            child:
+                                ampText(CustomValues.lang.ttDayToString(value)),
+                          );
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
@@ -123,7 +123,7 @@ class RegisterTimetableScreenPageState
                         items: CustomValues.ttHours
                             .map<DropdownMenuItem<int>>((int value) {
                           return DropdownMenuItem<int>(
-                              value: value, child: Text(value.toString()));
+                              value: value, child: ampText(value.toString()));
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
@@ -193,24 +193,24 @@ class RegisterTimetableScreenPageState
                           final teacherInputFormController =
                               TextEditingController(
                                   text: selectedTTLesson.teacher);
-                          showAmpTextDialog(
+                          ampTextDialog(
                             title: CustomValues.lang.editHour,
                             children: (context) => [
-                              Padding(padding: EdgeInsets.all(3)),
+                              ampPadding(3),
                               ampFormField(
                                 controller: subjectInputFormController,
                                 key: subjectInputFormKey,
                                 validator: textFieldValidator,
                                 labelText: CustomValues.lang.subject,
                               ),
-                              Padding(padding: EdgeInsets.all(6)),
+                              ampPadding(6),
                               ampFormField(
                                 controller: notesInputFormController,
                                 key: notesInputFormKey,
                                 validator: textFieldValidator,
                                 labelText: CustomValues.lang.notes,
                               ),
-                              Padding(padding: EdgeInsets.all(6)),
+                              ampPadding(6),
                               ampFormField(
                                 controller: teacherInputFormController,
                                 key: teacherInputFormKey,
@@ -233,15 +233,16 @@ class RegisterTimetableScreenPageState
                             actions: (context) => ampDialogButtonsSaveAndCancel(
                               onCancel: () => Navigator.pop(context),
                               onSave: () {
-                                selectedTTLesson.subject =
-                                    subjectInputFormController.text.trim();
-                                selectedTTLesson.notes =
-                                    notesInputFormController.text.trim();
-                                selectedTTLesson.teacher =
-                                    teacherInputFormController.text.trim();
-                                selectedTTLesson.isFree =
-                                    tempCurrentTTLessonIsFree;
-                                setState(() {});
+                                setState(() {
+                                  selectedTTLesson.subject =
+                                      subjectInputFormController.text.trim();
+                                  selectedTTLesson.notes =
+                                      notesInputFormController.text.trim();
+                                  selectedTTLesson.teacher =
+                                      teacherInputFormController.text.trim();
+                                  selectedTTLesson.isFree =
+                                      tempCurrentTTLessonIsFree;
+                                });
                                 Navigator.pop(context);
                                 ttSaveToPrefs(CustomValues.ttColumns);
                               },
@@ -249,36 +250,29 @@ class RegisterTimetableScreenPageState
                             context: context,
                           );
                         },
-                        title: Text(
+                        title: ampText(
                           ttColumn.lessons[index].subject.trim().isEmpty &&
                                   !ttColumn.lessons[index].isFree
                               ? CustomValues.lang.subject
                               : titleString.trim(),
-                          style: TextStyle(
-                              color: AmpColors.colorForeground, fontSize: 22),
+                          size: 22,
                         ),
-                        subtitle: Text(
+                        subtitle: ampText(
                           ttColumn.lessons[index].notes.trim().isEmpty
                               ? CustomValues.lang.notes
                               : ttColumn.lessons[index].notes.trim(),
-                          style: TextStyle(
-                              color: AmpColors.lightForeground, fontSize: 16),
+                          size: 16,
                         ),
-                        trailing: Text(
+                        trailing: ampText(
                           ttColumn.lessons[index].teacher.trim().isEmpty &&
                                   !ttColumn.lessons[index].isFree
                               ? CustomValues.lang.teacher
                               : trailingString.trim(),
-                          style: TextStyle(
-                              color: AmpColors.lightForeground, fontSize: 16),
+                          size: 16,
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                          color: AmpColors.colorForeground,
-                          height: Prefs.subListItemSpace);
-                    },
+                    separatorBuilder: (context, index) => ampDivider,
                   )),
                 ],
               ),
@@ -291,20 +285,12 @@ class RegisterTimetableScreenPageState
                 await dsbUpdateWidget();
                 ttSaveToPrefs(CustomValues.ttColumns);
                 Animations.changeScreenEaseOutBackReplace(
-                  MyApp(
-                    initialIndex: 1,
-                  ),
+                  MyApp(initialIndex: 1),
                   context,
                 );
               },
-              label: Text(
-                CustomValues.lang.save,
-                style: TextStyle(color: AmpColors.colorForeground),
-              ),
-              icon: Icon(
-                Icons.save,
-                color: AmpColors.colorForeground,
-              ),
+              label: ampText(CustomValues.lang.save),
+              icon: ampIcon(Icons.save),
             ),
           ),
           Scaffold(
@@ -316,14 +302,8 @@ class RegisterTimetableScreenPageState
                 RegisterTimetableValues.tabController.animateTo(0);
                 ttSaveToPrefs(CustomValues.ttColumns);
               },
-              label: Text(
-                CustomValues.lang.firstStartupDone,
-                style: TextStyle(color: AmpColors.colorForeground),
-              ),
-              icon: Icon(
-                MdiIcons.arrowRight,
-                color: AmpColors.colorForeground,
-              ),
+              label: ampText(CustomValues.lang.firstStartupDone),
+              icon: ampIcon(MdiIcons.arrowRight),
             ),
           ),
         ],

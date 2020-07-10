@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() {
@@ -215,8 +216,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Future<Null> rebuildDragDown() async {
-    // ignore: unawaited_futures
-    refreshKey.currentState?.show();
+    unawaited(refreshKey.currentState?.show());
     await dsbUpdateWidget(
         callback: rebuild,
         cachePostRequests: false,
@@ -258,7 +258,10 @@ class _MyHomePageState extends State<MyHomePage>
           value: gradeDropDownValue,
           items: FirstLoginValues.grades
               .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
+            return DropdownMenuItem<String>(
+              value: value,
+              child: ampText(value),
+            );
           }).toList(),
           onChanged: (value) {
             setAlState(() {
@@ -267,12 +270,15 @@ class _MyHomePageState extends State<MyHomePage>
             });
           },
         ),
-        Padding(padding: EdgeInsets.all(10)),
+        ampPadding(10),
         ampDropdownButton(
           value: letterDropDownValue,
           items: FirstLoginValues.letters
               .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
+            return DropdownMenuItem<String>(
+              value: value,
+              child: ampText(value),
+            );
           }).toList(),
           onChanged: (value) {
             setAlState(() {
@@ -303,7 +309,9 @@ class _MyHomePageState extends State<MyHomePage>
           value: lang,
           items: Language.all.map<DropdownMenuItem<Language>>((value) {
             return DropdownMenuItem<Language>(
-                value: value, child: Text(value.name));
+              value: value,
+              child: ampText(value.name),
+            );
           }).toList(),
           onChanged: (value) => setAlState(() => lang = value),
         ),
@@ -339,7 +347,7 @@ class _MyHomePageState extends State<MyHomePage>
         TextEditingController(text: Prefs.username);
     final passwordInputFormController =
         TextEditingController(text: Prefs.password);
-    showAmpTextDialog(
+    ampTextDialog(
       context: context,
       title: CustomValues.lang.changeLoginPopup,
       children: (context) => [
@@ -358,19 +366,11 @@ class _MyHomePageState extends State<MyHomePage>
             return ampFormField(
               suffixIcon: IconButton(
                 onPressed: () {
-                  setFieldState(() {
-                    passwordHidden = !passwordHidden;
-                  });
+                  setFieldState(() => passwordHidden = !passwordHidden);
                 },
                 icon: passwordHidden
-                    ? Icon(
-                        Icons.visibility,
-                        color: AmpColors.colorForeground,
-                      )
-                    : Icon(
-                        Icons.visibility_off,
-                        color: AmpColors.colorForeground,
-                      ),
+                    ? ampIcon(Icons.visibility)
+                    : ampIcon(Icons.visibility_off),
               ),
               controller: passwordInputFormController,
               key: passwordInputFormKey,
@@ -406,14 +406,8 @@ class _MyHomePageState extends State<MyHomePage>
         ? widget = Stack(
             children: <Widget>[
               ListTile(
-                title: Text(
-                  CustomValues.lang.allClasses,
-                  style: TextStyle(color: AmpColors.colorForeground),
-                ),
-                trailing: Text(
-                  '${Prefs.grade}${Prefs.char}',
-                  style: TextStyle(color: AmpColors.colorForeground),
-                ),
+                title: ampText(CustomValues.lang.allClasses),
+                trailing: ampText('${Prefs.grade}${Prefs.char}'),
               ),
               Align(
                   child: Switch(
@@ -498,18 +492,13 @@ class _MyHomePageState extends State<MyHomePage>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          MdiIcons.timetable,
-                          color: AmpColors.colorForeground,
-                          size: 200,
-                        ),
-                        Text(
+                        ampIcon(MdiIcons.timetable, size: 200),
+                        ampText(
                           CustomValues.lang.setupTimetable,
-                          style: TextStyle(
-                              color: AmpColors.colorForeground, fontSize: 32),
+                          size: 32,
                           textAlign: TextAlign.center,
                         ),
-                        Padding(padding: EdgeInsets.all(10)),
+                        ampPadding(10),
                       ],
                     ),
                   ),
@@ -528,9 +517,8 @@ class _MyHomePageState extends State<MyHomePage>
                     ampSwitchWithText(
                       text: CustomValues.lang.filterTimetables,
                       value: Prefs.filterTimetables,
-                      onChanged: (value) {
-                        setState(() => Prefs.filterTimetables = value);
-                      },
+                      onChanged: (value) =>
+                          setState(() => Prefs.filterTimetables = value),
                     ),
                     Padding(padding: EdgeInsets.all(24)),
                   ],
@@ -540,21 +528,15 @@ class _MyHomePageState extends State<MyHomePage>
             ? FloatingActionButton.extended(
                 onPressed: () => Animations.changeScreenEaseOutBackReplace(
                     RegisterTimetableScreen(), context),
-                label: Text(CustomValues.lang.edit),
-                icon: Icon(
-                  Icons.edit,
-                  color: AmpColors.colorForeground,
-                ),
+                label: ampText(CustomValues.lang.edit),
+                icon: ampIcon(Icons.edit),
                 backgroundColor: AmpColors.colorBackground,
                 foregroundColor: AmpColors.colorForeground,
                 splashColor: AmpColors.colorForeground,
                 highlightElevation: 0,
                 focusColor: Colors.transparent,
               )
-            : Container(
-                height: 0,
-                width: 0,
-              ),
+            : Container(),
       ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
@@ -602,8 +584,7 @@ class _MyHomePageState extends State<MyHomePage>
                   await rebuildNewBuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
-                    content: Text(CustomValues.lang.changedAppearance,
-                        style: AmpColors.textStyleForeground),
+                    content: ampText(CustomValues.lang.changedAppearance),
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
                       label: CustomValues.lang.show,
@@ -707,14 +688,8 @@ class _MyHomePageState extends State<MyHomePage>
                   backgroundColor: fabBackgroundColor,
                   splashColor: AmpColors.colorForeground,
                   onPressed: () => setState(() => Prefs.counter += 2),
-                  icon: Icon(
-                    Icons.add,
-                    color: AmpColors.colorForeground,
-                  ),
-                  label: Text(
-                    'Zählen',
-                    style: TextStyle(color: AmpColors.colorForeground),
-                  ),
+                  icon: ampIcon(Icons.add),
+                  label: ampText('Zählen'),
                 )
               : Container(),
           bottomNavigationBar: SizedBox(
@@ -724,13 +699,18 @@ class _MyHomePageState extends State<MyHomePage>
               indicatorColor: AmpColors.colorForeground,
               labelColor: AmpColors.colorForeground,
               tabs: <Widget>[
-                Tab(icon: Icon(Icons.home), text: CustomValues.lang.start),
                 Tab(
-                    icon: Icon(MdiIcons.timetable),
-                    text: CustomValues.lang.timetable),
+                  icon: ampIcon(Icons.home),
+                  text: CustomValues.lang.start,
+                ),
                 Tab(
-                    icon: Icon(Icons.settings),
-                    text: CustomValues.lang.settings)
+                  icon: ampIcon(MdiIcons.timetable),
+                  text: CustomValues.lang.timetable,
+                ),
+                Tab(
+                  icon: ampIcon(Icons.settings),
+                  text: CustomValues.lang.settings,
+                )
               ],
             ),
           ),

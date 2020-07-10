@@ -68,8 +68,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         backgroundColor: AmpColors.colorBackground,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Entwickleroptionen',
-              style: TextStyle(fontSize: 20, color: AmpColors.colorForeground)),
+          title: ampText('Entwickleroptionen', size: 20),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -79,19 +78,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           child: Center(
             child: ListView(
               children: [
-                Divider(
-                    color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace + 2),
+                ampDivider,
                 ampSwitchWithText(
                   text: 'Entwickleroptionen aktiviert',
                   value: Prefs.devOptionsEnabled,
                   onChanged: (value) =>
                       setState(() => Prefs.devOptionsEnabled = value),
                 ),
-                Divider(
-                  color: AmpColors.colorForeground,
-                  height: Prefs.subListItemSpace,
-                ),
+                ampDivider,
                 ampSwitchWithText(
                   text: 'Hilfe für Langeweile aktiviert',
                   value: Prefs.counterEnabled,
@@ -119,31 +113,25 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                         callback: () => setState(() {}), cacheJsonPlans: value);
                   },
                 ),
-                Divider(
-                    color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace),
+                ampDivider,
                 ListTile(
-                  title: Text('Listenelementabstand',
-                      style: AmpColors.textStyleForeground),
-                  trailing: Text('${Prefs.subListItemSpace}',
-                      style: AmpColors.textStyleForeground),
+                  title: ampText('Listenelementabstand'),
+                  trailing: ampText('${Prefs.subListItemSpace}'),
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
                 ListTile(
-                  title: Text('Refreshtimer (in Minuten)',
-                      style: AmpColors.textStyleForeground),
-                  trailing: Text('${Prefs.timer}',
-                      style: AmpColors.textStyleForeground),
+                  title: ampText('Refreshtimer (in Minuten)'),
+                  trailing: ampText('${Prefs.timer}'),
                   onTap: () => showInputTimerDialog(context),
                 ),
-                Divider(
-                    color: AmpColors.colorForeground,
-                    height: Prefs.subListItemSpace),
+                ampDivider,
                 Divider(color: Colors.transparent, height: 10),
-                RaisedButton(
-                    child: Text('Print Cache'), onPressed: Prefs.listCache),
-                RaisedButton(
-                  child: Text('Clear Cache'),
+                ampRaisedButton(
+                  text: 'Print Cache',
+                  onPressed: Prefs.listCache,
+                ),
+                ampRaisedButton(
+                  text: 'Clear Cache',
                   onPressed: Prefs.clearCache,
                 ),
                 ampRaisedButton(
@@ -170,33 +158,25 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     }),
                 RaisedButton.icon(
                   color: Colors.red,
-                  icon: Icon(Icons.delete, color: AmpColors.colorForeground),
-                  label: Text('App-Daten löschen',
-                      style: TextStyle(color: AmpColors.colorForeground)),
+                  icon: ampIcon(Icons.delete),
+                  label: ampText('App-Daten löschen'),
                   onPressed: () {
                     showDialog(
                         context: context,
                         barrierDismissible: true,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('App-Daten löschen',
-                                style: AmpColors.textStyleForeground),
-                            content: Text('Löschen der App-Daten bestätigen?',
-                                style: AmpColors.textStyleForeground),
+                            title: ampText('App-Daten löschen'),
+                            content:
+                                ampText('Löschen der App-Daten bestätigen?'),
                             backgroundColor: AmpColors.colorBackground,
-                            actions: <Widget>[
-                              ampDialogButton(
-                                text: 'Abbrechen',
-                                onPressed: Navigator.of(context).pop,
-                              ),
-                              ampDialogButton(
-                                text: 'Bestätigen',
-                                onPressed: () {
-                                  Prefs.clear();
-                                  SystemNavigator.pop();
-                                },
-                              ),
-                            ],
+                            actions: ampDialogButtonsSaveAndCancel(
+                              onCancel: Navigator.of(context).pop,
+                              onSave: () {
+                                Prefs.clear();
+                                SystemNavigator.pop();
+                              },
+                            ),
                           );
                         });
                   },
@@ -212,16 +192,12 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           onPressed: () {
             dsbUpdateWidget();
             Animations.changeScreenEaseOutBackReplace(
-                MyApp(initialIndex: 2), context);
+              MyApp(initialIndex: 2),
+              context,
+            );
           },
-          label: Text(
-            'zurück',
-            style: TextStyle(color: AmpColors.colorForeground),
-          ),
-          icon: Icon(
-            Icons.arrow_back,
-            color: AmpColors.colorForeground,
-          ),
+          label: ampText('zurück'),
+          icon: ampIcon(Icons.arrow_back),
         ),
       )
     ]);
@@ -231,7 +207,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final inputFormKey = GlobalKey<FormFieldState>();
     final inputFormController =
         TextEditingController(text: Prefs.subListItemSpace.toString());
-    showAmpTextDialog(
+    ampTextDialog(
       context: context,
       title: 'Listenelementabstand',
       children: (context) => [
@@ -259,7 +235,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final inputFormKey = GlobalKey<FormFieldState>();
     final inputFormController =
         TextEditingController(text: Prefs.dsbJsonCache.toString());
-    showAmpTextDialog(
+    ampTextDialog(
       context: context,
       title: 'Cache',
       children: (context) => [
@@ -285,7 +261,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final timerInputFormKey = GlobalKey<FormFieldState>();
     final timerInputFormController =
         TextEditingController(text: Prefs.timer.toString());
-    showAmpTextDialog(
+    ampTextDialog(
       context: context,
       title: 'Timer (Minuten)',
       children: (context) => [

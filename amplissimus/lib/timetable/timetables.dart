@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
@@ -206,22 +207,16 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
   var widgets = <Widget>[];
   for (var plan in tempPlans) {
     var ttColumnIndex = TTDay.values.indexOf(plan.day);
-    widgets.add(
-      ListTile(
-          title: Text(' ${CustomValues.lang.ttDayToString(plan.day)}',
-              style:
-                  TextStyle(color: AmpColors.colorForeground, fontSize: 24))),
-    );
+    widgets.add(ListTile(
+      title: ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 24),
+    ));
     var unthemedWidgets = <Widget>[];
     var lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
     var tempLength = lessons.length;
     for (var lesson in lessons) {
-      var finishedFiltering = false;
+      var finishedFiltering = false, isReplaced = false;
       var lessonIndex = lessons.indexOf(lesson) + 1;
-      var titleString = '';
-      var trailingString = '';
-      var notesString = '';
-      var isReplaced = false;
+      var titleString = '', trailingString = '', notesString = '';
       if (filtered) {
         if (plan.subs.isEmpty) {
           if (lesson.isFree)
@@ -267,41 +262,39 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
       }
 
       unthemedWidgets.add(ListTile(
-        title: Text(
+        title: ampText(
           titleString.trim().isEmpty && !lesson.isFree
               ? CustomValues.lang.subject
               : titleString.trim(),
-          style: TextStyle(color: AmpColors.colorForeground, fontSize: 22),
+          size: 22,
         ),
         leading: Text(
           (lessons.indexOf(lesson) + 1).toString(),
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AmpColors.colorForeground,
-              fontSize: 30),
+            fontWeight: FontWeight.bold,
+            color: AmpColors.colorForeground,
+            fontSize: 30,
+          ),
         ),
-        subtitle: Text(
+        subtitle: ampText(
           notesString.trim().isEmpty
               ? CustomValues.lang.notes
               : notesString.trim(),
-          style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
+          size: 16,
         ),
-        trailing: Text(
+        trailing: ampText(
           trailingString.trim().isEmpty && !isReplaced && !lesson.isFree
               ? CustomValues.lang.teacher
               : trailingString.trim(),
-          style: TextStyle(color: AmpColors.lightForeground, fontSize: 16),
+          size: 16,
         ),
       ));
       if (lessons.indexOf(lesson) < tempLength - 1)
-        unthemedWidgets.add(Divider(
-          color: AmpColors.colorForeground,
-          height: 0,
-        ));
+        unthemedWidgets.add(ampSizedDivider(0));
     }
     widgets.add(getThemedWidget(
         Column(children: unthemedWidgets), Prefs.currentThemeId));
-    widgets.add(Padding(padding: EdgeInsets.all(12)));
+    widgets.add(ampPadding(12));
   }
   return widgets;
 }

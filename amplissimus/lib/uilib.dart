@@ -1,4 +1,5 @@
 import 'package:Amplissimus/main.dart';
+import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ Future<Null> ampSelectionDialog(
     barrierDismissible: true,
     builder: (context) {
       return AlertDialog(
-        title: Text(title, style: TextStyle(color: AmpColors.colorForeground)),
+        title: ampText(title),
         backgroundColor: AmpColors.colorBackground,
         content: StatefulBuilder(
           builder: (BuildContext alertContext, StateSetter setAlState) => Theme(
@@ -29,7 +30,7 @@ Future<Null> ampSelectionDialog(
   );
 }
 
-Future<Null> showAmpTextDialog(
+Future<Null> ampTextDialog(
     {@required String title,
     @required List<Widget> Function(BuildContext) children,
     @required List<Widget> Function(BuildContext) actions,
@@ -40,7 +41,7 @@ Future<Null> showAmpTextDialog(
     builder: (context) {
       return MaterialApp(
         home: AlertDialog(
-          title: Text(title, style: AmpColors.textStyleForeground),
+          title: ampText(title),
           backgroundColor: AmpColors.colorBackground,
           content: SingleChildScrollView(
             child: Column(
@@ -80,21 +81,23 @@ TextFormField ampFormField(
     validator: validator,
     keyboardType: keyboardType,
     decoration: InputDecoration(
-        suffixIcon: suffixIcon,
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        labelStyle: TextStyle(color: AmpColors.colorForeground),
-        labelText: labelText,
-        fillColor: AmpColors.colorForeground,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: AmpColors.colorForeground))),
+      suffixIcon: suffixIcon,
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      labelStyle: AmpColors.textStyleForeground,
+      labelText: labelText,
+      fillColor: AmpColors.colorForeground,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: AmpColors.colorForeground),
+      ),
+    ),
   );
 }
 
@@ -103,7 +106,7 @@ Widget ampDialogButton(
   return FlatButton(
     textColor: AmpColors.colorForeground,
     onPressed: onPressed,
-    child: Text(text),
+    child: ampText(text),
   );
 }
 
@@ -129,7 +132,7 @@ Widget ampSwitchWithText(
     @required bool value,
     @required Function(bool) onChanged}) {
   return ListTile(
-    title: Text(text, style: AmpColors.textStyleForeground),
+    title: ampText(text),
     trailing: Switch(
       activeColor: AmpColors.colorForeground,
       value: value,
@@ -137,6 +140,11 @@ Widget ampSwitchWithText(
     ),
   );
 }
+
+Divider ampSizedDivider(double size) =>
+    Divider(color: AmpColors.colorForeground, height: size);
+
+Divider get ampDivider => ampSizedDivider(Prefs.subListItemSpace);
 
 List<Widget> ampDialogButtonsSaveAndCancel(
     {@required Function() onCancel, @required Function() onSave}) {
@@ -173,18 +181,10 @@ Widget ampBigAmpButton(
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Padding(padding: EdgeInsets.all(24)),
-                  Icon(icon,
-                      size: 50,
-                      color: visible
-                          ? AmpColors.colorForeground
-                          : AmpColors.colorBackground),
-                  Padding(padding: EdgeInsets.all(10)),
-                  Text(text,
-                      style: visible
-                          ? AmpColors.textStyleForeground
-                          : AmpColors.textStyleBackground,
-                      textAlign: TextAlign.center)
+                  ampPadding(24),
+                  ampIcon(icon, size: 50),
+                  ampPadding(10),
+                  ampText(text, textAlign: TextAlign.center)
                 ],
               ),
             ),
@@ -195,17 +195,35 @@ Widget ampBigAmpButton(
 
 Widget ampRaisedButton({String text, void Function() onPressed}) {
   return RaisedButton(
-    child: Text(text),
+    child: ampText(text),
     onPressed: onPressed,
   );
 }
+
+Padding ampPadding(double value) => Padding(padding: EdgeInsets.all(value));
+
+Text ampText(String text, {double size, TextAlign textAlign}) {
+  return textAlign == null
+      ? Text(
+          text,
+          style: AmpColors.sizedTextStyleForeground(size),
+        )
+      : Text(
+          text,
+          style: AmpColors.sizedTextStyleForeground(size),
+          textAlign: textAlign,
+        );
+}
+
+Icon ampIcon(IconData data, {double size}) => size != null
+    ? Icon(data, color: AmpColors.colorForeground, size: size)
+    : Icon(data, color: AmpColors.colorForeground);
 
 Widget ampAppBar(String text, {double fontSize = 25}) {
   return AppBar(
     elevation: 0,
     backgroundColor: Colors.transparent,
-    title: Text(text,
-        style: TextStyle(fontSize: fontSize, color: AmpColors.colorForeground)),
+    title: ampText(text, size: fontSize),
     centerTitle: true,
   );
 }

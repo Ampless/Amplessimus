@@ -8,6 +8,7 @@ import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:Amplissimus/uilib.dart';
 import 'package:Amplissimus/values.dart';
 import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
@@ -395,13 +396,12 @@ Future<Null> dsbUpdateWidget(
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-          child: getThemedWidget(
-            ListTile(
-              title: Text(errorString(e), style: AmpColors.textStyleForeground),
-            ),
-            currentThemeId,
-          ),
-          padding: EdgeInsets.only(top: 15)),
+        child: getThemedWidget(
+          ListTile(title: ampText(errorString(e))),
+          currentThemeId,
+        ),
+        padding: EdgeInsets.only(top: 15),
+      ),
     );
   }
   callback();
@@ -443,8 +443,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
     var dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
       dayWidgets.add(ListTile(
-        title: Text(CustomValues.lang.noSubs,
-            style: AmpColors.textStyleForeground),
+        title: ampText(CustomValues.lang.noSubs),
       ));
     }
     var i = 0;
@@ -454,38 +453,26 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       if (CustomValues.isAprilFools)
         titleSub = '${Random().nextInt(98) + 1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title: Text(titleSub, style: AmpColors.textStyleForeground),
-        subtitle: Text(CustomValues.lang.dsbSubtoSubtitle(sub),
-            style: TextStyle(
-                color: CustomValues.isAprilFools
-                    ? rcolor
-                    : AmpColors.colorForeground)),
+        title: ampText(titleSub),
+        subtitle: ampText(CustomValues.lang.dsbSubtoSubtitle(sub)),
         trailing:
             (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly)
-                ? Text(sub.affectedClass,
-                    style: TextStyle(color: AmpColors.colorForeground))
-                : Text(''),
+                ? ampText(sub.affectedClass)
+                : Container(),
       ));
-      if (++i != iMax)
-        dayWidgets.add(Divider(
-            color: AmpColors.colorForeground, height: Prefs.subListItemSpace));
+      if (++i != iMax) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
         title: Row(children: <Widget>[
-      Text(' ${CustomValues.lang.ttDayToString(plan.day)}',
-          style: TextStyle(color: AmpColors.colorForeground, fontSize: 22)),
+      ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 22),
       IconButton(
-          icon: Icon(
-            Icons.info,
-            color: AmpColors.colorForeground,
-          ),
+          icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
             dsbApiHomeScaffoldKey.currentState?.showSnackBar(
               SnackBar(
                   backgroundColor: AmpColors.colorBackground,
-                  content:
-                      Text(plan.date, style: AmpColors.textStyleForeground)),
+                  content: ampText(plan.date)),
             );
           }),
     ])));
