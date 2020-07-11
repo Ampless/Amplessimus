@@ -193,9 +193,9 @@ class RegisterTimetableScreenPageState
                           final teacherInputFormController =
                               TextEditingController(
                                   text: selectedTTLesson.teacher);
-                          ampTextDialog(
+                          ampDialog(
                             title: CustomValues.lang.editHour,
-                            children: (context) => [
+                            children: (context, setAlState) => [
                               ampPadding(3),
                               ampFormField(
                                 controller: subjectInputFormController,
@@ -248,6 +248,7 @@ class RegisterTimetableScreenPageState
                               },
                             ),
                             context: context,
+                            rowOrColumn: ampColumn,
                           );
                         },
                         title: ampText(

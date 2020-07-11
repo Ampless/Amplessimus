@@ -242,9 +242,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       valueColor: AlwaysStoppedAnimation<Color>(
                           AmpColors.colorForeground),
                     )
-                  : Container(
-                      height: 0,
-                    ),
+                  : ampNull,
               floatingActionButton: _saveButton = FloatingActionButton.extended(
                 elevation: 0,
                 onPressed: () async {
@@ -348,7 +346,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       valueColor: AlwaysStoppedAnimation<Color>(
                           AmpColors.colorForeground),
                     )
-                  : Container(height: 0),
+                  : ampNull,
             ),
           ]),
         ]));

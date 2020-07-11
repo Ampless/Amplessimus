@@ -1,13 +1,13 @@
-import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/values.dart';
 import 'package:flutter/material.dart';
 
-Future<Null> ampSelectionDialog(
+Future<Null> ampDialog(
     {@required String title,
-    @required List<Widget> Function(BuildContext, StateSetter) inputChildren,
+    @required List<Widget> Function(BuildContext, StateSetter) children,
     @required List<Widget> Function(BuildContext) actions,
-    @required BuildContext context}) {
+    @required BuildContext context,
+    @required Widget Function(List<Widget>) rowOrColumn}) {
   return showDialog(
     context: context,
     barrierDismissible: true,
@@ -16,12 +16,8 @@ Future<Null> ampSelectionDialog(
         title: ampText(title),
         backgroundColor: AmpColors.colorBackground,
         content: StatefulBuilder(
-          builder: (BuildContext alertContext, StateSetter setAlState) => Theme(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: inputChildren(alertContext, setAlState),
-            ),
-            data: ThemeData(canvasColor: AmpColors.materialColorBackground),
+          builder: (alertContext, setAlState) => rowOrColumn(
+            children(alertContext, setAlState),
           ),
         ),
         actions: actions(context),
@@ -30,33 +26,17 @@ Future<Null> ampSelectionDialog(
   );
 }
 
-Future<Null> ampTextDialog(
-    {@required String title,
-    @required List<Widget> Function(BuildContext) children,
-    @required List<Widget> Function(BuildContext) actions,
-    @required BuildContext context}) {
-  return showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return MaterialApp(
-        home: AlertDialog(
-          title: ampText(title),
-          backgroundColor: AmpColors.colorBackground,
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: children(context),
-            ),
-          ),
-          actions: actions(context),
-        ),
-        builder: (context, child) =>
-            ScrollConfiguration(behavior: MyBehavior(), child: child),
-      );
-    },
-  );
-}
+Container get ampNull => Container(width: 0, height: 0);
+
+Column ampColumn(List<Widget> children) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: children,
+    );
+
+Row ampRow(List<Widget> children) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: children,
+    );
 
 TextFormField ampFormField(
     {@required TextEditingController controller,
@@ -68,10 +48,7 @@ TextFormField ampFormField(
     List<String> autofillHints,
     Widget suffixIcon}) {
   autofillHints ??= [];
-  suffixIcon ??= Container(
-    height: 0,
-    width: 0,
-  );
+  suffixIcon ??= ampNull;
   return TextFormField(
     obscureText: obscureText,
     style: AmpColors.textStyleForeground,
@@ -120,6 +97,8 @@ DropdownButton ampDropdownButton(
       height: underlineDisabled ? 0 : 2,
       color: AmpColors.colorForeground,
     ),
+    dropdownColor: AmpColors.colorBackground,
+    focusColor: AmpColors.colorBackground,
     style: AmpColors.textStyleForeground,
     value: value,
     items: items,
@@ -190,11 +169,12 @@ Widget ampBigAmpButton(
             ),
           ),
         )
-      : Container();
+      : ampNull;
 }
 
 RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
   return RaisedButton(
+    color: AmpColors.lightBackground,
     child: ampText(text),
     onPressed: onPressed,
   );

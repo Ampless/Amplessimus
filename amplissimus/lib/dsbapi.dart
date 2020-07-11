@@ -458,7 +458,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
         trailing:
             (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly)
                 ? ampText(sub.affectedClass)
-                : Container(),
+                : ampNull,
       ));
       if (++i != iMax) dayWidgets.add(ampDivider);
     }

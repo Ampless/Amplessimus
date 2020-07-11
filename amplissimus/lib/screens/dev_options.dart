@@ -207,10 +207,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final inputFormKey = GlobalKey<FormFieldState>();
     final inputFormController =
         TextEditingController(text: Prefs.subListItemSpace.toString());
-    ampTextDialog(
+    ampDialog(
       context: context,
       title: 'Listenelementabstand',
-      children: (context) => [
+      children: (context, setAlState) => [
         ampFormField(
           controller: inputFormController,
           key: inputFormKey,
@@ -228,6 +228,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           Navigator.of(context).pop();
         },
       ),
+      rowOrColumn: ampColumn,
     );
   }
 
@@ -235,10 +236,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final inputFormKey = GlobalKey<FormFieldState>();
     final inputFormController =
         TextEditingController(text: Prefs.dsbJsonCache.toString());
-    ampTextDialog(
+    ampDialog(
       context: context,
       title: 'Cache',
-      children: (context) => [
+      children: (context, setAlState) => [
         ampFormField(
           controller: inputFormController,
           key: inputFormKey,
@@ -254,6 +255,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           Navigator.of(context).pop();
         },
       ),
+      rowOrColumn: ampColumn,
     );
   }
 
@@ -261,10 +263,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     final timerInputFormKey = GlobalKey<FormFieldState>();
     final timerInputFormController =
         TextEditingController(text: Prefs.timer.toString());
-    ampTextDialog(
+    ampDialog(
       context: context,
       title: 'Timer (Minuten)',
-      children: (context) => [
+      children: (context, setAlState) => [
         ampFormField(
           controller: timerInputFormController,
           key: timerInputFormKey,
@@ -278,13 +280,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           if (!timerInputFormKey.currentState.validate()) return;
           try {
             setState(() => Prefs.setTimer(
-                int.parse(timerInputFormController.text.trim()), () => null));
+                int.parse(timerInputFormController.text.trim()), () {}));
           } catch (e) {
             return;
           }
           Navigator.of(context).pop();
         },
       ),
+      rowOrColumn: ampColumn,
     );
   }
 }

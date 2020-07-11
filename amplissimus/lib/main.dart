@@ -250,10 +250,10 @@ class _MyHomePageState extends State<MyHomePage>
       gradeDropDownValue = FirstLoginValues.grades[0];
     if (!FirstLoginValues.letters.contains(letterDropDownValue)) return;
     if (!FirstLoginValues.grades.contains(gradeDropDownValue)) return;
-    await ampSelectionDialog(
+    await ampDialog(
       context: context,
       title: CustomValues.lang.selectClass,
-      inputChildren: (alertContext, setAlState) => [
+      children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: gradeDropDownValue,
           items: FirstLoginValues.grades
@@ -295,16 +295,17 @@ class _MyHomePageState extends State<MyHomePage>
           Navigator.of(context).pop();
         },
       ),
+      rowOrColumn: ampRow,
     );
   }
 
   void showInputChangeLanguage(BuildContext context) {
     var lang = CustomValues.lang;
     var use = Prefs.dsbUseLanguage;
-    ampSelectionDialog(
+    ampDialog(
       context: context,
       title: CustomValues.lang.changeLanguage,
-      inputChildren: (alertContext, setAlState) => [
+      children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: lang,
           items: Language.all.map<DropdownMenuItem<Language>>((value) {
@@ -315,14 +316,11 @@ class _MyHomePageState extends State<MyHomePage>
           }).toList(),
           onChanged: (value) => setAlState(() => lang = value),
         ),
-        Divider(
-          color: AmpColors.colorForeground,
-          height: Prefs.subListItemSpace,
-        ),
+        ampSizedDivider(5),
         ampSwitchWithText(
           text: 'Use for DSB',
           value: use,
-          onChanged: (value) => setAlState(() => use),
+          onChanged: (value) => setAlState(() => use = value),
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
@@ -337,6 +335,7 @@ class _MyHomePageState extends State<MyHomePage>
           Navigator.of(context).pop();
         },
       ),
+      rowOrColumn: ampColumn,
     );
   }
 
@@ -347,11 +346,11 @@ class _MyHomePageState extends State<MyHomePage>
         TextEditingController(text: Prefs.username);
     final passwordInputFormController =
         TextEditingController(text: Prefs.password);
-    ampTextDialog(
+    ampDialog(
       context: context,
       title: CustomValues.lang.changeLoginPopup,
-      children: (context) => [
-        Padding(padding: EdgeInsets.all(2)),
+      children: (context, setAlState) => [
+        ampPadding(2),
         ampFormField(
           controller: usernameInputFormController,
           key: usernameInputFormKey,
@@ -360,28 +359,22 @@ class _MyHomePageState extends State<MyHomePage>
           keyboardType: TextInputType.visiblePassword,
           autofillHints: [AutofillHints.username],
         ),
-        Padding(padding: EdgeInsets.all(6)),
-        StatefulBuilder(
-          builder: (context, setFieldState) {
-            return ampFormField(
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setFieldState(() => passwordHidden = !passwordHidden);
-                },
-                icon: passwordHidden
-                    ? ampIcon(Icons.visibility)
-                    : ampIcon(Icons.visibility_off),
-              ),
-              controller: passwordInputFormController,
-              key: passwordInputFormKey,
-              validator: textFieldValidator,
-              labelText: CustomValues.lang.password,
-              keyboardType: TextInputType.visiblePassword,
-              obscureText: passwordHidden,
-              autofillHints: [AutofillHints.password],
-            );
-          },
-        ),
+        ampPadding(6),
+        ampFormField(
+          suffixIcon: IconButton(
+            onPressed: () => setAlState(() => passwordHidden = !passwordHidden),
+            icon: passwordHidden
+                ? ampIcon(Icons.visibility)
+                : ampIcon(Icons.visibility_off),
+          ),
+          controller: passwordInputFormController,
+          key: passwordInputFormKey,
+          validator: textFieldValidator,
+          labelText: CustomValues.lang.password,
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: passwordHidden,
+          autofillHints: [AutofillHints.password],
+        )
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: () => Navigator.of(context).pop(),
@@ -395,15 +388,15 @@ class _MyHomePageState extends State<MyHomePage>
           Navigator.of(context).pop();
         },
       ),
+      rowOrColumn: ampColumn,
     );
   }
 
   Widget get changeSubVisibilityWidget {
     var display = true;
-    Widget widget;
     if (Prefs.grade == '' && Prefs.char == '') display = false;
-    display
-        ? widget = Stack(
+    return display
+        ? Stack(
             children: <Widget>[
               ListTile(
                 title: ampText(CustomValues.lang.allClasses),
@@ -428,8 +421,7 @@ class _MyHomePageState extends State<MyHomePage>
                   alignment: Alignment.center),
             ],
           )
-        : widget = Container(height: 0);
-    return widget;
+        : ampNull;
   }
 
   @override
@@ -536,7 +528,7 @@ class _MyHomePageState extends State<MyHomePage>
                 highlightElevation: 0,
                 focusColor: Colors.transparent,
               )
-            : Container(),
+            : ampNull,
       ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
@@ -691,7 +683,7 @@ class _MyHomePageState extends State<MyHomePage>
                   icon: ampIcon(Icons.add),
                   label: ampText('Zählen'),
                 )
-              : Container(),
+              : ampNull,
           bottomNavigationBar: SizedBox(
             height: 55,
             child: TabBar(
@@ -722,7 +714,7 @@ class _MyHomePageState extends State<MyHomePage>
                   valueColor:
                       AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
                 )
-              : Container(height: 0),
+              : ampNull,
         )
       ],
     ));
