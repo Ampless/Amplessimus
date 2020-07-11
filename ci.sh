@@ -58,9 +58,11 @@ update_altstore() {
         git push
 }
 
-upload_to_github() {
+output() {
+        mv -f amplissimus/bin "$output_dir"
+
         [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
-        cd $output_dir
+        cd "$output_dir"
         upload_url="$(gh_create_release $commitid $version_name)"
         for fn in * ; do
                 gh_upload_binary "$upload_url" "$fn"
@@ -80,14 +82,12 @@ main() {
                 mkdir -p /usr/local/var/www/amplissimus
 
                 cd amplissimus
-                make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
+                make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
                 make mac || { make cleanartifacts rollbackversions ; }
                 cd ..
         } 2>&1 | tee amplissimus/bin/ci.log
 
-        mv -f amplissimus/bin "$output_dir"
-
-        upload_to_github
+        output
 
         update_altstore
 }
