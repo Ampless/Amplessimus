@@ -185,10 +185,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          elevation: 0,
-          backgroundColor: AmpColors.colorBackground,
-          splashColor: AmpColors.colorForeground,
+        floatingActionButton: ampFab(
           onPressed: () {
             dsbUpdateWidget();
             Animations.changeScreenEaseOutBackReplace(
@@ -196,8 +193,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
               context,
             );
           },
-          label: ampText('zurück'),
-          icon: ampIcon(Icons.arrow_back),
+          label: 'zurück',
+          icon: Icons.arrow_back,
         ),
       )
     ]);

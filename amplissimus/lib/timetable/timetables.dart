@@ -270,13 +270,10 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
               : titleString.trim(),
           size: 22,
         ),
-        leading: Text(
+        leading: ampText(
           (lessons.indexOf(lesson) + 1).toString(),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AmpColors.colorForeground,
-            fontSize: 30,
-          ),
+          weight: FontWeight.bold,
+          size: 30,
         ),
         subtitle: ampText(
           notesString.trim().isEmpty

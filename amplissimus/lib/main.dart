@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:Amplissimus/animations.dart';
-import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/screens/dev_options.dart';
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/first_login.dart';
@@ -70,12 +69,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       } else {
         await dsbUpdateWidget(
             cacheJsonPlans: Prefs.useJsonCache,
-            httpPost: FirstLoginValues.testing
-                ? FirstLoginValues.httpPostReplacement
-                : httpPost,
-            httpGet: FirstLoginValues.testing
-                ? FirstLoginValues.httpGetReplacement
-                : httpGet);
+            httpPost: FirstLoginValues.httpPostFunc,
+            httpGet: FirstLoginValues.httpGetFunc);
         Future.delayed(Duration(milliseconds: 1000), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
@@ -206,27 +201,21 @@ class _MyHomePageState extends State<MyHomePage>
   void rebuildTimer() {
     if (tabController.index == 0)
       dsbUpdateWidget(
-          callback: rebuild,
-          httpPost: FirstLoginValues.testing
-              ? FirstLoginValues.httpPostReplacement
-              : httpPost,
-          httpGet: FirstLoginValues.testing
-              ? FirstLoginValues.httpGetReplacement
-              : httpGet);
+        callback: rebuild,
+        httpPost: FirstLoginValues.httpPostFunc,
+        httpGet: FirstLoginValues.httpGetFunc,
+      );
   }
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
     await dsbUpdateWidget(
-        callback: rebuild,
-        cachePostRequests: false,
-        cacheJsonPlans: Prefs.useJsonCache,
-        httpPost: FirstLoginValues.testing
-            ? FirstLoginValues.httpPostReplacement
-            : httpPost,
-        httpGet: FirstLoginValues.testing
-            ? FirstLoginValues.httpGetReplacement
-            : httpGet);
+      callback: rebuild,
+      cachePostRequests: false,
+      cacheJsonPlans: Prefs.useJsonCache,
+      httpPost: FirstLoginValues.httpPostFunc,
+      httpGet: FirstLoginValues.httpGetFunc,
+    );
   }
 
   Future<Null> rebuildNewBuild() async {
@@ -234,12 +223,8 @@ class _MyHomePageState extends State<MyHomePage>
     await dsbUpdateWidget(
         callback: rebuild,
         cacheJsonPlans: Prefs.useJsonCache,
-        httpPost: FirstLoginValues.testing
-            ? FirstLoginValues.httpPostReplacement
-            : httpPost,
-        httpGet: FirstLoginValues.testing
-            ? FirstLoginValues.httpGetReplacement
-            : httpGet);
+        httpPost: FirstLoginValues.httpPostFunc,
+        httpGet: FirstLoginValues.httpGetFunc);
     setState(() => circularProgressIndicatorActive = false);
   }
 
@@ -409,14 +394,11 @@ class _MyHomePageState extends State<MyHomePage>
                       onChanged: (value) {
                         setState(() => Prefs.oneClassOnly = value);
                         dsbUpdateWidget(
-                            callback: rebuild,
-                            cacheJsonPlans: Prefs.useJsonCache,
-                            httpPost: FirstLoginValues.testing
-                                ? FirstLoginValues.httpPostReplacement
-                                : httpPost,
-                            httpGet: FirstLoginValues.testing
-                                ? FirstLoginValues.httpGetReplacement
-                                : httpGet);
+                          callback: rebuild,
+                          cacheJsonPlans: Prefs.useJsonCache,
+                          httpPost: FirstLoginValues.httpPostFunc,
+                          httpGet: FirstLoginValues.httpGetFunc,
+                        );
                       }),
                   alignment: Alignment.center),
             ],
@@ -517,16 +499,11 @@ class _MyHomePageState extends State<MyHomePage>
                 ),
         ),
         floatingActionButton: Prefs.jsonTimetable != null
-            ? FloatingActionButton.extended(
+            ? ampFab(
                 onPressed: () => Animations.changeScreenEaseOutBackReplace(
                     RegisterTimetableScreen(), context),
-                label: ampText(CustomValues.lang.edit),
-                icon: ampIcon(Icons.edit),
-                backgroundColor: AmpColors.colorBackground,
-                foregroundColor: AmpColors.colorForeground,
-                splashColor: AmpColors.colorForeground,
-                highlightElevation: 0,
-                focusColor: Colors.transparent,
+                label: CustomValues.lang.edit,
+                icon: Icons.edit,
               )
             : ampNull,
       ),
@@ -675,13 +652,11 @@ class _MyHomePageState extends State<MyHomePage>
             children: containers,
           ),
           floatingActionButton: Prefs.counterEnabled
-              ? FloatingActionButton.extended(
-                  elevation: 0,
+              ? ampFab(
                   backgroundColor: fabBackgroundColor,
-                  splashColor: AmpColors.colorForeground,
                   onPressed: () => setState(() => Prefs.counter += 2),
-                  icon: ampIcon(Icons.add),
-                  label: ampText('Zählen'),
+                  icon: Icons.add,
+                  label: 'Zählen',
                 )
               : ampNull,
           bottomNavigationBar: SizedBox(

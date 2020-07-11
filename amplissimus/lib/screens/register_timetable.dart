@@ -169,12 +169,10 @@ class RegisterTimetableScreenPageState
                         trailingString = ttColumn.lessons[index].teacher;
                       }
                       return ListTile(
-                        leading: Text(
-                          (index + 1).toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AmpColors.colorForeground,
-                              fontSize: 30),
+                        leading: ampText(
+                          (index + 1),
+                          weight: FontWeight.bold,
+                          size: 30,
                         ),
                         onTap: () {
                           selectedTTLesson = ttColumn.lessons[index];
@@ -278,10 +276,7 @@ class RegisterTimetableScreenPageState
                 ],
               ),
             ),
-            floatingActionButton: FloatingActionButton.extended(
-              elevation: 0,
-              backgroundColor: AmpColors.colorBackground,
-              splashColor: AmpColors.colorForeground,
+            floatingActionButton: ampFab(
               onPressed: () async {
                 await dsbUpdateWidget();
                 ttSaveToPrefs(CustomValues.ttColumns);
@@ -290,21 +285,18 @@ class RegisterTimetableScreenPageState
                   context,
                 );
               },
-              label: ampText(CustomValues.lang.save),
-              icon: ampIcon(Icons.save),
+              label: CustomValues.lang.save,
+              icon: Icons.save,
             ),
           ),
           Scaffold(
-            floatingActionButton: FloatingActionButton.extended(
-              elevation: 0,
-              backgroundColor: AmpColors.colorBackground,
-              splashColor: AmpColors.colorForeground,
+            floatingActionButton: ampFab(
               onPressed: () {
                 RegisterTimetableValues.tabController.animateTo(0);
                 ttSaveToPrefs(CustomValues.ttColumns);
               },
-              label: ampText(CustomValues.lang.firstStartupDone),
-              icon: ampIcon(MdiIcons.arrowRight),
+              label: CustomValues.lang.firstStartupDone,
+              icon: MdiIcons.arrowRight,
             ),
           ),
         ],

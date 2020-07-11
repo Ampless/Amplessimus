@@ -182,15 +182,20 @@ RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
 
 Padding ampPadding(double value) => Padding(padding: EdgeInsets.all(value));
 
-Text ampText(String text, {double size, TextAlign textAlign}) {
+Text ampText(
+  Object text, {
+  double size,
+  TextAlign textAlign,
+  FontWeight weight,
+}) {
   return textAlign == null
       ? Text(
-          text,
-          style: AmpColors.sizedTextStyleForeground(size),
+          text.toString(),
+          style: AmpColors.sizedTextStyleForeground(size, weight: weight),
         )
       : Text(
-          text,
-          style: AmpColors.sizedTextStyleForeground(size),
+          text.toString(),
+          style: AmpColors.sizedTextStyleForeground(size, weight: weight),
           textAlign: textAlign,
         );
 }
@@ -208,5 +213,24 @@ AppBar ampAppBar(String text, {double fontSize = 25}) {
     backgroundColor: Colors.transparent,
     title: ampText(text, size: fontSize),
     centerTitle: true,
+  );
+}
+
+FloatingActionButton ampFab({
+  @required String label,
+  @required IconData icon,
+  @required void Function() onPressed,
+  Color backgroundColor,
+}) {
+  backgroundColor ??= AmpColors.colorBackground;
+  return FloatingActionButton.extended(
+    elevation: 0,
+    onPressed: onPressed,
+    highlightElevation: 0,
+    backgroundColor: backgroundColor,
+    focusColor: Colors.transparent,
+    splashColor: AmpColors.colorForeground,
+    label: ampText(label),
+    icon: ampIcon(icon),
   );
 }

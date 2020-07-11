@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:Amplissimus/dsbutil.dart';
+import 'package:Amplissimus/first_login.dart';
 import 'package:Amplissimus/intutils.dart';
 import 'package:Amplissimus/langs/language.dart';
 import 'package:Amplissimus/logging.dart';
@@ -349,11 +350,11 @@ Future<Null> dsbUpdateWidget(
             Uri url, Object body, String id, Map<String, String> headers,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
-        httpPost = httpPost,
+        httpPost,
     Future<String> Function(Uri url,
             {String Function(String) getCache,
             void Function(String, String, Duration) setCache})
-        httpGet = httpGet,
+        httpGet,
     String dsbLanguage,
     String dsbJsonCache,
     String username,
@@ -363,6 +364,8 @@ Future<Null> dsbUpdateWidget(
     String char,
     int currentThemeId,
     Language lang}) async {
+  httpPost ??= FirstLoginValues.httpPostFunc;
+  httpGet ??= FirstLoginValues.httpGetFunc;
   cacheJsonPlans ??= Prefs.useJsonCache;
   callback ??= () {};
   dsbLanguage ??= Prefs.dsbLanguage;

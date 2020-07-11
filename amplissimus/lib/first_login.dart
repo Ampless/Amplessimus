@@ -24,8 +24,10 @@ class FirstLoginScreen extends StatelessWidget {
               void Function(String, String, Duration) setCache})
           httpGetReplacement}) {
     FirstLoginValues.testing = testing;
-    FirstLoginValues.httpPostReplacement = httpPostReplacement;
-    FirstLoginValues.httpGetReplacement = httpGetReplacement;
+    if (testing) {
+      FirstLoginValues.httpPostFunc = httpPostReplacement;
+      FirstLoginValues.httpGetFunc = httpGetReplacement;
+    }
   }
   FirstLoginScreenPage _page;
   FirstLoginScreenPage get page => _page;
@@ -106,16 +108,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                title: Text(
-                  CustomValues.lang.changeLoginPopup,
-                  style:
-                      TextStyle(color: AmpColors.colorForeground, fontSize: 25),
-                ),
-                centerTitle: true,
-              ),
+              appBar: ampAppBar(CustomValues.lang.changeLoginPopup),
               body: Center(
                 heightFactor: 1,
                 child: Container(
@@ -124,28 +117,22 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        CustomValues.lang.selectClass,
-                        style: TextStyle(
-                            color: AmpColors.colorForeground, fontSize: 20),
-                      ),
+                      ampText(CustomValues.lang.selectClass, size: 20),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         ampDropdownButton(
                           value: FirstLoginValues.grades[0],
                           items: FirstLoginValues.grades
-                              .map<DropdownMenuItem<String>>((String value) {
+                              .map<DropdownMenuItem<String>>((value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value),
+                              child: ampText(value),
                             );
                           }).toList(),
                           onChanged: (value) {
                             setState(() {
                               gradeDropDownValue = value;
-                              if (gradeDropDownValue == CustomValues.lang.empty)
-                                Prefs.grade = '';
-                              else
-                                Prefs.grade = value;
+                              Prefs.grade =
+                                  value == CustomValues.lang.empty ? '' : value;
                             });
                           },
                         ),
@@ -153,26 +140,23 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampDropdownButton(
                           value: FirstLoginValues.letters[0],
                           items: FirstLoginValues.letters
-                              .map<DropdownMenuItem<String>>((String value) {
+                              .map<DropdownMenuItem<String>>((value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value),
+                              child: ampText(value),
                             );
                           }).toList(),
                           onChanged: (value) {
                             setState(() {
                               letterDropDownValue = value;
-                              if (letterDropDownValue ==
-                                  CustomValues.lang.empty)
-                                Prefs.char = '';
-                              else
-                                Prefs.char = value;
+                              Prefs.char =
+                                  value == CustomValues.lang.empty ? '' : value;
                             });
                           },
                         ),
                       ]),
-                      Divider(color: AmpColors.colorForeground, height: 20),
-                      Padding(padding: EdgeInsets.all(4)),
+                      ampSizedDivider(20),
+                      ampPadding(4),
                       ampFormField(
                         controller:
                             FirstLoginValues.usernameInputFormController,
@@ -182,7 +166,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         keyboardType: TextInputType.visiblePassword,
                         autofillHints: [AutofillHints.username],
                       ),
-                      Padding(padding: EdgeInsets.all(6)),
+                      ampPadding(6),
                       ampFormField(
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -191,14 +175,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             });
                           },
                           icon: passwordHidden
-                              ? Icon(
-                                  Icons.visibility,
-                                  color: AmpColors.colorForeground,
-                                )
-                              : Icon(
-                                  Icons.visibility_off,
-                                  color: AmpColors.colorForeground,
-                                ),
+                              ? ampIcon(Icons.visibility)
+                              : ampIcon(Icons.visibility_off),
                         ),
                         controller:
                             FirstLoginValues.passwordInputFormController,
@@ -209,11 +187,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         obscureText: passwordHidden,
                         autofillHints: [AutofillHints.password],
                       ),
-                      Divider(color: AmpColors.colorForeground, height: 20),
-                      Padding(padding: EdgeInsets.all(4)),
-                      Text(CustomValues.lang.changeLanguage,
-                          style: TextStyle(
-                              color: AmpColors.colorForeground, fontSize: 20)),
+                      ampSizedDivider(20),
+                      ampPadding(4),
+                      ampText(CustomValues.lang.changeLanguage, size: 20),
                       ampDropdownButton(
                         value: CustomValues.lang,
                         items: Language.all
@@ -224,13 +200,14 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         onChanged: (value) =>
                             setState(() => CustomValues.lang = value),
                       ),
-                      Padding(padding: EdgeInsets.all(10)),
-                      Divider(color: Colors.transparent, height: 30),
+                      ampPadding(10),
+                      ampSizedDivider(30),
                       AnimatedDefaultTextStyle(
                           child: Text(textString),
                           style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: isError ? 20 : 0),
+                            color: Colors.redAccent,
+                            fontSize: isError ? 20 : 0,
+                          ),
                           duration: Duration(milliseconds: 350)),
                     ],
                   ),
@@ -240,11 +217,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ? LinearProgressIndicator(
                       backgroundColor: AmpColors.colorBackground,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          AmpColors.colorForeground),
+                        AmpColors.colorForeground,
+                      ),
                     )
                   : ampNull,
-              floatingActionButton: _saveButton = FloatingActionButton.extended(
-                elevation: 0,
+              floatingActionButton: _saveButton = ampFab(
                 onPressed: () async {
                   var condA = FirstLoginValues.passwordInputFormKey.currentState
                       .validate();
@@ -260,17 +237,16 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         .passwordInputFormController.text
                         .trim();
                     await dsbGetData(
-                        FirstLoginValues.usernameInputFormController.text
-                            .trim(),
-                        FirstLoginValues.passwordInputFormController.text
-                            .trim(),
-                        lang: CustomValues.lang,
-                        httpPost: FirstLoginValues.testing
-                            ? FirstLoginValues.httpPostReplacement
-                            : httpPost);
+                      FirstLoginValues.usernameInputFormController.text.trim(),
+                      FirstLoginValues.passwordInputFormController.text.trim(),
+                      lang: CustomValues.lang,
+                      httpPost: FirstLoginValues.httpPostFunc,
+                    );
                     isError = true;
-                    setState(
-                        () => {credentialsAreLoading = false, textString = ''});
+                    setState(() {
+                      credentialsAreLoading = false;
+                      textString = '';
+                    });
                     FocusScope.of(context).unfocus();
                     FirstLoginValues.tabController.animateTo(1);
                   } catch (e) {
@@ -281,12 +257,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     });
                   }
                 },
-                highlightElevation: 0,
-                backgroundColor: AmpColors.colorBackground,
-                splashColor: AmpColors.colorForeground,
-                label: Text(CustomValues.lang.save,
-                    style: TextStyle(color: AmpColors.colorForeground)),
-                icon: Icon(Icons.save, color: AmpColors.colorForeground),
+                label: CustomValues.lang.save,
+                icon: Icons.save,
               ),
             ),
           ),
@@ -312,33 +284,21 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 ),
                 centerTitle: true,
               ),
-              floatingActionButton: _doneButton = FloatingActionButton.extended(
-                elevation: 0,
+              floatingActionButton: _doneButton = ampFab(
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
                   Prefs.firstLogin = false;
                   setState(() => dsbWidgetIsLoading = false);
-                  await dsbUpdateWidget(
-                      callback: () => setState(() {}),
-                      httpPost: FirstLoginValues.testing
-                          ? FirstLoginValues.httpPostReplacement
-                          : httpPost,
-                      httpGet: FirstLoginValues.testing
-                          ? FirstLoginValues.httpGetReplacement
-                          : httpGet);
+                  await dsbUpdateWidget(callback: () => setState(() {}));
                   await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyApp(initialIndex: 0)));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(initialIndex: 0),
+                    ),
+                  );
                 },
-                backgroundColor: AmpColors.colorBackground,
-                splashColor: AmpColors.colorForeground,
-                label: Text(CustomValues.lang.firstStartupDone,
-                    style: AmpColors.textStyleForeground),
-                icon: Icon(
-                  MdiIcons.arrowRight,
-                  color: AmpColors.colorForeground,
-                ),
+                label: CustomValues.lang.firstStartupDone,
+                icon: MdiIcons.arrowRight,
               ),
               bottomSheet: dsbWidgetIsLoading
                   ? LinearProgressIndicator(
@@ -363,12 +323,13 @@ class FirstLoginValues {
   static TabController tabController;
   static bool testing = false;
   static Future<String> Function(
-      Uri url, Object body, String id, Map<String, String> headers,
-      {String Function(String) getCache,
-      void Function(String, String, Duration) setCache}) httpPostReplacement;
+          Uri url, Object body, String id, Map<String, String> headers,
+          {String Function(String) getCache,
+          void Function(String, String, Duration) setCache}) httpPostFunc =
+      httpPost;
   static Future<String> Function(Uri url,
       {String Function(String) getCache,
-      void Function(String, String, Duration) setCache}) httpGetReplacement;
+      void Function(String, String, Duration) setCache}) httpGetFunc = httpGet;
   static List<Widget> settingsButtons;
 
   static final List<String> grades = [
