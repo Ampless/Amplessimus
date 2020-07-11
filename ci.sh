@@ -72,6 +72,7 @@ main() {
         raw_version="$(head -n 1 amplissimus/Makefile | cut -d' ' -f3)"
         version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
         output_dir="/usr/local/var/www/amplissimus/$version_name"
+        mkdir -p amplissimus/bin
         {
                 echo "Building $version_name..."
                 flutter_update
