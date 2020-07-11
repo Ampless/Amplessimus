@@ -68,21 +68,19 @@ upload_to_github() {
 }
 
 main() {
+        commitid=$(git rev-parse @)
+        raw_version="$(head -n 1 amplissimus/Makefile | cut -d' ' -f3)"
+        version_name="$raw_version.$(echo $commitid | cut -c 1-6)"
+        output_dir="/usr/local/var/www/amplissimus/$version_name"
         {
+                echo "Building $version_name..."
                 flutter_update
 
                 mkdir -p /usr/local/var/www/amplissimus
-                cd amplissimus
 
+                cd amplissimus
                 make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
                 make mac || { make cleanartifacts rollbackversions ; }
-
-                commitid=$(git rev-parse @)
-                raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
-                version_name="$raw_version.$(echo $commitid | cut -c 1-6)"
-                echo "$version_name"
-                output_dir="/usr/local/var/www/amplissimus/$version_name"
-
                 cd ..
         } 2>&1 | tee amplissimus/bin/ci.log
 
