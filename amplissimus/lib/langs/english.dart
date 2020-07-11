@@ -218,4 +218,7 @@ class English extends Language {
 
   @override
   String get show => 'Show';
+
+  @override
+  String get useForDsb => 'Use for DSB (not recommended)';
 }

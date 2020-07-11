@@ -275,15 +275,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 color: Colors.black),
             Scaffold(
               backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                title: Text(
-                  AmpStrings.appTitle,
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                ),
-                centerTitle: true,
-              ),
+              appBar: ampAppBar(AmpStrings.appTitle, fontSize: 24),
               floatingActionButton: _doneButton = ampFab(
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
@@ -293,7 +285,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   await Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyApp(initialIndex: 0),
+                      builder: (context) => AmpApp(initialIndex: 0),
                     ),
                   );
                 },
@@ -304,7 +296,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ? LinearProgressIndicator(
                       backgroundColor: AmpColors.colorBackground,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          AmpColors.colorForeground),
+                        AmpColors.colorForeground,
+                      ),
                     )
                   : ampNull,
             ),

@@ -27,10 +27,8 @@ void main() {
 
 class SplashScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    //ampLogDebugInit(); //always comment out before committing
-    return MaterialApp(title: AmpStrings.appTitle, home: SplashScreenPage());
-  }
+  Widget build(BuildContext context) =>
+      MaterialApp(title: AmpStrings.appTitle, home: SplashScreenPage());
 }
 
 class SplashScreenPage extends StatefulWidget {
@@ -61,21 +59,20 @@ class SplashScreenPageState extends State<SplashScreenPage> {
             SchedulerBinding.instance.window.platformBrightness ==
                 Brightness.dark;
 
-      if (Prefs.firstLogin) {
-        Future.delayed(Duration(milliseconds: 1000), () {
+      if (Prefs.firstLogin)
+        Future.delayed(Duration(seconds: 1), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => FirstLoginScreen()));
         });
-      } else {
+      else
         await dsbUpdateWidget(
             cacheJsonPlans: Prefs.useJsonCache,
             httpPost: FirstLoginValues.httpPostFunc,
             httpGet: FirstLoginValues.httpGetFunc);
-        Future.delayed(Duration(milliseconds: 1000), () {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => MyApp(initialIndex: 0)));
-        });
-      }
+      Future.delayed(Duration(milliseconds: 1000), () {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => AmpApp(initialIndex: 0)));
+      });
     })();
   }
 
@@ -110,12 +107,12 @@ class MyBehavior extends ScrollBehavior {
       child;
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({@required this.initialIndex});
+class AmpApp extends StatelessWidget {
+  AmpApp({@required this.initialIndex});
   final int initialIndex;
   @override
   Widget build(BuildContext context) {
-    ampInfo(ctx: 'MyApp', message: 'Building Main Page');
+    ampInfo(ctx: 'AmpApp', message: 'Building Main Page');
     return WillPopScope(
       child: MaterialApp(
         builder: (context, child) {
@@ -127,7 +124,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: AmpColors.materialColorForeground,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(
+        home: AmpHomePage(
           title: AmpStrings.appTitle,
           initialIndex: initialIndex,
         ),
@@ -137,16 +134,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.initialIndex})
+class AmpHomePage extends StatefulWidget {
+  AmpHomePage({Key key, this.title, @required this.initialIndex})
       : super(key: key);
   final int initialIndex;
   final String title;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  AmpHomePageState createState() => AmpHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class AmpHomePageState extends State<AmpHomePage>
     with SingleTickerProviderStateMixin {
   static TabController tabController;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
@@ -176,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
-    ampInfo(ctx: '_MyHomePageState', message: 'initState()');
+    ampInfo(ctx: 'AmpHomePageState', message: 'initState()');
     if (letterDropDownValue.isEmpty)
       letterDropDownValue = FirstLoginValues.grades[0];
     if (gradeDropDownValue.isEmpty)
@@ -192,9 +189,9 @@ class _MyHomePageState extends State<MyHomePage>
   void rebuild() {
     try {
       setState(() {});
-      ampInfo(ctx: 'MyApp', message: 'rebuilt!');
+      ampInfo(ctx: 'AmpApp', message: 'rebuilt!');
     } catch (e) {
-      ampInfo(ctx: '_MyHomePageState][rebuild', message: errorString(e));
+      ampInfo(ctx: 'AmpHomePageState][rebuild', message: errorString(e));
     }
   }
 
@@ -303,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage>
         ),
         ampSizedDivider(5),
         ampSwitchWithText(
-          text: 'Use for DSB',
+          text: CustomValues.lang.useForDsb,
           value: use,
           onChanged: (value) => setAlState(() => use = value),
         ),
@@ -485,16 +482,14 @@ class _MyHomePageState extends State<MyHomePage>
                         filtered: Prefs.filterTimetables,
                       ),
                     ),
-                    Divider(
-                      color: AmpColors.colorForeground,
-                    ),
+                    ampDivider,
                     ampSwitchWithText(
                       text: CustomValues.lang.filterTimetables,
                       value: Prefs.filterTimetables,
                       onChanged: (value) =>
                           setState(() => Prefs.filterTimetables = value),
                     ),
-                    Padding(padding: EdgeInsets.all(24)),
+                    ampPadding(24),
                   ],
                 ),
         ),
@@ -667,17 +662,17 @@ class _MyHomePageState extends State<MyHomePage>
               labelColor: AmpColors.colorForeground,
               tabs: <Widget>[
                 Tab(
-                  icon: Icon(Icons.home),
+                  icon: ampIcon(Icons.home),
                   text: CustomValues.lang.start,
                 ),
                 Tab(
-                  icon: Icon(MdiIcons.timetable),
+                  icon: ampIcon(MdiIcons.timetable),
                   text: CustomValues.lang.timetable,
                 ),
                 Tab(
-                  icon: Icon(Icons.settings),
+                  icon: ampIcon(Icons.settings),
                   text: CustomValues.lang.settings,
-                )
+                ),
               ],
             ),
           ),

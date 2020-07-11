@@ -205,4 +205,7 @@ class German extends Language {
 
   @override
   String get show => 'Anzeigen';
+
+  @override
+  String get useForDsb => 'An DSB senden (nicht empfohlen)';
 }

@@ -29,7 +29,7 @@ class DevOptionsScreen extends StatelessWidget {
         onWillPop: () async {
           await dsbUpdateWidget();
           Animations.changeScreenEaseOutBackReplace(
-              MyApp(initialIndex: 2), context);
+              AmpApp(initialIndex: 2), context);
           return false;
         });
   }
@@ -52,153 +52,150 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     DevOptionsValues.tabController.animation.addListener(() {
       if (DevOptionsValues.tabController.index < 1) {
         Animations.changeScreenNoAnimationReplace(
-            MyApp(
-              initialIndex: 2,
-            ),
-            context);
+            AmpApp(initialIndex: 2), context);
       }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return TabBarView(controller: DevOptionsValues.tabController, children: [
-      MyApp(initialIndex: 2),
-      Scaffold(
-        backgroundColor: AmpColors.colorBackground,
-        appBar: AppBar(
-          centerTitle: true,
-          title: ampText('Entwickleroptionen', size: 20),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: Container(
-          color: AmpColors.colorBackground,
-          margin: EdgeInsets.all(16),
-          child: Center(
-            child: ListView(
-              children: [
-                ampDivider,
-                ampSwitchWithText(
-                  text: 'Entwickleroptionen aktiviert',
-                  value: Prefs.devOptionsEnabled,
-                  onChanged: (value) =>
-                      setState(() => Prefs.devOptionsEnabled = value),
-                ),
-                ampDivider,
-                ampSwitchWithText(
-                  text: 'Hilfe für Langeweile aktiviert',
-                  value: Prefs.counterEnabled,
-                  onChanged: (value) =>
-                      setState(() => Prefs.counterEnabled = value),
-                ),
-                ampSwitchWithText(
-                  text: 'App schließt bei zurück-Taste',
-                  value: Prefs.closeAppOnBackPress,
-                  onChanged: (value) =>
-                      setState(() => Prefs.closeAppOnBackPress = value),
-                ),
-                ampSwitchWithText(
-                  text: 'Dauerhafter Ladebalken',
-                  value: Prefs.loadingBarEnabled,
-                  onChanged: (value) =>
-                      setState(() => Prefs.loadingBarEnabled = value),
-                ),
-                ampSwitchWithText(
-                  text: 'JSON Cache benutzen',
-                  value: Prefs.useJsonCache,
-                  onChanged: (value) {
-                    Prefs.useJsonCache = value;
-                    dsbUpdateWidget(
-                        callback: () => setState(() {}), cacheJsonPlans: value);
-                  },
-                ),
-                ampDivider,
-                ListTile(
-                  title: ampText('Listenelementabstand'),
-                  trailing: ampText('${Prefs.subListItemSpace}'),
-                  onTap: () => showInputSubListItemSpacingDialog(context),
-                ),
-                ListTile(
-                  title: ampText('Refreshtimer (in Minuten)'),
-                  trailing: ampText('${Prefs.timer}'),
-                  onTap: () => showInputTimerDialog(context),
-                ),
-                ampDivider,
-                Divider(color: Colors.transparent, height: 10),
-                ampRaisedButton(
-                  text: 'Print Cache',
-                  onPressed: Prefs.listCache,
-                ),
-                ampRaisedButton(
-                  text: 'Clear Cache',
-                  onPressed: Prefs.clearCache,
-                ),
-                ampRaisedButton(
-                  text: 'Set Cache to Kekw',
-                  onPressed: () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"3.7.2020 Freitag\",\"subs\":['
-                      '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
-                      '{\"day\":0,\"date\":\"6.7.2020 Montag\",\"subs\":['
-                      '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Himmel\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Willer\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Cap\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
-                      '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
-                ),
-                ampRaisedButton(
-                    text: 'Set Cache to Input',
-                    onPressed: () => showCacheDialog(context)),
-                ampRaisedButton(
-                    text: 'Stundenplan löschen',
+  Widget build(BuildContext context) =>
+      TabBarView(controller: DevOptionsValues.tabController, children: [
+        AmpApp(initialIndex: 2),
+        Scaffold(
+          backgroundColor: AmpColors.colorBackground,
+          appBar: AppBar(
+            centerTitle: true,
+            title: ampText('Entwickleroptionen', size: 20),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: Container(
+            color: AmpColors.colorBackground,
+            margin: EdgeInsets.all(16),
+            child: Center(
+              child: ListView(
+                children: [
+                  ampDivider,
+                  ampSwitchWithText(
+                    text: 'Entwickleroptionen aktiviert',
+                    value: Prefs.devOptionsEnabled,
+                    onChanged: (value) =>
+                        setState(() => Prefs.devOptionsEnabled = value),
+                  ),
+                  ampDivider,
+                  ampSwitchWithText(
+                    text: 'Hilfe für Langeweile aktiviert',
+                    value: Prefs.counterEnabled,
+                    onChanged: (value) =>
+                        setState(() => Prefs.counterEnabled = value),
+                  ),
+                  ampSwitchWithText(
+                    text: 'App schließt bei zurück-Taste',
+                    value: Prefs.closeAppOnBackPress,
+                    onChanged: (value) =>
+                        setState(() => Prefs.closeAppOnBackPress = value),
+                  ),
+                  ampSwitchWithText(
+                    text: 'Dauerhafter Ladebalken',
+                    value: Prefs.loadingBarEnabled,
+                    onChanged: (value) =>
+                        setState(() => Prefs.loadingBarEnabled = value),
+                  ),
+                  ampSwitchWithText(
+                    text: 'JSON Cache benutzen',
+                    value: Prefs.useJsonCache,
+                    onChanged: (value) {
+                      Prefs.useJsonCache = value;
+                      dsbUpdateWidget(
+                          callback: () => setState(() {}),
+                          cacheJsonPlans: value);
+                    },
+                  ),
+                  ampDivider,
+                  ListTile(
+                    title: ampText('Listenelementabstand'),
+                    trailing: ampText('${Prefs.subListItemSpace}'),
+                    onTap: () => showInputSubListItemSpacingDialog(context),
+                  ),
+                  ListTile(
+                    title: ampText('Refreshtimer (in Minuten)'),
+                    trailing: ampText('${Prefs.timer}'),
+                    onTap: () => showInputTimerDialog(context),
+                  ),
+                  ampDivider,
+                  Divider(color: Colors.transparent, height: 10),
+                  ampRaisedButton(
+                    text: 'Print Cache',
+                    onPressed: Prefs.listCache,
+                  ),
+                  ampRaisedButton(
+                    text: 'Clear Cache',
+                    onPressed: Prefs.clearCache,
+                  ),
+                  ampRaisedButton(
+                    text: 'Set Cache to Kekw',
+                    onPressed: () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"3.7.2020 Freitag\",\"subs\":['
+                        '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
+                        '{\"day\":0,\"date\":\"6.7.2020 Montag\",\"subs\":['
+                        '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Himmel\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Willer\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Cap\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
+                        '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
+                  ),
+                  ampRaisedButton(
+                      text: 'Set Cache to Input',
+                      onPressed: () => showCacheDialog(context)),
+                  ampRaisedButton(
+                      text: 'Stundenplan löschen',
+                      onPressed: () {
+                        Prefs.jsonTimetable = null;
+                        setState(() {});
+                      }),
+                  RaisedButton.icon(
+                    color: Colors.red,
+                    icon: ampIcon(Icons.delete),
+                    label: ampText('App-Daten löschen'),
                     onPressed: () {
-                      Prefs.jsonTimetable = null;
-                      setState(() {});
-                    }),
-                RaisedButton.icon(
-                  color: Colors.red,
-                  icon: ampIcon(Icons.delete),
-                  label: ampText('App-Daten löschen'),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: ampText('App-Daten löschen'),
-                            content:
-                                ampText('Löschen der App-Daten bestätigen?'),
-                            backgroundColor: AmpColors.colorBackground,
-                            actions: ampDialogButtonsSaveAndCancel(
-                              onCancel: Navigator.of(context).pop,
-                              onSave: () {
-                                Prefs.clear();
-                                SystemNavigator.pop();
-                              },
-                            ),
-                          );
-                        });
-                  },
-                ),
-              ],
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: ampText('App-Daten löschen'),
+                              content:
+                                  ampText('Löschen der App-Daten bestätigen?'),
+                              backgroundColor: AmpColors.colorBackground,
+                              actions: ampDialogButtonsSaveAndCancel(
+                                onCancel: Navigator.of(context).pop,
+                                onSave: () {
+                                  Prefs.clear();
+                                  SystemNavigator.pop();
+                                },
+                              ),
+                            );
+                          });
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        floatingActionButton: ampFab(
-          onPressed: () {
-            dsbUpdateWidget();
-            Animations.changeScreenEaseOutBackReplace(
-              MyApp(initialIndex: 2),
-              context,
-            );
-          },
-          label: 'zurück',
-          icon: Icons.arrow_back,
-        ),
-      )
-    ]);
-  }
+          floatingActionButton: ampFab(
+            onPressed: () {
+              dsbUpdateWidget();
+              Animations.changeScreenEaseOutBackReplace(
+                AmpApp(initialIndex: 2),
+                context,
+              );
+            },
+            label: 'zurück',
+            icon: Icons.arrow_back,
+          ),
+        )
+      ]);
 
   void showInputSubListItemSpacingDialog(BuildContext context) {
     final inputFormKey = GlobalKey<FormFieldState>();

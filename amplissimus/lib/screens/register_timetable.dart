@@ -281,7 +281,7 @@ class RegisterTimetableScreenPageState
                 await dsbUpdateWidget();
                 ttSaveToPrefs(CustomValues.ttColumns);
                 Animations.changeScreenEaseOutBackReplace(
-                  MyApp(initialIndex: 1),
+                  AmpApp(initialIndex: 1),
                   context,
                 );
               },
