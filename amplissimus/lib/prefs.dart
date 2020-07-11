@@ -118,7 +118,7 @@ String get jsonTimetable => _prefs.getString('json_timetable', null);
 set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
 
 bool get dsbUseLanguage => _prefs.getBool('dsb_use_language', false);
-set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', true);
+set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', b);
 
 String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 
