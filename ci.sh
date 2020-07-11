@@ -36,43 +36,61 @@ gh_upload_binary() {
         echo "[GitHub] Done uploading: $2"
 }
 
-flutter channel master
-flutter upgrade
-flutter config --enable-web --enable-macos-desktop
+flutter_update() {
+        flutter channel master
+        flutter upgrade
+        flutter config --enable-web --enable-macos-desktop
+}
 
-mkdir -p /usr/local/var/www/amplissimus
-cd amplissimus
-make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
-make mac || { make cleanartifacts rollbackversions ; }
+update_altstore() {
+        cd
+        [ ! -d amplus.chrissx.de ] && git clone https://github.com/Amplissimus/amplus.chrissx.de
+        cd amplus.chrissx.de
+        git pull
+        cd altstore
+        sed -E 's/^ *"version": ".+",$/      "version": "'"$version_name"'",/' alpha.json | \
+        sed -E 's/^ *"versionDate": ".+",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
+        sed -E 's/^ *"versionDescription": ".+",$/      "versionDescription": "As of '"$(date)"'",/' | \
+        sed -E 's/^ *"downloadURL": ".+",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
+        mv temp.json alpha.json
+        git add alpha.json
+        git commit -m "automatic ci update to amplissimus ios alpha version $version_name"
+        git push
+}
 
-commitid=$(git rev-parse @)
-date=$(date +%Y_%m_%d-%H_%M_%S)
-raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
-version_name="$raw_version.$(echo $commitid | cut -c 1-6)"
-echo "$version_name"
-output_dir="/usr/local/var/www/amplissimus/$version_name"
+upload_to_github() {
+        [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
+        cd $output_dir
+        upload_url="$(gh_create_release $commitid $version_name)"
+        for fn in * ; do
+                gh_upload_binary "$upload_url" "$fn"
+        done
+}
 
-cp -rf bin "$output_dir"
-rm -rf bin/*
-cd ..
+main() {
+        {
+                flutter_update
 
-[ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
-cd $output_dir
-upload_url="$(gh_create_release $commitid $version_name)"
-for fn in * ; do
-        gh_upload_binary "$upload_url" "$fn"
-done
+                mkdir -p /usr/local/var/www/amplissimus
+                cd amplissimus
 
-cd
-[ ! -d amplus.chrissx.de ] && git clone https://github.com/Amplissimus/amplus.chrissx.de
-cd amplus.chrissx.de
-git pull
-cd altstore
-sed -E 's/^ *"version": ".+",$/      "version": "'"$version_name"'",/' alpha.json | \
-sed -E 's/^ *"versionDate": ".+",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
-sed -E 's/^ *"versionDescription": ".+",$/      "versionDescription": "As of '"$(date)"'",/' | \
-sed -E 's/^ *"downloadURL": ".+",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
-mv temp.json alpha.json
-git add alpha.json
-git commit -m "automatic ci update to amplissimus ios alpha version $version_name"
-git push
+                make ci || { make cleanartifacts rollbackversions ; exit 1 ; }
+                make mac || { make cleanartifacts rollbackversions ; }
+
+                commitid=$(git rev-parse @)
+                raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
+                version_name="$raw_version.$(echo $commitid | cut -c 1-6)"
+                echo "$version_name"
+                output_dir="/usr/local/var/www/amplissimus/$version_name"
+
+                cd ..
+        } 2>&1 | tee amplissimus/bin/ci.log
+
+        mv -f amplissimus/bin "$output_dir"
+
+        upload_to_github
+
+        update_altstore
+}
+
+main
