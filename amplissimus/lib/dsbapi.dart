@@ -325,12 +325,17 @@ List<DsbPlan> dsbSortAllByHour(List<DsbPlan> plans) {
   return plans;
 }
 
-Widget dsbGetGoodList(List<DsbPlan> plans) {
+Widget dsbGetGoodList(
+  List<DsbPlan> plans,
+  bool oneClassOnly,
+  String char,
+  String grade,
+  int themeId,
+) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   var widgets = <Widget>[];
-  _initializeTheme(widgets, plans);
+  _initializeTheme(widgets, plans, oneClassOnly, char, grade, themeId);
   widgets.add(ampPadding(12));
-  updateTimetableDays(plans);
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
 }
 
@@ -362,8 +367,9 @@ Future<Null> dsbUpdateWidget(
     bool oneClassOnly,
     String grade,
     String char,
-    int currentThemeId,
+    int themeId,
     Language lang}) async {
+  await Prefs.waitForMutex();
   httpPost ??= FirstLoginValues.httpPostFunc;
   httpGet ??= FirstLoginValues.httpGetFunc;
   cacheJsonPlans ??= Prefs.useJsonCache;
@@ -376,25 +382,25 @@ Future<Null> dsbUpdateWidget(
   oneClassOnly ??= Prefs.oneClassOnly;
   grade ??= Prefs.grade;
   char ??= Prefs.char;
-  currentThemeId ??= Prefs.currentThemeId;
+  themeId ??= Prefs.currentThemeId;
   try {
-    await Prefs.waitForMutex();
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
-    List<DsbPlan> plans;
-    if (!cacheJsonPlans || dsbJsonCache == null) {
-      plans = await dsbGetAllSubs(username, password,
-          lang: lang,
-          cacheGetRequests: cacheGetRequests,
-          cachePostRequests: cachePostRequests,
-          httpPost: httpPost,
-          httpGet: httpGet,
-          dsbLanguage: dsbLanguage);
-      dsbJsonCache = plansToJson(plans);
-    } else
-      plans = plansFromJson(dsbJsonCache);
-    if (oneClassOnly && username.isNotEmpty && password.isNotEmpty)
+    var useJCache = cacheJsonPlans && dsbJsonCache != null;
+    var plans = useJCache
+        ? plansFromJson(dsbJsonCache)
+        : await dsbGetAllSubs(username, password,
+            lang: lang,
+            cacheGetRequests: cacheGetRequests,
+            cachePostRequests: cachePostRequests,
+            httpPost: httpPost,
+            httpGet: httpGet,
+            dsbLanguage: dsbLanguage);
+    if (!useJCache) dsbJsonCache = plansToJson(plans);
+    ampInfo(ctx: 'dsbUpdateWidget', message: 'oneClassOnly: $oneClassOnly');
+    if (oneClassOnly)
       plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
-    dsbWidget = dsbGetGoodList(plans);
+    updateTimetableDays(plans);
+    dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
     timetablePlans = plans;
   } catch (e) {
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
@@ -402,7 +408,7 @@ Future<Null> dsbUpdateWidget(
       child: Container(
         child: getThemedWidget(
           ListTile(title: ampText(errorString(e))),
-          currentThemeId,
+          themeId,
         ),
         padding: EdgeInsets.only(top: 15),
       ),
@@ -442,7 +448,14 @@ Widget getThemedWidget(Widget child, int themeId) {
 Widget _columnWidget(List<Widget> dayW, int theme) =>
     getThemedWidget(ampColumn(dayW), theme);
 
-void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
+void _initializeTheme(
+  List<Widget> widgets,
+  List<DsbPlan> plans,
+  bool oco,
+  String char,
+  String grade,
+  int themeId,
+) {
   for (var plan in plans) {
     var dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
@@ -458,10 +471,9 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       dayWidgets.add(ListTile(
         title: ampText(titleSub),
         subtitle: ampText(CustomValues.lang.dsbSubtoSubtitle(sub)),
-        trailing:
-            (Prefs.char.isEmpty || Prefs.grade.isEmpty || !Prefs.oneClassOnly)
-                ? ampText(sub.affectedClass)
-                : ampNull,
+        trailing: (char.isEmpty || grade.isEmpty || !oco)
+            ? ampText(sub.affectedClass)
+            : ampNull,
       ));
       if (++i != plan.subs.length) dayWidgets.add(ampDivider);
     }
@@ -479,7 +491,7 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
         ),
       ]),
     ));
-    widgets.add(_columnWidget(dayWidgets, Prefs.currentThemeId));
+    widgets.add(_columnWidget(dayWidgets, themeId));
   }
 }
 

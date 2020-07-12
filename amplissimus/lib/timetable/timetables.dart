@@ -58,12 +58,10 @@ int ttDayToInt(TTDay day) {
 List<DsbPlan> timetablePlans = [];
 
 List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
+
 void updateTimetableDays(List<DsbPlan> plans) {
   timetableDays = [];
-  for (var plan in plans) {
-    timetableDays.add(plan.day);
-  }
-  print(timetableDays);
+  for (var plan in plans) timetableDays.add(plan.day);
 }
 
 class TTLesson {

@@ -383,7 +383,7 @@ class AmpHomePageState extends State<AmpHomePage>
                         dsbWidget,
                         ampDivider,
                         changeSubVisibilityWidget,
-                        ampPadding(30),
+                        //ampRaisedButton(text: 'rebuild', onPressed: rebuild),
                       ],
                     )
                   : Center(
