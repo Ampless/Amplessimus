@@ -109,7 +109,7 @@ class RegisterTimetableScreenPageState
                         },
                         underlineDisabled: true,
                       ),
-                      Padding(padding: EdgeInsets.all(10)),
+                      ampPadding(10),
                       ampDropdownButton(
                         value: currentDropdownHour,
                         items: CustomValues.ttHours

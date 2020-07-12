@@ -405,9 +405,9 @@ class AmpHomePageState extends State<AmpHomePage>
                       shrinkWrap: true,
                       children: [
                         dsbWidget,
-                        Divider(),
+                        ampDivider,
                         changeSubVisibilityWidget,
-                        Padding(padding: EdgeInsets.all(30))
+                        ampPadding(30),
                       ],
                     )
                   : Center(

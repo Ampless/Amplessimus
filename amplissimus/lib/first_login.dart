@@ -125,7 +125,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             });
                           },
                         ),
-                        Padding(padding: EdgeInsets.all(10)),
+                        ampPadding(10),
                         ampDropdownButton(
                           value: FirstLoginValues.letters[0],
                           items: FirstLoginValues.letters

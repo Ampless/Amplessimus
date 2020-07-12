@@ -329,7 +329,7 @@ Widget dsbGetGoodList(List<DsbPlan> plans) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   var widgets = <Widget>[];
   _initializeTheme(widgets, plans);
-  widgets.add(Padding(padding: EdgeInsets.all(12)));
+  widgets.add(ampPadding(12));
   updateTimetableDays(plans);
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
 }
