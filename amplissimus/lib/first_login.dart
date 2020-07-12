@@ -35,19 +35,9 @@ class FirstLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AmpColors.isDarkMode = true;
     return WillPopScope(
-        child: MaterialApp(
-          builder: (context, child) {
-            return ScrollConfiguration(behavior: MyBehavior(), child: child);
-          },
+        child: ampMatApp(
           title: AmpStrings.appTitle,
-          theme: ThemeData(
-            canvasColor: AmpColors.materialColorBackground,
-            primarySwatch: AmpColors.materialColorBackground,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: _page = FirstLoginScreenPage(
-            title: AmpStrings.appTitle,
-          ),
+          home: _page = FirstLoginScreenPage(),
         ),
         onWillPop: () async {
           if (FirstLoginValues.tabController.index <= 0)
@@ -62,8 +52,7 @@ class FirstLoginScreen extends StatelessWidget {
 
 // ignore: must_be_immutable
 class FirstLoginScreenPage extends StatefulWidget {
-  FirstLoginScreenPage({this.title});
-  final String title;
+  FirstLoginScreenPage();
   FirstLoginScreenPageState _state;
   FirstLoginScreenPageState get state => _state;
   @override

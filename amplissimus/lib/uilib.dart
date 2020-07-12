@@ -7,7 +7,7 @@ Future<Null> ampDialog(
     @required List<Widget> Function(BuildContext, StateSetter) children,
     @required List<Widget> Function(BuildContext) actions,
     @required BuildContext context,
-    @required Widget Function(List<Widget>) rowOrColumn}) {
+    Widget Function(List<Widget>) rowOrColumn = ampColumn}) {
   return showDialog(
     context: context,
     barrierDismissible: true,
@@ -213,6 +213,29 @@ AppBar ampAppBar(String text, {double fontSize = 25}) {
     backgroundColor: Colors.transparent,
     title: ampText(text, size: fontSize),
     centerTitle: true,
+  );
+}
+
+ThemeData get ampThemeData => ThemeData(
+      canvasColor: AmpColors.materialColorBackground,
+      primarySwatch: AmpColors.materialColorForeground,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    );
+
+class _AmpBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+          BuildContext context, Widget child, AxisDirection axisDirection) =>
+      child;
+}
+
+MaterialApp ampMatApp({@required String title, @required Widget home}) {
+  return MaterialApp(
+    builder: (context, child) =>
+        ScrollConfiguration(behavior: _AmpBehavior(), child: child),
+    title: title,
+    theme: ampThemeData,
+    home: home,
   );
 }
 

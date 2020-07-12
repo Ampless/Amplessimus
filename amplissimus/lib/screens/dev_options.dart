@@ -1,4 +1,5 @@
 import 'package:Amplissimus/dsbapi.dart';
+import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/main.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/uilib.dart';
@@ -13,18 +14,9 @@ class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: MaterialApp(
-          builder: (context, child) =>
-              ScrollConfiguration(behavior: MyBehavior(), child: child),
+        child: ampMatApp(
           title: AmpStrings.appTitle,
-          theme: ThemeData(
-            canvasColor: AmpColors.materialColorBackground,
-            primarySwatch: AmpColors.materialColorForeground,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: DevOptionsScreenPage(
-            title: AmpStrings.appTitle,
-          ),
+          home: DevOptionsScreenPage(),
         ),
         onWillPop: () async {
           await dsbUpdateWidget();
@@ -36,39 +28,37 @@ class DevOptionsScreen extends StatelessWidget {
 }
 
 class DevOptionsScreenPage extends StatefulWidget {
-  DevOptionsScreenPage({this.title});
-  final String title;
+  DevOptionsScreenPage();
   @override
   State<StatefulWidget> createState() => DevOptionsScreenPageState();
 }
 
 class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     with SingleTickerProviderStateMixin {
+  static TabController _tabController;
+
   @override
   void initState() {
+    ampInfo(ctx: 'DevOptionsScreenPageState', message: 'initState()');
     super.initState();
-    DevOptionsValues.tabController =
-        TabController(length: 2, vsync: this, initialIndex: 1);
-    DevOptionsValues.tabController.animation.addListener(() {
-      if (DevOptionsValues.tabController.index < 1) {
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+    _tabController.animation.addListener(() {
+      if (_tabController.index < 1) {
         Animations.changeScreenNoAnimationReplace(
-            AmpApp(initialIndex: 2), context);
+          AmpApp(initialIndex: 2),
+          context,
+        );
       }
     });
   }
 
   @override
   Widget build(BuildContext context) =>
-      TabBarView(controller: DevOptionsValues.tabController, children: [
+      TabBarView(controller: _tabController, children: [
         AmpApp(initialIndex: 2),
         Scaffold(
-          backgroundColor: AmpColors.colorBackground,
-          appBar: AppBar(
-            centerTitle: true,
-            title: ampText('Entwickleroptionen', size: 20),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-          ),
+          appBar: ampAppBar('Entwickleroptionen', fontSize: 20),
+          backgroundColor: Colors.transparent,
           body: Container(
             color: AmpColors.colorBackground,
             margin: EdgeInsets.all(16),
@@ -123,7 +113,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     onTap: () => showInputTimerDialog(context),
                   ),
                   ampDivider,
-                  Divider(color: Colors.transparent, height: 10),
+                  ampPadding(5.25),
                   ampRaisedButton(
                     text: 'Print Cache',
                     onPressed: Prefs.listCache,
@@ -159,24 +149,19 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     icon: ampIcon(Icons.delete),
                     label: ampText('App-Daten löschen'),
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: ampText('App-Daten löschen'),
-                              content:
-                                  ampText('Löschen der App-Daten bestätigen?'),
-                              backgroundColor: AmpColors.colorBackground,
-                              actions: ampDialogButtonsSaveAndCancel(
-                                onCancel: Navigator.of(context).pop,
-                                onSave: () {
-                                  Prefs.clear();
-                                  SystemNavigator.pop();
-                                },
-                              ),
-                            );
-                          });
+                      ampDialog(
+                        title: 'App-Daten löschen',
+                        context: context,
+                        children: (_, __) =>
+                            [ampText('Löschen der App-Daten bestätigen?')],
+                        actions: (context) => ampDialogButtonsSaveAndCancel(
+                          onCancel: Navigator.of(context).pop,
+                          onSave: () {
+                            Prefs.clear();
+                            SystemNavigator.pop();
+                          },
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -286,6 +271,4 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
   }
 }
 
-class DevOptionsValues {
-  static TabController tabController;
-}
+class DevOptionsValues {}

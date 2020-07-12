@@ -100,13 +100,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   }
 }
 
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(
-          BuildContext context, Widget child, AxisDirection axisDirection) =>
-      child;
-}
-
 class AmpApp extends StatelessWidget {
   AmpApp({@required this.initialIndex});
   final int initialIndex;
@@ -114,20 +107,9 @@ class AmpApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ampInfo(ctx: 'AmpApp', message: 'Building Main Page');
     return WillPopScope(
-      child: MaterialApp(
-        builder: (context, child) {
-          return ScrollConfiguration(behavior: MyBehavior(), child: child);
-        },
+      child: ampMatApp(
         title: AmpStrings.appTitle,
-        theme: ThemeData(
-          canvasColor: AmpColors.materialColorBackground,
-          primarySwatch: AmpColors.materialColorForeground,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: AmpHomePage(
-          title: AmpStrings.appTitle,
-          initialIndex: initialIndex,
-        ),
+        home: AmpHomePage(initialIndex: initialIndex),
       ),
       onWillPop: () => Future(() => Prefs.closeAppOnBackPress),
     );
@@ -135,10 +117,8 @@ class AmpApp extends StatelessWidget {
 }
 
 class AmpHomePage extends StatefulWidget {
-  AmpHomePage({Key key, this.title, @required this.initialIndex})
-      : super(key: key);
+  AmpHomePage({Key key, @required this.initialIndex}) : super(key: key);
   final int initialIndex;
-  final String title;
   @override
   AmpHomePageState createState() => AmpHomePageState();
 }

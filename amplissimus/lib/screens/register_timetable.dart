@@ -13,16 +13,8 @@ class RegisterTimetableScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AmpColors.isDarkMode = true;
     return WillPopScope(
-      child: MaterialApp(
-        builder: (context, child) {
-          return ScrollConfiguration(behavior: MyBehavior(), child: child);
-        },
+      child: ampMatApp(
         title: AmpStrings.appTitle,
-        theme: ThemeData(
-          canvasColor: AmpColors.materialColorBackground,
-          primarySwatch: AmpColors.materialColorBackground,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
         home: RegisterTimetableScreenPage(),
       ),
       onWillPop: () async {
