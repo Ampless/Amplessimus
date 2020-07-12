@@ -378,6 +378,7 @@ Future<Null> dsbUpdateWidget(
   char ??= Prefs.char;
   currentThemeId ??= Prefs.currentThemeId;
   try {
+    await Prefs.waitForMutex();
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
     List<DsbPlan> plans;
     if (!cacheJsonPlans || dsbJsonCache == null) {
@@ -438,8 +439,8 @@ Widget getThemedWidget(Widget child, int themeId) {
   }
 }
 
-Widget _getWidget(List<Widget> dayW, int theme) => getThemedWidget(
-    Column(mainAxisSize: MainAxisSize.min, children: dayW), theme);
+Widget _columnWidget(List<Widget> dayW, int theme) =>
+    getThemedWidget(ampColumn(dayW), theme);
 
 void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
   for (var plan in plans) {
@@ -450,7 +451,6 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
       ));
     }
     var i = 0;
-    var iMax = plan.subs.length;
     for (var sub in plan.subs) {
       var titleSub = CustomValues.lang.dsbSubtoTitle(sub);
       if (CustomValues.isAprilFools)
@@ -463,23 +463,23 @@ void _initializeTheme(List<Widget> widgets, List<DsbPlan> plans) {
                 ? ampText(sub.affectedClass)
                 : ampNull,
       ));
-      if (++i != iMax) dayWidgets.add(ampDivider);
+      if (++i != plan.subs.length) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
-        title: Row(children: <Widget>[
-      ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 22),
-      IconButton(
+      title: Row(children: <Widget>[
+        ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 22),
+        IconButton(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
             dsbApiHomeScaffoldKey.currentState?.showSnackBar(
-              SnackBar(
-                  backgroundColor: AmpColors.colorBackground,
-                  content: ampText(plan.date)),
+              ampSnackBar(plan.date),
             );
-          }),
-    ])));
-    widgets.add(_getWidget(dayWidgets, Prefs.currentThemeId));
+          },
+        ),
+      ]),
+    ));
+    widgets.add(_columnWidget(dayWidgets, Prefs.currentThemeId));
   }
 }
 

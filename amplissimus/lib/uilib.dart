@@ -239,6 +239,11 @@ MaterialApp ampMatApp({@required String title, @required Widget home}) {
   );
 }
 
+SnackBar ampSnackBar(String content) => SnackBar(
+      backgroundColor: AmpColors.colorBackground,
+      content: ampText(content),
+    );
+
 FloatingActionButton ampFab({
   @required String label,
   @required IconData icon,

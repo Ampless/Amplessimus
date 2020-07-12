@@ -59,11 +59,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
             SchedulerBinding.instance.window.platformBrightness ==
                 Brightness.dark;
 
-      if (!Prefs.firstLogin)
-        await dsbUpdateWidget(
-            cacheJsonPlans: Prefs.useJsonCache,
-            httpPost: FirstLoginValues.httpPostFunc,
-            httpGet: FirstLoginValues.httpGetFunc);
+      if (!Prefs.firstLogin) await dsbUpdateWidget();
 
       Future.delayed(Duration(seconds: 1), () {
         Navigator.pushReplacement(
@@ -176,32 +172,17 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   void rebuildTimer() {
-    if (tabController.index == 0)
-      dsbUpdateWidget(
-        callback: rebuild,
-        httpPost: FirstLoginValues.httpPostFunc,
-        httpGet: FirstLoginValues.httpGetFunc,
-      );
+    dsbUpdateWidget(callback: rebuild);
   }
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
-    await dsbUpdateWidget(
-      callback: rebuild,
-      cachePostRequests: false,
-      cacheJsonPlans: Prefs.useJsonCache,
-      httpPost: FirstLoginValues.httpPostFunc,
-      httpGet: FirstLoginValues.httpGetFunc,
-    );
+    await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
   }
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
-    await dsbUpdateWidget(
-        callback: rebuild,
-        cacheJsonPlans: Prefs.useJsonCache,
-        httpPost: FirstLoginValues.httpPostFunc,
-        httpGet: FirstLoginValues.httpGetFunc);
+    await dsbUpdateWidget(callback: rebuild);
     setState(() => circularProgressIndicatorActive = false);
   }
 
@@ -369,13 +350,8 @@ class AmpHomePageState extends State<AmpHomePage>
                       activeColor: AmpColors.colorForeground,
                       value: Prefs.oneClassOnly,
                       onChanged: (value) {
-                        setState(() => Prefs.oneClassOnly = value);
-                        dsbUpdateWidget(
-                          callback: rebuild,
-                          cacheJsonPlans: Prefs.useJsonCache,
-                          httpPost: FirstLoginValues.httpPostFunc,
-                          httpGet: FirstLoginValues.httpGetFunc,
-                        );
+                        Prefs.oneClassOnly = value;
+                        dsbUpdateWidget(callback: rebuild);
                       }),
                   alignment: Alignment.center),
             ],

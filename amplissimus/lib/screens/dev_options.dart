@@ -95,10 +95,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     text: 'JSON Cache benutzen',
                     value: Prefs.useJsonCache,
                     onChanged: (value) {
-                      Prefs.useJsonCache = value;
-                      dsbUpdateWidget(
-                          callback: () => setState(() {}),
-                          cacheJsonPlans: value);
+                      setState(() => Prefs.useJsonCache = value);
                     },
                   ),
                   ampDivider,
