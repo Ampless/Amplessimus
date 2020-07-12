@@ -59,19 +59,19 @@ class SplashScreenPageState extends State<SplashScreenPage> {
             SchedulerBinding.instance.window.platformBrightness ==
                 Brightness.dark;
 
-      if (Prefs.firstLogin)
-        Future.delayed(Duration(seconds: 1), () {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => FirstLoginScreen()));
-        });
-      else
+      if (!Prefs.firstLogin)
         await dsbUpdateWidget(
             cacheJsonPlans: Prefs.useJsonCache,
             httpPost: FirstLoginValues.httpPostFunc,
             httpGet: FirstLoginValues.httpGetFunc);
-      Future.delayed(Duration(milliseconds: 1000), () {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => AmpApp(initialIndex: 0)));
+
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
+          ),
+        );
       });
     })();
   }
@@ -101,7 +101,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 }
 
 class AmpApp extends StatelessWidget {
-  AmpApp({@required this.initialIndex});
+  AmpApp({this.initialIndex = 0});
   final int initialIndex;
   @override
   Widget build(BuildContext context) {
