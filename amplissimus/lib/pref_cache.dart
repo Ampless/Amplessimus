@@ -218,7 +218,7 @@ class CachedSharedPreferences {
 
   void checkPlatformSharedPrefSupport() {
     try {
-      _platformSupportsSharedPrefs = !Platform.isWindows && !Platform.isLinux;
+      _platformSupportsSharedPrefs = !Platform.isWindows;
     } catch (e) {
       //it should only fail on web
       _platformSupportsSharedPrefs = true;
