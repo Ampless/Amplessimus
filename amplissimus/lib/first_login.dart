@@ -254,7 +254,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
           Stack(children: [
             Container(
                 child: FlareActor(
-                  'assets/anims/get_ready.flr',
+                  'assets/anims/get_ready.json',
                   animation: animString,
                   callback: (name) {
                     setState(() => animString =

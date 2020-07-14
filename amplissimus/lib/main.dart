@@ -82,7 +82,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           height: double.infinity,
           width: double.infinity,
           duration: Duration(milliseconds: 1000),
-          child: FlareActor('assets/anims/splash_screen.flr',
+          child: FlareActor('assets/anims/splash_screen.json',
               alignment: Alignment.center,
               fit: BoxFit.contain,
               animation: 'anim'),
