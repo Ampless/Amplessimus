@@ -243,13 +243,15 @@ class CachedSharedPreferences {
     _cacheInt.clear();
     _cacheString.clear();
     _cacheStrings.clear();
-    _prefFileMutex.release();
+    flush();
     if (_prefs == null) {
+      _prefFileMutex.release();
       if (_platformSupportsSharedPrefs)
         throw 'PREFS NOT LODADA D A D AD';
       else
         return;
     }
     _prefs.clear();
+    _prefFileMutex.release();
   }
 }
