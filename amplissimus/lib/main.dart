@@ -182,7 +182,7 @@ class AmpHomePageState extends State<AmpHomePage>
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
-    await dsbUpdateWidget(callback: rebuild);
+    await dsbUpdateWidget();
     setState(() => circularProgressIndicatorActive = false);
   }
 
@@ -359,11 +359,19 @@ class AmpHomePageState extends State<AmpHomePage>
         : ampNull;
   }
 
+  int lastUpdate = 0;
   @override
   Widget build(BuildContext context) {
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
-    if (dsbWidget == null) rebuildNewBuild();
+    if (dsbWidget == null ||
+        lastUpdate <
+            DateTime.now()
+                .subtract(Duration(minutes: Prefs.timer))
+                .millisecondsSinceEpoch) {
+      rebuildNewBuild();
+      lastUpdate = DateTime.now().millisecondsSinceEpoch;
+    }
     var containers = [
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
