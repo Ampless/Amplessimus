@@ -4,6 +4,7 @@ FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
 IOS_FLAGS = $(BIN_FLAGS)
 APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm64,android-x64
+AAB_FLAGS = $(APK_FLAGS)
 WIN_FLAGS = $(BIN_FLAGS)
 GTK_FLAGS = $(BIN_FLAGS)
 MAC_FLAGS = $(BIN_FLAGS)
@@ -29,6 +30,7 @@ TRU = || true
 
 OUTPUT_DIR = bin
 OUTPUT_APK = $(OUTPUT_DIR)/$(VERSION).apk
+OUTPUT_AAB = $(OUTPUT_DIR)/$(VERSION).aab
 OUTPUT_DEB = $(OUTPUT_DIR)/$(VERSION).deb
 OUTPUT_DMG = $(OUTPUT_DIR)/$(VERSION).dmg
 OUTPUT_IPA = $(OUTPUT_DIR)/$(VERSION).ipa
@@ -44,9 +46,9 @@ TMP_DEB_DIR = $(TMP)/deb
 TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
-ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk aab cleanartifacts rollbackversions
 
-android: mkdirs replaceversions apk cleanartifacts rollbackversions
+android: mkdirs replaceversions apk aab cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
 web: mkdirs replaceversions webbuild cleanartifacts rollbackversions
 win: mkdirs replaceversions winx64 cleanartifacts rollbackversions
@@ -94,6 +96,11 @@ apk:
 	which flutter mv
 	flutter build apk $(APK_FLAGS)
 	mv build/app/outputs/apk/release/app-release.apk $(OUTPUT_APK)
+
+aab:
+	which flutter mv
+	flutter build appbundle $(AAB_FLAGS)
+	mv build/app/outputs/bundle/release/app-release.aab $(OUTPUT_AAB)
 
 webbuild:
 	which flutter mv
