@@ -364,12 +364,15 @@ class AmpHomePageState extends State<AmpHomePage>
   Widget build(BuildContext context) {
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
-    if (dsbWidget == null ||
-        lastUpdate <
-            DateTime.now()
-                .subtract(Duration(minutes: Prefs.timer))
-                .millisecondsSinceEpoch) {
+    if (dsbWidget == null) {
       rebuildNewBuild();
+      lastUpdate = DateTime.now().millisecondsSinceEpoch;
+    }
+    if (lastUpdate <
+        DateTime.now()
+            .subtract(Duration(minutes: Prefs.timer))
+            .millisecondsSinceEpoch) {
+      rebuildDragDown();
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     var containers = [
