@@ -121,7 +121,6 @@ class AmpHomePage extends StatefulWidget {
 
 class AmpHomePageState extends State<AmpHomePage>
     with SingleTickerProviderStateMixin {
-  static TabController tabController;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -160,8 +159,6 @@ class AmpHomePageState extends State<AmpHomePage>
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
-    tabController = TabController(
-        length: 3, vsync: this, initialIndex: widget.initialIndex);
     Prefs.setTimer(Prefs.timer, rebuildTimer);
   }
 
@@ -520,7 +517,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
                       label: CustomValues.lang.show,
-                      onPressed: () => tabController.animateTo(0),
+                      onPressed: () => setState(() => _currentIndex = 0),
                     ),
                   ));
                 },
@@ -665,8 +662,7 @@ class AmpHomePageState extends State<AmpHomePage>
               ],
             ),
           ),*/
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           bottomSheet: Prefs.loadingBarEnabled
               ? LinearProgressIndicator(
                   backgroundColor: AmpColors.blankGrey,
