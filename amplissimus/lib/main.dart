@@ -131,6 +131,8 @@ class AmpHomePageState extends State<AmpHomePage>
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
   bool passwordHidden = true;
 
+  int _currentIndex = 0;
+
   void checkBrightness() {
     if (Prefs.useSystemTheme &&
         (SchedulerBinding.instance.window.platformBrightness !=
@@ -150,6 +152,7 @@ class AmpHomePageState extends State<AmpHomePage>
   @override
   void initState() {
     ampInfo(ctx: 'AmpHomePageState', message: 'initState()');
+    _currentIndex = widget.initialIndex;
     if (letterDropDownValue.isEmpty)
       letterDropDownValue = FirstLoginValues.grades[0];
     if (gradeDropDownValue.isEmpty)
@@ -376,9 +379,8 @@ class AmpHomePageState extends State<AmpHomePage>
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     var containers = [
-      AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        color: AmpColors.colorBackground,
+      Container(
+        color: Colors.transparent,
         child: Scaffold(
           key: homeScaffoldKey,
           appBar: ampAppBar(
@@ -469,8 +471,7 @@ class AmpHomePageState extends State<AmpHomePage>
               )
             : ampNull,
       ),
-      AnimatedContainer(
-        duration: Duration(milliseconds: 150),
+      Container(
         color: Colors.transparent,
         child: Scaffold(
           key: settingsScaffoldKey,
@@ -600,19 +601,12 @@ class AmpHomePageState extends State<AmpHomePage>
       )
     ];
     return SafeArea(
-        child: Stack(
-      children: <Widget>[
-        AnimatedContainer(
-          duration: Duration(milliseconds: 150),
-          color: AmpColors.colorBackground,
-        ),
-        Scaffold(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        color: AmpColors.colorBackground,
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: TabBarView(
-            controller: tabController,
-            physics: ClampingScrollPhysics(),
-            children: containers,
-          ),
+          body: containers[_currentIndex],
           floatingActionButton: Prefs.counterEnabled
               ? ampFab(
                   backgroundColor: fabBackgroundColor,
@@ -621,7 +615,35 @@ class AmpHomePageState extends State<AmpHomePage>
                   label: 'Zählen',
                 )
               : ampNull,
-          bottomNavigationBar: SizedBox(
+          bottomNavigationBar: BottomNavigationBar(
+            elevation: 0,
+            type: BottomNavigationBarType.shifting,
+            unselectedItemColor: Colors.grey,
+            backgroundColor: Colors.transparent,
+            currentIndex: _currentIndex,
+            selectedItemColor: AmpColors.colorForeground,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text(CustomValues.lang.start),
+                backgroundColor: Colors.transparent,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(MdiIcons.timetable),
+                title: Text(CustomValues.lang.settings),
+                backgroundColor: Colors.transparent,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                title: Text(CustomValues.lang.settings),
+                backgroundColor: Colors.transparent,
+              ),
+            ],
+            onTap: (value) {
+              setState(() => _currentIndex = value);
+            },
+          ),
+          /*SizedBox(
             height: 55,
             child: TabBar(
               controller: tabController,
@@ -642,7 +664,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 ),
               ],
             ),
-          ),
+          ),*/
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           bottomSheet: Prefs.loadingBarEnabled
@@ -652,8 +674,8 @@ class AmpHomePageState extends State<AmpHomePage>
                       AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
                 )
               : ampNull,
-        )
-      ],
-    ));
+        ),
+      ),
+    );
   }
 }
