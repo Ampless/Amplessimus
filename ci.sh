@@ -77,7 +77,8 @@ build() {
         mkdir -p /usr/local/var/www/amplissimus
 
         cd amplissimus
-        make ci || { make cleanartifacts rollbackversions cicertback ; output ; exit 1 ; }
+        pwd
+        make ci || { make cleanartifacts rollbackversions cicertback ; exit 1 ; }
         make mac || { make cleanartifacts rollbackversions cicertback ; }
         cd ..
 }
