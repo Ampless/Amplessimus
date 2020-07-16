@@ -618,7 +618,7 @@ class AmpHomePageState extends State<AmpHomePage>
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             type: BottomNavigationBarType.shifting,
-            unselectedItemColor: Colors.grey,
+            unselectedItemColor: AmpColors.lightForeground,
             backgroundColor: Colors.transparent,
             currentIndex: _currentIndex,
             selectedItemColor: AmpColors.colorForeground,

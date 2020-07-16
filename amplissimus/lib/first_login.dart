@@ -194,8 +194,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           onChanged: (value) =>
                               setState(() => CustomValues.lang = value),
                         ),
-                        ampPadding(10),
-                        ampSizedDivider(30),
+                        ampSizedDivider(5),
                         AnimatedDefaultTextStyle(
                             child: Text(textString),
                             style: TextStyle(
