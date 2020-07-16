@@ -540,8 +540,9 @@ class AmpHomePageState extends State<AmpHomePage>
               ),
               ampBigAmpButton(
                 onTap: () {
-                  Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                  if (Prefs.useSystemTheme) {
+                  var tempBool = !Prefs.useSystemTheme;
+                  setState(() => Prefs.useSystemTheme = !Prefs.useSystemTheme);
+                  if (tempBool) {
                     var brightness =
                         SchedulerBinding.instance.window.platformBrightness;
                     var darkModeEnabled = brightness != Brightness.light;
