@@ -84,6 +84,9 @@ build() {
 }
 
 main() {
+        git stash
+        git pull
+
         commitid=$(git rev-parse @)
         raw_version="$(head -n 1 amplissimus/Makefile | cut -d' ' -f3)"
         version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
