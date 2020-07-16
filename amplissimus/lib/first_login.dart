@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Amplissimus/dsbapi.dart';
 import 'package:Amplissimus/dsbutil.dart';
 import 'package:Amplissimus/langs/language.dart';
@@ -87,10 +89,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
     if (Prefs.grade.trim().isEmpty)
       gradeDropDownValue = FirstLoginValues.grades[0];
     return Scaffold(
-        body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: FirstLoginValues.tabController,
-            children: <Widget>[
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: FirstLoginValues.tabController,
+        children: <Widget>[
           AnimatedContainer(
             duration: Duration(milliseconds: 150),
             color: AmpColors.colorBackground,
@@ -102,103 +104,107 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 heightFactor: 1,
                 child: Container(
                   margin: EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ampText(CustomValues.lang.selectClass, size: 20),
-                      Row(mainAxisSize: MainAxisSize.min, children: [
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ampText(CustomValues.lang.selectClass, size: 20),
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          ampDropdownButton(
+                            value: FirstLoginValues.grades[0],
+                            items: FirstLoginValues.grades
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: ampText(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                gradeDropDownValue = value;
+                                Prefs.grade = value == CustomValues.lang.empty
+                                    ? ''
+                                    : value;
+                              });
+                            },
+                          ),
+                          ampPadding(10),
+                          ampDropdownButton(
+                            value: FirstLoginValues.letters[0],
+                            items: FirstLoginValues.letters
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: ampText(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                letterDropDownValue = value;
+                                Prefs.char = value == CustomValues.lang.empty
+                                    ? ''
+                                    : value;
+                              });
+                            },
+                          ),
+                        ]),
+                        ampSizedDivider(20),
+                        ampPadding(4),
+                        ampFormField(
+                          controller:
+                              FirstLoginValues.usernameInputFormController,
+                          key: FirstLoginValues.usernameInputFormKey,
+                          validator: textFieldValidator,
+                          labelText: CustomValues.lang.username,
+                          keyboardType: TextInputType.visiblePassword,
+                          autofillHints: [AutofillHints.username],
+                        ),
+                        ampPadding(6),
+                        ampFormField(
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                passwordHidden = !passwordHidden;
+                              });
+                            },
+                            icon: passwordHidden
+                                ? ampIcon(Icons.visibility)
+                                : ampIcon(Icons.visibility_off),
+                          ),
+                          controller:
+                              FirstLoginValues.passwordInputFormController,
+                          key: FirstLoginValues.passwordInputFormKey,
+                          validator: textFieldValidator,
+                          labelText: CustomValues.lang.password,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: passwordHidden,
+                          autofillHints: [AutofillHints.password],
+                        ),
+                        ampSizedDivider(20),
+                        ampPadding(4),
+                        ampText(CustomValues.lang.changeLanguage, size: 20),
                         ampDropdownButton(
-                          value: FirstLoginValues.grades[0],
-                          items: FirstLoginValues.grades
-                              .map<DropdownMenuItem<String>>((value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: ampText(value),
-                            );
+                          value: CustomValues.lang,
+                          items: Language.all
+                              .map<DropdownMenuItem<Language>>((value) {
+                            return DropdownMenuItem<Language>(
+                                value: value, child: Text(value.name));
                           }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              gradeDropDownValue = value;
-                              Prefs.grade =
-                                  value == CustomValues.lang.empty ? '' : value;
-                            });
-                          },
+                          onChanged: (value) =>
+                              setState(() => CustomValues.lang = value),
                         ),
                         ampPadding(10),
-                        ampDropdownButton(
-                          value: FirstLoginValues.letters[0],
-                          items: FirstLoginValues.letters
-                              .map<DropdownMenuItem<String>>((value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: ampText(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              letterDropDownValue = value;
-                              Prefs.char =
-                                  value == CustomValues.lang.empty ? '' : value;
-                            });
-                          },
-                        ),
-                      ]),
-                      ampSizedDivider(20),
-                      ampPadding(4),
-                      ampFormField(
-                        controller:
-                            FirstLoginValues.usernameInputFormController,
-                        key: FirstLoginValues.usernameInputFormKey,
-                        validator: textFieldValidator,
-                        labelText: CustomValues.lang.username,
-                        keyboardType: TextInputType.visiblePassword,
-                        autofillHints: [AutofillHints.username],
-                      ),
-                      ampPadding(6),
-                      ampFormField(
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              passwordHidden = !passwordHidden;
-                            });
-                          },
-                          icon: passwordHidden
-                              ? ampIcon(Icons.visibility)
-                              : ampIcon(Icons.visibility_off),
-                        ),
-                        controller:
-                            FirstLoginValues.passwordInputFormController,
-                        key: FirstLoginValues.passwordInputFormKey,
-                        validator: textFieldValidator,
-                        labelText: CustomValues.lang.password,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: passwordHidden,
-                        autofillHints: [AutofillHints.password],
-                      ),
-                      ampSizedDivider(20),
-                      ampPadding(4),
-                      ampText(CustomValues.lang.changeLanguage, size: 20),
-                      ampDropdownButton(
-                        value: CustomValues.lang,
-                        items: Language.all
-                            .map<DropdownMenuItem<Language>>((value) {
-                          return DropdownMenuItem<Language>(
-                              value: value, child: Text(value.name));
-                        }).toList(),
-                        onChanged: (value) =>
-                            setState(() => CustomValues.lang = value),
-                      ),
-                      ampPadding(10),
-                      ampSizedDivider(30),
-                      AnimatedDefaultTextStyle(
-                          child: Text(textString),
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: isError ? 20 : 0,
-                          ),
-                          duration: Duration(milliseconds: 350)),
-                    ],
+                        ampSizedDivider(30),
+                        AnimatedDefaultTextStyle(
+                            child: Text(textString),
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: isError ? 20 : 0,
+                            ),
+                            duration: Duration(milliseconds: 350)),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -225,14 +231,18 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Prefs.password = FirstLoginValues
                         .passwordInputFormController.text
                         .trim();
-                    await dsbGetData(
+                    Map<String, dynamic> map = jsonDecode(await dsbGetData(
                       FirstLoginValues.usernameInputFormController.text.trim(),
                       FirstLoginValues.passwordInputFormController.text.trim(),
                       lang: CustomValues.lang,
                       httpPost: FirstLoginValues.httpPostFunc,
-                    );
-                    isError = true;
+                    ));
+                    map.forEach((key, value) {
+                      if (value.toString().trim() == 'Login fehlgeschlagen')
+                        throw CustomValues.lang.catchDsbGetData(value);
+                    });
                     setState(() {
+                      isError = false;
                       credentialsAreLoading = false;
                       textString = '';
                     });
@@ -251,47 +261,53 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               ),
             ),
           ),
-          Stack(children: [
-            Container(
-                child: FlareActor(
-                  'assets/anims/get_ready.json',
-                  animation: animString,
-                  callback: (name) {
-                    setState(() => animString =
-                        name.trim().toLowerCase() == 'idle' ? 'idle2' : 'idle');
-                  },
-                ),
-                color: Colors.black),
-            Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: ampAppBar(AmpStrings.appTitle, fontSize: 24),
-              floatingActionButton: _doneButton = ampFab(
-                onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  Prefs.firstLogin = false;
-                  setState(() => dsbWidgetIsLoading = false);
-                  await dsbUpdateWidget();
-                  await Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AmpApp(initialIndex: 0),
-                    ),
-                  );
-                },
-                label: CustomValues.lang.firstStartupDone,
-                icon: MdiIcons.arrowRight,
-              ),
-              bottomSheet: dsbWidgetIsLoading
-                  ? LinearProgressIndicator(
-                      backgroundColor: AmpColors.colorBackground,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AmpColors.colorForeground,
+          Stack(
+            children: [
+              Container(
+                  child: FlareActor(
+                    'assets/anims/get_ready.json',
+                    animation: animString,
+                    callback: (name) {
+                      setState(() => animString =
+                          name.trim().toLowerCase() == 'idle'
+                              ? 'idle2'
+                              : 'idle');
+                    },
+                  ),
+                  color: Colors.black),
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: ampAppBar(AmpStrings.appTitle, fontSize: 24),
+                floatingActionButton: _doneButton = ampFab(
+                  onPressed: () async {
+                    FocusScope.of(context).unfocus();
+                    Prefs.firstLogin = false;
+                    setState(() => dsbWidgetIsLoading = false);
+                    await dsbUpdateWidget();
+                    await Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AmpApp(initialIndex: 0),
                       ),
-                    )
-                  : ampNull,
-            ),
-          ]),
-        ]));
+                    );
+                  },
+                  label: CustomValues.lang.firstStartupDone,
+                  icon: MdiIcons.arrowRight,
+                ),
+                bottomSheet: dsbWidgetIsLoading
+                    ? LinearProgressIndicator(
+                        backgroundColor: AmpColors.colorBackground,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AmpColors.colorForeground,
+                        ),
+                      )
+                    : ampNull,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
