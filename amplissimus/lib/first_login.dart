@@ -280,6 +280,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 floatingActionButton: _doneButton = ampFab(
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
+                    Prefs.firstLogin = false;
                     setState(() => dsbWidgetIsLoading = false);
                     await dsbUpdateWidget();
                     await Navigator.pushReplacement(
