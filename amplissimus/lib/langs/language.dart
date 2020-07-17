@@ -54,6 +54,7 @@ abstract class Language {
   String get changedAppearance;
   String get show;
   String get useForDsb;
+  String get affectedClass;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);

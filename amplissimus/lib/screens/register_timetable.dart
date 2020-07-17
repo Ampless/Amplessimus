@@ -270,7 +270,7 @@ class RegisterTimetableScreenPageState
             ),
             floatingActionButton: ampFab(
               onPressed: () async {
-                await dsbUpdateWidget();
+                await dsbUpdateWidget(context: context);
                 ttSaveToPrefs(CustomValues.ttColumns);
                 Animations.changeScreenEaseOutBackReplace(
                   AmpApp(initialIndex: 1),

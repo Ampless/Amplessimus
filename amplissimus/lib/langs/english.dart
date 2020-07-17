@@ -163,6 +163,9 @@ class English extends Language {
   String get substitution => 'Substitution';
 
   @override
+  String get affectedClass => 'Affected classes';
+
+  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Physical Education (sports)',
     'e': 'English',

@@ -19,7 +19,7 @@ class DevOptionsScreen extends StatelessWidget {
           home: DevOptionsScreenPage(),
         ),
         onWillPop: () async {
-          await dsbUpdateWidget();
+          await dsbUpdateWidget(context: context);
           Animations.changeScreenEaseOutBackReplace(
               AmpApp(initialIndex: 2), context);
           return false;
@@ -167,7 +167,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           ),
           floatingActionButton: ampFab(
             onPressed: () {
-              dsbUpdateWidget();
+              dsbUpdateWidget(context: context);
               Animations.changeScreenEaseOutBackReplace(
                 AmpApp(initialIndex: 2),
                 context,
