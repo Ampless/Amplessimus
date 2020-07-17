@@ -38,6 +38,8 @@ Row ampRow(List<Widget> children) => Row(
       children: children,
     );
 
+Tab ampTab(IconData icon, String text) => Tab(icon: Icon(icon), text: text);
+
 TextFormField ampFormField(
     {@required TextEditingController controller,
     @required Key key,

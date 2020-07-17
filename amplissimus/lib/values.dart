@@ -54,9 +54,9 @@ class CustomValues {
 }
 
 class AmpStrings {
-  static const String appTitle = 'Amplissimus';
+  static const String appTitle = 'Amplessimus';
   static const String version = '0.0.0-1';
-  static const List<String> authors = ['miruslavus', 'chrissx'];
+  static const List<String> authors = ['chrissx', 'miruslavus'];
 }
 
 class AmpColors {
