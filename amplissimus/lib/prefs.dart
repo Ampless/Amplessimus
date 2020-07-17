@@ -77,8 +77,6 @@ void devOptionsTimerCache() {
 int timesToggleDarkModePressed = 0;
 int lastPressedToggleDarkMode = 0;
 
-int get counter => _prefs.getInt('counter', 0);
-set counter(int i) => _prefs.setInt('counter', i);
 double get subListItemSpace => _prefs.getDouble('sub_list_item_space', 0);
 set subListItemSpace(double d) => _prefs.setDouble('sub_list_item_space', d);
 int get currentThemeId => _prefs.getInt('current_theme_id', 0);
@@ -91,8 +89,6 @@ String get grade => _prefs.getString('grade', '5').toLowerCase();
 set grade(String s) => _prefs.setString('grade', s.toLowerCase());
 String get char => _prefs.getString('char', 'a').toLowerCase();
 set char(String s) => _prefs.setString('char', s.toLowerCase());
-bool get loadingBarEnabled => _prefs.getBool('loading_bar_enabled', false);
-set loadingBarEnabled(bool b) => _prefs.setBool('loading_bar_enabled', b);
 bool get oneClassOnly => _prefs.getBool('one_class_only', false);
 set oneClassOnly(bool b) => _prefs.setBool('one_class_only', b);
 bool get closeAppOnBackPress =>
@@ -100,8 +96,6 @@ bool get closeAppOnBackPress =>
 set closeAppOnBackPress(bool b) => _prefs.setBool('close_app_on_back_press', b);
 bool get devOptionsEnabled => _prefs.getBool('dev_options_enabled', false);
 set devOptionsEnabled(bool b) => _prefs.setBool('dev_options_enabled', b);
-bool get counterEnabled => _prefs.getBool('counter_enabled', false);
-set counterEnabled(bool b) => _prefs.setBool('counter_enabled', b);
 bool get firstLogin => _prefs.getBool('first_login', true);
 set firstLogin(bool b) => _prefs.setBool('first_login', b);
 bool get useJsonCache => _prefs.getBool('use_json_cache', false);

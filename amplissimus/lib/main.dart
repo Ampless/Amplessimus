@@ -383,8 +383,7 @@ class AmpHomePageState extends State<AmpHomePage>
         color: AmpColors.colorBackground,
         child: Scaffold(
           key: homeScaffoldKey,
-          appBar: ampAppBar(
-              '${AmpStrings.appTitle}${Prefs.counterEnabled ? ' ' + Prefs.counter.toString() : ''}'),
+          appBar: ampAppBar(AmpStrings.appTitle),
           backgroundColor: Colors.transparent,
           body: RefreshIndicator(
               key: refreshKey,
@@ -615,14 +614,7 @@ class AmpHomePageState extends State<AmpHomePage>
             physics: ClampingScrollPhysics(),
             children: containers,
           ),
-          floatingActionButton: Prefs.counterEnabled
-              ? ampFab(
-                  backgroundColor: fabBackgroundColor,
-                  onPressed: () => setState(() => Prefs.counter += 2),
-                  icon: Icons.add,
-                  label: 'Zählen',
-                )
-              : ampNull,
+          floatingActionButton: ampNull,
           bottomNavigationBar: SizedBox(
             height: 55,
             child: TabBar(
@@ -638,13 +630,7 @@ class AmpHomePageState extends State<AmpHomePage>
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          bottomSheet: Prefs.loadingBarEnabled
-              ? LinearProgressIndicator(
-                  backgroundColor: AmpColors.blankGrey,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
-                )
-              : ampNull,
+          bottomSheet: ampNull,
         )
       ],
     ));

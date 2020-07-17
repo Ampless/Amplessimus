@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
@@ -74,22 +76,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   ),
                   ampDivider,
                   ampSwitchWithText(
-                    text: 'Hilfe für Langeweile aktiviert',
-                    value: Prefs.counterEnabled,
-                    onChanged: (value) =>
-                        setState(() => Prefs.counterEnabled = value),
-                  ),
-                  ampSwitchWithText(
                     text: 'App schließt bei zurück-Taste',
                     value: Prefs.closeAppOnBackPress,
                     onChanged: (value) =>
                         setState(() => Prefs.closeAppOnBackPress = value),
-                  ),
-                  ampSwitchWithText(
-                    text: 'Dauerhafter Ladebalken',
-                    value: Prefs.loadingBarEnabled,
-                    onChanged: (value) =>
-                        setState(() => Prefs.loadingBarEnabled = value),
                   ),
                   ampSwitchWithText(
                     text: 'JSON Cache benutzen',
@@ -105,7 +95,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     onTap: () => showInputSubListItemSpacingDialog(context),
                   ),
                   ListTile(
-                    title: ampText('Refreshtimer (in Minuten)'),
+                    title: ampText('Refreshtimer (Minuten)'),
                     trailing: ampText('${Prefs.timer}'),
                     onTap: () => showInputTimerDialog(context),
                   ),
@@ -155,7 +145,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                           onCancel: Navigator.of(context).pop,
                           onSave: () {
                             Prefs.clear();
-                            SystemNavigator.pop();
+                            exit(0);
                           },
                         ),
                       );
