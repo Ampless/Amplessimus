@@ -509,18 +509,15 @@ class AmpHomePageState extends State<AmpHomePage>
                     Prefs.currentThemeId = 0;
                   else
                     Prefs.currentThemeId++;
-                  print(Prefs.currentThemeId);
                   await rebuildNewBuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
                     content: ampText(CustomValues.lang.changedAppearance),
                     action: SnackBarAction(
-                        textColor: AmpColors.colorForeground,
-                        label: CustomValues.lang.show,
-                        onPressed: () => {
-                              setState(() => _currentIndex = 0),
-                              _tabController.animateTo(0),
-                            }),
+                      textColor: AmpColors.colorForeground,
+                      label: CustomValues.lang.show,
+                      onPressed: () => setState(() => _currentIndex = 0),
+                    ),
                   ));
                 },
                 icon: AmpColors.isDarkMode
