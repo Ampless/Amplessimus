@@ -8,7 +8,6 @@ import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/pref_cache.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:crypto/crypto.dart';
-import 'package:package_info/package_info.dart';
 
 CachedSharedPreferences _prefs;
 
@@ -149,7 +148,6 @@ void initTestPrefs() {
 Future<Null> loadPrefs() async {
   _prefs = CachedSharedPreferences();
   try {
-    CustomValues.packageInfo = await PackageInfo.fromPlatform();
     await _prefs.ctor();
   } catch (e) {
     ampErr(ctx: 'Prefs', message: 'Initialization failed: ${errorString(e)}');

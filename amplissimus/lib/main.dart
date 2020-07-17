@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:package_info/package_info.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -590,8 +589,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 onTap: () => showAboutDialog(
                     context: context,
                     applicationName: AmpStrings.appTitle,
-                    applicationVersion:
-                        CustomValues.packageInfo.version.toString(),
+                    applicationVersion: AmpStrings.version,
                     applicationIcon:
                         Image.asset('assets/images/logo.png', height: 40),
                     children: [Text(CustomValues.lang.appInfo)]),
