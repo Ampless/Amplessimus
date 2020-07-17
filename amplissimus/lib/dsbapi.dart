@@ -331,11 +331,10 @@ Widget dsbGetGoodList(
   String char,
   String grade,
   int themeId,
-  BuildContext context,
 ) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   var widgets = <Widget>[];
-  _initializeTheme(widgets, plans, oneClassOnly, char, grade, themeId, context);
+  _initializeTheme(widgets, plans, oneClassOnly, char, grade, themeId);
   widgets.add(ampPadding(12));
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
 }
@@ -347,31 +346,29 @@ String errorString(dynamic e) {
 
 Widget dsbWidget;
 
-Future<Null> dsbUpdateWidget({
-  void Function() callback,
-  bool cacheGetRequests = true,
-  bool cachePostRequests = true,
-  bool cacheJsonPlans,
-  Future<String> Function(
-          Uri url, Object body, String id, Map<String, String> headers,
-          {String Function(String) getCache,
-          void Function(String, String, Duration) setCache})
-      httpPost,
-  Future<String> Function(Uri url,
-          {String Function(String) getCache,
-          void Function(String, String, Duration) setCache})
-      httpGet,
-  String dsbLanguage,
-  String dsbJsonCache,
-  String username,
-  String password,
-  bool oneClassOnly,
-  String grade,
-  String char,
-  int themeId,
-  Language lang,
-  @required BuildContext context,
-}) async {
+Future<Null> dsbUpdateWidget(
+    {void Function() callback,
+    bool cacheGetRequests = true,
+    bool cachePostRequests = true,
+    bool cacheJsonPlans,
+    Future<String> Function(
+            Uri url, Object body, String id, Map<String, String> headers,
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
+        httpPost,
+    Future<String> Function(Uri url,
+            {String Function(String) getCache,
+            void Function(String, String, Duration) setCache})
+        httpGet,
+    String dsbLanguage,
+    String dsbJsonCache,
+    String username,
+    String password,
+    bool oneClassOnly,
+    String grade,
+    String char,
+    int themeId,
+    Language lang}) async {
   await Prefs.waitForMutex();
   httpPost ??= FirstLoginValues.httpPostFunc;
   httpGet ??= FirstLoginValues.httpGetFunc;
@@ -403,8 +400,7 @@ Future<Null> dsbUpdateWidget({
     if (oneClassOnly)
       plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
     updateTimetableDays(plans);
-    dsbWidget =
-        dsbGetGoodList(plans, oneClassOnly, char, grade, themeId, context);
+    dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
     timetablePlans = plans;
   } catch (e) {
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
@@ -421,15 +417,14 @@ Future<Null> dsbUpdateWidget({
   callback();
 }
 
-Widget getThemedWidget(Widget _child, int themeId) {
+Widget getThemedWidget(Widget child, int themeId) {
   switch (themeId) {
     case 0:
       return Card(
         elevation: 0,
         color: AmpColors.lightBackground,
-        child: _child,
+        child: child,
       );
-      break;
     case 1:
       return Container(
         margin: EdgeInsets.all(8),
@@ -437,20 +432,16 @@ Widget getThemedWidget(Widget _child, int themeId) {
           border: Border.all(color: AmpColors.colorForeground),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: _child,
+        child: child,
       );
-      break;
-    case 2:
-      return ClipRRect(
-        child: Container(
-          color: AmpColors.isDarkMode ? Colors.white10 : Colors.black12,
-          child: _child,
-        ),
-        borderRadius: BorderRadius.circular(18),
+    case -1:
+      return Card(
+        elevation: 0,
+        color: AmpColors.lightBackground,
+        child: child,
       );
-      break;
     default:
-      return getThemedWidget(_child, 0);
+      return getThemedWidget(child, 0);
   }
 }
 
@@ -464,137 +455,42 @@ void _initializeTheme(
   String char,
   String grade,
   int themeId,
-  BuildContext _context,
 ) {
-  print(themeId);
   for (var plan in plans) {
     var dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
-      dayWidgets.add(
-        ListTile(
-          title: ampText(CustomValues.lang.noSubs),
-        ),
-      );
+      dayWidgets.add(ListTile(
+        title: ampText(CustomValues.lang.noSubs),
+      ));
     }
     var i = 0;
     for (var sub in plan.subs) {
       var titleSub = CustomValues.lang.dsbSubtoTitle(sub);
       if (CustomValues.isAprilFools)
         titleSub = '${Random().nextInt(98) + 1}.${titleSub.split('.').last}';
-      BorderRadius _borderRadius;
-      if (themeId == 2) {
-        if (i == 0 && i == plan.subs.length - 1) {
-          _borderRadius = BorderRadius.circular(18);
-        } else if (i == 0) {
-          _borderRadius = BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
-          );
-        } else if (i == plan.subs.length - 1) {
-          _borderRadius = BorderRadius.only(
-            bottomLeft: Radius.circular(18),
-            bottomRight: Radius.circular(18),
-          );
-        } else {
-          _borderRadius = BorderRadius.circular(0);
-        }
-      } else if (themeId == 1) {
-        if (i == 0 && i == plan.subs.length - 1) {
-          _borderRadius = BorderRadius.circular(7);
-        } else if (i == 0) {
-          _borderRadius = BorderRadius.only(
-            topLeft: Radius.circular(7),
-            topRight: Radius.circular(7),
-          );
-        } else if (i == plan.subs.length - 1) {
-          _borderRadius = BorderRadius.only(
-            bottomLeft: Radius.circular(7),
-            bottomRight: Radius.circular(7),
-          );
-        } else {
-          _borderRadius = BorderRadius.circular(0);
-        }
-      }
-      dayWidgets.add(
-        InkWell(
-          splashColor: themeId == 2 ? rcolor : AmpColors.lightForeground,
-          child: ListTile(
-            title: ampText(titleSub),
-            subtitle: ampText(CustomValues.lang.dsbSubtoSubtitle(sub)),
-            trailing: (char.isEmpty || grade.isEmpty || !oco)
-                ? ampText(sub.affectedClass)
-                : ampNull,
-          ),
-          borderRadius: _borderRadius,
-          focusColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          onTap: () {
-            showDialog(
-              context: _context,
-              builder: (_context) {
-                return AlertDialog(
-                  backgroundColor: AmpColors.colorBackground,
-                  title: Text(CustomValues.lang.dsbSubtoTitle(sub),
-                      style: TextStyle(color: AmpColors.colorForeground)),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      sub.isFree
-                          ? Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(CustomValues.lang.freeLesson,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      color: AmpColors.colorForeground)))
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  '${CustomValues.lang.dsbSubtoSubtitle(sub)}',
-                                  style: TextStyle(
-                                      color: AmpColors.colorForeground))),
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              '${CustomValues.lang.affectedClass}: ${sub.affectedClass}',
-                              style:
-                                  TextStyle(color: AmpColors.colorForeground))),
-                    ],
-                  ),
-                  actions: [
-                    FlatButton(
-                      splashColor: AmpColors.lightForeground,
-                      onPressed: () => Navigator.pop(_context),
-                      child: Text('OK',
-                          style: TextStyle(color: AmpColors.colorForeground)),
-                    )
-                  ],
-                );
-              },
+      dayWidgets.add(ListTile(
+        title: ampText(titleSub),
+        subtitle: ampText(CustomValues.lang.dsbSubtoSubtitle(sub)),
+        trailing: (char.isEmpty || grade.isEmpty || !oco)
+            ? ampText(sub.affectedClass)
+            : ampNull,
+      ));
+      if (++i != plan.subs.length) dayWidgets.add(ampDivider);
+    }
+    widgets.add(ListTile(
+      title: Row(children: <Widget>[
+        ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 22),
+        IconButton(
+          icon: ampIcon(Icons.info),
+          tooltip: plan.date.split(' ').first,
+          onPressed: () {
+            dsbApiHomeScaffoldKey.currentState?.showSnackBar(
+              ampSnackBar(plan.date),
             );
           },
         ),
-      );
-      if (++i != plan.subs.length) dayWidgets.add(ampDivider);
-    }
-    widgets.add(
-      ListTile(
-        title: Row(
-          children: <Widget>[
-            ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 22),
-            IconButton(
-              icon: ampIcon(Icons.info),
-              tooltip: plan.date.split(' ').first,
-              onPressed: () {
-                dsbApiHomeScaffoldKey.currentState?.showSnackBar(
-                  ampSnackBar(plan.date),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+      ]),
+    ));
     widgets.add(_columnWidget(dayWidgets, themeId));
   }
 }

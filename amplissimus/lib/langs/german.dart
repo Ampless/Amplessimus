@@ -151,9 +151,6 @@ class German extends Language {
   String get freeLesson => 'Freistunde';
 
   @override
-  String get affectedClass => 'Betroffene Klassen';
-
-  @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Sport',
     'e': 'Englisch',

@@ -59,7 +59,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
             SchedulerBinding.instance.window.platformBrightness ==
                 Brightness.dark;
 
-      if (!Prefs.firstLogin) await dsbUpdateWidget(context: context);
+      if (!Prefs.firstLogin) await dsbUpdateWidget();
 
       Future.delayed(Duration(seconds: 1), () {
         Navigator.pushReplacement(
@@ -184,18 +184,17 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   void rebuildTimer() {
-    dsbUpdateWidget(callback: rebuild, context: context);
+    dsbUpdateWidget(callback: rebuild);
   }
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
-    await dsbUpdateWidget(
-        callback: rebuild, cachePostRequests: false, context: context);
+    await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
   }
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
-    await dsbUpdateWidget(context: context);
+    await dsbUpdateWidget();
     setState(() => circularProgressIndicatorActive = false);
   }
 
@@ -364,7 +363,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       value: Prefs.oneClassOnly,
                       onChanged: (value) {
                         Prefs.oneClassOnly = value;
-                        dsbUpdateWidget(callback: rebuild, context: context);
+                        dsbUpdateWidget(callback: rebuild);
                       }),
                   alignment: Alignment.center),
             ],
@@ -518,7 +517,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 onTap: () async {
                   if (CustomValues.isAprilFools) return;
                   ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                  if (Prefs.currentThemeId >= 2)
+                  if (Prefs.currentThemeId >= 1)
                     Prefs.currentThemeId = 0;
                   else
                     Prefs.currentThemeId++;

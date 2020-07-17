@@ -269,7 +269,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
                     setState(() => dsbWidgetIsLoading = false);
-                    await dsbUpdateWidget(context: context);
+                    await dsbUpdateWidget();
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
