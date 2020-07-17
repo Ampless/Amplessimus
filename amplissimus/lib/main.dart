@@ -129,8 +129,8 @@ class AmpHomePageState extends State<AmpHomePage>
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
   bool passwordHidden = true;
-
-  int _currentIndex = 0;
+  int _currentIndex;
+  TabController tabController;
 
   void checkBrightness() {
     if (Prefs.useSystemTheme &&
@@ -151,7 +151,6 @@ class AmpHomePageState extends State<AmpHomePage>
   @override
   void initState() {
     ampInfo(ctx: 'AmpHomePageState', message: 'initState()');
-    _currentIndex = widget.initialIndex;
     if (letterDropDownValue.isEmpty)
       letterDropDownValue = FirstLoginValues.grades[0];
     if (gradeDropDownValue.isEmpty)
@@ -159,6 +158,9 @@ class AmpHomePageState extends State<AmpHomePage>
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
+    _currentIndex = widget.initialIndex;
+    tabController =
+        TabController(length: 3, vsync: this, initialIndex: _currentIndex);
     Prefs.setTimer(Prefs.timer, rebuildTimer);
   }
 
@@ -376,8 +378,9 @@ class AmpHomePageState extends State<AmpHomePage>
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     var containers = [
-      Container(
-        color: Colors.transparent,
+      AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        color: AmpColors.colorBackground,
         child: Scaffold(
           key: homeScaffoldKey,
           appBar: ampAppBar(
@@ -468,7 +471,8 @@ class AmpHomePageState extends State<AmpHomePage>
               )
             : ampNull,
       ),
-      Container(
+      AnimatedContainer(
+        duration: Duration(milliseconds: 150),
         color: Colors.transparent,
         child: Scaffold(
           key: settingsScaffoldKey,
@@ -598,12 +602,19 @@ class AmpHomePageState extends State<AmpHomePage>
       )
     ];
     return SafeArea(
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        color: AmpColors.colorBackground,
-        child: Scaffold(
+        child: Stack(
+      children: <Widget>[
+        AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          color: AmpColors.colorBackground,
+        ),
+        Scaffold(
           backgroundColor: Colors.transparent,
-          body: containers[_currentIndex],
+          body: TabBarView(
+            controller: tabController,
+            physics: ClampingScrollPhysics(),
+            children: containers,
+          ),
           floatingActionButton: Prefs.counterEnabled
               ? ampFab(
                   backgroundColor: fabBackgroundColor,
@@ -612,57 +623,21 @@ class AmpHomePageState extends State<AmpHomePage>
                   label: 'Zählen',
                 )
               : ampNull,
-          bottomNavigationBar: BottomNavigationBar(
-            elevation: 0,
-            type: BottomNavigationBarType.shifting,
-            unselectedItemColor: AmpColors.lightForeground,
-            backgroundColor: Colors.transparent,
-            currentIndex: _currentIndex,
-            selectedItemColor: AmpColors.colorForeground,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text(CustomValues.lang.start),
-                backgroundColor: Colors.transparent,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(MdiIcons.timetable),
-                title: Text(CustomValues.lang.settings),
-                backgroundColor: Colors.transparent,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                title: Text(CustomValues.lang.settings),
-                backgroundColor: Colors.transparent,
-              ),
-            ],
-            onTap: (value) {
-              setState(() => _currentIndex = value);
-            },
-          ),
-          /*SizedBox(
+          bottomNavigationBar: SizedBox(
             height: 55,
             child: TabBar(
               controller: tabController,
               indicatorColor: AmpColors.colorForeground,
               labelColor: AmpColors.colorForeground,
               tabs: <Widget>[
-                Tab(
-                  icon: ampIcon(Icons.home),
-                  text: CustomValues.lang.start,
-                ),
-                Tab(
-                  icon: ampIcon(MdiIcons.timetable),
-                  text: CustomValues.lang.timetable,
-                ),
-                Tab(
-                  icon: ampIcon(Icons.settings),
-                  text: CustomValues.lang.settings,
-                ),
+                ampTab(Icons.home, CustomValues.lang.start),
+                ampTab(MdiIcons.timetable, CustomValues.lang.timetable),
+                ampTab(Icons.settings, CustomValues.lang.settings),
               ],
             ),
-          ),*/
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           bottomSheet: Prefs.loadingBarEnabled
               ? LinearProgressIndicator(
                   backgroundColor: AmpColors.blankGrey,
@@ -670,8 +645,8 @@ class AmpHomePageState extends State<AmpHomePage>
                       AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
                 )
               : ampNull,
-        ),
-      ),
-    );
+        )
+      ],
+    ));
   }
 }
