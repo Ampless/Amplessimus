@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/dsbutil.dart';
-import 'package:Amplissimus/langs/language.dart';
-import 'package:Amplissimus/main.dart';
-import 'package:Amplissimus/uilib.dart';
-import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/validators.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/dsbutil.dart';
+import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/main.dart';
+import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/validators.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

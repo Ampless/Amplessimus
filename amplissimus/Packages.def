@@ -1,14 +1,14 @@
-Package: de.amplus.amplissimus
-Name: Amplissimus
+Package: de.ampless.amplessimus
+Name: Amplessimus
 Depends: system-cmds
 Pre-Depends: dpkg (>= 1.14.25-8)
 Version: 0.0.0-1
 Architecture: $ARCH
-Description: a nice dsbmobile alternative
-Maintainer: Amplus <amplus@chrissx.de>
-Author: Amplus <amplus@chrissx.de>
+Description: A nice Amplissimus alternative
+Maintainer: Ampless <ampless@chrissx.de>
+Author: Ampless <ampless@chrissx.de>
 Section: Education
-Filename: amplissimus//0.0.0-1
+Filename: amplessimus//0.0.0-1
 Size: $SIZEbytes
 MD5sum: $MD5
-Depiction: https://amplus.chrissx.de/AmplissimusCydia.html
+Depiction: https://ampless.chrissx.de/AmplissimusCydia.html

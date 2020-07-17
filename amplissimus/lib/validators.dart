@@ -1,4 +1,4 @@
-import 'package:Amplissimus/values.dart';
+import 'package:Amplessimus/values.dart';
 
 //this is currently unused, possible lists:
 //['5','6','7','8','9','10','11','12','13','']

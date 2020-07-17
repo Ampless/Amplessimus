@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:Amplissimus/langs/language.dart';
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 

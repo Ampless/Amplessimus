@@ -1,5 +1,5 @@
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:flutter_test/flutter_test.dart';
 
 abstract class TestCase {

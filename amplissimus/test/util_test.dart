@@ -1,7 +1,7 @@
-import 'package:Amplissimus/dsbutil.dart';
+import 'package:Amplessimus/dsbutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
+import 'package:Amplessimus/dsbhtmlcodes.dart' as htmlcodes;
 
 import 'testlib.dart';
 

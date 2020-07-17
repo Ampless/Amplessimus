@@ -1,10 +1,10 @@
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/main.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/uilib.dart';
-import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/validators.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/main.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

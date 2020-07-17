@@ -1,4 +1,4 @@
-import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';

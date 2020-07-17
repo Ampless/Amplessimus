@@ -1,6 +1,6 @@
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
-import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';

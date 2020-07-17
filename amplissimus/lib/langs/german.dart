@@ -1,8 +1,8 @@
 import 'dart:collection';
 
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/langs/language.dart';
-import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/timetable/timetables.dart';
 
 class German extends Language {
   @override

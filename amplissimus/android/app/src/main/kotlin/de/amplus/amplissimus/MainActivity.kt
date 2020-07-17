@@ -1,4 +1,4 @@
-package de.amplus.amplissimus
+package de.ampless.amplessimus
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -131,7 +131,7 @@ macdmg:
 	which cp ln hdiutil
 	cp -rf $(MAC_BUILD_DIR) $(TMP_DMG_DIR)
 	ln -s /Applications $(MAC_BUILD_DIR)/Applications
-	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname "Install Amplissimus"
+	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname "Install Amplessimus"
 	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o $(OUTPUT_DMG)
 
 mkdirs:

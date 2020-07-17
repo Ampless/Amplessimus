@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/langs/english.dart';
-import 'package:Amplissimus/langs/german.dart';
-import 'package:Amplissimus/timetable/timetables.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/langs/english.dart';
+import 'package:Amplessimus/langs/german.dart';
+import 'package:Amplessimus/timetable/timetables.dart';
 
 abstract class Language {
   String get code;

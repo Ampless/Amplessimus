@@ -1,6 +1,6 @@
-import 'package:Amplissimus/first_login.dart';
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

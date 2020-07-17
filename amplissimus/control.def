@@ -1,14 +1,14 @@
-Package: de.amplus.amplissimus
+Package: de.ampless.amplessimus
 Priority: standard
-Name: Amplissimus
+Name: Amplessimus
 Version: 0.0.0-1
 Installed-Size: $ISIZE
 Section: Education
 Pre-Depends: dpkg (>= 1.14.25-8)
 Depends: system-cmds
 Architecture: $ARCH
-Author: Amplus <amplus@chrissx.de>
-Maintainer: Amplus <amplus@chrissx.de>
-Description: A DSBMobile substitution ;)
- This is just a better version of DSBMobile.
-Homepage: https://amplus.chrissx.de
+Author: Ampless <ampless@chrissx.de>
+Maintainer: Ampless <ampless@chrissx.de>
+Description: A Amplissimus substitution ;)
+ This is just a better version of Amplissimus.
+Homepage: https://ampless.chrissx.de

@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = Amplissimus
+PRODUCT_NAME = Amplessimus
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = de.amplus.amplissimus
+PRODUCT_BUNDLE_IDENTIFIER = de.ampless.amplessimus
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 Amplus Team. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2020 Ampless Team. All rights reserved.

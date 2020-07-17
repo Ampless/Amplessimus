@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/first_login.dart';
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/pref_cache.dart';
-import 'package:Amplissimus/values.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/pref_cache.dart';
+import 'package:Amplessimus/values.dart';
 import 'package:crypto/crypto.dart';
 import 'package:package_info/package_info.dart';
 

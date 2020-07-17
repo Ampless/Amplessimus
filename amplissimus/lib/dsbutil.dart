@@ -3,9 +3,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:Amplissimus/dsbhtmlcodes.dart' as htmlcodes;
-import 'package:Amplissimus/logging.dart';
-import 'package:Amplissimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/dsbhtmlcodes.dart' as htmlcodes;
+import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:flutter/material.dart';
 import 'dart:async';
 

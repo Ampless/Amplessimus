@@ -1,10 +1,10 @@
-import 'package:Amplissimus/animations.dart';
-import 'package:Amplissimus/dsbapi.dart';
-import 'package:Amplissimus/main.dart';
-import 'package:Amplissimus/timetable/timetables.dart';
-import 'package:Amplissimus/uilib.dart';
-import 'package:Amplissimus/values.dart';
-import 'package:Amplissimus/validators.dart';
+import 'package:Amplessimus/animations.dart';
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/main.dart';
+import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
