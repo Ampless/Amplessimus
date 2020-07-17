@@ -5,6 +5,7 @@ import 'package:Amplissimus/logging.dart';
 import 'package:Amplissimus/prefs.dart' as Prefs;
 import 'package:Amplissimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 class CustomValues {
   static bool get isAprilFools =>
@@ -15,6 +16,8 @@ class CustomValues {
     Prefs.savedLangCode = l.code;
     _lang = l;
   }
+
+  static PackageInfo packageInfo;
 
   static List<int> ttHours = [
     0,
@@ -55,7 +58,6 @@ class CustomValues {
 
 class AmpStrings {
   static const String appTitle = 'Amplissimus';
-  static const String version = '0.0.0-1';
   static const List<String> authors = ['miruslavus', 'chrissx'];
 }
 
