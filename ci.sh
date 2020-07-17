@@ -16,7 +16,7 @@ gh_create_release() {
                          \"draft\": false,
                          \"prerelease\": true
                         }" \
-               https://api.github.com/repos/Amplissimus/Amplissimus/releases)"
+               https://api.github.com/repos/Ampless/Amplessimus/releases)"
         UPLOAD_URL=$(echo "$RAW" | grep '"upload_url":' | head -n 1 | cut -d: -f2- | sed 's/^.*"\(.*\)".*$/\1/' | sed 's/{?name,label}//')
         echo "[GitHub] Created release: $UPLOAD_URL" >&2
         echo "$UPLOAD_URL"
@@ -44,14 +44,14 @@ flutter_update() {
 
 update_altstore() {
         cd
-        [ ! -d amplus.chrissx.de ] && git clone https://github.com/Amplissimus/amplus.chrissx.de
-        cd amplus.chrissx.de
+        [ ! -d ampless.chrissx.de ] && git clone https://github.com/Ampless/ampless.chrissx.de
+        cd ampless.chrissx.de
         git pull
         cd altstore
         sed -E 's/^ *"version": ".*",$/      "version": "'"$version_name"'",/' alpha.json | \
         sed -E 's/^ *"versionDate": ".*",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
         sed -E 's/^ *"versionDescription": ".*",$/      "versionDescription": "As of '"$(date)"'",/' | \
-        sed -E 's/^ *"downloadURL": ".*",$/      "downloadURL": "https:\/\/github.com\/Amplissimus\/Amplissimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
+        sed -E 's/^ *"downloadURL": ".*",$/      "downloadURL": "https:\/\/github.com\/Ampless\/Amplessimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
         mv temp.json alpha.json
         git add alpha.json
         git commit -m "automatic ci update to amplissimus ios alpha version $version_name"

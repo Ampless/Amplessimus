@@ -7,7 +7,7 @@ import 'package:Amplessimus/timetable/timetables.dart';
 class German extends Language {
   @override
   String get appInfo =>
-      'Amplissimus ist eine App, um Untis Vertretungspläne durch DSBMobile einfach anzusehen.';
+      'Amplessimus ist eine App, um Untis Vertretungspläne durch DSBMobile einfach anzusehen.';
 
   @override
   String get code => 'de';
@@ -85,10 +85,10 @@ class German extends Language {
 
   @override
   String get dsbListErrorSubtitle =>
-      'Bitte an Amplus melden (https://amplus.chrissx.de/amplissimus)';
+      'Bitte an Amplus melden (https://ampless.chrissx.de/amplessimus)';
 
   @override
-  String get dsbListErrorTitle => 'Amplissimus-Fehler';
+  String get dsbListErrorTitle => 'Amplessimus-Fehler';
 
   @override
   String get noLogin => 'Keine Login-Daten eingetragen.';
