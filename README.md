@@ -1,2 +1,2 @@
-# Amplissimus
-This is an alternative to the 'DSBMobile' app as long as your school uses Untis.
+# Amplessimus
+This is an alternative to the 'Amplissimus' app.
