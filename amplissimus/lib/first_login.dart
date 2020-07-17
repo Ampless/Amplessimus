@@ -181,8 +181,20 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           obscureText: passwordHidden,
                           autofillHints: [AutofillHints.password],
                         ),
-                        Padding(padding: EdgeInsets.all(4)),
-                        ampSizedDivider(10),
+                        ampSizedDivider(20),
+                        ampPadding(4),
+                        ampText(CustomValues.lang.changeLanguage, size: 20),
+                        ampDropdownButton(
+                          value: CustomValues.lang,
+                          items: Language.all
+                              .map<DropdownMenuItem<Language>>((value) {
+                            return DropdownMenuItem<Language>(
+                                value: value, child: Text(value.name));
+                          }).toList(),
+                          onChanged: (value) =>
+                              setState(() => CustomValues.lang = value),
+                        ),
+                        ampSizedDivider(5),
                         AnimatedDefaultTextStyle(
                             child: Text(textString),
                             style: TextStyle(
