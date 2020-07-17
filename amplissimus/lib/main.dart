@@ -527,10 +527,12 @@ class AmpHomePageState extends State<AmpHomePage>
                     backgroundColor: AmpColors.colorBackground,
                     content: ampText(CustomValues.lang.changedAppearance),
                     action: SnackBarAction(
-                      textColor: AmpColors.colorForeground,
-                      label: CustomValues.lang.show,
-                      onPressed: () => setState(() => _currentIndex = 0),
-                    ),
+                        textColor: AmpColors.colorForeground,
+                        label: CustomValues.lang.show,
+                        onPressed: () => {
+                              setState(() => _currentIndex = 0),
+                              _tabController.animateTo(0),
+                            }),
                   ));
                 },
                 icon: AmpColors.isDarkMode
