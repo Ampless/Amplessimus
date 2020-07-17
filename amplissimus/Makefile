@@ -46,7 +46,7 @@ TMP_DEB_DIR = $(TMP)/deb
 TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
-ci: mkdirs replaceversions cicert iosapp ipa deb cydiainfo apk cicertback cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk aab cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk aab cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
@@ -54,14 +54,6 @@ web: mkdirs replaceversions webbuild cleanartifacts rollbackversions
 win: mkdirs replaceversions winx64 cleanartifacts rollbackversions
 mac: mkdirs replaceversions macapp macdmg cleanartifacts rollbackversions
 linux: mkdirs replaceversions linux64 cleanartifacts rollbackversions
-
-cicert:
-	mv -f 'android/app/build.gradle' 'android/app/build.gradle.playstore'
-	mv -f 'android/app/build.gradle.ci' 'android/app/build.gradle'
-
-cicertback:
-	mv -f 'android/app/build.gradle.playstore' 'android/app/build.gradle'
-	mv -f 'android/app/build.gradle' 'android/app/build.gradle.ci'
 
 replaceversions:
 	which mv sed

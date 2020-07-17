@@ -69,20 +69,6 @@ output() {
         done
 }
 
-build() {
-        mkdir -p amplissimus/bin
-        echo "Building $version_name..."
-        flutter_update
-
-        mkdir -p /usr/local/var/www/amplissimus
-
-        cd amplissimus
-        pwd
-        make ci || { make cleanartifacts rollbackversions cicertback ; exit 1 ; }
-        make mac || { make cleanartifacts rollbackversions cicertback ; }
-        cd ..
-}
-
 main() {
         git stash
         git pull
@@ -91,8 +77,18 @@ main() {
         raw_version="$(head -n 1 amplissimus/Makefile | cut -d' ' -f3)"
         version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
         output_dir="/usr/local/var/www/amplissimus/$version_name"
+        mkdir -p amplissimus/bin
+        {
+                echo "Building $version_name..."
+                flutter_update
 
-        build 2>&1 | tee amplissimus/bin/ci.log
+                mkdir -p /usr/local/var/www/amplissimus
+
+                cd amplissimus
+                make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
+                make mac || { make cleanartifacts rollbackversions ; }
+                cd ..
+        } 2>&1 | tee amplissimus/bin/ci.log
 
         output
 
