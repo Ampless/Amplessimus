@@ -71,7 +71,6 @@ replaceversions:
 rollbackversions:
 	which mv
 	mv -f pubspec.yaml.def pubspec.yaml
-	mv -f lib/values.dart.def lib/values.dart
 
 iosapp:
 	which flutter xcrun mv strip
