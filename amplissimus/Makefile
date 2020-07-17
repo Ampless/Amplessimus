@@ -67,8 +67,6 @@ replaceversions:
 	which mv sed
 	mv -f pubspec.yaml pubspec.yaml.def
 	sed "s/0.0.0-1/$(VERSION)/" pubspec.yaml.def > pubspec.yaml
-	mv -f lib/values.dart lib/values.dart.def
-	sed "s/0.0.0-1/$(VERSION)/" lib/values.dart.def > lib/values.dart
 
 rollbackversions:
 	which mv
