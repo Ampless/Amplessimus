@@ -177,6 +177,7 @@ Widget ampBigAmpButton(
 RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
   return RaisedButton(
     color: AmpColors.lightBackground,
+    splashColor: AmpColors.lightForeground,
     child: ampText(text),
     onPressed: onPressed,
   );
