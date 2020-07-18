@@ -54,7 +54,7 @@ update_altstore() {
         sed -E 's/^ *"downloadURL": ".*",$/      "downloadURL": "https:\/\/github.com\/Ampless\/Amplessimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
         mv temp.json alpha.json
         git add alpha.json
-        git commit -m "automatic ci update to amplissimus ios alpha version $version_name"
+        git commit -m "automatic ci update to amplessimus ios alpha version $version_name"
         git push
 }
 
