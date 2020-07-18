@@ -46,7 +46,7 @@ TMP_DEB_DIR = $(TMP)/deb
 TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
-ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk aab cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk aab cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
