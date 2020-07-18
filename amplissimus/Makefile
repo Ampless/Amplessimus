@@ -18,7 +18,7 @@ IOS_STRIP_LIST = $(IOS_BUILD_DIR)/Runner \
 				 $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter \
 				 $(IOS_BUILD_DIR)/Frameworks/shared_preferences.framework/shared_preferences \
 				 $(IOS_BUILD_DIR)/Frameworks/*.dylib
-MAC_BUILD_DIR = build/macos/Build/Products/Release/Amplissimus.app
+MAC_BUILD_DIR = build/macos/Build/Products/Release/Amplessimus.app
 MAC_STRIP_LIST = $(MAC_BUILD_DIR)/Contents/Runner \
 				 $(MAC_BUILD_DIR)/Contents/Frameworks/App.framework/Versions/A/App \
 				 $(MAC_BUILD_DIR)/Contents/Frameworks/FlutterMacOS.framework/Versions/A/FlutterMacOS \
@@ -145,4 +145,4 @@ test:
 	genhtml -o coverage/html coverage/lcov.info
 	lcov -l coverage/lcov.info
 
-.PHONY: replaceversions rollbackversions iosapp ipa deb apk webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts test
+.PHONY: replaceversions rollbackversions iosapp ipa deb apk aab webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts test
