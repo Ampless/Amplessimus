@@ -185,22 +185,24 @@ RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
 
 Padding ampPadding(double value) => Padding(padding: EdgeInsets.all(value));
 
+TextStyle ampTextStyle({
+  double size,
+  FontWeight weight,
+  Color color,
+}) {
+  color ??= AmpColors.colorForeground;
+  return TextStyle(color: color, fontSize: size, fontWeight: weight);
+}
+
 Text ampText(
-  Object text, {
+  String text, {
   double size,
   TextAlign textAlign,
   FontWeight weight,
+  Color color,
 }) {
-  return textAlign == null
-      ? Text(
-          text.toString(),
-          style: AmpColors.sizedTextStyleForeground(size, weight: weight),
-        )
-      : Text(
-          text.toString(),
-          style: AmpColors.sizedTextStyleForeground(size, weight: weight),
-          textAlign: textAlign,
-        );
+  var style = ampTextStyle(size: size, weight: weight, color: color);
+  return Text(text, style: style, textAlign: textAlign);
 }
 
 Icon ampIcon(IconData data, {double size, Color color}) {

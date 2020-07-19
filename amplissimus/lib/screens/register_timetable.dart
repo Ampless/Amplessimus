@@ -162,7 +162,7 @@ class RegisterTimetableScreenPageState
                       }
                       return ListTile(
                         leading: ampText(
-                          (index + 1),
+                          (index + 1).toString(),
                           weight: FontWeight.bold,
                           size: 30,
                         ),

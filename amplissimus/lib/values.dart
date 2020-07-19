@@ -97,20 +97,13 @@ class AmpColors {
   static Color get colorForeground => isDarkMode ? _blankWhite : _blankBlack;
 
   static TextStyle weightedTextStyleForeground(FontWeight weight) =>
-      weight != null
-          ? TextStyle(color: colorForeground, fontWeight: weight)
-          : TextStyle(color: colorForeground);
+      TextStyle(color: colorForeground, fontWeight: weight);
   static TextStyle get textStyleForeground => weightedTextStyleForeground(null);
   static TextStyle sizedTextStyleForeground(double size, {FontWeight weight}) =>
-      size != null
-          ? TextStyle(
-              color: colorForeground, fontSize: size, fontWeight: weight)
-          : weightedTextStyleForeground(weight);
-  static TextStyle get styleLightForeground =>
-      TextStyle(color: lightForeground);
-  static TextStyle sizedStyleLightForeground(double size) => size != null
-      ? TextStyle(color: lightForeground, fontSize: size)
-      : styleLightForeground;
+      TextStyle(color: colorForeground, fontSize: size, fontWeight: weight);
+  static TextStyle get styleLightForeground => sizedStyleLightForeground(null);
+  static TextStyle sizedStyleLightForeground(double size) =>
+      TextStyle(color: lightForeground, fontSize: size);
 
   static Brightness get brightness =>
       isDarkMode ? Brightness.dark : Brightness.light;

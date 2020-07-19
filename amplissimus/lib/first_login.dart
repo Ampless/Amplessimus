@@ -191,7 +191,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                               setState(() => CustomValues.lang = value),
                         ),
                         ampSizedDivider(5),
-                        Text(textString, style: TextStyle(color: Colors.red)),
+                        ampText(
+                          textString,
+                          color: Colors.red,
+                          weight: FontWeight.bold,
+                          size: 20,
+                        ),
                       ],
                     ),
                   ),
