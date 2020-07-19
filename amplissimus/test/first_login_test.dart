@@ -20,8 +20,8 @@ void main() {
             dsbTest1Cache['44a7def4-aaa3-4177-959d-e2921176cde9.htm']);
     await tester.pumpWidget(screen);
     await tester.pumpAndSettle();
-    FirstLoginValues.usernameInputFormController.text = 'username';
-    FirstLoginValues.passwordInputFormController.text = 'password';
+    screen.page.state.usernameInputFormController.text = 'username';
+    screen.page.state.passwordInputFormController.text = 'password';
     screen.page.state.gradeDropDownValue = '11';
     screen.page.state.letterDropDownValue = 'q';
     screen.page.state.saveButton.onPressed();

@@ -107,7 +107,7 @@ class AmpApp extends StatelessWidget {
         title: AmpStrings.appTitle,
         home: AmpHomePage(initialIndex: initialIndex),
       ),
-      onWillPop: () => Future(() => Prefs.closeAppOnBackPress),
+      onWillPop: () async => Prefs.closeAppOnBackPress,
     );
   }
 }
@@ -212,12 +212,12 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        onCancel: Navigator.of(context).pop,
-        onSave: () {
+        context: context,
+        save: () {
           Prefs.grade = gradeDropDownValue;
           Prefs.char = letterDropDownValue;
           rebuildNewBuild();
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         },
       ),
       rowOrColumn: ampRow,
@@ -249,15 +249,15 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        onCancel: Navigator.of(context).pop,
-        onSave: () {
+        context: context,
+        save: () {
           CustomValues.lang = lang;
           Prefs.dsbUseLanguage = use;
           rebuildNewBuild();
 
           FirstLoginValues.grades[0] = CustomValues.lang.empty;
           FirstLoginValues.letters[0] = CustomValues.lang.empty;
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         },
       ),
       rowOrColumn: ampColumn,
@@ -303,15 +303,15 @@ class AmpHomePageState extends State<AmpHomePage>
         )
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        onCancel: () => Navigator.of(context).pop(),
-        onSave: () {
+        context: context,
+        save: () {
           var condA = passwordInputFormKey.currentState.validate();
           var condB = usernameInputFormKey.currentState.validate();
           if (!condA || !condB) return;
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();
           rebuildDragDown();
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         },
       ),
       rowOrColumn: ampColumn,

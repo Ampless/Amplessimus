@@ -42,11 +42,9 @@ class FirstLoginScreen extends StatelessWidget {
           home: _page = FirstLoginScreenPage(),
         ),
         onWillPop: () async {
-          if (FirstLoginValues.tabController.index <= 0)
-            return false;
-          else
-            FirstLoginValues.tabController
-                .animateTo(FirstLoginValues.tabController.index - 1);
+          if (page.state.tabController.index > 0)
+            page.state.tabController
+                .animateTo(page.state.tabController.index - 1);
           return false;
         });
   }
@@ -75,23 +73,30 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   Widget _saveButton, _doneButton;
   FloatingActionButton get saveButton => _saveButton;
   FloatingActionButton get doneButton => _doneButton;
+  final usernameInputFormKey = GlobalKey<FormFieldState>();
+  final passwordInputFormKey = GlobalKey<FormFieldState>();
+  final usernameInputFormController =
+      TextEditingController(text: Prefs.username);
+  final passwordInputFormController =
+      TextEditingController(text: Prefs.password);
+  TabController tabController;
 
   @override
   void initState() {
-    FirstLoginValues.tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     if (Prefs.char.trim().isEmpty)
-      letterDropDownValue = FirstLoginValues.letters[0];
+      letterDropDownValue = FirstLoginValues.letters.first;
     if (Prefs.grade.trim().isEmpty)
-      gradeDropDownValue = FirstLoginValues.grades[0];
+      gradeDropDownValue = FirstLoginValues.grades.first;
     return Scaffold(
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
-        controller: FirstLoginValues.tabController,
+        controller: tabController,
         children: <Widget>[
           AnimatedContainer(
             duration: Duration(milliseconds: 150),
@@ -148,9 +153,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampSizedDivider(20),
                         ampPadding(4),
                         ampFormField(
-                          controller:
-                              FirstLoginValues.usernameInputFormController,
-                          key: FirstLoginValues.usernameInputFormKey,
+                          controller: usernameInputFormController,
+                          key: usernameInputFormKey,
                           validator: textFieldValidator,
                           labelText: CustomValues.lang.username,
                           keyboardType: TextInputType.visiblePassword,
@@ -168,9 +172,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                                 ? ampIcon(Icons.visibility)
                                 : ampIcon(Icons.visibility_off),
                           ),
-                          controller:
-                              FirstLoginValues.passwordInputFormController,
-                          key: FirstLoginValues.passwordInputFormKey,
+                          controller: passwordInputFormController,
+                          key: passwordInputFormKey,
                           validator: textFieldValidator,
                           labelText: CustomValues.lang.password,
                           keyboardType: TextInputType.visiblePassword,
@@ -206,19 +209,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ampLinearProgressIndicator(loading: credentialsAreLoading),
               floatingActionButton: _saveButton = ampFab(
                 onPressed: () async {
-                  var condA = FirstLoginValues.passwordInputFormKey.currentState
-                      .validate();
-                  var condB = FirstLoginValues.usernameInputFormKey.currentState
-                      .validate();
+                  var condA = passwordInputFormKey.currentState.validate();
+                  var condB = usernameInputFormKey.currentState.validate();
                   if (!condA || !condB) return;
                   setState(() => credentialsAreLoading = true);
                   try {
-                    Prefs.username = FirstLoginValues
-                        .usernameInputFormController.text
-                        .trim();
-                    Prefs.password = FirstLoginValues
-                        .passwordInputFormController.text
-                        .trim();
+                    Prefs.username = usernameInputFormController.text.trim();
+                    Prefs.password = passwordInputFormController.text.trim();
                     await Prefs.waitForMutex();
                     Map<String, dynamic> map = jsonDecode(await dsbGetData(
                       Prefs.username,
@@ -236,7 +233,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       textString = '';
                     });
                     FocusScope.of(context).unfocus();
-                    FirstLoginValues.tabController.animateTo(1);
+                    tabController.animateTo(1);
                   } catch (e) {
                     setState(() {
                       credentialsAreLoading = false;
@@ -253,17 +250,16 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
           Stack(
             children: [
               Container(
-                  child: FlareActor(
-                    'assets/anims/get_ready.json',
-                    animation: animString,
-                    callback: (name) {
-                      setState(() => animString =
-                          name.trim().toLowerCase() == 'idle'
-                              ? 'idle2'
-                              : 'idle');
-                    },
-                  ),
-                  color: Colors.black),
+                child: FlareActor(
+                  'assets/anims/get_ready.json',
+                  animation: animString,
+                  callback: (name) {
+                    setState(() => animString =
+                        name.trim().toLowerCase() == 'idle' ? 'idle2' : 'idle');
+                  },
+                ),
+                color: Colors.black,
+              ),
               Scaffold(
                 backgroundColor: Colors.transparent,
                 appBar: ampAppBar(AmpStrings.appTitle, fontSize: 24),
@@ -276,7 +272,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AmpApp(initialIndex: 0),
+                        builder: (_) => AmpApp(initialIndex: 0),
                       ),
                     );
                   },
@@ -295,13 +291,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 }
 
 class FirstLoginValues {
-  static final usernameInputFormKey = GlobalKey<FormFieldState>();
-  static final passwordInputFormKey = GlobalKey<FormFieldState>();
-  static final usernameInputFormController =
-      TextEditingController(text: Prefs.username);
-  static final passwordInputFormController =
-      TextEditingController(text: Prefs.password);
-  static TabController tabController;
   static bool testing = false;
   static Future<String> Function(
           Uri url, Object body, String id, Map<String, String> headers,
@@ -313,16 +302,7 @@ class FirstLoginValues {
       void Function(String, String, Duration) setCache}) httpGetFunc = httpGet;
   static List<Widget> settingsButtons;
 
-  static final List<String> grades = [
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13'
-  ];
-  static final List<String> letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'q'];
+  static List<String> get grades =>
+      ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
+  static List<String> get letters => ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'q'];
 }

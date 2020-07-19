@@ -221,8 +221,8 @@ class RegisterTimetableScreenPageState
                               ),
                             ],
                             actions: (context) => ampDialogButtonsSaveAndCancel(
-                              onCancel: () => Navigator.pop(context),
-                              onSave: () {
+                              context: context,
+                              save: () {
                                 setState(() {
                                   selectedTTLesson.subject =
                                       subjectInputFormController.text.trim();

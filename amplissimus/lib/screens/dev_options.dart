@@ -139,11 +139,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       ampDialog(
                         title: 'App-Daten löschen',
                         context: context,
-                        children: (_, __) =>
-                            [ampText('Löschen der App-Daten bestätigen?')],
+                        children: (_, __) => [ampText('Sicher?')],
                         actions: (context) => ampDialogButtonsSaveAndCancel(
-                          onCancel: Navigator.of(context).pop,
-                          onSave: () async {
+                          context: context,
+                          save: () async {
                             await Prefs.clear();
                             exit(0);
                           },
@@ -185,13 +184,13 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        onCancel: () => Navigator.of(context).pop(),
-        onSave: () {
+        context: context,
+        save: () {
           if (!inputFormKey.currentState.validate()) return;
           Prefs.subListItemSpace =
               double.parse(inputFormController.text.trim());
-          setState(() => Prefs.subListItemSpace);
-          Navigator.of(context).pop();
+          setState(Prefs.waitForMutex);
+          Navigator.pop(context);
         },
       ),
       rowOrColumn: ampColumn,
@@ -214,11 +213,11 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        onCancel: () => Navigator.of(context).pop(),
-        onSave: () {
+        context: context,
+        save: () {
           if (!inputFormKey.currentState.validate()) return;
           Prefs.dsbJsonCache = inputFormController.text.trim();
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         },
       ),
       rowOrColumn: ampColumn,
@@ -241,8 +240,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        onCancel: () => Navigator.of(context).pop(),
-        onSave: () {
+        context: context,
+        save: () {
           if (!timerInputFormKey.currentState.validate()) return;
           try {
             setState(() => Prefs.setTimer(
@@ -250,7 +249,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           } catch (e) {
             return;
           }
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         },
       ),
       rowOrColumn: ampColumn,
