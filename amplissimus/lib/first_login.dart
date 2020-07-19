@@ -110,7 +110,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ampText(CustomValues.lang.selectClass, size: 20),
-                        Row(mainAxisSize: MainAxisSize.min, children: [
+                        ampRow([
                           ampDropdownButton(
                             value: FirstLoginValues.grades[0],
                             items: FirstLoginValues.grades
@@ -202,14 +202,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ),
                 ),
               ),
-              bottomSheet: credentialsAreLoading
-                  ? LinearProgressIndicator(
-                      backgroundColor: AmpColors.colorBackground,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AmpColors.colorForeground,
-                      ),
-                    )
-                  : ampNull,
+              bottomSheet: ampLinearProgressIndicator(credentialsAreLoading),
               floatingActionButton: _saveButton = ampFab(
                 onPressed: () async {
                   var condA = FirstLoginValues.passwordInputFormKey.currentState
@@ -225,16 +218,17 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Prefs.password = FirstLoginValues
                         .passwordInputFormController.text
                         .trim();
+                    await Prefs.waitForMutex();
                     Map<String, dynamic> map = jsonDecode(await dsbGetData(
-                      FirstLoginValues.usernameInputFormController.text.trim(),
-                      FirstLoginValues.passwordInputFormController.text.trim(),
+                      Prefs.username,
+                      Prefs.password,
                       lang: CustomValues.lang,
                       httpPost: FirstLoginValues.httpPostFunc,
                     ));
-                    map.forEach((key, value) {
-                      if (value.toString().trim() == 'Login fehlgeschlagen')
-                        throw CustomValues.lang.catchDsbGetData(value);
-                    });
+                    for (var v in map.values) {
+                      if (v.toString().trim() == 'Login fehlgeschlagen')
+                        throw CustomValues.lang.catchDsbGetData(v);
+                    }
                     setState(() {
                       isError = false;
                       credentialsAreLoading = false;
@@ -288,14 +282,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   label: CustomValues.lang.firstStartupDone,
                   icon: MdiIcons.arrowRight,
                 ),
-                bottomSheet: dsbWidgetIsLoading
-                    ? LinearProgressIndicator(
-                        backgroundColor: AmpColors.colorBackground,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AmpColors.colorForeground,
-                        ),
-                      )
-                    : ampNull,
+                bottomSheet: ampLinearProgressIndicator(dsbWidgetIsLoading),
               ),
             ],
           ),

@@ -78,20 +78,19 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
-          color: Colors.black,
+          color: AmpColors.colorBackground,
           height: double.infinity,
           width: double.infinity,
-          duration: Duration(milliseconds: 1000),
-          child: FlareActor('assets/anims/splash_screen.json',
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-              animation: 'anim'),
+          duration: Duration(seconds: 1),
+          child: FlareActor(
+            'assets/anims/splash_screen.json',
+            alignment: Alignment.center,
+            fit: BoxFit.contain,
+            animation: 'anim',
+          ),
         ),
       ),
-      bottomSheet: LinearProgressIndicator(
-        backgroundColor: Colors.grey,
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-      ),
+      bottomSheet: ampLinearProgressIndicator(true),
     );
   }
 }
@@ -338,27 +337,26 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   Widget get changeSubVisibilityWidget {
-    var display = true;
-    if (Prefs.grade == '' && Prefs.char == '') display = false;
-    return display
-        ? Stack(
+    return Prefs.grade.isEmpty && Prefs.char.isEmpty
+        ? ampNull
+        : Stack(
             children: <Widget>[
               ListTile(
                 title: ampText(CustomValues.lang.allClasses),
                 trailing: ampText('${Prefs.grade}${Prefs.char}'),
               ),
               Align(
-                  child: Switch(
-                      activeColor: AmpColors.colorForeground,
-                      value: Prefs.oneClassOnly,
-                      onChanged: (value) {
-                        Prefs.oneClassOnly = value;
-                        dsbUpdateWidget(callback: rebuild);
-                      }),
-                  alignment: Alignment.center),
+                child: ampSwitch(
+                  value: Prefs.oneClassOnly,
+                  onChanged: (value) {
+                    Prefs.oneClassOnly = value;
+                    dsbUpdateWidget(callback: rebuild);
+                  },
+                ),
+                alignment: Alignment.center,
+              ),
             ],
-          )
-        : ampNull;
+          );
   }
 
   int lastUpdate = 0;
@@ -461,14 +459,14 @@ class AmpHomePageState extends State<AmpHomePage>
                   ],
                 ),
         ),
-        floatingActionButton: Prefs.jsonTimetable != null
-            ? ampFab(
+        floatingActionButton: Prefs.jsonTimetable == null
+            ? ampNull
+            : ampFab(
                 onPressed: () => Animations.changeScreenEaseOutBackReplace(
                     RegisterTimetableScreen(), context),
                 label: CustomValues.lang.edit,
                 icon: Icons.edit,
-              )
-            : ampNull,
+              ),
       ),
       AnimatedContainer(
         duration: Duration(milliseconds: 150),
@@ -614,7 +612,6 @@ class AmpHomePageState extends State<AmpHomePage>
             physics: ClampingScrollPhysics(),
             children: containers,
           ),
-          floatingActionButton: ampNull,
           bottomNavigationBar: SizedBox(
             height: 55,
             child: TabBar(
@@ -630,7 +627,6 @@ class AmpHomePageState extends State<AmpHomePage>
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          bottomSheet: ampNull,
         )
       ],
     ));

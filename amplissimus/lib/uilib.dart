@@ -26,6 +26,15 @@ Future<Null> ampDialog(
   );
 }
 
+Widget ampLinearProgressIndicator(bool isLoading) {
+  return !isLoading
+      ? ampNull
+      : LinearProgressIndicator(
+          backgroundColor: AmpColors.colorBackground,
+          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+        );
+}
+
 Container get ampNull => Container(width: 0, height: 0);
 
 Column ampColumn(List<Widget> children) => Column(
@@ -108,17 +117,21 @@ DropdownButton ampDropdownButton(
   );
 }
 
+Switch ampSwitch({@required bool value, @required Function(bool) onChanged}) {
+  return Switch(
+    activeColor: AmpColors.colorForeground,
+    value: value,
+    onChanged: onChanged,
+  );
+}
+
 ListTile ampSwitchWithText(
     {@required String text,
     @required bool value,
     @required Function(bool) onChanged}) {
   return ListTile(
     title: ampText(text),
-    trailing: Switch(
-      activeColor: AmpColors.colorForeground,
-      value: value,
-      onChanged: onChanged,
-    ),
+    trailing: ampSwitch(value: value, onChanged: onChanged),
   );
 }
 
