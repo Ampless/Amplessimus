@@ -123,9 +123,7 @@ class AmpHomePageState extends State<AmpHomePage>
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
-  Color fabBackgroundColor = AmpColors.colorBackground;
   bool circularProgressIndicatorActive = false;
-  bool passwordHidden = true;
   int _currentIndex;
   TabController tabController;
 
@@ -135,13 +133,8 @@ class AmpHomePageState extends State<AmpHomePage>
                 Brightness.light) !=
             Prefs.isDarkMode) {
       AmpColors.switchMode();
-      setState(() {
-        fabBackgroundColor = Colors.transparent;
-        rebuildNewBuild();
-      });
-      Future.delayed(Duration(milliseconds: 150), () {
-        setState(() => fabBackgroundColor = AmpColors.colorBackground);
-      });
+      rebuildNewBuild();
+      Future.delayed(Duration(milliseconds: 150), rebuild);
     }
   }
 
@@ -277,6 +270,7 @@ class AmpHomePageState extends State<AmpHomePage>
         TextEditingController(text: Prefs.username);
     final passwordInputFormController =
         TextEditingController(text: Prefs.password);
+    var passwordHidden = true;
     ampDialog(
       context: context,
       title: CustomValues.lang.changeLoginPopup,
@@ -473,14 +467,8 @@ class AmpHomePageState extends State<AmpHomePage>
                   }
                   AmpColors.switchMode();
                   if (Prefs.useSystemTheme) Prefs.useSystemTheme = false;
-                  setState(() {
-                    fabBackgroundColor = Colors.transparent;
-                    rebuildNewBuild();
-                  });
-                  Future.delayed(Duration(milliseconds: 150), () {
-                    setState(
-                        () => fabBackgroundColor = AmpColors.colorBackground);
-                  });
+                  rebuildNewBuild();
+                  Future.delayed(Duration(milliseconds: 150), rebuild);
                 },
                 icon: AmpColors.isDarkMode
                     ? MdiIcons.lightbulbOn
@@ -523,14 +511,8 @@ class AmpHomePageState extends State<AmpHomePage>
                     var darkModeEnabled = brightness != Brightness.light;
                     if (darkModeEnabled != Prefs.isDarkMode) {
                       AmpColors.switchMode();
-                      setState(() {
-                        fabBackgroundColor = Colors.transparent;
-                        rebuildNewBuild();
-                      });
-                      Future.delayed(Duration(milliseconds: 150), () {
-                        setState(() =>
-                            fabBackgroundColor = AmpColors.colorBackground);
-                      });
+                      rebuildNewBuild();
+                      Future.delayed(Duration(milliseconds: 150), rebuild);
                     }
                   }
                   rebuild();
