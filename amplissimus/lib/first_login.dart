@@ -112,7 +112,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampText(CustomValues.lang.selectClass, size: 20),
                         ampRow([
                           ampDropdownButton(
-                            value: FirstLoginValues.grades[0],
+                            value: gradeDropDownValue,
                             items: FirstLoginValues.grades
                                 .map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem<String>(
@@ -129,7 +129,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           ),
                           ampPadding(10),
                           ampDropdownButton(
-                            value: FirstLoginValues.letters[0],
+                            value: letterDropDownValue,
                             items: FirstLoginValues.letters
                                 .map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem<String>(
