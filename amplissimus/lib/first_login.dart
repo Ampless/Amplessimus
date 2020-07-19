@@ -123,9 +123,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             onChanged: (value) {
                               setState(() {
                                 gradeDropDownValue = value;
-                                Prefs.grade = value == CustomValues.lang.empty
-                                    ? ''
-                                    : value;
+                                Prefs.grade = value;
                               });
                             },
                           ),
@@ -142,9 +140,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             onChanged: (value) {
                               setState(() {
                                 letterDropDownValue = value;
-                                Prefs.char = value == CustomValues.lang.empty
-                                    ? ''
-                                    : value;
+                                Prefs.char = value;
                               });
                             },
                           ),
