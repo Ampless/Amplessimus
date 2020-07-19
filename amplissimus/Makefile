@@ -1,4 +1,5 @@
 VERSION = 1.4.0
+ACTUAL_VERSION = $(VERSION).$$(git rev-parse @ | cut -c 1-7)
 
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
@@ -26,17 +27,16 @@ MAC_STRIP_LIST = $(MAC_BUILD_DIR)/Contents/Runner \
 				 $(MAC_BUILD_DIR)/Contents/Frameworks/*.dylib
 STRIP = strip -u -r
 BITCODE_STRIP = xcrun bitcode_strip
-TRU = || true
 
 OUTPUT_DIR = bin
-OUTPUT_APK = $(OUTPUT_DIR)/$(VERSION).apk
-OUTPUT_AAB = $(OUTPUT_DIR)/$(VERSION).aab
-OUTPUT_DEB = $(OUTPUT_DIR)/$(VERSION).deb
-OUTPUT_DMG = $(OUTPUT_DIR)/$(VERSION).dmg
-OUTPUT_IPA = $(OUTPUT_DIR)/$(VERSION).ipa
-OUTPUT_GTK = $(OUTPUT_DIR)/$(VERSION).linux
-OUTPUT_WEB = $(OUTPUT_DIR)/$(VERSION).web
-OUTPUT_WIN = $(OUTPUT_DIR)/$(VERSION).win
+OUTPUT_APK = $(OUTPUT_DIR)/$(ACTUAL_VERSION).apk
+OUTPUT_AAB = $(OUTPUT_DIR)/$(ACTUAL_VERSION).aab
+OUTPUT_DEB = $(OUTPUT_DIR)/$(ACTUAL_VERSION).deb
+OUTPUT_DMG = $(OUTPUT_DIR)/$(ACTUAL_VERSION).dmg
+OUTPUT_IPA = $(OUTPUT_DIR)/$(ACTUAL_VERSION).ipa
+OUTPUT_GTK = $(OUTPUT_DIR)/$(ACTUAL_VERSION).linux
+OUTPUT_WEB = $(OUTPUT_DIR)/$(ACTUAL_VERSION).web
+OUTPUT_WIN = $(OUTPUT_DIR)/$(ACTUAL_VERSION).win
 
 TMP         = tmp
 TMP_SYMBOLS = $(TMP)/debug_symbols
@@ -58,23 +58,26 @@ linux: mkdirs replaceversions linux64 cleanartifacts rollbackversions
 replaceversions:
 	which mv sed
 	mv -f pubspec.yaml pubspec.yaml.def
-	sed "s/0.0.0-1/$(VERSION)/" pubspec.yaml.def > pubspec.yaml
+	sed "s/0.0.0-1/$(ACTUAL_VERSION)/" pubspec.yaml.def > pubspec.yaml
+	mv -f lib/values.dart lib/values.dart.def
+	sed "s/0.0.0-1/$(ACTUAL_VERSION)/" lib/values.dart.def > lib/values.dart
 
 rollbackversions:
 	which mv
 	mv -f pubspec.yaml.def pubspec.yaml
+	mv -f lib/values.dart.def lib/values.dart
 
 iosapp:
 	which flutter xcrun mv strip
 	flutter build ios $(IOS_FLAGS)
 	$(BITCODE_STRIP) $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
-	$(STRIP) $(IOS_STRIP_LIST) $(TRU)
+	$(STRIP) $(IOS_STRIP_LIST) || true
 
 ipa:
 	which cp rm cd zip
 	cp -rp $(IOS_BUILD_DIR) $(TMP_IPA_DIR)
-	rm -rf $(OUTPUT_DIR)/$(VERSION).ipa
+	rm -rf $(OUTPUT_IPA)
 	cd $(TMP) && zip -r -9 ../$(OUTPUT_IPA) $(IPA_DIR)
 
 # This is for Cydia: http://www.saurik.com/id/7
@@ -117,7 +120,7 @@ linux64:
 macapp:
 	which flutter strip
 	flutter build macos $(MAC_FLAGS)
-	$(STRIP) $(MAC_STRIP_LIST) $(TRU)
+	$(STRIP) $(MAC_STRIP_LIST) || true
 
 macdmg:
 	which cp ln hdiutil
