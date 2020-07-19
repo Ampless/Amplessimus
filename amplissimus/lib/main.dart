@@ -125,8 +125,6 @@ class AmpHomePageState extends State<AmpHomePage>
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   Color fabBackgroundColor = AmpColors.colorBackground;
   bool circularProgressIndicatorActive = false;
-  String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
-  String letterDropDownValue = Prefs.char.trim().toLowerCase();
   bool passwordHidden = true;
   int _currentIndex;
   TabController tabController;
@@ -150,10 +148,6 @@ class AmpHomePageState extends State<AmpHomePage>
   @override
   void initState() {
     ampInfo(ctx: 'AmpHomePageState', message: 'initState()');
-    if (letterDropDownValue.isEmpty)
-      letterDropDownValue = FirstLoginValues.grades[0];
-    if (gradeDropDownValue.isEmpty)
-      gradeDropDownValue = FirstLoginValues.grades[0];
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
@@ -188,53 +182,46 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   void showInputSelectCurrentClass(BuildContext context) async {
-    if (Prefs.char.trim().isEmpty)
+    var letterDropDownValue = Prefs.char.trim().toLowerCase();
+    var gradeDropDownValue = Prefs.grade.trim().toLowerCase();
+    if (letterDropDownValue.isEmpty ||
+        !FirstLoginValues.letters.contains(letterDropDownValue))
       letterDropDownValue = FirstLoginValues.letters[0];
-    if (Prefs.grade.trim().isEmpty)
+    if (gradeDropDownValue.isEmpty ||
+        !FirstLoginValues.grades.contains(gradeDropDownValue))
       gradeDropDownValue = FirstLoginValues.grades[0];
-    if (!FirstLoginValues.letters.contains(letterDropDownValue)) return;
-    if (!FirstLoginValues.grades.contains(gradeDropDownValue)) return;
     await ampDialog(
       context: context,
       title: CustomValues.lang.selectClass,
       children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: gradeDropDownValue,
-          items: FirstLoginValues.grades
-              .map<DropdownMenuItem<String>>((String value) {
+          items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((value) {
             return DropdownMenuItem<String>(
               value: value,
               child: ampText(value),
             );
           }).toList(),
-          onChanged: (value) {
-            setAlState(() {
-              gradeDropDownValue = value;
-              Prefs.grade = value;
-            });
-          },
+          onChanged: (value) => setAlState(() => gradeDropDownValue = value),
         ),
         ampPadding(10),
         ampDropdownButton(
           value: letterDropDownValue,
-          items: FirstLoginValues.letters
-              .map<DropdownMenuItem<String>>((String value) {
+          items:
+              FirstLoginValues.letters.map<DropdownMenuItem<String>>((value) {
             return DropdownMenuItem<String>(
               value: value,
               child: ampText(value),
             );
           }).toList(),
-          onChanged: (value) {
-            setAlState(() {
-              letterDropDownValue = value;
-              Prefs.char = value;
-            });
-          },
+          onChanged: (value) => setAlState(() => letterDropDownValue = value),
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         onCancel: Navigator.of(context).pop,
         onSave: () {
+          Prefs.grade = gradeDropDownValue;
+          Prefs.char = letterDropDownValue;
           rebuildNewBuild();
           Navigator.of(context).pop();
         },
