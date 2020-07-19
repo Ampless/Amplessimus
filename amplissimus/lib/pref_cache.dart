@@ -236,14 +236,13 @@ class CachedSharedPreferences {
         : ctorPrealphaDesktop)();
   }
 
-  void clear() {
-    _prefFileMutex.acquire();
+  void clear() async {
+    await _prefFileMutex.acquire();
     _cacheBool.clear();
     _cacheDouble.clear();
     _cacheInt.clear();
     _cacheString.clear();
     _cacheStrings.clear();
-    flush();
     if (_prefs == null) {
       _prefFileMutex.release();
       if (_platformSupportsSharedPrefs)
@@ -251,7 +250,8 @@ class CachedSharedPreferences {
       else
         return;
     }
-    _prefs.clear();
+    await _prefs.clear();
     _prefFileMutex.release();
+    await flush();
   }
 }

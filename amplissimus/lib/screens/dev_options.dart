@@ -143,8 +143,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                             [ampText('Löschen der App-Daten bestätigen?')],
                         actions: (context) => ampDialogButtonsSaveAndCancel(
                           onCancel: Navigator.of(context).pop,
-                          onSave: () {
-                            Prefs.clear();
+                          onSave: () async {
+                            await Prefs.clear();
                             exit(0);
                           },
                         ),

@@ -148,9 +148,9 @@ Future<Null> loadPrefs() async {
   }
 }
 
-void clear() {
+void clear() async {
   if (_prefs == null)
     throw 'HOLY SHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
-  _prefs.clear();
+  await _prefs.clear();
   ampInfo(ctx: 'Prefs', message: 'Cleared SharedPreferences.');
 }
