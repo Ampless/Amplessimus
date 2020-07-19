@@ -202,7 +202,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ),
                 ),
               ),
-              bottomSheet: ampLinearProgressIndicator(credentialsAreLoading),
+              bottomSheet:
+                  ampLinearProgressIndicator(loading: credentialsAreLoading),
               floatingActionButton: _saveButton = ampFab(
                 onPressed: () async {
                   var condA = FirstLoginValues.passwordInputFormKey.currentState
@@ -282,7 +283,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   label: CustomValues.lang.firstStartupDone,
                   icon: MdiIcons.arrowRight,
                 ),
-                bottomSheet: ampLinearProgressIndicator(dsbWidgetIsLoading),
+                bottomSheet:
+                    ampLinearProgressIndicator(loading: dsbWidgetIsLoading),
               ),
             ],
           ),

@@ -88,7 +88,10 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           ),
         ),
       ),
-      bottomSheet: ampLinearProgressIndicator(true),
+      bottomSheet: ampLinearProgressIndicator(
+        backgroundColor: Colors.grey,
+        foregroundColor: Colors.white,
+      ),
     );
   }
 }
