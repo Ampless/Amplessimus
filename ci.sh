@@ -51,7 +51,7 @@ update_altstore() {
         sed -E 's/^ *"version": ".*",$/      "version": "'"$version_name"'",/' alpha.json | \
         sed -E 's/^ *"versionDate": ".*",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
         sed -E 's/^ *"versionDescription": ".*",$/      "versionDescription": "As of '"$(date)"'",/' | \
-        sed -E 's/^ *"downloadURL": ".*",$/      "downloadURL": "https:\/\/github.com\/Ampless\/Amplessimus\/releases\/download\/'"$version_name"'\/'"$raw_version"'.ipa",/' > temp.json
+        sed -E 's/^ *"downloadURL": ".*",$/      "downloadURL": "https:\/\/github.com\/Ampless\/Amplessimus\/releases\/download\/'"$version_name"'\/'"$version_name"'.ipa",/' > temp.json
         mv temp.json alpha.json
         git add alpha.json
         git commit -m "automatic ci update to amplessimus ios alpha version $version_name"
