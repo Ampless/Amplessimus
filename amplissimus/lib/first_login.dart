@@ -189,19 +189,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           items: Language.all
                               .map<DropdownMenuItem<Language>>((value) {
                             return DropdownMenuItem<Language>(
-                                value: value, child: Text(value.name));
+                                value: value, child: ampText(value.name));
                           }).toList(),
                           onChanged: (value) =>
                               setState(() => CustomValues.lang = value),
                         ),
                         ampSizedDivider(5),
-                        AnimatedDefaultTextStyle(
-                            child: Text(textString),
-                            style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: isError ? 20 : 0,
-                            ),
-                            duration: Duration(milliseconds: 350)),
+                        Text(textString, style: TextStyle(color: Colors.red)),
                       ],
                     ),
                   ),
