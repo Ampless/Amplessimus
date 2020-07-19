@@ -139,6 +139,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       ampDialog(
                         title: 'App-Daten löschen',
                         context: context,
+                        rowOrColumn: ampRow,
                         children: (_, __) => [ampText('Sicher?')],
                         actions: (context) => ampDialogButtonsSaveAndCancel(
                           context: context,
@@ -256,5 +257,3 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     );
   }
 }
-
-class DevOptionsValues {}
