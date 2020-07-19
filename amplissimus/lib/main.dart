@@ -37,8 +37,6 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> {
-  bool firstRefresh = true;
-  String fileString = 'assets/anims/data-white-to-black.html';
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -78,7 +76,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
-          color: AmpColors.colorBackground,
+          color: Colors.black,
           height: double.infinity,
           width: double.infinity,
           duration: Duration(seconds: 1),
