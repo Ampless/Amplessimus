@@ -190,24 +190,13 @@ class AmpHomePageState extends State<AmpHomePage>
       children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: gradeDropDownValue,
-          items: FirstLoginValues.grades.map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: ampText(value),
-            );
-          }).toList(),
+          items: FirstLoginValues.grades,
           onChanged: (value) => setAlState(() => gradeDropDownValue = value),
         ),
         ampPadding(10),
         ampDropdownButton(
           value: letterDropDownValue,
-          items:
-              FirstLoginValues.letters.map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: ampText(value),
-            );
-          }).toList(),
+          items: FirstLoginValues.letters,
           onChanged: (value) => setAlState(() => letterDropDownValue = value),
         ),
       ],
@@ -233,12 +222,8 @@ class AmpHomePageState extends State<AmpHomePage>
       children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: lang,
-          items: Language.all.map<DropdownMenuItem<Language>>((value) {
-            return DropdownMenuItem<Language>(
-              value: value,
-              child: ampText(value.name),
-            );
-          }).toList(),
+          itemToDropdownChild: (i) => ampText(i.name),
+          items: Language.all,
           onChanged: (value) => setAlState(() => lang = value),
         ),
         ampSizedDivider(5),

@@ -118,13 +118,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampRow([
                           ampDropdownButton(
                             value: gradeDropDownValue,
-                            items: FirstLoginValues.grades
-                                .map<DropdownMenuItem<String>>((value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: ampText(value),
-                              );
-                            }).toList(),
+                            items: FirstLoginValues.grades,
                             onChanged: (value) {
                               setState(() {
                                 gradeDropDownValue = value;
@@ -135,13 +129,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           ampPadding(10),
                           ampDropdownButton(
                             value: letterDropDownValue,
-                            items: FirstLoginValues.letters
-                                .map<DropdownMenuItem<String>>((value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: ampText(value),
-                              );
-                            }).toList(),
+                            items: FirstLoginValues.letters,
                             onChanged: (value) {
                               setState(() {
                                 letterDropDownValue = value;
@@ -185,13 +173,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampText(CustomValues.lang.changeLanguage, size: 20),
                         ampDropdownButton(
                           value: CustomValues.lang,
-                          items: Language.all
-                              .map<DropdownMenuItem<Language>>((value) {
-                            return DropdownMenuItem<Language>(
-                                value: value, child: ampText(value.name));
-                          }).toList(),
-                          onChanged: (value) =>
-                              setState(() => CustomValues.lang = value),
+                          itemToDropdownChild: (i) => ampText(i.name),
+                          items: Language.all,
+                          onChanged: (v) =>
+                              setState(() => CustomValues.lang = v),
                         ),
                         ampSizedDivider(5),
                         ampText(

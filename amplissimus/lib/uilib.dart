@@ -106,7 +106,8 @@ FlatButton ampDialogButton(
 
 DropdownButton ampDropdownButton(
     {@required dynamic value,
-    @required List<DropdownMenuItem<dynamic>> items,
+    @required List<dynamic> items,
+    Widget Function(dynamic) itemToDropdownChild = ampText,
     @required void Function(dynamic) onChanged,
     bool underlineDisabled = false}) {
   return DropdownButton(
@@ -118,7 +119,9 @@ DropdownButton ampDropdownButton(
     focusColor: AmpColors.colorBackground,
     style: AmpColors.textStyleForeground,
     value: value,
-    items: items,
+    items: items
+        .map((e) => DropdownMenuItem(child: itemToDropdownChild(e), value: e))
+        .toList(),
     onChanged: onChanged,
   );
 }
@@ -214,14 +217,14 @@ TextStyle ampTextStyle({
 }
 
 Text ampText(
-  String text, {
+  Object text, {
   double size,
   TextAlign textAlign,
   FontWeight weight,
   Color color,
 }) {
   var style = ampTextStyle(size: size, weight: weight, color: color);
-  return Text(text, style: style, textAlign: textAlign);
+  return Text(text.toString(), style: style, textAlign: textAlign);
 }
 
 Icon ampIcon(IconData data, {double size, Color color}) {

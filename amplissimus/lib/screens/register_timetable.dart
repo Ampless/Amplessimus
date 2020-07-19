@@ -91,14 +91,9 @@ class RegisterTimetableScreenPageState
                     children: [
                       ampDropdownButton(
                         value: currentDropdownDay,
-                        items:
-                            ttWeek.map<DropdownMenuItem<TTDay>>((TTDay value) {
-                          return DropdownMenuItem<TTDay>(
-                            value: value,
-                            child:
-                                ampText(CustomValues.lang.ttDayToString(value)),
-                          );
-                        }).toList(),
+                        itemToDropdownChild: (i) =>
+                            ampText(CustomValues.lang.ttDayToString(i)),
+                        items: ttWeek,
                         onChanged: (value) {
                           setState(() {
                             currentDropdownDay = value;
@@ -112,11 +107,7 @@ class RegisterTimetableScreenPageState
                       ampPadding(10),
                       ampDropdownButton(
                         value: currentDropdownHour,
-                        items: CustomValues.ttHours
-                            .map<DropdownMenuItem<int>>((int value) {
-                          return DropdownMenuItem<int>(
-                              value: value, child: ampText(value.toString()));
-                        }).toList(),
+                        items: CustomValues.ttHours,
                         onChanged: (value) {
                           setState(() {
                             currentDropdownHour = value;
