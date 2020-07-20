@@ -234,11 +234,11 @@ Icon ampIcon(IconData data, {double size, Color color}) {
       : Icon(data, color: color);
 }
 
-AppBar ampAppBar(String text, {double fontSize = 25}) {
+AppBar ampAppBar(String text) {
   return AppBar(
     elevation: 0,
     backgroundColor: Colors.transparent,
-    title: ampText(text, size: fontSize),
+    title: ampText(text, size: 25),
     centerTitle: true,
   );
 }

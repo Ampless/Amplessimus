@@ -238,7 +238,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               ),
               Scaffold(
                 backgroundColor: Colors.transparent,
-                appBar: ampAppBar(AmpStrings.appTitle, fontSize: 24),
+                appBar: ampAppBar(AmpStrings.appTitle),
                 floatingActionButton: _doneButton = ampFab(
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
