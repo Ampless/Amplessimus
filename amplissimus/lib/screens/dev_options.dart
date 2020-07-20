@@ -210,13 +210,11 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           controller: inputFormController,
           key: inputFormKey,
           keyboardType: TextInputType.multiline,
-          validator: textFieldValidator,
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context: context,
         save: () {
-          if (!inputFormKey.currentState.validate()) return;
           Prefs.dsbJsonCache = inputFormController.text.trim();
           Navigator.pop(context);
         },

@@ -7,7 +7,6 @@ import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/validators.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -143,7 +142,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampFormField(
                           controller: usernameInputFormController,
                           key: usernameInputFormKey,
-                          validator: textFieldValidator,
                           labelText: CustomValues.lang.username,
                           keyboardType: TextInputType.visiblePassword,
                           autofillHints: [AutofillHints.username],
@@ -152,9 +150,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampFormField(
                           suffixIcon: IconButton(
                             onPressed: () {
-                              setState(() {
-                                passwordHidden = !passwordHidden;
-                              });
+                              setState(() => passwordHidden = !passwordHidden);
                             },
                             icon: passwordHidden
                                 ? ampIcon(Icons.visibility)
@@ -162,7 +158,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           ),
                           controller: passwordInputFormController,
                           key: passwordInputFormKey,
-                          validator: textFieldValidator,
                           labelText: CustomValues.lang.password,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: passwordHidden,
@@ -194,9 +189,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ampLinearProgressIndicator(loading: credentialsAreLoading),
               floatingActionButton: _saveButton = ampFab(
                 onPressed: () async {
-                  var condA = passwordInputFormKey.currentState.validate();
-                  var condB = usernameInputFormKey.currentState.validate();
-                  if (!condA || !condB) return;
                   setState(() => credentialsAreLoading = true);
                   try {
                     Prefs.username = usernameInputFormController.text.trim();
@@ -208,10 +200,10 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       lang: CustomValues.lang,
                       httpPost: FirstLoginValues.httpPostFunc,
                     ));
-                    for (var v in map.values) {
-                      if (v.toString().trim() == 'Login fehlgeschlagen')
-                        throw CustomValues.lang.catchDsbGetData(v);
-                    }
+                    if (map['Resultcode'] != 0)
+                      throw CustomValues.lang
+                          .catchDsbGetData(map['ResultStatusInfo']);
+
                     setState(() {
                       isError = false;
                       credentialsAreLoading = false;
@@ -239,8 +231,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   'assets/anims/get_ready.json',
                   animation: animString,
                   callback: (name) {
-                    setState(() => animString =
-                        name.trim().toLowerCase() == 'idle' ? 'idle2' : 'idle');
+                    setState(() => animString = (name == 'i1' ? 'i2' : 'i1'));
                   },
                 ),
                 color: Colors.black,

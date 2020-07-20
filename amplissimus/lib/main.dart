@@ -12,7 +12,6 @@ import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
-import 'package:Amplessimus/validators.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -265,7 +264,6 @@ class AmpHomePageState extends State<AmpHomePage>
         ampFormField(
           controller: usernameInputFormController,
           key: usernameInputFormKey,
-          validator: textFieldValidator,
           labelText: CustomValues.lang.username,
           keyboardType: TextInputType.visiblePassword,
           autofillHints: [AutofillHints.username],
@@ -280,7 +278,6 @@ class AmpHomePageState extends State<AmpHomePage>
           ),
           controller: passwordInputFormController,
           key: passwordInputFormKey,
-          validator: textFieldValidator,
           labelText: CustomValues.lang.password,
           keyboardType: TextInputType.visiblePassword,
           obscureText: passwordHidden,
@@ -290,9 +287,6 @@ class AmpHomePageState extends State<AmpHomePage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context: context,
         save: () {
-          var condA = passwordInputFormKey.currentState.validate();
-          var condB = usernameInputFormKey.currentState.validate();
-          if (!condA || !condB) return;
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();
           rebuildDragDown();

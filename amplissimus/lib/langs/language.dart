@@ -46,7 +46,6 @@ abstract class Language {
   String get notes;
   String get editHour;
   String get teacher;
-  String get teacherInput;
   String get freeLesson;
   String get filterTimetables;
   String get edit;

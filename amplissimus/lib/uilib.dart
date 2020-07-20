@@ -58,7 +58,7 @@ Tab ampTab(IconData icon, String text) => Tab(icon: Icon(icon), text: text);
 TextFormField ampFormField(
     {@required TextEditingController controller,
     @required Key key,
-    @required String Function(String) validator,
+    String Function(String) validator,
     TextInputType keyboardType = TextInputType.text,
     String labelText = '',
     bool obscureText = false,

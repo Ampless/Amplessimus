@@ -4,14 +4,12 @@ import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
-import 'package:Amplessimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class RegisterTimetableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AmpColors.isDarkMode = true;
     return WillPopScope(
       child: ampMatApp(
         title: AmpStrings.appTitle,
@@ -181,22 +179,19 @@ class RegisterTimetableScreenPageState
                               ampFormField(
                                 controller: subjectInputFormController,
                                 key: subjectInputFormKey,
-                                validator: textFieldValidator,
                                 labelText: CustomValues.lang.subject,
                               ),
                               ampPadding(6),
                               ampFormField(
                                 controller: notesInputFormController,
                                 key: notesInputFormKey,
-                                validator: textFieldValidator,
                                 labelText: CustomValues.lang.notes,
                               ),
                               ampPadding(6),
                               ampFormField(
                                 controller: teacherInputFormController,
                                 key: teacherInputFormKey,
-                                validator: textFieldValidator,
-                                labelText: CustomValues.lang.teacherInput,
+                                labelText: CustomValues.lang.teacher,
                               ),
                               StatefulBuilder(
                                 builder: (context, setSwitchState) {

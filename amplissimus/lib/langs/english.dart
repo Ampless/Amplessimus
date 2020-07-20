@@ -148,9 +148,6 @@ class English extends Language {
   String get teacher => 'Teacher';
 
   @override
-  String get teacherInput => 'Teacher (last name)';
-
-  @override
   String get freeLesson => 'Free lesson';
 
   @override

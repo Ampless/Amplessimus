@@ -9,9 +9,6 @@ String Function(String) makeListValidator(List<String> list) {
       : CustomValues.lang.widgetValidatorInvalid;
 }
 
-String textFieldValidator(String value) =>
-    value.trim().isEmpty ? CustomValues.lang.widgetValidatorFieldEmpty : null;
-
 String numberValidator(String value) {
   value = value.trim();
   if (value.isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;

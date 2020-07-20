@@ -145,9 +145,6 @@ class German extends Language {
   String get teacher => 'Lehrer*in';
 
   @override
-  String get teacherInput => 'Lehrer*in (Nachname)';
-
-  @override
   String get freeLesson => 'Freistunde';
 
   @override
