@@ -85,7 +85,7 @@ class German extends Language {
 
   @override
   String get dsbListErrorSubtitle =>
-      'Bitte an Amplus melden (https://ampless.chrissx.de/amplessimus)';
+      'Bitte an Ampless melden (https://ampless.chrissx.de/amplessimus)';
 
   @override
   String get dsbListErrorTitle => 'Amplessimus-Fehler';

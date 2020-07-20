@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "de.amplus.amplissimus"
+        applicationId "de.ampless.amplessimus"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
