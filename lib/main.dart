@@ -20,6 +20,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'dsbapi.dart';
+
 void main() {
   runApp(SplashScreen());
 }
@@ -158,13 +160,17 @@ class AmpHomePageState extends State<AmpHomePage>
     }
   }
 
-  void rebuildTimer() {
-    dsbUpdateWidget(callback: rebuild);
+  Future<Null> rebuildTimer() {
+    return dsbUpdateWidget(callback: rebuild);
   }
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
     await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
+  }
+
+  Future<Null> rebuildNoIndicator() {
+    return dsbUpdateWidget();
   }
 
   Future<Null> rebuildNewBuild() async {
@@ -200,10 +206,11 @@ class AmpHomePageState extends State<AmpHomePage>
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context: context,
-        save: () {
+        save: () async {
           Prefs.grade = gradeDropDownValue;
           Prefs.char = letterDropDownValue;
-          rebuildNewBuild();
+          await Prefs.waitForMutex();
+          unawaited(rebuildNewBuild());
           Navigator.pop(context);
         },
       ),
@@ -233,10 +240,11 @@ class AmpHomePageState extends State<AmpHomePage>
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context: context,
-        save: () {
+        save: () async {
           CustomValues.lang = lang;
           Prefs.dsbUseLanguage = use;
-          rebuildNewBuild();
+          await Prefs.waitForMutex();
+          unawaited(rebuildNewBuild());
 
           FirstLoginValues.grades[0] = CustomValues.lang.empty;
           FirstLoginValues.letters[0] = CustomValues.lang.empty;
@@ -285,10 +293,11 @@ class AmpHomePageState extends State<AmpHomePage>
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context: context,
-        save: () {
+        save: () async {
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();
-          rebuildDragDown();
+          await Prefs.waitForMutex();
+          unawaited(rebuildDragDown());
           Navigator.pop(context);
         },
       ),
@@ -325,14 +334,14 @@ class AmpHomePageState extends State<AmpHomePage>
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     if (dsbWidget == null) {
-      rebuildNewBuild();
+      rebuildNoIndicator();
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     if (lastUpdate <
         DateTime.now()
             .subtract(Duration(minutes: Prefs.timer))
             .millisecondsSinceEpoch) {
-      rebuildDragDown();
+      rebuildNoIndicator();
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     var containers = [
@@ -344,29 +353,29 @@ class AmpHomePageState extends State<AmpHomePage>
           appBar: ampAppBar(AmpStrings.appTitle),
           backgroundColor: Colors.transparent,
           body: RefreshIndicator(
-              key: refreshKey,
-              child: !circularProgressIndicatorActive
-                  ? ListView(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      children: [
-                        dsbWidget,
-                        ampDivider,
-                        changeSubVisibilityWidget,
-                        //ampRaisedButton(text: 'rebuild', onPressed: rebuild),
-                      ],
-                    )
-                  : Center(
-                      child: SizedBox(
-                      child: SpinKitWave(
-                        size: 100,
-                        duration: Duration(milliseconds: 1050),
-                        color: AmpColors.colorForeground,
-                      ),
-                      height: 200,
-                      width: 200,
-                    )),
-              onRefresh: rebuildDragDown),
+            key: refreshKey,
+            child: !circularProgressIndicatorActive
+                ? ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: [
+                      dsbWidget,
+                      ampDivider,
+                      changeSubVisibilityWidget,
+                    ],
+                  )
+                : Center(
+                    child: SizedBox(
+                    child: SpinKitWave(
+                      size: 100,
+                      duration: Duration(milliseconds: 1050),
+                      color: AmpColors.colorForeground,
+                    ),
+                    height: 200,
+                    width: 200,
+                  )),
+            onRefresh: rebuildDragDown,
+          ),
         ),
         margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
       ),
@@ -446,8 +455,8 @@ class AmpHomePageState extends State<AmpHomePage>
                     Prefs.timesToggleDarkModePressed = 0;
                   }
                   AmpColors.switchMode();
-                  if (Prefs.useSystemTheme) Prefs.useSystemTheme = false;
-                  rebuildNewBuild();
+                  Prefs.useSystemTheme = false;
+                  rebuildNoIndicator();
                   Future.delayed(Duration(milliseconds: 150), rebuild);
                 },
                 icon: AmpColors.isDarkMode
@@ -465,7 +474,8 @@ class AmpHomePageState extends State<AmpHomePage>
                     Prefs.currentThemeId = 0;
                   else
                     Prefs.currentThemeId++;
-                  await rebuildNewBuild();
+                  await rebuildNoIndicator();
+                  rebuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
                     content: ampText(CustomValues.lang.changedAppearance),
@@ -482,20 +492,10 @@ class AmpHomePageState extends State<AmpHomePage>
                 text: CustomValues.lang.changeAppearance,
               ),
               ampBigAmpButton(
-                onTap: () {
-                  var ust = !Prefs.useSystemTheme;
-                  setState(() => Prefs.useSystemTheme = ust);
-                  if (ust) {
-                    var brightness =
-                        SchedulerBinding.instance.window.platformBrightness;
-                    var darkModeEnabled = brightness != Brightness.light;
-                    if (darkModeEnabled != Prefs.isDarkMode) {
-                      AmpColors.switchMode();
-                      rebuildNewBuild();
-                      Future.delayed(Duration(milliseconds: 150), rebuild);
-                    }
-                  }
-                  rebuild();
+                onTap: () async {
+                  Prefs.useSystemTheme = !Prefs.useSystemTheme;
+                  await Prefs.waitForMutex();
+                  checkBrightness();
                 },
                 icon: MdiIcons.brightness6,
                 text: Prefs.useSystemTheme
