@@ -395,9 +395,8 @@ class AmpHomePageState extends State<AmpHomePage>
                       Animations.changeScreenEaseOutBackReplace(
                           RegisterTimetableScreen(), context);
                     },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                    child: ampColumn(
+                      [
                         ampIcon(MdiIcons.timetable, size: 200),
                         ampText(
                           CustomValues.lang.setupTimetable,

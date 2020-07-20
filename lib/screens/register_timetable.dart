@@ -83,13 +83,11 @@ class RegisterTimetableScreenPageState
             body: Container(
               margin: EdgeInsets.only(left: 12, right: 12),
               color: Colors.transparent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+              child: ampColumn(
+                [
                   Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                    child: ampRow(
+                      [
                         ampDropdownButton(
                           value: currentDropdownDay,
                           itemToDropdownChild: (i) =>
