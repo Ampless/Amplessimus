@@ -74,58 +74,52 @@ class RegisterTimetableScreenPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: ampAppBar(CustomValues.lang.setupTimetableTitle),
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: RegisterTimetableValues.tabController,
         children: <Widget>[
           Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: AmpColors.colorBackground,
-              title: Container(
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ampDropdownButton(
-                        value: currentDropdownDay,
-                        itemToDropdownChild: (i) =>
-                            ampText(CustomValues.lang.ttDayToString(i)),
-                        items: ttWeek,
-                        onChanged: (value) {
-                          setState(() {
-                            currentDropdownDay = value;
-                            ttColumn = CustomValues.ttColumns[
-                                TTDay.values.indexOf(currentDropdownDay)];
-                            currentDropdownHour = ttColumn.lessons.length;
-                          });
-                        },
-                        underlineDisabled: true,
-                      ),
-                      ampPadding(10),
-                      ampDropdownButton(
-                        value: currentDropdownHour,
-                        items: CustomValues.ttHours,
-                        onChanged: (value) {
-                          setState(() {
-                            currentDropdownHour = value;
-                            updateTTColumn(value, currentDropdownDay);
-                          });
-                        },
-                        underlineDisabled: true,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            backgroundColor: Colors.transparent,
             body: Container(
               margin: EdgeInsets.only(left: 12, right: 12),
               color: Colors.transparent,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ampDropdownButton(
+                          value: currentDropdownDay,
+                          itemToDropdownChild: (i) =>
+                              ampText(CustomValues.lang.ttDayToString(i)),
+                          items: ttWeek,
+                          onChanged: (value) {
+                            setState(() {
+                              currentDropdownDay = value;
+                              ttColumn = CustomValues.ttColumns[
+                                  TTDay.values.indexOf(currentDropdownDay)];
+                              currentDropdownHour = ttColumn.lessons.length;
+                            });
+                          },
+                          underlineDisabled: true,
+                        ),
+                        ampPadding(10),
+                        ampDropdownButton(
+                          value: currentDropdownHour,
+                          items: CustomValues.ttHours,
+                          onChanged: (value) {
+                            setState(() {
+                              currentDropdownHour = value;
+                              updateTTColumn(value, currentDropdownDay);
+                            });
+                          },
+                          underlineDisabled: true,
+                        ),
+                      ],
+                    ),
+                  ),
                   Divider(
                     color: AmpColors.colorForeground,
                     height: 2,

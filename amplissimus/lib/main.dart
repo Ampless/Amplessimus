@@ -432,6 +432,7 @@ class AmpHomePageState extends State<AmpHomePage>
         duration: Duration(milliseconds: 150),
         color: Colors.transparent,
         child: Scaffold(
+          appBar: ampAppBar(CustomValues.lang.settings),
           key: settingsScaffoldKey,
           backgroundColor: Colors.transparent,
           body: GridView.count(
