@@ -124,7 +124,7 @@ class AmpHomePageState extends State<AmpHomePage>
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   bool circularProgressIndicatorActive = false;
-  int _currentIndex;
+  int _index;
   TabController tabController;
 
   void checkBrightness() {
@@ -144,9 +144,8 @@ class AmpHomePageState extends State<AmpHomePage>
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
-    _currentIndex = widget.initialIndex;
-    tabController =
-        TabController(length: 3, vsync: this, initialIndex: _currentIndex);
+    _index = widget.initialIndex;
+    tabController = TabController(length: 3, vsync: this, initialIndex: _index);
     Prefs.setTimer(Prefs.timer, rebuildTimer);
   }
 
@@ -472,7 +471,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
                       label: CustomValues.lang.show,
-                      onPressed: () => setState(() => _currentIndex = 0),
+                      onPressed: () => setState(() => _index = 0),
                     ),
                   ));
                 },

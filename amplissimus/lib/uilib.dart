@@ -244,6 +244,7 @@ AppBar ampAppBar(String text, {double fontSize = 25}) {
 }
 
 ThemeData get ampThemeData => ThemeData(
+      brightness: AmpColors.brightness,
       canvasColor: AmpColors.materialColorBackground,
       primarySwatch: AmpColors.materialColorForeground,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -263,6 +264,7 @@ MaterialApp ampMatApp({@required String title, @required Widget home}) {
     title: title,
     theme: ampThemeData,
     home: home,
+    debugShowCheckedModeBanner: false,
   );
 }
 
