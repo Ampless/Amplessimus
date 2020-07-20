@@ -116,9 +116,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                         '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
                         '{\"day\":0,\"date\":\"6.7.2020 Montag\",\"subs\":['
                         '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                        '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Himmel\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                        '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Willer\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-                        '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Cap\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Lehnert\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+                        '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Häußler\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
                         '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
                         '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
                   ),
