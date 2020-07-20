@@ -181,15 +181,13 @@ Widget ampBigAmpButton(
             customBorder: RoundedRectangleBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(32.0))),
             onTap: onTap,
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  ampPadding(24),
-                  ampIcon(icon, size: 50),
-                  ampPadding(10),
-                  ampText(text, textAlign: TextAlign.center)
-                ],
-              ),
+            child: ampColumn(
+              [
+                ampPadding(18),
+                ampIcon(icon, size: 50),
+                ampPadding(8),
+                ampText(text, textAlign: TextAlign.center),
+              ],
             ),
           ),
         )
