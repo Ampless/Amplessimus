@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/langs/czech.dart';
 import 'package:Amplessimus/langs/english.dart';
 import 'package:Amplessimus/langs/german.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
