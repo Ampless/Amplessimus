@@ -1,133 +1,165 @@
+import 'dart:collection';
+
+import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/timetable/timetables.dart';
+
 class Czech extends Language {
-  
-  String appInfo =>
+  @override
+  String get appInfo =>
       'Amplissimus je aplikace, která umožňuje přehledné prohlížení suplovacích plánů přes DSBMobile';
 
-  
-  String code => 'cz';
+  @override
+  String get code => 'cz';
 
-  
-  String settings => 'Nastavení';
+  @override
+  String get settings => 'Nastavení';
 
-  
-  String start => 'Start';
+  @override
+  String get start => 'Start';
 
-  
-  String name => 'Čeština';
+  @override
+  String get name => 'Čeština';
 
-  
-  String settingsAppInfo => 'Informace o aplikaci';
+  @override
+  String get settingsAppInfo => 'Informace o aplikaci';
 
-  
-  String changeAppearance => 'Změnit vzhled aplikace';
+  @override
+  String get changeAppearance => 'Změnit vzhled aplikace';
 
-  
-  String changeLogin => 'Přihlašovací údaje';
+  @override
+  String get changeLogin => 'Přihlašovací údaje';
 
-  
-  String changeLoginPopup => 'Údaje k DSBMobile';
+  @override
+  String get changeLoginPopup => 'Údaje k DSBMobile';
 
-  
-  String lightsOff => 'zhasnout';
+  @override
+  String get lightsOff => 'zhasnout';
 
-  
-  String lightsOn => 'rozsvítit';
+  @override
+  String get lightsOn => 'rozsvítit';
 
-  
-  String selectClass => 'zvolit třídu';
+  @override
+  String get selectClass => 'zvolit třídu';
 
-  
-  String lightsNoSystem => 'Nepoužívat vzhled systému';
+  @override
+  String get lightsNoSystem => 'Nepoužívat vzhled systému';
 
-  
-  String lightsUseSystem => 'použít vzhled systému';
+  @override
+  String get lightsUseSystem => 'použít vzhled systému';
 
-  
-  String filterTimetables => 'filtrovat rozvrh hodin';
+  @override
+  String get filterTimetables => 'filtrovat rozvrh hodin';
 
-  
-  String edit => 'upravit';
+  @override
+  String get edit => 'upravit';
 
-  String substitution => 'suplování';
+  @override
+  String get substitution => 'suplování';
 
-  String dsbSubtoSubtitle(DsbSubstitution sub) => sub.isFree ? 'volná hodina' : 'Supluje ${teacher}';
+  @override
+  String dsbSubtoSubtitle(DsbSubstitution sub) =>
+      sub.isFree ? 'volná hodina' : 'Supluje ${teacher}';
 
-  String dsbSubtoTitle => return '$lesson. Stunde ${realSubject(subject)}';
+  @override
+  String dsbSubtoTitle(DsbSubstitution sub) =>
+      '${sub.actualHours}. Stunde ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
 
-  String catchDsbGetData => 'Ověřte zda jste připojeni k síti. (Fehler: $e)';
+  @override
+  String catchDsbGetData(e) => 'Ověřte zda jste připojeni k síti. (Fehler: $e)';
 
-  String dsbListErrorSubtitle =>
-      'prosím přihlašte se na amplus (https://amplus.chrissx.de/amplissimus)';
+  @override
+  String get dsbListErrorSubtitle =>
+      'prosím přihlašte se na ampless (ampless.chrissx.de)';
 
-  
-  String dsbListErrorTitle => chyba amplissimu;
+  @override
+  String get dsbListErrorTitle => 'chyba amplissimu';
 
-  
-  String noLogin => 'nebyly zadány žádné přihlašovací údaje.';
-  
-  String empty => 'prázdné';
+  @override
+  String get noLogin => 'nebyly zadány žádné přihlašovací údaje.';
 
-  String password => 'heslo';
-  
-  String username => 'Uživatelské jméno';
+  @override
+  String get empty => 'prázdné';
 
-  String save => 'uložit';
+  @override
+  String get password => 'heslo';
 
-  String cancel => 'zrušit';
+  @override
+  String get username => 'Uživatelské jméno';
 
-  String allClasses => 'všechny třídy';
+  @override
+  String get save => 'uložit';
 
-  String widgetValidatorFieldEmpty => 'Pole je prázdné!';
+  @override
+  String get cancel => 'zrušit';
 
-  String widgetValidatorInvalid => 'Neplatné zadání!';
+  @override
+  String get allClasses => 'všechny třídy';
 
-  String changeLanguage => 'změnit jazyk';
+  @override
+  String get widgetValidatorFieldEmpty => 'Pole je prázdné!';
 
-  String firstStartupDone => 'hotovo';
+  @override
+  String get widgetValidatorInvalid => 'Neplatné zadání!';
 
-  String timetable => 'Rozvrh hodin';
+  @override
+  String get changeLanguage => 'změnit jazyk';
 
-  String setupTimetable => 'nastavit\nrozvrh hodin';
+  @override
+  String get firstStartupDone => 'hotovo';
 
-  String setupTimetableTitle => 'nastavit rozvrh hodin';
+  @override
+  String get timetable => 'Rozvrh hodin';
 
-  String subject => 'předmět';
+  @override
+  String get setupTimetable => 'nastavit\nrozvrh hodin';
 
-  String notes => 'zápisky';
+  @override
+  String get setupTimetableTitle => 'nastavit rozvrh hodin';
 
-  String editHour => 'upravit hodinu';
+  @override
+  String get subject => 'předmět';
 
-  String teacher => 'učitel';
+  @override
+  String get notes => 'zápisky';
 
-  String teacherInput => 'učitel (příjmení)';
+  @override
+  String get editHour => 'upravit hodinu';
 
-  String freeLesson => 'volná hodina';
+  @override
+  String get teacher => 'učitel';
 
-  String subjectLut => {
-    'spo': 'tělesná výchova',
-    'e': 'Anglický jazyk',
-    'd': 'Německý jazyk',
-    'i': 'Informatika',
-    'g': 'Dějepis',
-    'geo': 'Zeměpis',
-    'l': 'Latinský jazyk',
-    'it': 'Italský jazyk',
-    'f': 'Francouzský jazyk',
-    'so': 'Společenské vědy',
-    'sk': 'Společenské vědy',
-    'm': 'Matematika',
-    'mu': 'Hudební výchova',
-    'b': 'Biologie',
-    'c': 'Chemie',
-    'k': 'Výtvarná výchova',
-    'p': 'Fyzika',
-    'w': 'Ekonomika a právo',
-    'nut': 'Příroda a technika',
-    'spr': 'Konverzační hodina',
-  };
+  @override
+  String get freeLesson => 'volná hodina';
 
-  String darkMode => 'tmavý režim';
+  @override
+  LinkedHashMap<String, String> get subjectLut => LinkedHashMap.from({
+        'spo': 'tělesná výchova',
+        'e': 'Anglický jazyk',
+        'd': 'Německý jazyk',
+        'i': 'Informatika',
+        'g': 'Dějepis',
+        'geo': 'Zeměpis',
+        'l': 'Latinský jazyk',
+        'it': 'Italský jazyk',
+        'f': 'Francouzský jazyk',
+        'so': 'Společenské vědy',
+        'sk': 'Společenské vědy',
+        'm': 'Matematika',
+        'mu': 'Hudební výchova',
+        'b': 'Biologie',
+        'c': 'Chemie',
+        'k': 'Výtvarná výchova',
+        'p': 'Fyzika',
+        'w': 'Ekonomika a právo',
+        'nut': 'Příroda a technika',
+        'spr': 'Konverzační hodina',
+      });
 
+  @override
+  String get darkMode => 'tmavý režim';
+
+  @override
   String ttDayToString(TTDay day) {
     switch (day) {
       case TTDay.Null:
@@ -147,9 +179,15 @@ class Czech extends Language {
     }
   }
 
-  String noSubs => 'žádné suplování';
+  @override
+  String get noSubs => 'žádné suplování';
 
-  String changedAppearance => 'Vzhled rozvrhu hodin byl změněn!';
+  @override
+  String get changedAppearance => 'Vzhled rozvrhu hodin byl změněn!';
 
-  String show => 'Ukázat';
+  @override
+  String get show => 'Ukázat';
+
+  @override
+  String get useForDsb => 'unimplemented';
 }
