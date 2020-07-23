@@ -58,7 +58,7 @@ abstract class Language {
   String catchDsbGetData(dynamic e);
   LinkedHashMap<String, String> get subjectLut;
 
-  static final List<Language> _langs = [English(), German()];
+  static final List<Language> _langs = [English(), German(), Czech()];
   static List<Language> get all => _langs;
 
   static Language fromCode(String code) {
