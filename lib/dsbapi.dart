@@ -105,8 +105,8 @@ class DsbSubstitution {
 
   static bool _isNum(String s, int i) {
     if (s == null) return false;
-    var codeUnit = s.codeUnitAt(i);
-    return codeUnit >= zero && codeUnit <= nine;
+    var cu = s.codeUnitAt(i);
+    return cu >= zero && cu <= nine;
   }
 
   static final Pattern _letters = RegExp(r'[a-zA-Z]');

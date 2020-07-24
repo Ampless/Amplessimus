@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
 
 class Czech extends Language {
@@ -59,12 +58,21 @@ class Czech extends Language {
   String get substitution => 'suplování';
 
   @override
-  String dsbSubtoSubtitle(DsbSubstitution sub) =>
-      sub.isFree ? 'volná hodina' : 'Supluje ${sub.teacher}';
+  String dsbSubtoSubtitle(DsbSubstitution sub) {
+    if (sub == null) return 'null';
+    return sub.isFree ? 'volná hodina' : 'Supluje ${sub.teacher}';
+  }
 
   @override
-  String dsbSubtoTitle(DsbSubstitution sub) =>
-      '${sub.actualHours}. Stunde ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
+  String dsbSubtoTitle(DsbSubstitution sub) {
+    if (sub == null) return 'null';
+    var s = '';
+    if (sub.hours == null)
+      s = 'null';
+    else
+      for (var h in sub.hours) s += s.isEmpty ? h.toString() : ', $h';
+    return '$s Stunde ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
+  }
 
   @override
   String catchDsbGetData(e) => 'Ověřte zda jste připojeni k síti. (Fehler: $e)';

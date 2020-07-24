@@ -22,7 +22,7 @@ class DayTestCase extends TestCase {
       else
         return;
     }
-    if (error) throw 'No error.';
+    if (error) throw '[DTC($input, $expct)] No error.';
     expect(res, expct);
   }
 }
@@ -31,9 +31,10 @@ List<DayTestCase> dayTestCases = [
   DayTestCase(null, TTDay.Null, false),
   DayTestCase('', TTDay.Null, false),
   DayTestCase('heute ist MoNtAg', TTDay.Monday, false),
-  DayTestCase('beatifufflk MoNNDaY', null, true),
+  DayTestCase('beatifufflk MoNNDaY', TTDay.Monday, false),
   DayTestCase('wednesday okd okd', TTDay.Wednesday, false),
   DayTestCase('_kEkW_freiTaG_llUUULW', TTDay.Friday, false),
+  DayTestCase('FvCkDaY', null, true),
   DayTestCase(TTDay.Monday, 0, false, tfunc: ttDayToInt),
   DayTestCase(TTDay.Tuesday, 1, false, tfunc: ttDayToInt),
   DayTestCase(TTDay.Wednesday, 2, false, tfunc: ttDayToInt),

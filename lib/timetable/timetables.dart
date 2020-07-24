@@ -139,15 +139,15 @@ TTDay ttMatchDay(String s) {
   s = s.toLowerCase();
   if (s.contains('null') || s.contains('none'))
     return TTDay.Null;
-  else if (s.contains('montag') || s.contains('monday'))
+  else if (s.contains('mo'))
     return TTDay.Monday;
-  else if (s.contains('dienstag') || s.contains('tuesday'))
+  else if (s.contains('di') || s.contains('tue'))
     return TTDay.Tuesday;
-  else if (s.contains('mittwoch') || s.contains('wednesday'))
+  else if (s.contains('mi') || s.contains('wed'))
     return TTDay.Wednesday;
-  else if (s.contains('donnerstag') || s.contains('thursday'))
+  else if (s.contains('do') || s.contains('thu'))
     return TTDay.Thursday;
-  else if (s.contains('freitag') || s.contains('friday'))
+  else if (s.contains('fr'))
     return TTDay.Friday;
   else
     throw '[TT] Unknown day: $s';
