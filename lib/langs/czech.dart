@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
 
 class Czech extends Language {
@@ -58,8 +59,10 @@ class Czech extends Language {
   String get substitution => 'suplování';
 
   @override
-  String dsbSubtoSubtitle(DsbSubstitution sub) =>
-      sub.isFree ? 'volná hodina' : 'Supluje ${teacher}';
+  String dsbSubtoSubtitle(DsbSubstitution sub) {
+    ampInfo(ctx: 'Czech][dsbSubToSubtitle', message: sub);
+    return sub.isFree ? 'volná hodina' : 'Supluje ${teacher}';
+  }
 
   @override
   String dsbSubtoTitle(DsbSubstitution sub) =>
@@ -73,7 +76,7 @@ class Czech extends Language {
       'prosím přihlašte se na ampless (ampless.chrissx.de)';
 
   @override
-  String get dsbListErrorTitle => 'chyba amplissimu';
+  String get dsbListErrorTitle => 'chyba amplessimu';
 
   @override
   String get noLogin => 'nebyly zadány žádné přihlašovací údaje.';
