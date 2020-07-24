@@ -215,14 +215,16 @@ TextStyle ampTextStyle({
 }
 
 Text ampText(
-  Object text, {
+  dynamic text, {
   double size,
   TextAlign textAlign,
   FontWeight weight,
   Color color,
+  String Function(dynamic) toString,
 }) {
+  toString ??= (o) => o.toString();
   var style = ampTextStyle(size: size, weight: weight, color: color);
-  return Text(text.toString(), style: style, textAlign: textAlign);
+  return Text(toString(text), style: style, textAlign: textAlign);
 }
 
 Icon ampIcon(IconData data, {double size, Color color}) {

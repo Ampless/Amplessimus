@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Amplessimus/animations.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
@@ -9,8 +10,6 @@ import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../animations.dart';
 
 class DevOptionsScreen extends StatelessWidget {
   @override
@@ -137,6 +136,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     );
                   },
                 ),
+                logWidget,
               ],
             ),
           ),

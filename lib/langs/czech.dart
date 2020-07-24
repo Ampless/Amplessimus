@@ -188,6 +188,7 @@ class Czech extends Language {
   @override
   String get show => 'Ukázat';
 
+  //TODO: Wait for translator to translate lol
   @override
   String get useForDsb => 'unimplemented';
 }

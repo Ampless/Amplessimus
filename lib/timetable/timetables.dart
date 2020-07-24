@@ -161,7 +161,6 @@ bool _subjectsEqual(String s1, String s2) {
   return s1.contains(s2) || s2.contains(s1);
 }
 
-//TODO: this is probably broken if you have different groups within your class
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   for (var plan in plans) {
     for (var i = 0; i < table.length; i++) {
