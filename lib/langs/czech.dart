@@ -59,10 +59,8 @@ class Czech extends Language {
   String get substitution => 'suplování';
 
   @override
-  String dsbSubtoSubtitle(DsbSubstitution sub) {
-    ampInfo(ctx: 'Czech][dsbSubToSubtitle', message: sub);
-    return sub.isFree ? 'volná hodina' : 'Supluje ${teacher}';
-  }
+  String dsbSubtoSubtitle(DsbSubstitution sub) =>
+      sub.isFree ? 'volná hodina' : 'Supluje ${sub.teacher}';
 
   @override
   String dsbSubtoTitle(DsbSubstitution sub) =>
