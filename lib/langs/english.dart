@@ -67,11 +67,11 @@ class English extends Language {
         if (hour.isNotEmpty) hour += '-';
         hour += h.toString();
         var r = h % 10;
-        if (r == 1)
+        if (r == 1 && h > 20)
           hour += 'st';
-        else if (r == 2)
+        else if (r == 2 && h > 20)
           hour += 'nd';
-        else if (r == 3)
+        else if (r == 3 && h > 20)
           hour += 'rd';
         else
           hour += 'th';
