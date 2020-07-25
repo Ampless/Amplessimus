@@ -70,8 +70,8 @@ class Czech extends Language {
     if (sub.hours == null)
       s = 'null';
     else
-      for (var h in sub.hours) s += s.isEmpty ? h.toString() : ', $h';
-    return '$s Stunde ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
+      for (var h in sub.hours) s += s.isEmpty ? h.toString() : '-$h';
+    return '$s. hodina ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
   }
 
   @override
@@ -197,7 +197,6 @@ class Czech extends Language {
   @override
   String get show => 'Ukázat';
 
-  //TODO: Wait for translator to translate lol
   @override
-  String get useForDsb => 'unimplemented';
+  String get useForDsb => 'Použít pro DSB (nedoporučeno)';
 }
