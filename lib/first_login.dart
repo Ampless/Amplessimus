@@ -245,9 +245,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     await dsbUpdateWidget();
                     await Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => AmpApp(initialIndex: 0),
-                      ),
+                      MaterialPageRoute(builder: (_) => AmpApp(0)),
                     );
                   },
                   label: CustomValues.lang.firstStartupDone,
@@ -267,12 +265,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 class FirstLoginValues {
   static bool testing = false;
   static Future<String> Function(
-      Uri url, Object body, String id, Map<String, String> headers,
-      {String Function(String) getCache,
-      void Function(String, String, Duration) setCache}) httpPostFunc;
+          Uri url, Object body, String id, Map<String, String> headers,
+          {String Function(String) getCache,
+          void Function(String, String, Duration) setCache}) httpPostFunc =
+      httpPost;
   static Future<String> Function(Uri url,
       {String Function(String) getCache,
-      void Function(String, String, Duration) setCache}) httpGetFunc;
+      void Function(String, String, Duration) setCache}) httpGetFunc = httpGet;
   static List<Widget> settingsButtons;
 
   static List<String> get grades =>
