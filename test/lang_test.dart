@@ -62,6 +62,16 @@ List<LanguageTestCase> languageTestCases = [
     lang.dsbSubtoSubtitle(
         DsbSubstitution('lul', [1, 3, 5], '---', 'sub', 'not', true));
   }),
+  LanguageTestCase((lang) {
+    if (lang == null || lang.code != 'de') return;
+    expect(lang.dsbSubtoTitle(DsbSubstitution('', [1], '', 'a', '', null)),
+        '1. Stunde a');
+  }),
+  LanguageTestCase((lang) {
+    if (lang == null || lang.code != 'en') return;
+    expect(lang.dsbSubtoTitle(DsbSubstitution('', [11], '', 'b', '', null)),
+        '11th lesson Biology');
+  }),
 ];
 
 List<LanguageCodeTestCase> languageCodeTestCases = [

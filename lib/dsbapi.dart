@@ -104,7 +104,7 @@ class DsbSubstitution {
       "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
   static bool _isNum(String s, int i) {
-    if (s == null) return false;
+    if (s == null || s.length <= i || i < 0) return false;
     var cu = s.codeUnitAt(i);
     return cu >= zero && cu <= nine;
   }

@@ -4,8 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'testlib.dart';
 
 class DayTestCase extends TestCase {
-  dynamic input;
-  dynamic expct;
+  dynamic input, expct;
   bool error;
   Function tfunc;
 
