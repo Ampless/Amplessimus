@@ -96,14 +96,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ),
                 ampRaisedButton(
                   text: 'Set Cache to Kekw',
-                  onPressed: () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"3.7.2020 Freitag\",\"subs\":['
+                  onPressed: () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"24.7.2020 Freitag\",\"subs\":['
                       '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
-                      '{\"day\":0,\"date\":\"6.7.2020 Montag\",\"subs\":['
+                      '{\"day\":0,\"date\":\"27.7.2020 Montag\",\"subs\":['
                       '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Lehnert\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-                      '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Häußler\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+                      '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Albl\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+                      '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Fikrle\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
                       '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
                 ),
