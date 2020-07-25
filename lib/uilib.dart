@@ -104,15 +104,15 @@ FlatButton ampDialogButton(
   );
 }
 
-DropdownButton ampDropdownButton(
-    {@required dynamic value,
-    @required List<dynamic> items,
-    Widget Function(dynamic) itemToDropdownChild = ampText,
-    @required void Function(dynamic) onChanged,
-    bool underlineDisabled = false}) {
+DropdownButton ampDropdownButton({
+  @required dynamic value,
+  @required List<dynamic> items,
+  Widget Function(dynamic) itemToDropdownChild = ampText,
+  @required void Function(dynamic) onChanged,
+}) {
   return DropdownButton(
     underline: Container(
-      height: underlineDisabled ? 0 : 2,
+      height: 2,
       color: AmpColors.colorForeground,
     ),
     dropdownColor: AmpColors.colorBackground,
@@ -205,15 +205,6 @@ RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
 
 Padding ampPadding(double value) => Padding(padding: EdgeInsets.all(value));
 
-TextStyle ampTextStyle({
-  double size,
-  FontWeight weight,
-  Color color,
-}) {
-  color ??= AmpColors.colorForeground;
-  return TextStyle(color: color, fontSize: size, fontWeight: weight);
-}
-
 Text ampText(
   dynamic text, {
   double size,
@@ -223,15 +214,14 @@ Text ampText(
   String Function(dynamic) toString,
 }) {
   toString ??= (o) => o.toString();
-  var style = ampTextStyle(size: size, weight: weight, color: color);
+  color ??= AmpColors.colorForeground;
+  var style = TextStyle(fontSize: size, fontWeight: weight, color: color);
   return Text(toString(text), style: style, textAlign: textAlign);
 }
 
 Icon ampIcon(IconData data, {double size, Color color}) {
   color ??= AmpColors.colorForeground;
-  return size != null
-      ? Icon(data, color: color, size: size)
-      : Icon(data, color: color);
+  return Icon(data, color: color, size: size);
 }
 
 AppBar ampAppBar(String text) {

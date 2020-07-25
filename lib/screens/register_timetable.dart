@@ -101,7 +101,6 @@ class RegisterTimetableScreenPageState
                               currentDropdownHour = ttColumn.lessons.length;
                             });
                           },
-                          underlineDisabled: true,
                         ),
                         ampPadding(10),
                         ampDropdownButton(
@@ -113,7 +112,6 @@ class RegisterTimetableScreenPageState
                               updateTTColumn(value, currentDropdownDay);
                             });
                           },
-                          underlineDisabled: true,
                         ),
                       ],
                     ),
