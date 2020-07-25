@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:Amplessimus/animations.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
@@ -21,8 +20,7 @@ class DevOptionsScreen extends StatelessWidget {
         ),
         onWillPop: () async {
           await dsbUpdateWidget();
-          Animations.changeScreenEaseOutBackReplace(
-              AmpApp(initialIndex: 2), context);
+          ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
           return false;
         });
   }
@@ -144,10 +142,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         floatingActionButton: ampFab(
           onPressed: () {
             dsbUpdateWidget();
-            Animations.changeScreenEaseOutBackReplace(
-              AmpApp(initialIndex: 2),
-              context,
-            );
+            ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
           },
           label: 'zurück',
           icon: Icons.arrow_back,

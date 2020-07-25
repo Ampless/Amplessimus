@@ -281,3 +281,22 @@ FloatingActionButton ampFab({
     icon: ampIcon(icon),
   );
 }
+
+void ampEaseOutBack(
+  Widget w,
+  BuildContext context, {
+  Function(BuildContext, Route) push = Navigator.push,
+}) =>
+    push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 200),
+        transitionsBuilder: (context, animatn, secondaryAnimation, child) =>
+            ScaleTransition(
+          scale: CurvedAnimation(parent: animatn, curve: Curves.easeInOutBack),
+          alignment: Alignment.center,
+          child: child,
+        ),
+        pageBuilder: (context, animation, secondaryAnimation) => w,
+      ),
+    );

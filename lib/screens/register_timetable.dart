@@ -1,4 +1,3 @@
-import 'package:Amplessimus/animations.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
@@ -248,9 +247,10 @@ class RegisterTimetableScreenPageState
               onPressed: () async {
                 await dsbUpdateWidget();
                 ttSaveToPrefs(CustomValues.ttColumns);
-                Animations.changeScreenEaseOutBackReplace(
-                  AmpApp(initialIndex: 1),
+                ampEaseOutBack(
+                  AmpApp(1),
                   context,
+                  push: Navigator.pushReplacement,
                 );
               },
               label: CustomValues.lang.save,

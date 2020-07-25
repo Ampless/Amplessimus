@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:Amplessimus/animations.dart';
 import 'package:Amplessimus/screens/dev_options.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/first_login.dart';
@@ -64,7 +63,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
+            builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(0),
           ),
         );
       });
@@ -98,7 +97,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 }
 
 class AmpApp extends StatelessWidget {
-  AmpApp({this.initialIndex = 0});
+  AmpApp(this.initialIndex);
   final int initialIndex;
   @override
   Widget build(BuildContext context) {
@@ -392,8 +391,11 @@ class AmpHomePageState extends State<AmpHomePage>
                     splashColor: AmpColors.colorForeground,
                     borderRadius: BorderRadius.circular(32),
                     onTap: () {
-                      Animations.changeScreenEaseOutBackReplace(
-                          RegisterTimetableScreen(), context);
+                      ampEaseOutBack(
+                        RegisterTimetableScreen(),
+                        context,
+                        push: Navigator.pushReplacement,
+                      );
                     },
                     child: ampColumn(
                       [
@@ -430,8 +432,11 @@ class AmpHomePageState extends State<AmpHomePage>
         floatingActionButton: Prefs.jsonTimetable == null
             ? ampNull
             : ampFab(
-                onPressed: () => Animations.changeScreenEaseOutBackReplace(
-                    RegisterTimetableScreen(), context),
+                onPressed: () => ampEaseOutBack(
+                  RegisterTimetableScreen(),
+                  context,
+                  push: Navigator.pushReplacement,
+                ),
                 label: CustomValues.lang.edit,
                 icon: Icons.edit,
               ),
@@ -534,8 +539,11 @@ class AmpHomePageState extends State<AmpHomePage>
               ampBigAmpButton(
                 onTap: () {
                   if (Prefs.devOptionsEnabled)
-                    Animations.changeScreenEaseOutBackReplace(
-                        DevOptionsScreen(), context);
+                    ampEaseOutBack(
+                      DevOptionsScreen(),
+                      context,
+                      push: Navigator.pushReplacement,
+                    );
                 },
                 icon: MdiIcons.codeBrackets,
                 text: 'Entwickleroptionen',
