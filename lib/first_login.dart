@@ -19,16 +19,14 @@ class FirstLoginScreen extends StatelessWidget {
               Uri url, Object body, String id, Map<String, String> headers,
               {String Function(String) getCache,
               void Function(String, String, Duration) setCache})
-          httpPostReplacement,
+          httpPostFunc = httpPost,
       Future<String> Function(Uri url,
               {String Function(String) getCache,
               void Function(String, String, Duration) setCache})
-          httpGetReplacement}) {
+          httpGetFunc = httpGet}) {
     FirstLoginValues.testing = testing;
-    if (testing) {
-      FirstLoginValues.httpPostFunc = httpPostReplacement;
-      FirstLoginValues.httpGetFunc = httpGetReplacement;
-    }
+    FirstLoginValues.httpPostFunc = httpPostFunc;
+    FirstLoginValues.httpGetFunc = httpGetFunc;
   }
   FirstLoginScreenPage _page;
   FirstLoginScreenPage get page => _page;
@@ -269,13 +267,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 class FirstLoginValues {
   static bool testing = false;
   static Future<String> Function(
-          Uri url, Object body, String id, Map<String, String> headers,
-          {String Function(String) getCache,
-          void Function(String, String, Duration) setCache}) httpPostFunc =
-      httpPost;
+      Uri url, Object body, String id, Map<String, String> headers,
+      {String Function(String) getCache,
+      void Function(String, String, Duration) setCache}) httpPostFunc;
   static Future<String> Function(Uri url,
       {String Function(String) getCache,
-      void Function(String, String, Duration) setCache}) httpGetFunc = httpGet;
+      void Function(String, String, Duration) setCache}) httpGetFunc;
   static List<Widget> settingsButtons;
 
   static List<String> get grades =>
