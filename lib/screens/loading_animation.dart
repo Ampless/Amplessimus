@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 
 class AmpLoadingAnimation extends StatefulWidget {
