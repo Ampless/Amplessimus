@@ -4,6 +4,7 @@ import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/screens/loading_animation.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/validators.dart';
@@ -113,6 +114,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     onPressed: () {
                       Prefs.jsonTimetable = null;
                       setState(() {});
+                    }),
+                ampRaisedButton(
+                    text: 'Ladebildschirm',
+                    onPressed: () {
+                      ampEaseOutBack(
+                        ampMatApp(title: 'Load', home: AmpLoadingAnimation()),
+                        context,
+                      );
                     }),
                 RaisedButton.icon(
                   color: Colors.red,
