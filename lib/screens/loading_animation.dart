@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:ui';
 
+import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 
@@ -15,18 +18,21 @@ class _AmpLoadingAnimationState extends State<AmpLoadingAnimation> {
   double frame = 0;
   @override
   Widget build(BuildContext context) {
+    var f = min(window.physicalSize.width, window.physicalSize.height) /
+        window.devicePixelRatio;
+    //ampInfo(ctx: 'Loading', message: 'f = $f');
     Timer(Duration(milliseconds: 20),
         () => setState(() => {frame++, frame %= 50}));
     var rotorblyat = Container(
-      padding: EdgeInsets.fromLTRB(210, 0, 20, 200),
+      padding: EdgeInsets.fromLTRB(0.575 * f, 0.01 * f, 0.075 * f, 0.29 * f),
       child: Image.asset('assets/images/lilrotorblyat.png'),
     );
     var rotorblyat2 = Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 210, 200),
+      padding: EdgeInsets.fromLTRB(0.08 * f, 0 * f, 0.57 * f, 0.3 * f),
       child: Image.asset('assets/images/lilrotorblyat2.png'),
     );
     var rotorblyat3 = Container(
-      padding: EdgeInsets.fromLTRB(100, 410, 110, 180),
+      padding: EdgeInsets.fromLTRB(0.26 * f, 1.035 * f, 0.285 * f, 0.46 * f),
       child: Image.asset('assets/images/lilrotorblyat3.png'),
     );
     var bg = Container(
@@ -34,19 +40,19 @@ class _AmpLoadingAnimationState extends State<AmpLoadingAnimation> {
         color: Colors.white,
         shape: BoxShape.circle,
       ),
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(0.04 * f),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.black,
           shape: BoxShape.circle,
         ),
-        padding: EdgeInsets.all(130),
+        padding: EdgeInsets.all(0.33 * f),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
           ),
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(0.05 * f),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black,
@@ -59,7 +65,7 @@ class _AmpLoadingAnimationState extends State<AmpLoadingAnimation> {
     return Scaffold(
       body: Stack(
         children: [
-          bg,
+          Center(child: bg),
           Center(child: rotorblyat),
           Center(child: rotorblyat2),
           Center(child: rotorblyat3),
