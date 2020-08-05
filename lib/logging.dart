@@ -1,14 +1,14 @@
+import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 
 bool _loggingEnabled = true;
 void ampDisableLogging() => _loggingEnabled = false;
 
-String _logBuffer = '';
-void ampClearLog() => _logBuffer = '';
+void ampClearLog() => Prefs.log = '';
 
-Widget get ampLogWidget => ampText(_logBuffer,
-    font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
+Widget get ampLogWidget =>
+    ampText(Prefs.log, font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
 
 void _log(String level, String ctx, Object message) {
   var now = DateTime.now(),
@@ -23,7 +23,7 @@ void _log(String level, String ctx, Object message) {
   if (ms.length == 2) ms = '0' + ms;
   if (_loggingEnabled) {
     var msg = '$h:$m:$s.$ms [$level][$ctx] $message';
-    _logBuffer += msg + '\n';
+    Prefs.log += msg + '\n';
     print(msg);
   }
 }

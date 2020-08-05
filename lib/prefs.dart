@@ -110,6 +110,10 @@ set savedLangCode(String s) => _prefs.setString('lang', s);
 String get jsonTimetable => _prefs.getString('json_timetable', null);
 set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
 
+//this is only temporary
+//the temporary windows shared prefs just don't allow this to work well
+String log = '';
+
 bool get dsbUseLanguage => _prefs.getBool('dsb_use_language', false);
 set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', b);
 
