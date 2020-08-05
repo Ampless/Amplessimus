@@ -124,11 +124,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       );
                     }),
                 ampRaisedButton(
-                    text: 'Clear log', onPressed: () => ampClearLog()),
-                RaisedButton.icon(
-                  color: Colors.red,
-                  icon: ampIcon(Icons.delete),
-                  label: ampText('App-Daten löschen'),
+                    text: 'Clear log', onPressed: () => setState(ampClearLog)),
+                ampRaisedButton(
+                  text: 'App-Daten löschen',
                   onPressed: () {
                     ampDialog(
                       title: 'App-Daten löschen',
