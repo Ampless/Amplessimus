@@ -123,6 +123,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                         context,
                       );
                     }),
+                ampRaisedButton(
+                    text: 'Clear log', onPressed: () => ampClearLog()),
                 RaisedButton.icon(
                   color: Colors.red,
                   icon: ampIcon(Icons.delete),

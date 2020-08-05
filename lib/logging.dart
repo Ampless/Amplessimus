@@ -7,11 +7,8 @@ void ampDisableLogging() => _loggingEnabled = false;
 String _logBuffer = '';
 void ampClearLog() => _logBuffer = '';
 
-Widget get ampLogWidget => ampText(_logBuffer, toString: (b) {
-      var t = '';
-      for (var s in b) t += s + '\n';
-      return t;
-    });
+Widget get ampLogWidget => ampText(_logBuffer,
+    font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
 
 void _log(String level, String ctx, Object message) {
   var now = DateTime.now(),
