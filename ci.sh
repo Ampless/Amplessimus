@@ -76,13 +76,15 @@ main() {
         commitid=$(git rev-parse @)
         raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
         version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
-        output_dir="/usr/local/var/www/amplissimus/$version_name"
+        output_dir="/usr/local/var/www/amplessimus/$version_name"
         mkdir -p bin
         {
                 echo "Building $version_name..."
                 flutter_update
 
-                mkdir -p /usr/local/var/www/amplissimus
+                mkdir -p /usr/local/var/www/amplessimus
+
+                echo "[Amplessimus-Build][$(date)] Running make."
 
                 make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
                 make mac || { make cleanartifacts rollbackversions ; }
