@@ -57,20 +57,20 @@ void clearCache() {
 }
 
 void listCache() {
-  print('{');
+  ampInfo(ctx: 'Cache', message: '{');
   for (var hash in _prefs.getStringList('CACHE_URLS', []))
-    print(
-        '  {hash=\'$hash\',len=${_prefs.getString('CACHE_VAL_$hash', '').length},ttl=${_prefs.getInt('CACHE_TTL_$hash', -1)}},');
-  print('}');
+    ampInfo(
+        ctx: 'Cache',
+        message:
+            '  {hash=\'$hash\',len=${_prefs.getString('CACHE_VAL_$hash', '').length},ttl=${_prefs.getInt('CACHE_TTL_$hash', -1)}},');
+  ampInfo(ctx: 'Cache', message: '}');
 }
 
 void devOptionsTimerCache() {
-  if (DateTime.now().millisecondsSinceEpoch <
-      lastPressedToggleDarkMode + 10000) {
+  if (DateTime.now().millisecondsSinceEpoch < lastPressedToggleDarkMode + 10000)
     timesToggleDarkModePressed = timesToggleDarkModePressed + 1;
-  } else {
+  else
     timesToggleDarkModePressed = 1;
-  }
   lastPressedToggleDarkMode = DateTime.now().millisecondsSinceEpoch;
 }
 
