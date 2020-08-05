@@ -51,14 +51,14 @@ class DsbSubstitution {
         'isFree': isFree,
       };
 
-  static final int zero = '0'.codeUnitAt(0), nine = '9'.codeUnitAt(0);
+  static final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
 
   static List<int> parseIntsFromString(String s) {
     var out = <int>[];
     var lastindex = 0;
     for (var i = 0; i < s.length; i++) {
       var c = s[i].codeUnitAt(0);
-      if (c < zero || c > nine) {
+      if (c < _zero || c > _nine) {
         if (lastindex != i) out.add(int.parse(s.substring(lastindex, i)));
         lastindex = i + 1;
       }
@@ -69,7 +69,7 @@ class DsbSubstitution {
 
   static DsbSubstitution fromStrings(String affectedClass, String hour,
       String teacher, String subject, String notes) {
-    if (affectedClass.codeUnitAt(0) == zero)
+    if (affectedClass.codeUnitAt(0) == _zero)
       affectedClass = affectedClass.substring(1);
     return DsbSubstitution(
         affectedClass.toLowerCase(),
@@ -90,14 +90,13 @@ class DsbSubstitution {
         _str(subject), _str(notes));
   }
 
-  static DsbSubstitution fromElementArray(List<dom.Element> elements) {
-    return fromElements(
-        elements[0], elements[1], elements[2], elements[3], elements[4]);
+  static DsbSubstitution fromElementArray(List<dom.Element> e) {
+    return fromElements(e[0], e[1], e[2], e[3], e[4]);
   }
 
-  static String _str(dom.Element e) {
-    return e.innerHtml.replaceAll(RegExp(r'</?.+?>'), '').trim();
-  }
+  static final _tag = RegExp(r'</?.+?>');
+
+  static String _str(dom.Element e) => e.innerHtml.replaceAll(_tag, '').trim();
 
   @override
   String toString() =>
@@ -106,22 +105,21 @@ class DsbSubstitution {
   static bool _isNum(String s, int i) {
     if (s == null || s.length <= i || i < 0) return false;
     var cu = s.codeUnitAt(i);
-    return cu >= zero && cu <= nine;
+    return cu >= _zero && cu <= _nine;
   }
 
-  static final Pattern _letters = RegExp(r'[a-zA-Z]');
-  static final Pattern _numeric = RegExp(r'[0-9]');
+  static final _letters = RegExp(r'[a-zA-Z]');
+  static final _numeric = RegExp(r'[0-9]');
 
-  static String realSubject(String subject, {@required Language lang}) {
+  static String realSubject(String subject, Language lang) {
     if (subject == null) return null;
     if (_isNum(subject, 0) || _isNum(subject, subject.length - 1))
-      return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang: lang)} '
+      return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang)} '
           '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';
     var sub = subject.toLowerCase();
     var s = subject;
-    lang.subjectLut.forEach((key, value) {
-      if (sub.startsWith(key)) s = value;
-    });
+    var lut = lang.subjectLut;
+    for (var key in lut.keys) if (sub.startsWith(key)) s = lut[key];
     return s;
   }
 
@@ -152,34 +150,33 @@ class DsbPlan {
 
   List<Map<String, dynamic>> subsToJson() {
     var lessonsStrings = <Map<String, dynamic>>[];
-    for (var sub in subs) {
-      lessonsStrings.add(sub.toJson());
-    }
+    for (var sub in subs) lessonsStrings.add(sub.toJson());
     return lessonsStrings;
   }
 
   static List<DsbSubstitution> subsFromJson(dynamic subsStrings) {
-    var tempSubs = <DsbSubstitution>[];
-    for (dynamic tempString in subsStrings) {
-      tempSubs.add(DsbSubstitution.fromJson(tempString));
-    }
-    return tempSubs;
+    var subs = <DsbSubstitution>[];
+    for (var s in subsStrings) subs.add(DsbSubstitution.fromJson(s));
+    return subs;
   }
 
   @override
   String toString() => '$day: $subs';
 }
 
-Future<String> dsbGetData(String username, String password,
-    {String apiEndpoint = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData',
-    bool cachePostRequests = true,
-    Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers,
-            {String Function(String) getCache,
-            void Function(String, String, Duration) setCache})
-        httpPost = httpPost,
-    String dsbLanguage = 'de',
-    @required Language lang}) async {
+Future<String> dsbGetData(
+  String username,
+  String password, {
+  String apiEndpoint = 'https://app.dsbcontrol.de/JsonHandler.ashx/GetData',
+  bool cachePostRequests = true,
+  Future<String> Function(
+          Uri url, Object body, String id, Map<String, String> headers,
+          {String Function(String) getCache,
+          void Function(String, String, Duration) setCache})
+      httpPost = httpPost,
+  String dsbLanguage = 'de',
+  @required Language lang,
+}) async {
   var datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   var json = '{'
       '"UserId":"$username",'
@@ -220,12 +217,14 @@ Future<String> dsbGetData(String username, String password,
   }
 }
 
-Future<Map<String, String>> dsbGetHtml(String jsontext,
-    {bool cacheGetRequests = true,
-    Future<String> Function(Uri url,
-            {String Function(String) getCache,
-            void Function(String, String, Duration) setCache})
-        httpGet = httpGet}) async {
+Future<Map<String, String>> dsbGetHtml(
+  String jsontext, {
+  bool cacheGetRequests = true,
+  Future<String> Function(Uri url,
+          {String Function(String) getCache,
+          void Function(String, String, Duration) setCache})
+      httpGet = httpGet,
+}) async {
   var json = jsonDecode(jsontext);
   if (json['Resultcode'] != 0) throw json['ResultStatusInfo'];
   json = json['ResultMenuItems'][0]['Childs'][0];
@@ -249,20 +248,23 @@ dom.Element _searchHtml(List<dom.Element> rootNode, String className) {
   return null;
 }
 
-Future<List<DsbPlan>> dsbGetAllSubs(String username, String password,
-    {bool cacheGetRequests = true,
-    bool cachePostRequests = true,
-    Future<String> Function(Uri url,
-            {String Function(String) getCache,
-            void Function(String, String, Duration) setCache})
-        httpGet = httpGet,
-    Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers,
-            {String Function(String) getCache,
-            void Function(String, String, Duration) setCache})
-        httpPost = httpPost,
-    @required String dsbLanguage,
-    @required Language lang}) async {
+Future<List<DsbPlan>> dsbGetAllSubs(
+  String username,
+  String password, {
+  bool cacheGetRequests = true,
+  bool cachePostRequests = true,
+  Future<String> Function(Uri url,
+          {String Function(String) getCache,
+          void Function(String, String, Duration) setCache})
+      httpGet = httpGet,
+  Future<String> Function(
+          Uri url, Object body, String id, Map<String, String> headers,
+          {String Function(String) getCache,
+          void Function(String, String, Duration) setCache})
+      httpPost = httpPost,
+  @required String dsbLanguage,
+  @required Language lang,
+}) async {
   var plans = <DsbPlan>[];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
   var json = await dsbGetData(username, password,

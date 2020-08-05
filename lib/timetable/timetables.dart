@@ -230,8 +230,8 @@ List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
         for (var sub in plan.subs) {
           if (!finishedFiltering) {
             if (sub.hours.contains(lessonIndex)) {
-              titleString = DsbSubstitution.realSubject(sub.subject,
-                  lang: CustomValues.lang);
+              titleString =
+                  DsbSubstitution.realSubject(sub.subject, CustomValues.lang);
               notesString = CustomValues.lang.dsbSubtoSubtitle(sub);
               if (!sub.isFree) {
                 trailingString = sub.teacher;

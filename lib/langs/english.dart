@@ -78,7 +78,7 @@ class English extends Language {
       }
     } else
       hour = 'null';
-    return '$hour lesson ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
+    return '$hour lesson ${DsbSubstitution.realSubject(sub.subject, this)}';
   }
 
   @override

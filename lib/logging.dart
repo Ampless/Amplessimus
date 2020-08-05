@@ -10,7 +10,7 @@ void ampClearLog() => Prefs.log = '';
 Widget get ampLogWidget =>
     ampText(Prefs.log, font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
 
-void _log(String level, String ctx, Object message) {
+void _log(String level, Object ctx, Object message) {
   var now = DateTime.now(),
       s = now.second.toString(),
       m = now.minute.toString(),
@@ -28,9 +28,9 @@ void _log(String level, String ctx, Object message) {
   }
 }
 
-void ampErr({@required String ctx, @required Object message}) =>
+void ampErr({@required Object ctx, @required Object message}) =>
     _log('Error', ctx, message);
-void ampWarn({@required String ctx, @required Object message}) =>
+void ampWarn({@required Object ctx, @required Object message}) =>
     _log('Warn', ctx, message);
-void ampInfo({@required String ctx, @required Object message}) =>
+void ampInfo({@required Object ctx, @required Object message}) =>
     _log('Info', ctx, message);

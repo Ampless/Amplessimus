@@ -41,7 +41,7 @@ Widget ampLinearProgressIndicator({
         );
 }
 
-Container get ampNull => Container(width: 0, height: 0);
+final ampNull = Container(width: 0, height: 0);
 
 Column ampColumn(List<Widget> children) => Column(
       mainAxisSize: MainAxisSize.min,
@@ -55,15 +55,16 @@ Row ampRow(List<Widget> children) => Row(
 
 Tab ampTab(IconData icon, String text) => Tab(icon: Icon(icon), text: text);
 
-TextFormField ampFormField(
-    {@required TextEditingController controller,
-    @required Key key,
-    String Function(String) validator,
-    TextInputType keyboardType = TextInputType.text,
-    String labelText = '',
-    bool obscureText = false,
-    List<String> autofillHints,
-    Widget suffixIcon}) {
+TextFormField ampFormField({
+  @required TextEditingController controller,
+  @required Key key,
+  String Function(String) validator,
+  TextInputType keyboardType = TextInputType.text,
+  String labelText = '',
+  bool obscureText = false,
+  List<String> autofillHints,
+  Widget suffixIcon,
+}) {
   autofillHints ??= [];
   suffixIcon ??= ampNull;
   return TextFormField(

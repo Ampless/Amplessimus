@@ -75,7 +75,7 @@ class German extends Language {
       for (var h in sub.hours) hour += hour.isEmpty ? h.toString() : '-$h';
     } else
       hour = 'null';
-    return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
+    return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject, this)}';
   }
 
   @override

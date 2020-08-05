@@ -71,7 +71,7 @@ class Czech extends Language {
       s = 'null';
     else
       for (var h in sub.hours) s += s.isEmpty ? h.toString() : '-$h';
-    return '$s. hodina ${DsbSubstitution.realSubject(sub.subject, lang: this)}';
+    return '$s. hodina ${DsbSubstitution.realSubject(sub.subject, this)}';
   }
 
   @override
