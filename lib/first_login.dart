@@ -245,7 +245,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     await dsbUpdateWidget();
                     await Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (_) => AmpApp(0)),
+                      MaterialPageRoute(builder: (_) => AmpApp()),
                     );
                   },
                   label: CustomValues.lang.firstStartupDone,

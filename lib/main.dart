@@ -63,7 +63,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(0),
+            builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
           ),
         );
       });
@@ -97,7 +97,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 }
 
 class AmpApp extends StatelessWidget {
-  AmpApp(this.initialIndex);
+  AmpApp([this.initialIndex = 0]);
   final int initialIndex;
   @override
   Widget build(BuildContext context) {
