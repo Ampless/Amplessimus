@@ -11,7 +11,7 @@ void main() {
   if (b) return;
   testWidgets('first_login_test_1', (tester) async {
     Prefs.initTestPrefs();
-    disableLogging();
+    ampDisableLogging();
     var screen = FirstLoginScreen(
         testing: true,
         httpPostFunc: (url, body, id, headers, {getCache, setCache}) async =>

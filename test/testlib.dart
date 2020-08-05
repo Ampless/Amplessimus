@@ -21,7 +21,7 @@ void runTests(List<TestCase> testCases, String groupName) {
     for (var testCase in testCases)
       test('case ${i++}', () async {
         Prefs.initTestPrefs();
-        disableLogging();
+        ampDisableLogging();
         await testCase.run();
       });
   });

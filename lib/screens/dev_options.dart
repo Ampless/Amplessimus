@@ -143,7 +143,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                     );
                   },
                 ),
-                logWidget,
+                ampLogWidget,
               ],
             ),
           ),

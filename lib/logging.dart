@@ -2,11 +2,14 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 
 bool _loggingEnabled = true;
-void disableLogging() => _loggingEnabled = false;
+void ampDisableLogging() => _loggingEnabled = false;
 
-List<String> _logBuffer = [];
+String _logBuffer = '';
+void ampClearLog() => _logBuffer = '';
 
-Widget get logWidget => ampText(_logBuffer, toString: (b) {
+Widget get ampLogWidget =>
+    ampText(_logBuffer, font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier'],
+        toString: (b) {
       var t = '';
       for (var s in b) t += s + '\n';
       return t;
@@ -25,7 +28,7 @@ void _log(String level, String ctx, Object message) {
   if (ms.length == 2) ms = '0' + ms;
   if (_loggingEnabled) {
     var msg = '$h:$m:$s.$ms [$level][$ctx] $message';
-    _logBuffer.add(msg);
+    _logBuffer += msg + '\n';
     print(msg);
   }
 }

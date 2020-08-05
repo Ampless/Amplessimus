@@ -212,11 +212,22 @@ Text ampText(
   FontWeight weight,
   Color color,
   String Function(dynamic) toString,
+  List<String> font,
 }) {
   toString ??= (o) => o.toString();
   color ??= AmpColors.colorForeground;
-  var style = TextStyle(fontSize: size, fontWeight: weight, color: color);
-  return Text(toString(text), style: style, textAlign: textAlign);
+  var style = TextStyle(
+    fontSize: size,
+    fontWeight: weight,
+    color: color,
+    fontFamily: font != null && font.isNotEmpty ? font.first : null,
+    fontFamilyFallback: font,
+  );
+  return Text(
+    toString(text),
+    style: style,
+    textAlign: textAlign,
+  );
 }
 
 Icon ampIcon(IconData data, {double size, Color color}) {
