@@ -7,8 +7,6 @@ import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 
 class CustomValues {
-  static bool get isAprilFools =>
-      DateTime.now().day == 1 && DateTime.now().month == 4;
   static Language _lang = Language.fromCode(Prefs.savedLangCode);
   static Language get lang => _lang;
   static set lang(Language l) {

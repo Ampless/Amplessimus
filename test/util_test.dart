@@ -1,5 +1,4 @@
 import 'package:Amplessimus/dsbutil.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Amplessimus/dsbhtmlcodes.dart' as htmlcodes;
 
@@ -64,9 +63,4 @@ void main() {
       assert(htmlUnescape(keys) == values);
     })
   ], 'dsbutil htmlcodes');
-  runTests([
-    GenericTestCase(() async {
-      assert(rcolor is Color);
-    })
-  ], 'dsbutil rcolor');
 }

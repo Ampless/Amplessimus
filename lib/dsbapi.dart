@@ -467,11 +467,8 @@ void _initializeTheme(
     }
     var i = 0;
     for (var sub in plan.subs) {
-      var titleSub = CustomValues.lang.dsbSubtoTitle(sub);
-      if (CustomValues.isAprilFools)
-        titleSub = '${Random().nextInt(98) + 1}.${titleSub.split('.').last}';
       dayWidgets.add(ListTile(
-        title: ampText(titleSub),
+        title: ampText(CustomValues.lang.dsbSubtoTitle(sub)),
         subtitle: ampText(CustomValues.lang.dsbSubtoSubtitle(sub)),
         trailing: (char.isEmpty || grade.isEmpty || !oco)
             ? ampText(sub.affectedClass)

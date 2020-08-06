@@ -48,9 +48,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await Prefs.loadPrefs();
       CustomValues.ttColumns = ttLoadFromPrefs();
 
-      if (CustomValues.isAprilFools)
-        Prefs.currentThemeId = -1;
-      else if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+      if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
       if (Prefs.useSystemTheme)
         AmpColors.isDarkMode =
@@ -465,7 +463,6 @@ class AmpHomePageState extends State<AmpHomePage>
               ),
               ampBigAmpButton(
                 onTap: () async {
-                  if (CustomValues.isAprilFools) return;
                   ampInfo(ctx: 'MyApp', message: 'switching design mode');
                   Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
                   await dsbUpdateWidget();

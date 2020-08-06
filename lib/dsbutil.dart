@@ -6,7 +6,6 @@ import 'dart:math';
 import 'package:Amplessimus/dsbhtmlcodes.dart' as htmlcodes;
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:flutter/material.dart';
 import 'dart:async';
 
 String _x(int i) => (i < 16 ? '0' : '') + i.toRadixString(16);
@@ -17,8 +16,6 @@ String get _r0 => _x(_r(0x100));
 String get _r2 => _r0 + _r0;
 String get _r4 => _x(_r(0x10) | 0x40);
 String get _r8 => _x(_r(0x40) | 0x80);
-
-Color get rcolor => Color.fromARGB(255, _r(256), _r(256), _r(256));
 
 String v4() => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
 
