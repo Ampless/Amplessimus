@@ -158,16 +158,12 @@ class AmpHomePageState extends State<AmpHomePage>
     }
   }
 
-  Future<Null> rebuildTimer() {
-    return dsbUpdateWidget(callback: rebuild);
-  }
+  Future<Null> rebuildTimer() => dsbUpdateWidget(callback: rebuild);
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
     await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
   }
-
-  Future<Null> Function() rebuildNoIndicator = dsbUpdateWidget;
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
@@ -330,14 +326,14 @@ class AmpHomePageState extends State<AmpHomePage>
     dsbApiHomeScaffoldKey = homeScaffoldKey;
     ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
     if (dsbWidget == null) {
-      rebuildNoIndicator();
+      dsbUpdateWidget();
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     if (lastUpdate <
         DateTime.now()
             .subtract(Duration(minutes: Prefs.timer))
             .millisecondsSinceEpoch) {
-      rebuildNoIndicator();
+      dsbUpdateWidget();
       lastUpdate = DateTime.now().millisecondsSinceEpoch;
     }
     var containers = [
@@ -457,7 +453,7 @@ class AmpHomePageState extends State<AmpHomePage>
                   }
                   AmpColors.switchMode();
                   Prefs.useSystemTheme = false;
-                  rebuildNoIndicator();
+                  dsbUpdateWidget();
                   Future.delayed(Duration(milliseconds: 150), rebuild);
                 },
                 icon: AmpColors.isDarkMode
@@ -471,11 +467,8 @@ class AmpHomePageState extends State<AmpHomePage>
                 onTap: () async {
                   if (CustomValues.isAprilFools) return;
                   ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                  if (Prefs.currentThemeId >= 1)
-                    Prefs.currentThemeId = 0;
-                  else
-                    Prefs.currentThemeId++;
-                  await rebuildNoIndicator();
+                  Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
+                  await dsbUpdateWidget();
                   rebuild();
                   settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                     backgroundColor: AmpColors.colorBackground,
