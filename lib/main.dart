@@ -51,9 +51,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
       if (Prefs.useSystemTheme)
-        AmpColors.isDarkMode =
-            SchedulerBinding.instance.window.platformBrightness ==
-                Brightness.dark;
+        AmpColors.brightness =
+            SchedulerBinding.instance.window.platformBrightness;
 
       if (!Prefs.firstLogin) await dsbUpdateWidget();
 
@@ -86,10 +85,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           ),
         ),
       ),
-      bottomSheet: ampLinearProgressIndicator(
-        backgroundColor: Colors.grey,
-        foregroundColor: Colors.white,
-      ),
+      bottomSheet: ampLinearProgressIndicator(),
     );
   }
 }
@@ -103,7 +99,7 @@ class AmpApp extends StatelessWidget {
     return WillPopScope(
       child: ampMatApp(
         title: AmpStrings.appTitle,
-        home: AmpHomePage(initialIndex: initialIndex),
+        home: AmpHomePage(initialIndex),
       ),
       onWillPop: () async => Prefs.closeAppOnBackPress,
     );
@@ -111,7 +107,7 @@ class AmpApp extends StatelessWidget {
 }
 
 class AmpHomePage extends StatefulWidget {
-  AmpHomePage({Key key, @required this.initialIndex}) : super(key: key);
+  AmpHomePage(this.initialIndex, {Key key}) : super(key: key);
   final int initialIndex;
   @override
   AmpHomePageState createState() => AmpHomePageState();
@@ -127,9 +123,8 @@ class AmpHomePageState extends State<AmpHomePage>
 
   void checkBrightness() {
     if (Prefs.useSystemTheme &&
-        (SchedulerBinding.instance.window.platformBrightness !=
-                Brightness.light) !=
-            Prefs.isDarkMode) {
+        SchedulerBinding.instance.window.platformBrightness !=
+            AmpColors.brightness) {
       AmpColors.switchMode();
       rebuildNewBuild();
       Future.delayed(Duration(milliseconds: 150), rebuild);
@@ -144,7 +139,7 @@ class AmpHomePageState extends State<AmpHomePage>
     super.initState();
     tabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialIndex);
-    Prefs.setTimer(Prefs.timer, rebuildTimer);
+    Prefs.setTimer(Prefs.timer, () => dsbUpdateWidget(callback: rebuild));
   }
 
   void rebuild() {
@@ -155,8 +150,6 @@ class AmpHomePageState extends State<AmpHomePage>
       ampInfo(ctx: 'AmpHomePageState][rebuild', message: errorString(e));
     }
   }
-
-  Future<Null> rebuildTimer() => dsbUpdateWidget(callback: rebuild);
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
@@ -169,7 +162,7 @@ class AmpHomePageState extends State<AmpHomePage>
     setState(() => circularProgressIndicatorActive = false);
   }
 
-  void showInputSelectCurrentClass(BuildContext context) async {
+  Future<Null> showInputSelectCurrentClass(BuildContext context) {
     var letterDropDownValue = Prefs.char.trim().toLowerCase();
     var gradeDropDownValue = Prefs.grade.trim().toLowerCase();
     if (letterDropDownValue.isEmpty ||
@@ -178,7 +171,7 @@ class AmpHomePageState extends State<AmpHomePage>
     if (gradeDropDownValue.isEmpty ||
         !FirstLoginValues.grades.contains(gradeDropDownValue))
       gradeDropDownValue = FirstLoginValues.grades[0];
-    await ampDialog(
+    return ampDialog(
       context: context,
       title: CustomValues.lang.selectClass,
       children: (alertContext, setAlState) => [
@@ -208,10 +201,10 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  void showInputChangeLanguage(BuildContext context) {
+  Future<Null> showInputChangeLanguage(BuildContext context) {
     var lang = CustomValues.lang;
     var use = Prefs.dsbUseLanguage;
-    ampDialog(
+    return ampDialog(
       context: context,
       title: CustomValues.lang.changeLanguage,
       children: (alertContext, setAlState) => [
@@ -245,7 +238,7 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  void showInputEntryCredentials(BuildContext context) {
+  Future<Null> showInputEntryCredentials(BuildContext context) {
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
     final usernameInputFormController =
@@ -253,7 +246,7 @@ class AmpHomePageState extends State<AmpHomePage>
     final passwordInputFormController =
         TextEditingController(text: Prefs.password);
     var passwordHidden = true;
-    ampDialog(
+    return ampDialog(
       context: context,
       title: CustomValues.lang.changeLoginPopup,
       children: (context, setAlState) => [
