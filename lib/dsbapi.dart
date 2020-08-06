@@ -184,7 +184,7 @@ Future<String> dsbGetData(
       '"AppVersion":"$_DSB_VERSION",'
       '"Language":"$dsbLanguage",'
       '"OsVersion":"$_DSB_OS_VERSION",'
-      '"AppId":"${v4()}",'
+      '"AppId":"${uuid4}",'
       '"Device":"$_DSB_DEVICE",'
       '"BundleId":"$_DSB_BUNDLE_ID",'
       '"Date":"$datetime",'
@@ -398,7 +398,6 @@ Future<Null> dsbUpdateWidget(
             httpGet: httpGet,
             dsbLanguage: dsbLanguage);
     if (!useJCache) dsbJsonCache = plansToJson(plans);
-    ampInfo(ctx: 'dsbUpdateWidget', message: 'oneClassOnly: $oneClassOnly');
     if (oneClassOnly)
       plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
     updateTimetableDays(plans);

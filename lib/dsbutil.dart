@@ -17,7 +17,7 @@ String get _r2 => _r0 + _r0;
 String get _r4 => _x(_r(0x10) | 0x40);
 String get _r8 => _x(_r(0x40) | 0x80);
 
-String v4() => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
+String get uuid4 => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
 
 String htmlUnescape(String data) {
   if (!data.contains('&')) return data;

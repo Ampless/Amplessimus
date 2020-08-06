@@ -7,10 +7,10 @@ security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.3.x+  | :white_check_mark: |
-| < 1.3.0 | :x:                |
+| 2.x.x+  | :white_check_mark: |
+| < 2.0.0 | :x:                |
 
 ## Reporting a Vulnerability
 
-Just open a GitHub issue or, if you are talking about a critical
-security issue, send an email containing that to `ampless@chrissx.de`.
+Just send an email to `ampless@chrissx.de`.
+(we might get a good bugtracker soon)
