@@ -125,7 +125,6 @@ class AmpHomePageState extends State<AmpHomePage>
   final settingsScaffoldKey = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   bool circularProgressIndicatorActive = false;
-  int _index;
   TabController tabController;
 
   void checkBrightness() {
@@ -145,8 +144,8 @@ class AmpHomePageState extends State<AmpHomePage>
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
-    _index = widget.initialIndex;
-    tabController = TabController(length: 3, vsync: this, initialIndex: _index);
+    tabController = TabController(
+        length: 3, vsync: this, initialIndex: widget.initialIndex);
     Prefs.setTimer(Prefs.timer, rebuildTimer);
   }
 
@@ -168,9 +167,7 @@ class AmpHomePageState extends State<AmpHomePage>
     await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
   }
 
-  Future<Null> rebuildNoIndicator() {
-    return dsbUpdateWidget();
-  }
+  Future<Null> Function() rebuildNoIndicator = dsbUpdateWidget;
 
   Future<Null> rebuildNewBuild() async {
     setState(() => circularProgressIndicatorActive = true);
@@ -486,7 +483,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     action: SnackBarAction(
                       textColor: AmpColors.colorForeground,
                       label: CustomValues.lang.show,
-                      onPressed: () => setState(() => _index = 0),
+                      onPressed: () => setState(() => tabController.index = 0),
                     ),
                   ));
                 },
