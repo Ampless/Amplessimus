@@ -19,8 +19,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'dsbapi.dart';
-
 void main() {
   runApp(SplashScreen());
 }
@@ -69,24 +67,29 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    ampInfo(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
-    return Scaffold(
-      body: Center(
-        child: AnimatedContainer(
-          color: Colors.black,
-          height: double.infinity,
-          width: double.infinity,
-          duration: Duration(seconds: 1),
-          child: FlareActor(
-            'assets/anims/splash_screen.json',
-            alignment: Alignment.center,
-            fit: BoxFit.contain,
-            animation: 'anim',
+    try {
+      ampInfo(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
+      return Scaffold(
+        body: Center(
+          child: AnimatedContainer(
+            color: Colors.black,
+            height: double.infinity,
+            width: double.infinity,
+            duration: Duration(seconds: 1),
+            child: FlareActor(
+              'assets/anims/splash_screen.json',
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: 'anim',
+            ),
           ),
         ),
-      ),
-      bottomSheet: ampLinearProgressIndicator(),
-    );
+        bottomSheet: ampLinearProgressIndicator(),
+      );
+    } catch (e) {
+      ampErr(ctx: 'SplashScreenPageState', message: errorString(e));
+      return ampText(errorString(e));
+    }
   }
 }
 
@@ -95,14 +98,19 @@ class AmpApp extends StatelessWidget {
   final int initialIndex;
   @override
   Widget build(BuildContext context) {
-    ampInfo(ctx: 'AmpApp', message: 'Building Main Page');
-    return WillPopScope(
-      child: ampMatApp(
-        title: AmpStrings.appTitle,
-        home: AmpHomePage(initialIndex),
-      ),
-      onWillPop: () async => Prefs.closeAppOnBackPress,
-    );
+    try {
+      ampInfo(ctx: 'AmpApp', message: 'Building Main Page');
+      return WillPopScope(
+        child: ampMatApp(
+          title: AmpStrings.appTitle,
+          home: AmpHomePage(initialIndex),
+        ),
+        onWillPop: () async => Prefs.closeAppOnBackPress,
+      );
+    } catch (e) {
+      ampErr(ctx: 'AmpApp', message: errorString(e));
+      return ampText(errorString(e));
+    }
   }
 }
 
@@ -314,257 +322,264 @@ class AmpHomePageState extends State<AmpHomePage>
   int lastUpdate = 0;
   @override
   Widget build(BuildContext context) {
-    dsbApiHomeScaffoldKey = homeScaffoldKey;
-    ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
-    if (dsbWidget == null) {
-      dsbUpdateWidget();
-      lastUpdate = DateTime.now().millisecondsSinceEpoch;
-    }
-    if (lastUpdate <
-        DateTime.now()
-            .subtract(Duration(minutes: Prefs.timer))
-            .millisecondsSinceEpoch) {
-      dsbUpdateWidget();
-      lastUpdate = DateTime.now().millisecondsSinceEpoch;
-    }
-    var containers = [
-      AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        color: AmpColors.colorBackground,
-        child: Scaffold(
-          key: homeScaffoldKey,
-          appBar: ampAppBar(AmpStrings.appTitle),
-          backgroundColor: Colors.transparent,
-          body: RefreshIndicator(
-            key: refreshKey,
-            child: !circularProgressIndicatorActive
-                ? ListView(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    children: [
-                      dsbWidget,
-                      ampDivider,
-                      changeSubVisibilityWidget,
-                    ],
-                  )
-                : Center(
-                    child: SizedBox(
-                    child: SpinKitWave(
-                      size: 100,
-                      duration: Duration(milliseconds: 1050),
-                      color: AmpColors.colorForeground,
-                    ),
-                    height: 200,
-                    width: 200,
-                  )),
-            onRefresh: rebuildDragDown,
-          ),
-        ),
-        margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
-      ),
-      Scaffold(
-        appBar: ampAppBar(CustomValues.lang.timetable),
-        backgroundColor: Colors.transparent,
-        body: Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          color: Colors.transparent,
-          child: Prefs.jsonTimetable == null
-              ? Center(
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: AmpColors.colorForeground,
-                    borderRadius: BorderRadius.circular(32),
-                    onTap: () {
-                      ampEaseOutBack(
-                        RegisterTimetableScreen(),
-                        context,
-                        push: Navigator.pushReplacement,
-                      );
-                    },
-                    child: ampColumn(
-                      [
-                        ampIcon(MdiIcons.timetable, size: 200),
-                        ampText(
-                          CustomValues.lang.setupTimetable,
-                          size: 32,
-                          textAlign: TextAlign.center,
-                        ),
-                        ampPadding(10),
-                      ],
-                    ),
-                  ),
-                )
-              : ListView(
-                  children: [
-                    Column(
-                      children: timetableWidget(
-                        timetablePlans,
-                        filtered: Prefs.filterTimetables,
-                      ),
-                    ),
-                    ampDivider,
-                    ampSwitchWithText(
-                      text: CustomValues.lang.filterTimetables,
-                      value: Prefs.filterTimetables,
-                      onChanged: (value) =>
-                          setState(() => Prefs.filterTimetables = value),
-                    ),
-                    ampPadding(24),
-                  ],
-                ),
-        ),
-        floatingActionButton: Prefs.jsonTimetable == null
-            ? ampNull
-            : ampFab(
-                onPressed: () => ampEaseOutBack(
-                  RegisterTimetableScreen(),
-                  context,
-                  push: Navigator.pushReplacement,
-                ),
-                label: CustomValues.lang.edit,
-                icon: Icons.edit,
-              ),
-      ),
-      AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        color: Colors.transparent,
-        child: Scaffold(
-          appBar: ampAppBar(CustomValues.lang.settings),
-          key: settingsScaffoldKey,
-          backgroundColor: Colors.transparent,
-          body: GridView.count(
-            crossAxisCount: 2,
-            children: FirstLoginValues.settingsButtons = <Widget>[
-              ampBigAmpButton(
-                onTap: () {
-                  Prefs.devOptionsTimerCache();
-                  if (Prefs.timesToggleDarkModePressed >= 10) {
-                    Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
-                    Prefs.timesToggleDarkModePressed = 0;
-                  }
-                  AmpColors.switchMode();
-                  Prefs.useSystemTheme = false;
-                  dsbUpdateWidget();
-                  Future.delayed(Duration(milliseconds: 150), rebuild);
-                },
-                icon: AmpColors.isDarkMode
-                    ? MdiIcons.lightbulbOn
-                    : MdiIcons.lightbulbOnOutline,
-                text: AmpColors.isDarkMode
-                    ? CustomValues.lang.lightsOn
-                    : CustomValues.lang.lightsOff,
-              ),
-              ampBigAmpButton(
-                onTap: () async {
-                  ampInfo(ctx: 'MyApp', message: 'switching design mode');
-                  Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
-                  await dsbUpdateWidget();
-                  rebuild();
-                  settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
-                    backgroundColor: AmpColors.colorBackground,
-                    content: ampText(CustomValues.lang.changedAppearance),
-                    action: SnackBarAction(
-                      textColor: AmpColors.colorForeground,
-                      label: CustomValues.lang.show,
-                      onPressed: () => setState(() => tabController.index = 0),
-                    ),
-                  ));
-                },
-                icon: AmpColors.isDarkMode
-                    ? MdiIcons.clipboardList
-                    : MdiIcons.clipboardListOutline,
-                text: CustomValues.lang.changeAppearance,
-              ),
-              ampBigAmpButton(
-                onTap: () async {
-                  Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                  await Prefs.waitForMutex();
-                  checkBrightness();
-                },
-                icon: MdiIcons.brightness6,
-                text: Prefs.useSystemTheme
-                    ? CustomValues.lang.lightsNoSystem
-                    : CustomValues.lang.lightsUseSystem,
-              ),
-              ampBigAmpButton(
-                onTap: () => showInputChangeLanguage(context),
-                icon: MdiIcons.translate,
-                text: CustomValues.lang.changeLanguage,
-              ),
-              ampBigAmpButton(
-                onTap: () => showInputEntryCredentials(context),
-                icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
-                text: CustomValues.lang.changeLogin,
-              ),
-              ampBigAmpButton(
-                onTap: () => showInputSelectCurrentClass(context),
-                icon: AmpColors.isDarkMode
-                    ? MdiIcons.school
-                    : MdiIcons.schoolOutline,
-                text: CustomValues.lang.selectClass,
-              ),
-              ampBigAmpButton(
-                onTap: () => showAboutDialog(
-                    context: context,
-                    applicationName: AmpStrings.appTitle,
-                    applicationVersion: AmpStrings.version,
-                    applicationIcon:
-                        Image.asset('assets/images/logo.png', height: 40),
-                    children: [Text(CustomValues.lang.appInfo)]),
-                icon: AmpColors.isDarkMode
-                    ? MdiIcons.folderInformation
-                    : MdiIcons.folderInformationOutline,
-                text: CustomValues.lang.settingsAppInfo,
-              ),
-              ampBigAmpButton(
-                onTap: () {
-                  if (Prefs.devOptionsEnabled)
-                    ampEaseOutBack(
-                      DevOptionsScreen(),
-                      context,
-                      push: Navigator.pushReplacement,
-                    );
-                },
-                icon: MdiIcons.codeBrackets,
-                text: 'Entwickleroptionen',
-                visible: Prefs.devOptionsEnabled,
-              ),
-            ],
-          ),
-        ),
-      )
-    ];
-    return SafeArea(
-        child: Stack(
-      children: <Widget>[
+    try {
+      dsbApiHomeScaffoldKey = homeScaffoldKey;
+      ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
+      if (dsbWidget == null) {
+        dsbUpdateWidget();
+        lastUpdate = DateTime.now().millisecondsSinceEpoch;
+      }
+      if (lastUpdate <
+          DateTime.now()
+              .subtract(Duration(minutes: Prefs.timer))
+              .millisecondsSinceEpoch) {
+        dsbUpdateWidget();
+        lastUpdate = DateTime.now().millisecondsSinceEpoch;
+      }
+      var containers = [
         AnimatedContainer(
           duration: Duration(milliseconds: 150),
           color: AmpColors.colorBackground,
+          child: Scaffold(
+            key: homeScaffoldKey,
+            appBar: ampAppBar(AmpStrings.appTitle),
+            backgroundColor: Colors.transparent,
+            body: RefreshIndicator(
+              key: refreshKey,
+              child: !circularProgressIndicatorActive
+                  ? ListView(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      children: [
+                        dsbWidget,
+                        ampDivider,
+                        changeSubVisibilityWidget,
+                      ],
+                    )
+                  : Center(
+                      child: SizedBox(
+                      child: SpinKitWave(
+                        size: 100,
+                        duration: Duration(milliseconds: 1050),
+                        color: AmpColors.colorForeground,
+                      ),
+                      height: 200,
+                      width: 200,
+                    )),
+              onRefresh: rebuildDragDown,
+            ),
+          ),
+          margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
         ),
         Scaffold(
+          appBar: ampAppBar(CustomValues.lang.timetable),
           backgroundColor: Colors.transparent,
-          body: TabBarView(
-            controller: tabController,
-            physics: ClampingScrollPhysics(),
-            children: containers,
+          body: Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            color: Colors.transparent,
+            child: Prefs.jsonTimetable == null
+                ? Center(
+                    child: InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: AmpColors.colorForeground,
+                      borderRadius: BorderRadius.circular(32),
+                      onTap: () {
+                        ampEaseOutBack(
+                          RegisterTimetableScreen(),
+                          context,
+                          push: Navigator.pushReplacement,
+                        );
+                      },
+                      child: ampColumn(
+                        [
+                          ampIcon(MdiIcons.timetable, size: 200),
+                          ampText(
+                            CustomValues.lang.setupTimetable,
+                            size: 32,
+                            textAlign: TextAlign.center,
+                          ),
+                          ampPadding(10),
+                        ],
+                      ),
+                    ),
+                  )
+                : ListView(
+                    children: [
+                      Column(
+                        children: timetableWidget(
+                          timetablePlans,
+                          filtered: Prefs.filterTimetables,
+                        ),
+                      ),
+                      ampDivider,
+                      ampSwitchWithText(
+                        text: CustomValues.lang.filterTimetables,
+                        value: Prefs.filterTimetables,
+                        onChanged: (value) =>
+                            setState(() => Prefs.filterTimetables = value),
+                      ),
+                      ampPadding(24),
+                    ],
+                  ),
           ),
-          bottomNavigationBar: SizedBox(
-            height: 55,
-            child: TabBar(
-              controller: tabController,
-              indicatorColor: AmpColors.colorForeground,
-              labelColor: AmpColors.colorForeground,
-              tabs: <Widget>[
-                ampTab(Icons.home, CustomValues.lang.start),
-                ampTab(MdiIcons.timetable, CustomValues.lang.timetable),
-                ampTab(Icons.settings, CustomValues.lang.settings),
+          floatingActionButton: Prefs.jsonTimetable == null
+              ? ampNull
+              : ampFab(
+                  onPressed: () => ampEaseOutBack(
+                    RegisterTimetableScreen(),
+                    context,
+                    push: Navigator.pushReplacement,
+                  ),
+                  label: CustomValues.lang.edit,
+                  icon: Icons.edit,
+                ),
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          color: Colors.transparent,
+          child: Scaffold(
+            appBar: ampAppBar(CustomValues.lang.settings),
+            key: settingsScaffoldKey,
+            backgroundColor: Colors.transparent,
+            body: GridView.count(
+              crossAxisCount: 2,
+              children: FirstLoginValues.settingsButtons = <Widget>[
+                ampBigAmpButton(
+                  onTap: () {
+                    Prefs.devOptionsTimerCache();
+                    if (Prefs.timesToggleDarkModePressed >= 10) {
+                      Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
+                      Prefs.timesToggleDarkModePressed = 0;
+                    }
+                    AmpColors.switchMode();
+                    Prefs.useSystemTheme = false;
+                    dsbUpdateWidget();
+                    Future.delayed(Duration(milliseconds: 150), rebuild);
+                  },
+                  icon: AmpColors.isDarkMode
+                      ? MdiIcons.lightbulbOn
+                      : MdiIcons.lightbulbOnOutline,
+                  text: AmpColors.isDarkMode
+                      ? CustomValues.lang.lightsOn
+                      : CustomValues.lang.lightsOff,
+                ),
+                ampBigAmpButton(
+                  onTap: () async {
+                    ampInfo(ctx: 'MyApp', message: 'switching design mode');
+                    Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
+                    await dsbUpdateWidget();
+                    rebuild();
+                    settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
+                      backgroundColor: AmpColors.colorBackground,
+                      content: ampText(CustomValues.lang.changedAppearance),
+                      action: SnackBarAction(
+                        textColor: AmpColors.colorForeground,
+                        label: CustomValues.lang.show,
+                        onPressed: () =>
+                            setState(() => tabController.index = 0),
+                      ),
+                    ));
+                  },
+                  icon: AmpColors.isDarkMode
+                      ? MdiIcons.clipboardList
+                      : MdiIcons.clipboardListOutline,
+                  text: CustomValues.lang.changeAppearance,
+                ),
+                ampBigAmpButton(
+                  onTap: () async {
+                    Prefs.useSystemTheme = !Prefs.useSystemTheme;
+                    await Prefs.waitForMutex();
+                    checkBrightness();
+                  },
+                  icon: MdiIcons.brightness6,
+                  text: Prefs.useSystemTheme
+                      ? CustomValues.lang.lightsNoSystem
+                      : CustomValues.lang.lightsUseSystem,
+                ),
+                ampBigAmpButton(
+                  onTap: () => showInputChangeLanguage(context),
+                  icon: MdiIcons.translate,
+                  text: CustomValues.lang.changeLanguage,
+                ),
+                ampBigAmpButton(
+                  onTap: () => showInputEntryCredentials(context),
+                  icon:
+                      AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
+                  text: CustomValues.lang.changeLogin,
+                ),
+                ampBigAmpButton(
+                  onTap: () => showInputSelectCurrentClass(context),
+                  icon: AmpColors.isDarkMode
+                      ? MdiIcons.school
+                      : MdiIcons.schoolOutline,
+                  text: CustomValues.lang.selectClass,
+                ),
+                ampBigAmpButton(
+                  onTap: () => showAboutDialog(
+                      context: context,
+                      applicationName: AmpStrings.appTitle,
+                      applicationVersion: AmpStrings.version,
+                      applicationIcon:
+                          Image.asset('assets/images/logo.png', height: 40),
+                      children: [Text(CustomValues.lang.appInfo)]),
+                  icon: AmpColors.isDarkMode
+                      ? MdiIcons.folderInformation
+                      : MdiIcons.folderInformationOutline,
+                  text: CustomValues.lang.settingsAppInfo,
+                ),
+                ampBigAmpButton(
+                  onTap: () {
+                    if (Prefs.devOptionsEnabled)
+                      ampEaseOutBack(
+                        DevOptionsScreen(),
+                        context,
+                        push: Navigator.pushReplacement,
+                      );
+                  },
+                  icon: MdiIcons.codeBrackets,
+                  text: 'Entwickleroptionen',
+                  visible: Prefs.devOptionsEnabled,
+                ),
               ],
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
         )
-      ],
-    ));
+      ];
+      return SafeArea(
+          child: Stack(
+        children: <Widget>[
+          AnimatedContainer(
+            duration: Duration(milliseconds: 150),
+            color: AmpColors.colorBackground,
+          ),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            body: TabBarView(
+              controller: tabController,
+              physics: ClampingScrollPhysics(),
+              children: containers,
+            ),
+            bottomNavigationBar: SizedBox(
+              height: 55,
+              child: TabBar(
+                controller: tabController,
+                indicatorColor: AmpColors.colorForeground,
+                labelColor: AmpColors.colorForeground,
+                tabs: <Widget>[
+                  ampTab(Icons.home, CustomValues.lang.start),
+                  ampTab(MdiIcons.timetable, CustomValues.lang.timetable),
+                  ampTab(Icons.settings, CustomValues.lang.settings),
+                ],
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+          )
+        ],
+      ));
+    } catch (e) {
+      ampErr(ctx: 'AmpHomePageState', message: errorString(e));
+      return ampText(errorString(e));
+    }
   }
 }
