@@ -128,8 +128,14 @@ void setTimer(int i, Function() f) {
       : Timer.periodic(Duration(minutes: i), (timer) => f());
 }
 
-set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
-bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
+set isDarkMode(bool b) {
+  _prefs.setBool('is_dark_mode', b);
+}
+
+bool get isDarkMode {
+  if (!_prefs.isInitialized) return true;
+  return _prefs.getBool('is_dark_mode', true);
+}
 
 String toJson() => _prefs.toJson();
 

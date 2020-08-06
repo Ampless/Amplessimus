@@ -21,6 +21,9 @@ class CachedSharedPreferences {
 
   bool _platformSupportsSharedPrefs;
 
+  // always returns false on windows, but that's fine, because prealpha
+  bool get isInitialized => _platformSupportsSharedPrefs && _prefs != null;
+
   Future<Null> setString(String key, String value) async {
     await _prefFileMutex.acquire();
     _cacheString[key] = value;
