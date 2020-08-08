@@ -175,8 +175,9 @@ Future<String> dsbGetData(
           void Function(String, String, Duration) setCache})
       httpPost = httpPost,
   String dsbLanguage = 'de',
-  @required Language lang,
+  Language lang,
 }) async {
+  lang ??= CustomValues.lang;
   var datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   var json = '{'
       '"UserId":"$username",'
@@ -473,7 +474,7 @@ void _initializeTheme(
             ? ampText(sub.affectedClass)
             : ampNull,
       ));
-      if (++i != plan.subs.length) dayWidgets.add(ampDivider);
+      if (++i < plan.subs.length) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
       title: Row(children: <Widget>[

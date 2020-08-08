@@ -14,7 +14,7 @@ class CustomValues {
     _lang = l;
   }
 
-  static List<int> ttHours = [
+  static final List<int> ttHours = [
     0,
     1,
     2,
@@ -35,20 +35,6 @@ class CustomValues {
 
   static List<TTColumn> ttColumns = [];
   static Timer updateTimer;
-
-  static void generateNewTTColumns() {
-    ttColumns = [];
-    for (var day in ttWeek) {
-      ttColumns.add(TTColumn(<TTLesson>[
-        TTLesson.empty,
-        TTLesson.empty,
-        TTLesson.empty,
-        TTLesson.empty,
-        TTLesson.empty,
-        TTLesson.empty,
-      ], day));
-    }
-  }
 }
 
 class AmpStrings {

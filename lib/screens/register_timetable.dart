@@ -61,7 +61,9 @@ class RegisterTimetableScreenPageState
   @override
   void initState() {
     CustomValues.ttColumns = ttLoadFromPrefs();
-    if (CustomValues.ttColumns.isEmpty) CustomValues.generateNewTTColumns();
+    if (CustomValues.ttColumns.isEmpty)
+      for (var day in ttWeek)
+        CustomValues.ttColumns.add(TTColumn(<TTLesson>[], day));
     curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
     ttColumn = CustomValues.ttColumns[curTTColumnIndex];
     currentDropdownHour = ttColumn.lessons.length;

@@ -91,8 +91,7 @@ TextFormField ampFormField({
   );
 }
 
-FlatButton ampDialogButton(
-    {@required String text, @required Function() onPressed}) {
+FlatButton ampDialogButton(String text, Function() onPressed) {
   return FlatButton(
     textColor: AmpColors.colorForeground,
     onPressed: onPressed,
@@ -148,14 +147,8 @@ Divider get ampDivider => ampSizedDivider(Prefs.subListItemSpace);
 List<Widget> ampDialogButtonsSaveAndCancel(
     {@required BuildContext context, @required Function() save}) {
   return [
-    ampDialogButton(
-      onPressed: Navigator.of(context).pop,
-      text: CustomValues.lang.cancel,
-    ),
-    ampDialogButton(
-      onPressed: save,
-      text: CustomValues.lang.save,
-    ),
+    ampDialogButton(CustomValues.lang.cancel, Navigator.of(context).pop),
+    ampDialogButton(CustomValues.lang.save, save),
   ];
 }
 
@@ -249,9 +242,7 @@ ThemeData get ampThemeData => ThemeData(
 
 class _AmpBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-          BuildContext context, Widget child, AxisDirection axisDirection) =>
-      child;
+  Widget buildViewportChrome(context, child, axisDirection) => child;
 }
 
 MaterialApp ampMatApp({@required String title, @required Widget home}) {

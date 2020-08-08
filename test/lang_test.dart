@@ -72,6 +72,11 @@ List<LanguageTestCase> languageTestCases = [
     expect(lang.dsbSubtoTitle(DsbSubstitution('', [11], '', 'b', '', null)),
         '11th lesson Biology');
   }),
+  LanguageTestCase((lang) {
+    if (lang == null || lang.code != 'en') return;
+    expect(lang.dsbSubtoTitle(DsbSubstitution('', [23], '', 'b', '', null)),
+        '23rd lesson Biology');
+  }),
 ];
 
 List<LanguageCodeTestCase> languageCodeTestCases = [
