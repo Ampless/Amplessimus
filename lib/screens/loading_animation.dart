@@ -23,15 +23,15 @@ class _AmpLoadingAnimationState extends State<AmpLoadingAnimation> {
         () => setState(() => {frame++, frame %= 50}));
     var rotorblyat = Container(
       padding: EdgeInsets.fromLTRB(0.575 * f, 0.01 * f, 0.075 * f, 0.29 * f),
-      child: Image.asset('assets/images/lilrotorblyat.png'),
+      child: Image.asset('assets/images/logo.png'),
     );
     var rotorblyat2 = Container(
       padding: EdgeInsets.fromLTRB(0.08 * f, 0 * f, 0.57 * f, 0.3 * f),
-      child: Image.asset('assets/images/lilrotorblyat2.png'),
+      child: Image.asset('assets/images/logo.png'),
     );
     var rotorblyat3 = Container(
       padding: EdgeInsets.fromLTRB(0.26 * f, 1.035 * f, 0.285 * f, 0.46 * f),
-      child: Image.asset('assets/images/lilrotorblyat3.png'),
+      child: Image.asset('assets/images/logo.png'),
     );
     var bg = Container(
       decoration: BoxDecoration(
