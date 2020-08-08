@@ -22,15 +22,19 @@ void _log(String level, Object ctx, Object message) {
   if (ms.length == 1) ms = '0' + ms;
   if (ms.length == 2) ms = '0' + ms;
   if (_loggingEnabled) {
-    var msg = '$h:$m:$s.$ms [$level][$ctx] $message';
-    Prefs.log += msg + '\n';
-    print(msg);
+    ampRawLog('$h:$m:$s.$ms [$level][$ctx] $message');
   }
+}
+
+void ampRawLog(Object msg) {
+  Prefs.log += msg;
+  Prefs.log += '\n';
+  print(msg);
 }
 
 void ampErr({@required Object ctx, @required Object message}) =>
     _log('Error', ctx, message);
 void ampWarn({@required Object ctx, @required Object message}) =>
-    _log('Warn', ctx, message);
+    _log('Warning', ctx, message);
 void ampInfo({@required Object ctx, @required Object message}) =>
     _log('Info', ctx, message);
