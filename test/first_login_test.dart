@@ -19,8 +19,14 @@ void main() {
             dsbTest1Cache['44a7def4-aaa3-4177-959d-e2921176cde9.htm']);
     await tester.pumpWidget(screen);
     await tester.pumpAndSettle();
-    screen.page.state.gradeDropDownValue = '11';
-    screen.page.state.letterDropDownValue = 'q';
+    await tester.tap(find.text('5'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('11').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('a'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('q').first);
+    await tester.pumpAndSettle();
     await tester.enterText(
         find.byKey(screen.page.state.usernameInputFormKey), 'username');
     await tester.pumpAndSettle();
@@ -31,14 +37,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(CustomValues.lang.firstStartupDone));
     await tester.pumpAndSettle();
-    for (var w in FirstLoginValues.settingsButtons) {
-      if (!(w is Card)) continue;
-      ((w as Card).child as InkWell).onTap();
+    await tester.tap(find.text(CustomValues.lang.settings));
+    await tester.pumpAndSettle();
+    for (var w in <String>[
+      CustomValues.lang.changeAppearance,
+    ]) {
+      await tester.tap(find.text(w));
       await tester.pumpAndSettle();
     }
     for (var i = 0; i < 10; i++) {
-      ((FirstLoginValues.settingsButtons.first as Card).child as InkWell)
-          .onTap();
+      await tester.tap(find.byWidget(FirstLoginValues.settingsButtons.first));
       await tester.pumpAndSettle();
     }
     assert(FirstLoginValues.settingsButtons.last is Card);

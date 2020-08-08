@@ -106,10 +106,7 @@ DropdownButton ampDropdownButton({
   @required void Function(dynamic) onChanged,
 }) {
   return DropdownButton(
-    underline: Container(
-      height: 2,
-      color: AmpColors.colorForeground,
-    ),
+    underline: Container(height: 2, color: AmpColors.colorForeground),
     dropdownColor: AmpColors.colorBackground,
     focusColor: AmpColors.colorBackground,
     style: AmpColors.textStyleForeground,
