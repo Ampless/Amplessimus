@@ -183,8 +183,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   ),
                 ),
               ),
-              bottomSheet:
-                  ampLinearProgressIndicator(loading: credentialsAreLoading),
+              bottomSheet: ampLinearProgressIndicator(credentialsAreLoading),
               floatingActionButton: _saveButton = ampFab(
                 onPressed: () async {
                   setState(() => credentialsAreLoading = true);
@@ -251,8 +250,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                   label: CustomValues.lang.firstStartupDone,
                   icon: MdiIcons.arrowRight,
                 ),
-                bottomSheet:
-                    ampLinearProgressIndicator(loading: dsbWidgetIsLoading),
+                bottomSheet: ampLinearProgressIndicator(dsbWidgetIsLoading),
               ),
             ],
           ),

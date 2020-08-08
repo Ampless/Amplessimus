@@ -27,18 +27,12 @@ Future<Null> ampDialog({
   );
 }
 
-Widget ampLinearProgressIndicator({
-  bool loading = true,
-  Color backgroundColor,
-  Color foregroundColor,
-}) {
-  backgroundColor ??= AmpColors.colorBackground;
-  foregroundColor ??= AmpColors.colorForeground;
+Widget ampLinearProgressIndicator([bool loading = true]) {
   return !loading
       ? ampNull
       : LinearProgressIndicator(
-          backgroundColor: backgroundColor,
-          valueColor: AlwaysStoppedAnimation<Color>(foregroundColor),
+          backgroundColor: AmpColors.colorBackground,
+          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
         );
 }
 
