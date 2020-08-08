@@ -223,7 +223,7 @@ class CachedSharedPreferences {
     try {
       _platformSupportsSharedPrefs = !Platform.isWindows;
     } catch (e) {
-      //it should only fail on web
+      //it should only fail on web (it doesnt with universal_io)
       _platformSupportsSharedPrefs = true;
     }
   }

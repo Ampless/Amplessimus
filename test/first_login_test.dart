@@ -7,8 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dsb_test.dart';
 
 void main() {
-  var b = true;
-  if (b) return;
   testWidgets('first_login_test_1', (tester) async {
     Prefs.initTestPrefs();
     ampDisableLogging();
@@ -29,6 +27,7 @@ void main() {
     screen.page.state.doneButton.onPressed();
     await tester.pumpAndSettle();
     for (var w in FirstLoginValues.settingsButtons) {
+      if (!(w is Card)) continue;
       ((w as Card).child as InkWell).onTap();
       await tester.pumpAndSettle();
     }
