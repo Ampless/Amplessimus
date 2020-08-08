@@ -454,7 +454,11 @@ class AmpHomePageState extends State<AmpHomePage>
                     AmpColors.switchMode();
                     Prefs.useSystemTheme = false;
                     dsbUpdateWidget();
-                    Future.delayed(Duration(milliseconds: 150), rebuild);
+                    Future.delayed(
+                        Duration(
+                          microseconds: FirstLoginValues.testing ? 1 : 150000,
+                        ),
+                        rebuild);
                   },
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.lightbulbOn

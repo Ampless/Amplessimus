@@ -67,9 +67,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
   bool passwordHidden = true;
-  Widget _saveButton, _doneButton;
-  FloatingActionButton get saveButton => _saveButton;
-  FloatingActionButton get doneButton => _doneButton;
   final usernameInputFormKey = GlobalKey<FormFieldState>();
   final passwordInputFormKey = GlobalKey<FormFieldState>();
   final usernameInputFormController =
@@ -184,7 +181,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 ),
               ),
               bottomSheet: ampLinearProgressIndicator(credentialsAreLoading),
-              floatingActionButton: _saveButton = ampFab(
+              floatingActionButton: ampFab(
                 onPressed: () async {
                   setState(() => credentialsAreLoading = true);
                   try {
@@ -236,7 +233,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               Scaffold(
                 backgroundColor: Colors.transparent,
                 appBar: ampAppBar(AmpStrings.appTitle),
-                floatingActionButton: _doneButton = ampFab(
+                floatingActionButton: ampFab(
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
                     Prefs.firstLogin = false;

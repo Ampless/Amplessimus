@@ -79,12 +79,14 @@ main() {
         output_dir="/usr/local/var/www/amplessimus/$version_name"
         mkdir -p bin
         {
-                echo "Building $version_name..."
                 flutter_update
 
                 mkdir -p /usr/local/var/www/amplessimus
 
-                echo "[Amplessimus-Build][$(date)] Running make."
+                echo "Running tests..."
+                flutter test
+
+                echo "[Amplessimus-Build][$(date)] Running make to build $version_name."
 
                 make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
                 make mac || { make cleanartifacts rollbackversions ; }
