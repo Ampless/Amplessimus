@@ -68,9 +68,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ampSwitchWithText(
                   text: 'JSON Cache benutzen',
                   value: Prefs.useJsonCache,
-                  onChanged: (value) {
-                    setState(() => Prefs.useJsonCache = value);
-                  },
+                  onChanged: (value) =>
+                      setState(() => Prefs.useJsonCache = value),
                 ),
                 ampDivider,
                 ListTile(
@@ -85,17 +84,11 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ),
                 ampDivider,
                 ampPadding(5),
+                ampRaisedButton('Print Cache', Prefs.listCache),
+                ampRaisedButton('Clear Cache', Prefs.clearCache),
                 ampRaisedButton(
-                  text: 'Print Cache',
-                  onPressed: Prefs.listCache,
-                ),
-                ampRaisedButton(
-                  text: 'Clear Cache',
-                  onPressed: Prefs.clearCache,
-                ),
-                ampRaisedButton(
-                  text: 'Set Cache to Kekw',
-                  onPressed: () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"24.7.2020 Freitag\",\"subs\":['
+                  'Set Cache to Kekw',
+                  () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"24.7.2020 Freitag\",\"subs\":['
                       '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
                       '{\"day\":0,\"date\":\"27.7.2020 Montag\",\"subs\":['
@@ -107,31 +100,25 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
                 ),
                 ampRaisedButton(
-                    text: 'Set Cache to Input',
-                    onPressed: () => showCacheDialog(context)),
+                    'Set Cache to Input', () => showCacheDialog(context)),
+                ampRaisedButton('Stundenplan löschen', () {
+                  Prefs.jsonTimetable = null;
+                  setState(() {});
+                }),
+                ampRaisedButton('Ladebildschirm', () {
+                  ampEaseOutBack(
+                    ampMatApp(title: 'Load', home: AmpLoadingAnimation()),
+                    context,
+                  );
+                }),
+                ampRaisedButton('Clear log', () => setState(ampClearLog)),
                 ampRaisedButton(
-                    text: 'Stundenplan löschen',
-                    onPressed: () {
-                      Prefs.jsonTimetable = null;
-                      setState(() {});
-                    }),
-                ampRaisedButton(
-                    text: 'Ladebildschirm',
-                    onPressed: () {
-                      ampEaseOutBack(
-                        ampMatApp(title: 'Load', home: AmpLoadingAnimation()),
-                        context,
-                      );
-                    }),
-                ampRaisedButton(
-                    text: 'Clear log', onPressed: () => setState(ampClearLog)),
-                ampRaisedButton(
-                  text: 'App-Daten löschen',
-                  onPressed: () {
+                  'App-Daten löschen',
+                  () {
                     ampDialog(
                       title: 'App-Daten löschen',
                       context: context,
-                      rowOrColumn: ampRow,
+                      widgetBuilder: ampRow,
                       children: (_, __) => [ampText('Sicher?')],
                       actions: (context) => ampDialogButtonsSaveAndCancel(
                         context: context,
@@ -183,7 +170,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           Navigator.pop(context);
         },
       ),
-      rowOrColumn: ampColumn,
+      widgetBuilder: ampColumn,
     );
   }
 
@@ -208,7 +195,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           Navigator.pop(context);
         },
       ),
-      rowOrColumn: ampColumn,
+      widgetBuilder: ampColumn,
     );
   }
 
@@ -240,7 +227,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           Navigator.pop(context);
         },
       ),
-      rowOrColumn: ampColumn,
+      widgetBuilder: ampColumn,
     );
   }
 }

@@ -2,12 +2,13 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
 
-Future<Null> ampDialog(
-    {@required String title,
-    @required List<Widget> Function(BuildContext, StateSetter) children,
-    @required List<Widget> Function(BuildContext) actions,
-    @required BuildContext context,
-    Widget Function(List<Widget>) rowOrColumn = ampColumn}) {
+Future<Null> ampDialog({
+  @required String title,
+  @required List<Widget> Function(BuildContext, StateSetter) children,
+  @required List<Widget> Function(BuildContext) actions,
+  @required BuildContext context,
+  @required Widget Function(List<Widget>) widgetBuilder,
+}) {
   return showDialog(
     context: context,
     barrierDismissible: true,
@@ -16,7 +17,7 @@ Future<Null> ampDialog(
         title: ampText(title),
         backgroundColor: AmpColors.colorBackground,
         content: StatefulBuilder(
-          builder: (alertContext, setAlState) => rowOrColumn(
+          builder: (alertContext, setAlState) => widgetBuilder(
             children(alertContext, setAlState),
           ),
         ),
@@ -195,7 +196,7 @@ Widget ampBigAmpButton(
       : ampNull;
 }
 
-RaisedButton ampRaisedButton({String text, void Function() onPressed}) {
+RaisedButton ampRaisedButton(String text, void Function() onPressed) {
   return RaisedButton(
     color: AmpColors.lightBackground,
     splashColor: AmpColors.lightForeground,

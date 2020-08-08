@@ -205,7 +205,7 @@ class AmpHomePageState extends State<AmpHomePage>
           Navigator.pop(context);
         },
       ),
-      rowOrColumn: ampRow,
+      widgetBuilder: ampRow,
     );
   }
 
@@ -242,7 +242,7 @@ class AmpHomePageState extends State<AmpHomePage>
           Navigator.pop(context);
         },
       ),
-      rowOrColumn: ampColumn,
+      widgetBuilder: ampColumn,
     );
   }
 
@@ -292,7 +292,7 @@ class AmpHomePageState extends State<AmpHomePage>
           Navigator.pop(context);
         },
       ),
-      rowOrColumn: ampColumn,
+      widgetBuilder: ampColumn,
     );
   }
 

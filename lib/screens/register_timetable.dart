@@ -213,7 +213,7 @@ class RegisterTimetableScreenPageState
                               },
                             ),
                             context: context,
-                            rowOrColumn: ampColumn,
+                            widgetBuilder: ampColumn,
                           );
                         },
                         title: ampText(

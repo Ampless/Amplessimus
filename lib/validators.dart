@@ -9,6 +9,7 @@ String Function(String) makeListValidator(List<String> list) {
       : CustomValues.lang.widgetValidatorInvalid;
 }
 
+//only used in dev_options, so it might be removed some time
 String numberValidator(String value) {
   value = value.trim();
   if (value.isEmpty) return CustomValues.lang.widgetValidatorFieldEmpty;
