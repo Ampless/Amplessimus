@@ -2,8 +2,8 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 
-bool _loggingEnabled = true;
-void ampDisableLogging() => _loggingEnabled = false;
+bool _loggingDisabled = false;
+void ampDisableLogging() => _loggingDisabled = true;
 
 void ampClearLog() => Prefs.log = '';
 
@@ -21,12 +21,11 @@ void _log(String level, Object ctx, Object message) {
   if (h.length == 1) h = '0' + h;
   if (ms.length == 1) ms = '0' + ms;
   if (ms.length == 2) ms = '0' + ms;
-  if (_loggingEnabled) {
-    ampRawLog('$h:$m:$s.$ms [$level][$ctx] $message');
-  }
+  ampRawLog('$h:$m:$s.$ms [$level][$ctx] $message');
 }
 
 void ampRawLog(Object msg) {
+  if (_loggingDisabled) return;
   Prefs.log += msg;
   Prefs.log += '\n';
   print(msg);
