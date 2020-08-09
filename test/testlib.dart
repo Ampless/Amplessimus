@@ -15,7 +15,30 @@ class GenericTestCase extends TestCase {
   Future<Null> run() => func();
 }
 
-void runTests(List<TestCase> testCases, String groupName) {
+class ExpectTestCase extends TestCase {
+  dynamic expct;
+  bool error;
+  Future<dynamic> Function() tfunc;
+
+  ExpectTestCase(this.tfunc, this.expct, this.error);
+
+  @override
+  Future<Null> run() async {
+    dynamic res;
+    try {
+      res = await tfunc();
+    } catch (e) {
+      if (!error)
+        rethrow;
+      else
+        return;
+    }
+    if (error) throw '[ETC($tfunc, $expct)] No error.';
+    expect(res, expct);
+  }
+}
+
+void tests(List<TestCase> testCases, String groupName) {
   group(groupName, () {
     var i = 1;
     for (var testCase in testCases)

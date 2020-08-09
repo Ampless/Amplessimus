@@ -141,6 +141,6 @@ List<JsonTestCase> jsonTestCases = [
 ];
 
 void main() {
-  runTests(dsbTestCases, 'dsbapi dsb');
-  runTests(jsonTestCases, 'dsbapi json');
+  tests(dsbTestCases, 'dsbapi dsb');
+  tests(jsonTestCases, 'dsbapi json');
 }

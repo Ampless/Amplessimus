@@ -85,6 +85,6 @@ List<LanguageCodeTestCase> languageCodeTestCases = [
 ];
 
 void main() {
-  runTests(languageTestCases, 'lang');
-  runTests(languageCodeTestCases, 'lang code');
+  tests(languageTestCases, 'lang');
+  tests(languageCodeTestCases, 'lang code');
 }

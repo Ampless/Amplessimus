@@ -53,8 +53,8 @@ List<HttpTestCase> httpTestCases = [
 ];
 
 void main() {
-  runTests(httpTestCases, 'dsbutil http');
-  runTests([
+  tests(httpTestCases, 'dsbutil http');
+  tests([
     GenericTestCase(() async {
       var keys = '&lulwdisisnocode;&#9773;';
       for (var key in htmlcodes.keys) keys += key + 'kekw ';

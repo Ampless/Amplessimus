@@ -75,5 +75,5 @@ final List<TTTestCase> ttTestCases = [
 ];
 
 void main() {
-  runTests(ttTestCases, 'timetable');
+  tests(ttTestCases, 'timetable');
 }

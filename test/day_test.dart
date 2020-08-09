@@ -1,29 +1,10 @@
 import 'package:Amplessimus/timetable/timetables.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
 
-class DayTestCase extends TestCase {
-  dynamic input, expct;
-  bool error;
-  Function tfunc;
-
-  DayTestCase(this.input, this.expct, this.error, {this.tfunc = ttMatchDay});
-
-  @override
-  Future<Null> run() async {
-    dynamic res;
-    try {
-      res = tfunc(input);
-    } catch (e) {
-      if (!error)
-        rethrow;
-      else
-        return;
-    }
-    if (error) throw '[DTC($input, $expct)] No error.';
-    expect(res, expct);
-  }
+class DayTestCase extends ExpectTestCase {
+  DayTestCase(input, expct, bool error, {Function tfunc = ttMatchDay})
+      : super(() async => tfunc(input), expct, error);
 }
 
 List<DayTestCase> dayTestCases = [
@@ -51,5 +32,5 @@ List<DayTestCase> dayTestCases = [
 ];
 
 void main() {
-  runTests(dayTestCases, 'day');
+  tests(dayTestCases, 'day');
 }
