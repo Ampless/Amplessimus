@@ -1,3 +1,4 @@
+import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
@@ -144,8 +145,8 @@ Divider get ampDivider => ampSizedDivider(Prefs.subListItemSpace);
 List<Widget> ampDialogButtonsSaveAndCancel(
     {@required BuildContext context, @required Function() save}) {
   return [
-    ampDialogButton(CustomValues.lang.cancel, Navigator.of(context).pop),
-    ampDialogButton(CustomValues.lang.save, save),
+    ampDialogButton(Language.current.cancel, Navigator.of(context).pop),
+    ampDialogButton(Language.current.save, save),
   ];
 }
 

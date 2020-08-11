@@ -1,7 +1,7 @@
 import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,14 +33,14 @@ void main() {
     await tester.enterText(
         find.byKey(screen.page.state.passwordInputFormKey), 'password');
     await tester.pumpAndSettle();
-    await tester.tap(find.text(CustomValues.lang.save));
+    await tester.tap(find.text(Language.current.save));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(CustomValues.lang.firstStartupDone));
+    await tester.tap(find.text(Language.current.firstStartupDone));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(CustomValues.lang.settings));
+    await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();
     for (var w in <String>[
-      CustomValues.lang.changeAppearance,
+      Language.current.changeAppearance,
     ]) {
       await tester.tap(find.text(w));
       await tester.pumpAndSettle();

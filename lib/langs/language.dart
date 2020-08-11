@@ -4,6 +4,7 @@ import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/czech.dart';
 import 'package:Amplessimus/langs/english.dart';
 import 'package:Amplessimus/langs/german.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetable/timetables.dart';
 
 abstract class Language {
@@ -58,6 +59,13 @@ abstract class Language {
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String catchDsbGetData(dynamic e);
   LinkedHashMap<String, String> get subjectLut;
+
+  static Language _current = fromCode(Prefs.savedLangCode);
+  static Language get current => _current;
+  static set current(Language l) {
+    Prefs.savedLangCode = l.code;
+    _current = l;
+  }
 
   static final List<Language> _langs = [English(), German(), Czech()];
   static List<Language> get all => _langs;

@@ -1,19 +1,11 @@
 import 'dart:async';
 
-import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 
 class CustomValues {
-  static Language _lang = Language.fromCode(Prefs.savedLangCode);
-  static Language get lang => _lang;
-  static set lang(Language l) {
-    Prefs.savedLangCode = l.code;
-    _lang = l;
-  }
-
   static final List<int> ttHours = [
     0,
     1,

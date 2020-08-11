@@ -177,7 +177,7 @@ Future<String> dsbGetData(
   String dsbLanguage = 'de',
   Language lang,
 }) async {
-  lang ??= CustomValues.lang;
+  lang ??= Language.current;
   var datetime = DateTime.now().toIso8601String().substring(0, 3) + 'Z';
   var json = '{'
       '"UserId":"$username",'
@@ -381,7 +381,7 @@ Future<Null> dsbUpdateWidget(
   dsbJsonCache ??= Prefs.dsbJsonCache;
   username ??= Prefs.username;
   password ??= Prefs.password;
-  lang ??= CustomValues.lang;
+  lang ??= Language.current;
   oneClassOnly ??= Prefs.oneClassOnly;
   grade ??= Prefs.grade;
   char ??= Prefs.char;
@@ -462,14 +462,14 @@ void _initializeTheme(
     var dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
       dayWidgets.add(ListTile(
-        title: ampText(CustomValues.lang.noSubs),
+        title: ampText(Language.current.noSubs),
       ));
     }
     var i = 0;
     for (var sub in plan.subs) {
       dayWidgets.add(ListTile(
-        title: ampText(CustomValues.lang.dsbSubtoTitle(sub)),
-        subtitle: ampText(CustomValues.lang.dsbSubtoSubtitle(sub)),
+        title: ampText(Language.current.dsbSubtoTitle(sub)),
+        subtitle: ampText(Language.current.dsbSubtoSubtitle(sub)),
         trailing: (char.isEmpty || grade.isEmpty || !oco)
             ? ampText(sub.affectedClass)
             : ampNull,
@@ -478,7 +478,7 @@ void _initializeTheme(
     }
     widgets.add(ListTile(
       title: Row(children: <Widget>[
-        ampText(' ${CustomValues.lang.ttDayToString(plan.day)}', size: 22),
+        ampText(' ${Language.current.ttDayToString(plan.day)}', size: 22),
         IconButton(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,

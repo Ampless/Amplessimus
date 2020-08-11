@@ -1,4 +1,5 @@
 import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
@@ -75,7 +76,7 @@ class RegisterTimetableScreenPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ampAppBar(CustomValues.lang.setupTimetableTitle),
+      appBar: ampAppBar(Language.current.setupTimetableTitle),
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: RegisterTimetableValues.tabController,
@@ -92,7 +93,7 @@ class RegisterTimetableScreenPageState
                         ampDropdownButton(
                           value: currentDropdownDay,
                           itemToDropdownChild: (i) =>
-                              ampText(CustomValues.lang.ttDayToString(i)),
+                              ampText(Language.current.ttDayToString(i)),
                           items: ttWeek,
                           onChanged: (value) {
                             setState(() {
@@ -134,7 +135,7 @@ class RegisterTimetableScreenPageState
                       String titleString;
                       String trailingString;
                       if (ttColumn.lessons[index].isFree) {
-                        titleString = CustomValues.lang.freeLesson;
+                        titleString = Language.current.freeLesson;
                         trailingString = '';
                       } else {
                         titleString = ttColumn.lessons[index].subject;
@@ -164,30 +165,30 @@ class RegisterTimetableScreenPageState
                               TextEditingController(
                                   text: selectedTTLesson.teacher);
                           ampDialog(
-                            title: CustomValues.lang.editHour,
+                            title: Language.current.editHour,
                             children: (context, setAlState) => [
                               ampPadding(3),
                               ampFormField(
                                 controller: subjectInputFormController,
                                 key: subjectInputFormKey,
-                                labelText: CustomValues.lang.subject,
+                                labelText: Language.current.subject,
                               ),
                               ampPadding(6),
                               ampFormField(
                                 controller: notesInputFormController,
                                 key: notesInputFormKey,
-                                labelText: CustomValues.lang.notes,
+                                labelText: Language.current.notes,
                               ),
                               ampPadding(6),
                               ampFormField(
                                 controller: teacherInputFormController,
                                 key: teacherInputFormKey,
-                                labelText: CustomValues.lang.teacher,
+                                labelText: Language.current.teacher,
                               ),
                               StatefulBuilder(
                                 builder: (context, setSwitchState) {
                                   return ampSwitchWithText(
-                                    text: CustomValues.lang.freeLesson,
+                                    text: Language.current.freeLesson,
                                     value: tempCurrentTTLessonIsFree,
                                     onChanged: (value) {
                                       setSwitchState(() =>
@@ -221,20 +222,20 @@ class RegisterTimetableScreenPageState
                         title: ampText(
                           ttColumn.lessons[index].subject.trim().isEmpty &&
                                   !ttColumn.lessons[index].isFree
-                              ? CustomValues.lang.subject
+                              ? Language.current.subject
                               : titleString.trim(),
                           size: 22,
                         ),
                         subtitle: ampText(
                           ttColumn.lessons[index].notes.trim().isEmpty
-                              ? CustomValues.lang.notes
+                              ? Language.current.notes
                               : ttColumn.lessons[index].notes.trim(),
                           size: 16,
                         ),
                         trailing: ampText(
                           ttColumn.lessons[index].teacher.trim().isEmpty &&
                                   !ttColumn.lessons[index].isFree
-                              ? CustomValues.lang.teacher
+                              ? Language.current.teacher
                               : trailingString.trim(),
                           size: 16,
                         ),
@@ -255,7 +256,7 @@ class RegisterTimetableScreenPageState
                   push: Navigator.pushReplacement,
                 );
               },
-              label: CustomValues.lang.save,
+              label: Language.current.save,
               icon: Icons.save,
             ),
           ),
@@ -265,7 +266,7 @@ class RegisterTimetableScreenPageState
                 RegisterTimetableValues.tabController.animateTo(0);
                 ttSaveToPrefs(CustomValues.ttColumns);
               },
-              label: CustomValues.lang.firstStartupDone,
+              label: Language.current.firstStartupDone,
               icon: MdiIcons.arrowRight,
             ),
           ),

@@ -181,7 +181,7 @@ class AmpHomePageState extends State<AmpHomePage>
       gradeDropDownValue = FirstLoginValues.grades[0];
     return ampDialog(
       context: context,
-      title: CustomValues.lang.selectClass,
+      title: Language.current.selectClass,
       children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: gradeDropDownValue,
@@ -210,11 +210,11 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   Future<Null> showInputChangeLanguage(BuildContext context) {
-    var lang = CustomValues.lang;
+    var lang = Language.current;
     var use = Prefs.dsbUseLanguage;
     return ampDialog(
       context: context,
-      title: CustomValues.lang.changeLanguage,
+      title: Language.current.changeLanguage,
       children: (alertContext, setAlState) => [
         ampDropdownButton(
           value: lang,
@@ -224,7 +224,7 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
         ampSizedDivider(5),
         ampSwitchWithText(
-          text: CustomValues.lang.useForDsb,
+          text: Language.current.useForDsb,
           value: use,
           onChanged: (value) => setAlState(() => use = value),
         ),
@@ -232,13 +232,13 @@ class AmpHomePageState extends State<AmpHomePage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context: context,
         save: () async {
-          CustomValues.lang = lang;
+          Language.current = lang;
           Prefs.dsbUseLanguage = use;
           await Prefs.waitForMutex();
           unawaited(rebuildNewBuild());
 
-          FirstLoginValues.grades[0] = CustomValues.lang.empty;
-          FirstLoginValues.letters[0] = CustomValues.lang.empty;
+          FirstLoginValues.grades[0] = Language.current.empty;
+          FirstLoginValues.letters[0] = Language.current.empty;
           Navigator.pop(context);
         },
       ),
@@ -256,13 +256,13 @@ class AmpHomePageState extends State<AmpHomePage>
     var passwordHidden = true;
     return ampDialog(
       context: context,
-      title: CustomValues.lang.changeLoginPopup,
+      title: Language.current.changeLoginPopup,
       children: (context, setAlState) => [
         ampPadding(2),
         ampFormField(
           controller: usernameInputFormController,
           key: usernameInputFormKey,
-          labelText: CustomValues.lang.username,
+          labelText: Language.current.username,
           keyboardType: TextInputType.visiblePassword,
           autofillHints: [AutofillHints.username],
         ),
@@ -276,7 +276,7 @@ class AmpHomePageState extends State<AmpHomePage>
           ),
           controller: passwordInputFormController,
           key: passwordInputFormKey,
-          labelText: CustomValues.lang.password,
+          labelText: Language.current.password,
           keyboardType: TextInputType.visiblePassword,
           obscureText: passwordHidden,
           autofillHints: [AutofillHints.password],
@@ -302,7 +302,7 @@ class AmpHomePageState extends State<AmpHomePage>
         : Stack(
             children: <Widget>[
               ListTile(
-                title: ampText(CustomValues.lang.allClasses),
+                title: ampText(Language.current.allClasses),
                 trailing: ampText('${Prefs.grade}${Prefs.char}'),
               ),
               Align(
@@ -372,7 +372,7 @@ class AmpHomePageState extends State<AmpHomePage>
           margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
         ),
         Scaffold(
-          appBar: ampAppBar(CustomValues.lang.timetable),
+          appBar: ampAppBar(Language.current.timetable),
           backgroundColor: Colors.transparent,
           body: Container(
             margin: EdgeInsets.only(left: 10, right: 10),
@@ -394,7 +394,7 @@ class AmpHomePageState extends State<AmpHomePage>
                         [
                           ampIcon(MdiIcons.timetable, size: 200),
                           ampText(
-                            CustomValues.lang.setupTimetable,
+                            Language.current.setupTimetable,
                             size: 32,
                             textAlign: TextAlign.center,
                           ),
@@ -413,7 +413,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       ),
                       ampDivider,
                       ampSwitchWithText(
-                        text: CustomValues.lang.filterTimetables,
+                        text: Language.current.filterTimetables,
                         value: Prefs.filterTimetables,
                         onChanged: (value) =>
                             setState(() => Prefs.filterTimetables = value),
@@ -430,7 +430,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     context,
                     push: Navigator.pushReplacement,
                   ),
-                  label: CustomValues.lang.edit,
+                  label: Language.current.edit,
                   icon: Icons.edit,
                 ),
         ),
@@ -438,7 +438,7 @@ class AmpHomePageState extends State<AmpHomePage>
           duration: Duration(milliseconds: 150),
           color: Colors.transparent,
           child: Scaffold(
-            appBar: ampAppBar(CustomValues.lang.settings),
+            appBar: ampAppBar(Language.current.settings),
             key: settingsScaffoldKey,
             backgroundColor: Colors.transparent,
             body: GridView.count(
@@ -464,8 +464,8 @@ class AmpHomePageState extends State<AmpHomePage>
                       ? MdiIcons.lightbulbOn
                       : MdiIcons.lightbulbOnOutline,
                   text: AmpColors.isDarkMode
-                      ? CustomValues.lang.lightsOn
-                      : CustomValues.lang.lightsOff,
+                      ? Language.current.lightsOn
+                      : Language.current.lightsOff,
                 ),
                 ampBigAmpButton(
                   onTap: () async {
@@ -475,10 +475,10 @@ class AmpHomePageState extends State<AmpHomePage>
                     rebuild();
                     settingsScaffoldKey.currentState?.showSnackBar(SnackBar(
                       backgroundColor: AmpColors.colorBackground,
-                      content: ampText(CustomValues.lang.changedAppearance),
+                      content: ampText(Language.current.changedAppearance),
                       action: SnackBarAction(
                         textColor: AmpColors.colorForeground,
-                        label: CustomValues.lang.show,
+                        label: Language.current.show,
                         onPressed: () =>
                             setState(() => tabController.index = 0),
                       ),
@@ -487,7 +487,7 @@ class AmpHomePageState extends State<AmpHomePage>
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.clipboardList
                       : MdiIcons.clipboardListOutline,
-                  text: CustomValues.lang.changeAppearance,
+                  text: Language.current.changeAppearance,
                 ),
                 ampBigAmpButton(
                   onTap: () async {
@@ -497,26 +497,26 @@ class AmpHomePageState extends State<AmpHomePage>
                   },
                   icon: MdiIcons.brightness6,
                   text: Prefs.useSystemTheme
-                      ? CustomValues.lang.lightsNoSystem
-                      : CustomValues.lang.lightsUseSystem,
+                      ? Language.current.lightsNoSystem
+                      : Language.current.lightsUseSystem,
                 ),
                 ampBigAmpButton(
                   onTap: () => showInputChangeLanguage(context),
                   icon: MdiIcons.translate,
-                  text: CustomValues.lang.changeLanguage,
+                  text: Language.current.changeLanguage,
                 ),
                 ampBigAmpButton(
                   onTap: () => showInputEntryCredentials(context),
                   icon:
                       AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
-                  text: CustomValues.lang.changeLogin,
+                  text: Language.current.changeLogin,
                 ),
                 ampBigAmpButton(
                   onTap: () => showInputSelectCurrentClass(context),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.school
                       : MdiIcons.schoolOutline,
-                  text: CustomValues.lang.selectClass,
+                  text: Language.current.selectClass,
                 ),
                 ampBigAmpButton(
                   onTap: () => showAboutDialog(
@@ -525,11 +525,11 @@ class AmpHomePageState extends State<AmpHomePage>
                       applicationVersion: AmpStrings.version,
                       applicationIcon:
                           Image.asset('assets/images/logo.png', height: 40),
-                      children: [Text(CustomValues.lang.appInfo)]),
+                      children: [Text(Language.current.appInfo)]),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.folderInformation
                       : MdiIcons.folderInformationOutline,
-                  text: CustomValues.lang.settingsAppInfo,
+                  text: Language.current.settingsAppInfo,
                 ),
                 ampBigAmpButton(
                   onTap: () {
@@ -570,9 +570,9 @@ class AmpHomePageState extends State<AmpHomePage>
                 indicatorColor: AmpColors.colorForeground,
                 labelColor: AmpColors.colorForeground,
                 tabs: <Widget>[
-                  ampTab(Icons.home, CustomValues.lang.start),
-                  ampTab(MdiIcons.timetable, CustomValues.lang.timetable),
-                  ampTab(Icons.settings, CustomValues.lang.settings),
+                  ampTab(Icons.home, Language.current.start),
+                  ampTab(MdiIcons.timetable, Language.current.timetable),
+                  ampTab(Icons.settings, Language.current.settings),
                 ],
               ),
             ),

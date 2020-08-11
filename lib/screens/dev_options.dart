@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:Amplessimus/dsbapi.dart';
+import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
@@ -157,7 +158,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           key: inputFormKey,
           keyboardType: TextInputType.number,
           validator: (value) => num.tryParse(value) == null
-              ? CustomValues.lang.widgetValidatorInvalid
+              ? Language.current.widgetValidatorInvalid
               : null,
         ),
       ],
@@ -213,7 +214,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           key: timerInputFormKey,
           keyboardType: TextInputType.number,
           validator: (value) => num.tryParse(value) == null
-              ? CustomValues.lang.widgetValidatorInvalid
+              ? Language.current.widgetValidatorInvalid
               : null,
         ),
       ],

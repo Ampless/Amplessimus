@@ -98,7 +98,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: Colors.transparent,
-              appBar: ampAppBar(CustomValues.lang.changeLoginPopup),
+              appBar: ampAppBar(Language.current.changeLoginPopup),
               body: Center(
                 heightFactor: 1,
                 child: Container(
@@ -108,7 +108,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ampText(CustomValues.lang.selectClass, size: 20),
+                        ampText(Language.current.selectClass, size: 20),
                         ampRow([
                           ampDropdownButton(
                             value: gradeDropDownValue,
@@ -137,7 +137,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                         ampFormField(
                           controller: usernameInputFormController,
                           key: usernameInputFormKey,
-                          labelText: CustomValues.lang.username,
+                          labelText: Language.current.username,
                           keyboardType: TextInputType.visiblePassword,
                           autofillHints: [AutofillHints.username],
                         ),
@@ -153,20 +153,20 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           ),
                           controller: passwordInputFormController,
                           key: passwordInputFormKey,
-                          labelText: CustomValues.lang.password,
+                          labelText: Language.current.password,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: passwordHidden,
                           autofillHints: [AutofillHints.password],
                         ),
                         ampSizedDivider(20),
                         ampPadding(4),
-                        ampText(CustomValues.lang.changeLanguage, size: 20),
+                        ampText(Language.current.changeLanguage, size: 20),
                         ampDropdownButton(
-                          value: CustomValues.lang,
+                          value: Language.current,
                           itemToDropdownChild: (i) => ampText(i.name),
                           items: Language.all,
                           onChanged: (v) =>
-                              setState(() => CustomValues.lang = v),
+                              setState(() => Language.current = v),
                         ),
                         ampSizedDivider(5),
                         ampText(
@@ -191,11 +191,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Map<String, dynamic> map = jsonDecode(await dsbGetData(
                       Prefs.username,
                       Prefs.password,
-                      lang: CustomValues.lang,
+                      lang: Language.current,
                       httpPost: FirstLoginValues.httpPostFunc,
                     ));
                     if (map['Resultcode'] != 0)
-                      throw CustomValues.lang
+                      throw Language.current
                           .catchDsbGetData(map['ResultStatusInfo']);
 
                     setState(() {
@@ -213,7 +213,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     });
                   }
                 },
-                label: CustomValues.lang.save,
+                label: Language.current.save,
                 icon: Icons.save,
               ),
             ),
@@ -244,7 +244,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       MaterialPageRoute(builder: (_) => AmpApp()),
                     );
                   },
-                  label: CustomValues.lang.firstStartupDone,
+                  label: Language.current.firstStartupDone,
                   icon: MdiIcons.arrowRight,
                 ),
                 bottomSheet: ampLinearProgressIndicator(dsbWidgetIsLoading),
