@@ -7,7 +7,6 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/loading_animation.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
-import 'package:Amplessimus/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -157,7 +156,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           controller: inputFormController,
           key: inputFormKey,
           keyboardType: TextInputType.number,
-          validator: numberValidator,
+          validator: (value) => num.tryParse(value) == null
+              ? CustomValues.lang.widgetValidatorInvalid
+              : null,
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
@@ -211,7 +212,9 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           controller: timerInputFormController,
           key: timerInputFormKey,
           keyboardType: TextInputType.number,
-          validator: numberValidator,
+          validator: (value) => num.tryParse(value) == null
+              ? CustomValues.lang.widgetValidatorInvalid
+              : null,
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
