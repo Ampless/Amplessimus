@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetable/timetables.dart';
@@ -26,7 +24,6 @@ class CustomValues {
   ];
 
   static List<TTColumn> ttColumns = [];
-  static Timer updateTimer;
 }
 
 class AmpStrings {

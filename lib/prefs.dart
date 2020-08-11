@@ -6,7 +6,6 @@ import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/pref_cache.dart';
-import 'package:Amplessimus/values.dart';
 import 'package:crypto/crypto.dart';
 
 CachedSharedPreferences _prefs;
@@ -120,11 +119,12 @@ set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', b);
 
 String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 
+Timer _updateTimer;
 int get timer => _prefs.getInt('update_dsb_timer', 15);
 void setTimer(int i, Function() f) {
   _prefs.setInt('update_dsb_timer', i);
-  if (CustomValues.updateTimer != null) CustomValues.updateTimer.cancel();
-  CustomValues.updateTimer = FirstLoginValues.testing
+  if (_updateTimer != null) _updateTimer.cancel();
+  _updateTimer = FirstLoginValues.testing
       ? null
       : Timer.periodic(Duration(minutes: i), (timer) => f());
 }
