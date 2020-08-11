@@ -406,9 +406,9 @@ class AmpHomePageState extends State<AmpHomePage>
                 : ListView(
                     children: [
                       Column(
-                        children: timetableWidget(
+                        children: ttWidgets(
                           timetablePlans,
-                          filtered: Prefs.filterTimetables,
+                          Prefs.filterTimetables,
                         ),
                       ),
                       ampDivider,

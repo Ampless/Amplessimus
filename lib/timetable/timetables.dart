@@ -140,15 +140,15 @@ TTDay ttMatchDay(String s) {
   s = s.toLowerCase();
   if (s.contains('null') || s.contains('none'))
     return TTDay.Null;
-  else if (s.contains('mo'))
+  else if (s.contains('mo') || s.contains('po'))
     return TTDay.Monday;
-  else if (s.contains('di') || s.contains('tue'))
+  else if (s.contains('di') || s.contains('tue') || s.contains('út'))
     return TTDay.Tuesday;
-  else if (s.contains('mi') || s.contains('wed'))
+  else if (s.contains('mi') || s.contains('wed') || (s.contains('stř')))
     return TTDay.Wednesday;
-  else if (s.contains('do') || s.contains('thu'))
+  else if (s.contains('do') || s.contains('thu') || s.contains('čt'))
     return TTDay.Thursday;
-  else if (s.contains('fr'))
+  else if (s.contains('fr') || s.contains('pá'))
     return TTDay.Friday;
   else
     throw '[TT] Unknown day: $s';
@@ -193,8 +193,8 @@ String ttToJson(List<TTColumn> tt) {
 List<TTColumn> ttFromJson(String jsontext) {
   if (jsontext == null) return [];
   var table = <TTColumn>[];
-  List columns = jsonDecode(jsontext);
-  for (dynamic s in columns) table.add(TTColumn.fromJson(s));
+  var columns = jsonDecode(jsontext);
+  for (var s in columns) table.add(TTColumn.fromJson(s));
   return table;
 }
 
@@ -202,7 +202,7 @@ void ttSaveToPrefs(List<TTColumn> table) =>
     Prefs.jsonTimetable = ttToJson(table);
 List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
-List<Widget> timetableWidget(List<DsbPlan> plans, {bool filtered = true}) {
+List<Widget> ttWidgets(List<DsbPlan> plans, [bool filtered = true]) {
   var tempPlans =
       dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   var widgets = <Widget>[];
