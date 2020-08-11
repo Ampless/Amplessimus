@@ -187,6 +187,7 @@ class English extends Language {
 
   @override
   String ttDayToString(TTDay day) {
+    if (day == null) return '';
     switch (day) {
       case TTDay.Null:
         return '';

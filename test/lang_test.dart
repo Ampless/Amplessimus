@@ -32,6 +32,9 @@ List<LanguageTestCase> languageTestCases = [
     for (var day in TTDay.values) lang.ttDayToString(day);
   }),
   LanguageTestCase((lang) {
+    lang.ttDayToString(null);
+  }),
+  LanguageTestCase((lang) {
     assert(Language.fromCode(lang.code) == lang);
   }),
   LanguageTestCase((lang) {
