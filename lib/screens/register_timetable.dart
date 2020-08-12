@@ -40,24 +40,7 @@ class RegisterTimetableScreenPageState
   Day currentDropdownDay = Day.Monday;
   TTColumn get ttColumn => ttColumns[Day.values.indexOf(currentDropdownDay)];
   int currentDropdownHour = 0;
-  TTLesson selectedTTLesson;
-  int curTTColumnIndex;
-  bool tempCurrentTTLessonIsFree = false;
   static TabController tabController;
-
-  void updateTTColumn(int newLength, Day day) {
-    if (ttColumn.lessons.length <= newLength) {
-      for (var i = 0; i < newLength; i++) {
-        if (i + 1 > ttColumn.lessons.length) {
-          ttColumn.lessons.add(TTLesson('', '', '', false));
-        }
-      }
-    } else {
-      for (var i = ttColumn.lessons.length; i > newLength; --i) {
-        ttColumn.lessons.removeAt(i - 1);
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -105,7 +88,15 @@ class RegisterTimetableScreenPageState
                           onChanged: (value) {
                             setState(() {
                               currentDropdownHour = value;
-                              updateTTColumn(value, currentDropdownDay);
+                              if (ttColumn.lessons.length <= value) {
+                                for (var i = 0; i < value; i++)
+                                  if (i + 1 > ttColumn.lessons.length)
+                                    ttColumn.lessons.add(TTLesson.empty);
+                              } else {
+                                for (var i = ttColumn.lessons.length;
+                                    i > value;
+                                    --i) ttColumn.lessons.removeAt(i - 1);
+                              }
                             });
                           },
                         ),
@@ -123,14 +114,16 @@ class RegisterTimetableScreenPageState
                     itemBuilder: (context, index) {
                       if (index == currentDropdownHour)
                         return ampSizedDivider(65);
-                      String titleString;
-                      String trailingString;
+                      var lesson = ttColumn.lessons[index];
+                      var lessonIsFree = false;
+                      String title;
+                      String trailing;
                       if (ttColumn.lessons[index].isFree) {
-                        titleString = Language.current.freeLesson;
-                        trailingString = '';
+                        title = Language.current.freeLesson;
+                        trailing = '';
                       } else {
-                        titleString = ttColumn.lessons[index].subject;
-                        trailingString = ttColumn.lessons[index].teacher;
+                        title = lesson.subject.trim();
+                        trailing = lesson.teacher.trim();
                       }
                       return ListTile(
                         leading: ampText(
@@ -139,22 +132,19 @@ class RegisterTimetableScreenPageState
                           size: 30,
                         ),
                         onTap: () {
-                          selectedTTLesson = ttColumn.lessons[index];
-                          tempCurrentTTLessonIsFree = selectedTTLesson.isFree;
+                          lesson = ttColumn.lessons[index];
+                          lessonIsFree = lesson.isFree;
                           final subjectInputFormKey =
                               GlobalKey<FormFieldState>();
                           final notesInputFormKey = GlobalKey<FormFieldState>();
                           final teacherInputFormKey =
                               GlobalKey<FormFieldState>();
                           final subjectInputFormController =
-                              TextEditingController(
-                                  text: selectedTTLesson.subject);
+                              TextEditingController(text: lesson.subject);
                           final notesInputFormController =
-                              TextEditingController(
-                                  text: selectedTTLesson.notes);
+                              TextEditingController(text: lesson.notes);
                           final teacherInputFormController =
-                              TextEditingController(
-                                  text: selectedTTLesson.teacher);
+                              TextEditingController(text: lesson.teacher);
                           ampDialog(
                             title: Language.current.editHour,
                             children: (context, setAlState) => [
@@ -180,10 +170,10 @@ class RegisterTimetableScreenPageState
                                 builder: (context, setSwitchState) {
                                   return ampSwitchWithText(
                                     text: Language.current.freeLesson,
-                                    value: tempCurrentTTLessonIsFree,
+                                    value: lessonIsFree,
                                     onChanged: (value) {
-                                      setSwitchState(() =>
-                                          tempCurrentTTLessonIsFree = value);
+                                      setSwitchState(
+                                          () => lessonIsFree = value);
                                     },
                                   );
                                 },
@@ -193,14 +183,13 @@ class RegisterTimetableScreenPageState
                               context: context,
                               save: () {
                                 setState(() {
-                                  selectedTTLesson.subject =
+                                  lesson.subject =
                                       subjectInputFormController.text.trim();
-                                  selectedTTLesson.notes =
+                                  lesson.notes =
                                       notesInputFormController.text.trim();
-                                  selectedTTLesson.teacher =
+                                  lesson.teacher =
                                       teacherInputFormController.text.trim();
-                                  selectedTTLesson.isFree =
-                                      tempCurrentTTLessonIsFree;
+                                  lesson.isFree = lessonIsFree;
                                 });
                                 Navigator.pop(context);
                                 ttSaveToPrefs(ttColumns);
@@ -214,7 +203,7 @@ class RegisterTimetableScreenPageState
                           ttColumn.lessons[index].subject.trim().isEmpty &&
                                   !ttColumn.lessons[index].isFree
                               ? Language.current.subject
-                              : titleString.trim(),
+                              : title,
                           size: 22,
                         ),
                         subtitle: ampText(
@@ -227,7 +216,7 @@ class RegisterTimetableScreenPageState
                           ttColumn.lessons[index].teacher.trim().isEmpty &&
                                   !ttColumn.lessons[index].isFree
                               ? Language.current.teacher
-                              : trailingString.trim(),
+                              : trailing,
                           size: 16,
                         ),
                       );
@@ -266,5 +255,3 @@ class RegisterTimetableScreenPageState
     );
   }
 }
-
-class RegisterTimetableValues {}
