@@ -87,9 +87,8 @@ const List<Day> ttWeek = [
 
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   for (var plan in plans) {
-    for (var i = 0; i < table.length; i++) {
-      if (table[i].day == plan.day) {
-        var column = table[i];
+    for (var column in table) {
+      if (column.day == plan.day) {
         for (var i = 0; i < column.lessons.length; i++) {
           for (var sub in plan.subs) {
             if (sub.actualHours.contains(i + 1) &&
@@ -127,23 +126,20 @@ List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
 List<Widget> ttWidgets(
   List<DsbPlan> plans,
-  List<TTColumn> columns, [
+  List<TTColumn> table, [
   bool filtered = true,
 ]) {
-  var tempPlans =
-      dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+  plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+  if (filtered) table = ttSubTable(table, plans);
   var widgets = <Widget>[];
-  for (var plan in tempPlans) {
-    var ttColumnIndex = Day.values.indexOf(plan.day);
+  for (var plan in plans) {
     widgets.add(ListTile(
       title: ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
     ));
     var unthemedWidgets = <Widget>[];
-    var lessons = columns[ttColumnIndex].lessons;
-    var tempLength = lessons.length;
+    var lessons = table[Day.values.indexOf(plan.day)].lessons;
+    var lessonLength = lessons.length;
     for (var lesson in lessons) {
-      var finishedFiltering = false, isReplaced = false;
-      var lessonIndex = lessons.indexOf(lesson) + 1;
       var titleString = '', trailingString = '', notesString = '';
       if (filtered) {
         if (plan.subs.isEmpty) {
@@ -154,30 +150,6 @@ List<Widget> ttWidgets(
             trailingString = lesson.teacher;
           }
           notesString = lesson.notes;
-        }
-        for (var sub in plan.subs) {
-          if (!finishedFiltering) {
-            if (sub.hours.contains(lessonIndex)) {
-              titleString =
-                  DsbSubstitution.realSubject(sub.subject, Language.current);
-              notesString = Language.current.dsbSubtoSubtitle(sub);
-              if (!sub.isFree) {
-                trailingString = sub.teacher;
-                var notesaddon = sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
-                notesString = Language.current.substitution + notesaddon;
-              }
-              isReplaced = true;
-              finishedFiltering = true;
-            } else {
-              if (lesson.isFree)
-                titleString = Language.current.freeLesson;
-              else {
-                titleString = lesson.subject;
-                trailingString = lesson.teacher;
-              }
-              notesString = lesson.notes;
-            }
-          }
         }
       } else {
         if (lesson.isFree) {
@@ -208,13 +180,13 @@ List<Widget> ttWidgets(
           size: 16,
         ),
         trailing: ampText(
-          trailingString.trim().isEmpty && !isReplaced && !lesson.isFree
+          trailingString.trim().isEmpty && !lesson.isFree
               ? Language.current.teacher
               : trailingString.trim(),
           size: 16,
         ),
       ));
-      if (lessons.indexOf(lesson) < tempLength - 1)
+      if (lessons.indexOf(lesson) < lessonLength - 1)
         unthemedWidgets.add(ampSizedDivider(0));
     }
     widgets.add(getThemedWidget(
