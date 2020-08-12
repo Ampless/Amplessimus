@@ -39,7 +39,7 @@ abstract class Language {
   String get empty;
   String get widgetValidatorFieldEmpty;
   String get widgetValidatorInvalid;
-  String get firstStartupDone;
+  String get done;
   String get timetable;
   String get darkMode;
   String get setupTimetable;

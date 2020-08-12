@@ -123,7 +123,7 @@ class English extends Language {
   String get changeLanguage => 'Change language';
 
   @override
-  String get firstStartupDone => 'Done';
+  String get done => 'Done';
 
   @override
   String get timetable => 'Timetable';

@@ -268,7 +268,7 @@ class RegisterTimetableScreenPageState
                 RegisterTimetableValues.tabController.animateTo(0);
                 ttSaveToPrefs(ttColumns);
               },
-              label: Language.current.firstStartupDone,
+              label: Language.current.done,
               icon: MdiIcons.arrowRight,
             ),
           ),

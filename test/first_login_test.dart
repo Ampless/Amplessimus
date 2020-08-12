@@ -35,7 +35,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.save));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(Language.current.firstStartupDone));
+    await tester.tap(find.text(Language.current.done));
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();

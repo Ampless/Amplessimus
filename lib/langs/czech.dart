@@ -115,7 +115,7 @@ class Czech extends Language {
   String get changeLanguage => 'změnit jazyk';
 
   @override
-  String get firstStartupDone => 'hotovo';
+  String get done => 'hotovo';
 
   @override
   String get timetable => 'Rozvrh hodin';

@@ -244,7 +244,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       MaterialPageRoute(builder: (_) => AmpApp()),
                     );
                   },
-                  label: Language.current.firstStartupDone,
+                  label: Language.current.done,
                   icon: MdiIcons.arrowRight,
                 ),
                 bottomSheet: ampLinearProgressIndicator(dsbWidgetIsLoading),

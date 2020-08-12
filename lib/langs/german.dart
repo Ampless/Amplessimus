@@ -121,7 +121,7 @@ class German extends Language {
   String get changeLanguage => 'Sprache ändern';
 
   @override
-  String get firstStartupDone => 'Fertig';
+  String get done => 'Fertig';
 
   @override
   String get timetable => 'Stundenplan';
