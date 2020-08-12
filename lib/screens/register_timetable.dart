@@ -104,7 +104,6 @@ class RegisterTimetableScreenPageState
                           value: currentDropdownHour,
                           items: ttLessons,
                           onChanged: (value) {
-                            ampInfo(ctx: 'RegTT', message: 'Got value $value');
                             setState(() {
                               currentDropdownHour = value;
                               updateTTColumn(value, currentDropdownDay);
