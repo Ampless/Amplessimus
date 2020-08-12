@@ -223,8 +223,9 @@ Future<List<DsbPlan>> dsbGetAndParse(
           {String Function(String) getCache,
           void Function(String, String, Duration) setCache})
       httpGet = httpGet,
-  @required Language lang,
+  Language lang,
 }) async {
+  lang ??= Language.current;
   var json = jsonDecode(jsontext);
   if (json['Resultcode'] != 0) throw json['ResultStatusInfo'];
   json = json['ResultMenuItems'][0]['Childs'][0];
@@ -292,8 +293,9 @@ Future<List<DsbPlan>> dsbGetAllSubs(
           void Function(String, String, Duration) setCache})
       httpPost = httpPost,
   @required String dsbLanguage,
-  @required Language lang,
+  Language lang,
 }) async {
+  lang ??= Language.current;
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
   var json = await dsbGetData(username, password,
       cachePostRequests: cachePostRequests,

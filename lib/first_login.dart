@@ -192,7 +192,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Map<String, dynamic> map = jsonDecode(await dsbGetData(
                       Prefs.username,
                       Prefs.password,
-                      lang: Language.current,
                       httpPost: FirstLoginValues.httpPostFunc,
                     ));
                     if (map['Resultcode'] != 0)
