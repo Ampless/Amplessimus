@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/subject.dart';
 
 class German extends Language {
   @override
@@ -75,7 +76,7 @@ class German extends Language {
       for (var h in sub.hours) hour += hour.isEmpty ? h.toString() : '-$h';
     } else
       hour = 'null';
-    return '$hour. Stunde ${DsbSubstitution.realSubject(sub.subject, this)}';
+    return '$hour. Stunde ${realSubject(sub.subject, this)}';
   }
 
   @override

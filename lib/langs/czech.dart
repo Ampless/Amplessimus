@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/subject.dart';
 
 class Czech extends Language {
   @override
@@ -71,7 +72,7 @@ class Czech extends Language {
       s = 'null';
     else
       for (var h in sub.hours) s += s.isEmpty ? h.toString() : '-$h';
-    return '$s. hodina ${DsbSubstitution.realSubject(sub.subject, this)}';
+    return '$s. hodina ${realSubject(sub.subject, this)}';
   }
 
   @override

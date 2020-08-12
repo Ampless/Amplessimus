@@ -4,6 +4,7 @@ import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/subject.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/utils.dart';
 import 'package:flutter/material.dart';
@@ -86,8 +87,15 @@ const List<Day> ttWeek = [
 ];
 
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
+  var tbl = <TTColumn>[];
+  for (var c in table) {
+    var ls = <TTLesson>[];
+    for (var l in c.lessons)
+      ls.add(TTLesson(l.subject, l.teacher, l.notes, l.isFree));
+    tbl.add(TTColumn(ls, c.day));
+  }
   for (var plan in plans) {
-    for (var column in table) {
+    for (var column in tbl) {
       if (column.day == plan.day) {
         for (var i = 0; i < column.lessons.length; i++) {
           for (var sub in plan.subs) {
@@ -102,7 +110,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
       }
     }
   }
-  return table;
+  return tbl;
 }
 
 String ttToJson(List<TTColumn> tt) {
@@ -140,32 +148,15 @@ List<Widget> ttWidgets(
     var lessons = table[Day.values.indexOf(plan.day)].lessons;
     var lessonLength = lessons.length;
     for (var lesson in lessons) {
-      var titleString = '', trailingString = '', notesString = '';
-      if (filtered) {
-        if (plan.subs.isEmpty) {
-          if (lesson.isFree)
-            titleString = Language.current.freeLesson;
-          else {
-            titleString = lesson.subject;
-            trailingString = lesson.teacher;
-          }
-          notesString = lesson.notes;
-        }
-      } else {
-        if (lesson.isFree) {
-          titleString = Language.current.freeLesson;
-        } else {
-          titleString = lesson.subject;
-          trailingString = lesson.teacher;
-        }
-        notesString = lesson.notes;
-      }
+      var title = lesson.isFree
+          ? Language.current.freeLesson
+          : realSubject(lesson.subject);
 
       unthemedWidgets.add(ListTile(
         title: ampText(
-          titleString.trim().isEmpty && !lesson.isFree
+          title.trim().isEmpty && !lesson.isFree
               ? Language.current.subject
-              : titleString.trim(),
+              : title.trim(),
           size: 22,
         ),
         leading: ampText(
@@ -174,23 +165,23 @@ List<Widget> ttWidgets(
           size: 30,
         ),
         subtitle: ampText(
-          notesString.trim().isEmpty
+          lesson.notes.trim().isEmpty
               ? Language.current.notes
-              : notesString.trim(),
+              : lesson.notes.trim(),
           size: 16,
         ),
         trailing: ampText(
-          trailingString.trim().isEmpty && !lesson.isFree
+          lesson.teacher.trim().isEmpty && !lesson.isFree
               ? Language.current.teacher
-              : trailingString.trim(),
+              : lesson.teacher.trim(),
           size: 16,
         ),
       ));
       if (lessons.indexOf(lesson) < lessonLength - 1)
         unthemedWidgets.add(ampSizedDivider(0));
     }
-    widgets.add(getThemedWidget(
-        Column(children: unthemedWidgets), Prefs.currentThemeId));
+    widgets.add(
+        ampThemedList(Column(children: unthemedWidgets), Prefs.currentThemeId));
     widgets.add(ampPadding(12));
   }
   return widgets;

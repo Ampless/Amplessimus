@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/subject.dart';
 
 class English extends Language {
   @override
@@ -78,7 +79,7 @@ class English extends Language {
       }
     } else
       hour = 'null';
-    return '$hour lesson ${DsbSubstitution.realSubject(sub.subject, this)}';
+    return '$hour lesson ${realSubject(sub.subject, this)}';
   }
 
   @override

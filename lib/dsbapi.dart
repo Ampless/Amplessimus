@@ -102,27 +102,6 @@ class DsbSubstitution {
   String toString() =>
       "['$affectedClass', $hours, '$teacher', '$subject', '$notes', $isFree]";
 
-  static bool _isNum(String s, int i) {
-    if (s == null || s.length <= i || i < 0) return false;
-    var cu = s.codeUnitAt(i);
-    return cu >= _zero && cu <= _nine;
-  }
-
-  static final _letters = RegExp(r'[a-zA-Z]');
-  static final _numeric = RegExp(r'[0-9]');
-
-  static String realSubject(String subject, Language lang) {
-    if (subject == null) return null;
-    if (_isNum(subject, 0) || _isNum(subject, subject.length - 1))
-      return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang)} '
-          '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';
-    var sub = subject.toLowerCase();
-    var s = subject;
-    var lut = lang.subjectLut;
-    for (var key in lut.keys) if (sub.startsWith(key)) s = lut[key];
-    return s;
-  }
-
   List<int> get actualHours {
     var h = <int>[];
     for (var i = min(hours); i <= max(hours); i++) h.add(i);
@@ -369,7 +348,7 @@ Widget dsbGetGoodList(
         ),
       ]),
     ));
-    widgets.add(getThemedWidget(ampColumn(dayWidgets), themeId));
+    widgets.add(ampThemedList(ampColumn(dayWidgets), themeId));
   }
   widgets.add(ampPadding(12));
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
@@ -437,7 +416,7 @@ Future<Null> dsbUpdateWidget(
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-        child: getThemedWidget(
+        child: ampThemedList(
           ListTile(title: ampText(errorString(e))),
           themeId,
         ),
@@ -446,28 +425,6 @@ Future<Null> dsbUpdateWidget(
     );
   }
   callback();
-}
-
-Widget getThemedWidget(Widget child, int themeId) {
-  switch (themeId) {
-    case 0:
-      return Card(
-        elevation: 0,
-        color: AmpColors.lightBackground,
-        child: child,
-      );
-    case 1:
-      return Container(
-        margin: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: AmpColors.colorForeground),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: child,
-      );
-    default:
-      return getThemedWidget(child, 0);
-  }
 }
 
 String plansToJson(List<DsbPlan> plans) {

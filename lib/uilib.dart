@@ -307,3 +307,25 @@ void ampEaseOutBack(
         pageBuilder: (context, animation, secondaryAnimation) => w,
       ),
     );
+
+Widget ampThemedList(Widget child, int themeId) {
+  switch (themeId) {
+    case 0:
+      return Card(
+        elevation: 0,
+        color: AmpColors.lightBackground,
+        child: child,
+      );
+    case 1:
+      return Container(
+        margin: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          border: Border.all(color: AmpColors.colorForeground),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: child,
+      );
+    default:
+      return ampThemedList(child, 0);
+  }
+}
