@@ -375,6 +375,7 @@ Widget dsbGetGoodList(
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
 }
 
+List<DsbPlan> dsbPlans;
 Widget dsbWidget;
 
 Future<Null> dsbUpdateWidget(
@@ -431,7 +432,7 @@ Future<Null> dsbUpdateWidget(
       plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
     updateTimetableDays(plans);
     dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
-    timetablePlans = plans;
+    dsbPlans = plans;
   } catch (e) {
     ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
     dsbWidget = SizedBox(

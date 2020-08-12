@@ -1,3 +1,4 @@
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
@@ -43,13 +44,18 @@ void main() {
     await tester.tap(find.text(Language.current.setupTimetable));
     await tester.pumpAndSettle();
     //this is where a timetable test should be
+    await tester.tap(find.text(Language.current.dayToString(Day.Monday)));
+    await tester.pumpAndSettle();
+    await tester
+        .tap(find.text(Language.current.dayToString(Day.Tuesday)).first);
+    await tester.pumpAndSettle();
     await tester.tap(find.text('0'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('6').first);
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.save));
     await tester.pumpAndSettle();
-    assert(ttColumns.first.lessons.isNotEmpty);
+    assert(ttColumns.where((element) => element.lessons.isNotEmpty).isNotEmpty);
     await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();
     for (var w in <String>[

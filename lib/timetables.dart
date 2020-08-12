@@ -8,8 +8,6 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/utils.dart';
 import 'package:flutter/material.dart';
 
-List<DsbPlan> timetablePlans = [];
-
 List<dynamic> timetableDays = [Day.Monday, Day.Tuesday];
 
 void updateTimetableDays(List<DsbPlan> plans) {

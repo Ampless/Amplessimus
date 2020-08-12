@@ -408,7 +408,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     children: [
                       Column(
                         children: ttWidgets(
-                          timetablePlans,
+                          dsbPlans,
                           ttColumns,
                           Prefs.filterTimetables,
                         ),

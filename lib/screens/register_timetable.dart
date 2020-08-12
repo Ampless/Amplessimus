@@ -1,7 +1,6 @@
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
