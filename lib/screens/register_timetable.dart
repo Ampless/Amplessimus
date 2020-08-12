@@ -41,23 +41,22 @@ class RegisterTimetableScreenPageState
     extends State<RegisterTimetableScreenPage>
     with SingleTickerProviderStateMixin {
   Day currentDropdownDay = Day.Monday;
-  TTColumn ttColumn;
+  TTColumn get ttColumn => ttColumns[Day.values.indexOf(currentDropdownDay)];
   int currentDropdownHour = 0;
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
   bool tempCurrentTTLessonIsFree = false;
 
   void updateTTColumn(int newLength, Day day) {
-    var index = Day.values.indexOf(currentDropdownDay);
     if (ttColumn.lessons.length <= newLength) {
       for (var i = 0; i < newLength; i++) {
-        if (i + 1 > ttColumns[index].lessons.length) {
-          ttColumns[index].lessons.add(TTLesson('', '', '', false));
+        if (i + 1 > ttColumn.lessons.length) {
+          ttColumn.lessons.add(TTLesson('', '', '', false));
         }
       }
     } else {
       for (var i = ttColumn.lessons.length; i > newLength; --i) {
-        ttColumns[index].lessons.removeAt(i - 1);
+        ttColumn.lessons.removeAt(i - 1);
       }
     }
   }
@@ -67,8 +66,6 @@ class RegisterTimetableScreenPageState
     ttColumns = ttLoadFromPrefs();
     if (ttColumns.isEmpty)
       for (var day in ttWeek) ttColumns.add(TTColumn(<TTLesson>[], day));
-    curTTColumnIndex = Day.values.indexOf(currentDropdownDay);
-    ttColumn = ttColumns[curTTColumnIndex];
     currentDropdownHour = ttColumn.lessons.length;
     RegisterTimetableValues.tabController =
         TabController(length: 2, vsync: this);
@@ -100,8 +97,6 @@ class RegisterTimetableScreenPageState
                           onChanged: (value) {
                             setState(() {
                               currentDropdownDay = value;
-                              ttColumn = ttColumns[
-                                  Day.values.indexOf(currentDropdownDay)];
                               currentDropdownHour = ttColumn.lessons.length;
                             });
                           },

@@ -2,6 +2,7 @@ import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -37,6 +38,18 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.done));
     await tester.pumpAndSettle();
+    await tester.tap(find.text(Language.current.timetable));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(Language.current.setupTimetable));
+    await tester.pumpAndSettle();
+    //this is where a timetable test should be
+    await tester.tap(find.text('0'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('6').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(Language.current.save));
+    await tester.pumpAndSettle();
+    assert(ttColumns.first.lessons.isNotEmpty);
     await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();
     for (var w in <String>[
