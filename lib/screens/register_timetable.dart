@@ -1,6 +1,7 @@
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
@@ -17,11 +18,8 @@ class RegisterTimetableScreen extends StatelessWidget {
         home: RegisterTimetableScreenPage(),
       ),
       onWillPop: () async {
-        if (RegisterTimetableValues.tabController.index <= 0)
-          return false;
-        else
-          RegisterTimetableValues.tabController
-              .animateTo(RegisterTimetableValues.tabController.index - 1);
+        if (RegisterTimetableScreenPageState.tabController.index > 0)
+          RegisterTimetableScreenPageState.tabController.animateTo(0);
         return false;
       },
     );
@@ -46,6 +44,7 @@ class RegisterTimetableScreenPageState
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
   bool tempCurrentTTLessonIsFree = false;
+  static TabController tabController;
 
   void updateTTColumn(int newLength, Day day) {
     if (ttColumn.lessons.length <= newLength) {
@@ -67,8 +66,7 @@ class RegisterTimetableScreenPageState
     if (ttColumns.isEmpty)
       for (var day in ttWeek) ttColumns.add(TTColumn(<TTLesson>[], day));
     currentDropdownHour = ttColumn.lessons.length;
-    RegisterTimetableValues.tabController =
-        TabController(length: 2, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -78,7 +76,7 @@ class RegisterTimetableScreenPageState
       appBar: ampAppBar(Language.current.setupTimetableTitle),
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
-        controller: RegisterTimetableValues.tabController,
+        controller: tabController,
         children: <Widget>[
           Scaffold(
             body: Container(
@@ -106,6 +104,7 @@ class RegisterTimetableScreenPageState
                           value: currentDropdownHour,
                           items: ttLessons,
                           onChanged: (value) {
+                            ampInfo(ctx: 'RegTT', message: 'Got value $value');
                             setState(() {
                               currentDropdownHour = value;
                               updateTTColumn(value, currentDropdownDay);
@@ -125,10 +124,7 @@ class RegisterTimetableScreenPageState
                     itemCount: ttColumn.lessons.length + 1,
                     itemBuilder: (context, index) {
                       if (index == currentDropdownHour)
-                        return Divider(
-                          color: AmpColors.colorBackground,
-                          height: 65,
-                        );
+                        return ampSizedDivider(65);
                       String titleString;
                       String trailingString;
                       if (ttColumn.lessons[index].isFree) {
@@ -260,7 +256,7 @@ class RegisterTimetableScreenPageState
           Scaffold(
             floatingActionButton: ampFab(
               onPressed: () {
-                RegisterTimetableValues.tabController.animateTo(0);
+                tabController.animateTo(0);
                 ttSaveToPrefs(ttColumns);
               },
               label: Language.current.done,
@@ -273,6 +269,4 @@ class RegisterTimetableScreenPageState
   }
 }
 
-class RegisterTimetableValues {
-  static TabController tabController;
-}
+class RegisterTimetableValues {}
