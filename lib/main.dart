@@ -10,6 +10,7 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';

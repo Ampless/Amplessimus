@@ -335,14 +335,41 @@ Widget dsbGetGoodList(
 ) {
   ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
   var widgets = <Widget>[];
-  _initializeTheme(widgets, plans, oneClassOnly, char, grade, themeId);
+  for (var plan in plans) {
+    var dayWidgets = <Widget>[];
+    if (plan.subs.isEmpty) {
+      dayWidgets.add(ListTile(
+        title: ampText(Language.current.noSubs),
+      ));
+    }
+    var i = 0;
+    for (var sub in plan.subs) {
+      dayWidgets.add(ListTile(
+        title: ampText(Language.current.dsbSubtoTitle(sub)),
+        subtitle: ampText(Language.current.dsbSubtoSubtitle(sub)),
+        trailing: (char.isEmpty || grade.isEmpty || !oneClassOnly)
+            ? ampText(sub.affectedClass)
+            : ampNull,
+      ));
+      if (++i < plan.subs.length) dayWidgets.add(ampDivider);
+    }
+    widgets.add(ListTile(
+      title: Row(children: <Widget>[
+        ampText(' ${Language.current.ttDayToString(plan.day)}', size: 22),
+        IconButton(
+          icon: ampIcon(Icons.info),
+          tooltip: plan.date.split(' ').first,
+          onPressed: () {
+            StaticState.homeScaffoldKey.currentState
+                ?.showSnackBar(ampSnackBar(plan.date));
+          },
+        ),
+      ]),
+    ));
+    widgets.add(getThemedWidget(ampColumn(dayWidgets), themeId));
+  }
   widgets.add(ampPadding(12));
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
-}
-
-String errorString(dynamic e) {
-  if (e is Error) return '$e\n${e.stackTrace}';
-  return e.toString();
 }
 
 Widget dsbWidget;
@@ -445,64 +472,14 @@ Widget getThemedWidget(Widget child, int themeId) {
   }
 }
 
-Widget _columnWidget(List<Widget> dayW, int theme) =>
-    getThemedWidget(ampColumn(dayW), theme);
-
-void _initializeTheme(
-  List<Widget> widgets,
-  List<DsbPlan> plans,
-  bool oco,
-  String char,
-  String grade,
-  int themeId,
-) {
-  for (var plan in plans) {
-    var dayWidgets = <Widget>[];
-    if (plan.subs.isEmpty) {
-      dayWidgets.add(ListTile(
-        title: ampText(Language.current.noSubs),
-      ));
-    }
-    var i = 0;
-    for (var sub in plan.subs) {
-      dayWidgets.add(ListTile(
-        title: ampText(Language.current.dsbSubtoTitle(sub)),
-        subtitle: ampText(Language.current.dsbSubtoSubtitle(sub)),
-        trailing: (char.isEmpty || grade.isEmpty || !oco)
-            ? ampText(sub.affectedClass)
-            : ampNull,
-      ));
-      if (++i < plan.subs.length) dayWidgets.add(ampDivider);
-    }
-    widgets.add(ListTile(
-      title: Row(children: <Widget>[
-        ampText(' ${Language.current.ttDayToString(plan.day)}', size: 22),
-        IconButton(
-          icon: ampIcon(Icons.info),
-          tooltip: plan.date.split(' ').first,
-          onPressed: () {
-            StaticState.homeScaffoldKey.currentState
-                ?.showSnackBar(ampSnackBar(plan.date));
-          },
-        ),
-      ]),
-    ));
-    widgets.add(_columnWidget(dayWidgets, themeId));
-  }
-}
-
 String plansToJson(List<DsbPlan> plans) {
   var plansStrings = [];
-  for (var plan in plans) {
-    plansStrings.add(plan.toJson());
-  }
+  for (var plan in plans) plansStrings.add(plan.toJson());
   return jsonEncode(plansStrings);
 }
 
 List<DsbPlan> plansFromJson(String jsonPlans) {
   var plans = <DsbPlan>[];
-  for (dynamic tempString in jsonDecode(jsonPlans)) {
-    plans.add(DsbPlan.fromJson(tempString));
-  }
+  for (var plan in jsonDecode(jsonPlans)) plans.add(DsbPlan.fromJson(plan));
   return plans;
 }

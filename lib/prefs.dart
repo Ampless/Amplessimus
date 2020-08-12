@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/pref_cache.dart';
+import 'package:Amplessimus/utils.dart';
 import 'package:crypto/crypto.dart';
 
 CachedSharedPreferences _prefs;
