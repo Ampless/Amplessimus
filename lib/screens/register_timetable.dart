@@ -11,9 +11,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class RegisterTimetableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: ampMatApp(RegisterTimetableScreenPage()),
-      onWillPop: () async {
+    return ampMatApp(
+      RegisterTimetableScreenPage(),
+      pop: () async {
         if (RegisterTimetableScreenPageState.tabController.index > 0)
           RegisterTimetableScreenPageState.tabController.animateTo(0);
         return false;

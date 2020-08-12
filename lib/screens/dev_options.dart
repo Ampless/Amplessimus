@@ -14,13 +14,11 @@ import 'package:flutter/services.dart';
 class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: ampMatApp(DevOptionsScreenPage()),
-        onWillPop: () async {
-          await dsbUpdateWidget();
-          ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
-          return false;
-        });
+    return ampMatApp(DevOptionsScreenPage(), pop: () async {
+      await dsbUpdateWidget();
+      ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
+      return false;
+    });
   }
 }
 
@@ -104,7 +102,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 }),
                 ampRaisedButton('Ladebildschirm', () {
                   ampEaseOutBack(
-                    ampMatApp(AmpLoadingAnimation()),
+                    ampMatApp(AmpLoadingAnimation(), pop: () async => false),
                     context,
                   );
                 }),
