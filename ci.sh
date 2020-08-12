@@ -12,7 +12,7 @@ gh_create_release() {
                          \"tag_name\": \"$2\",
                          \"target_commitish\": \"$1\",
                          \"name\": \"$2\",
-                         \"body\": \"This is an automatic release by the ci.\\n\\n###### Changelog\\n\\n\\n###### Related Issues\\n\\n\\n###### Known Bugs\\n\",
+                         \"body\": \"This is an automatic release by the ci.\\n\\n###### Changelog\\n\\n\\n###### Known Problems\\n\\n\",
                          \"draft\": false,
                          \"prerelease\": true
                         }" \
