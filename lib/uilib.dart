@@ -254,9 +254,20 @@ MaterialApp ampMatApp({@required String title, @required Widget home}) {
   );
 }
 
-SnackBar ampSnackBar(String content) => SnackBar(
+SnackBar ampSnackBar(String content, [SnackBarAction action]) => SnackBar(
       backgroundColor: AmpColors.colorBackground,
       content: ampText(content),
+      action: action,
+    );
+
+SnackBarAction ampSnackBarAction(
+  String label,
+  Function() onPressed,
+) =>
+    SnackBarAction(
+      textColor: AmpColors.colorForeground,
+      label: label,
+      onPressed: onPressed,
     );
 
 FloatingActionButton ampFab({

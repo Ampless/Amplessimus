@@ -3,8 +3,8 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter/material.dart';
 
-class CustomValues {
-  static final List<int> ttHours = [
+class StaticState {
+  static final ttHours = <int>[
     0,
     1,
     2,
@@ -23,7 +23,11 @@ class CustomValues {
     15
   ];
 
-  static List<TTColumn> ttColumns = [];
+  static var ttColumns = <TTColumn>[];
+
+  static final homeScaffoldKey = GlobalKey<ScaffoldState>();
+  static final settingsScaffoldKey = GlobalKey<ScaffoldState>();
+  static final refreshKey = GlobalKey<RefreshIndicatorState>();
 }
 
 class AmpStrings {

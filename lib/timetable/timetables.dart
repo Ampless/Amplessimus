@@ -205,7 +205,7 @@ List<Widget> ttWidgets(List<DsbPlan> plans, [bool filtered = true]) {
       title: ampText(' ${Language.current.ttDayToString(plan.day)}', size: 24),
     ));
     var unthemedWidgets = <Widget>[];
-    var lessons = CustomValues.ttColumns[ttColumnIndex].lessons;
+    var lessons = StaticState.ttColumns[ttColumnIndex].lessons;
     var tempLength = lessons.length;
     for (var lesson in lessons) {
       var finishedFiltering = false, isReplaced = false;

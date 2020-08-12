@@ -21,8 +21,6 @@ const String _DSB_DEVICE = 'SM-G950F';
 const String _DSB_VERSION = '2.5.9';
 const String _DSB_OS_VERSION = '29 10.0';
 
-var dsbApiHomeScaffoldKey = GlobalKey<ScaffoldState>();
-
 class DsbSubstitution {
   String affectedClass;
   List<int> hours;
@@ -483,9 +481,8 @@ void _initializeTheme(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
-            dsbApiHomeScaffoldKey.currentState?.showSnackBar(
-              ampSnackBar(plan.date),
-            );
+            StaticState.homeScaffoldKey.currentState
+                ?.showSnackBar(ampSnackBar(plan.date));
           },
         ),
       ]),

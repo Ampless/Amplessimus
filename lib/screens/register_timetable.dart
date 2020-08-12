@@ -38,7 +38,7 @@ class RegisterTimetableScreenPageState
     with SingleTickerProviderStateMixin {
   TTDay currentDropdownDay = TTDay.Monday;
   TTColumn ttColumn;
-  int currentDropdownHour = CustomValues.ttHours[5];
+  int currentDropdownHour = StaticState.ttHours[5];
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
   bool tempCurrentTTLessonIsFree = false;
@@ -47,26 +47,25 @@ class RegisterTimetableScreenPageState
     var index = TTDay.values.indexOf(currentDropdownDay);
     if (ttColumn.lessons.length <= newLength) {
       for (var i = 0; i < newLength; i++) {
-        if (i + 1 > CustomValues.ttColumns[index].lessons.length) {
-          CustomValues.ttColumns[index].lessons
-              .add(TTLesson('', '', '', false));
+        if (i + 1 > StaticState.ttColumns[index].lessons.length) {
+          StaticState.ttColumns[index].lessons.add(TTLesson('', '', '', false));
         }
       }
     } else {
       for (var i = ttColumn.lessons.length; i > newLength; --i) {
-        CustomValues.ttColumns[index].lessons.removeAt(i - 1);
+        StaticState.ttColumns[index].lessons.removeAt(i - 1);
       }
     }
   }
 
   @override
   void initState() {
-    CustomValues.ttColumns = ttLoadFromPrefs();
-    if (CustomValues.ttColumns.isEmpty)
+    StaticState.ttColumns = ttLoadFromPrefs();
+    if (StaticState.ttColumns.isEmpty)
       for (var day in ttWeek)
-        CustomValues.ttColumns.add(TTColumn(<TTLesson>[], day));
+        StaticState.ttColumns.add(TTColumn(<TTLesson>[], day));
     curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
-    ttColumn = CustomValues.ttColumns[curTTColumnIndex];
+    ttColumn = StaticState.ttColumns[curTTColumnIndex];
     currentDropdownHour = ttColumn.lessons.length;
     RegisterTimetableValues.tabController =
         TabController(length: 2, vsync: this);
@@ -98,7 +97,7 @@ class RegisterTimetableScreenPageState
                           onChanged: (value) {
                             setState(() {
                               currentDropdownDay = value;
-                              ttColumn = CustomValues.ttColumns[
+                              ttColumn = StaticState.ttColumns[
                                   TTDay.values.indexOf(currentDropdownDay)];
                               currentDropdownHour = ttColumn.lessons.length;
                             });
@@ -107,7 +106,7 @@ class RegisterTimetableScreenPageState
                         ampPadding(10),
                         ampDropdownButton(
                           value: currentDropdownHour,
-                          items: CustomValues.ttHours,
+                          items: StaticState.ttHours,
                           onChanged: (value) {
                             setState(() {
                               currentDropdownHour = value;
@@ -212,7 +211,7 @@ class RegisterTimetableScreenPageState
                                       tempCurrentTTLessonIsFree;
                                 });
                                 Navigator.pop(context);
-                                ttSaveToPrefs(CustomValues.ttColumns);
+                                ttSaveToPrefs(StaticState.ttColumns);
                               },
                             ),
                             context: context,
@@ -249,7 +248,7 @@ class RegisterTimetableScreenPageState
             floatingActionButton: ampFab(
               onPressed: () async {
                 await dsbUpdateWidget();
-                ttSaveToPrefs(CustomValues.ttColumns);
+                ttSaveToPrefs(StaticState.ttColumns);
                 ampEaseOutBack(
                   AmpApp(1),
                   context,
@@ -264,7 +263,7 @@ class RegisterTimetableScreenPageState
             floatingActionButton: ampFab(
               onPressed: () {
                 RegisterTimetableValues.tabController.animateTo(0);
-                ttSaveToPrefs(CustomValues.ttColumns);
+                ttSaveToPrefs(StaticState.ttColumns);
               },
               label: Language.current.firstStartupDone,
               icon: MdiIcons.arrowRight,
