@@ -20,6 +20,7 @@ String get _r8 => _x(_r(0x40) | 0x80);
 String get uuid4 => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
 
 String htmlUnescape(String data) {
+  //this optimization is kind of unnecessary for small strings
   if (!data.contains('&')) return data;
   var buf = StringBuffer();
   var offset = 0;
