@@ -1,5 +1,6 @@
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Amplessimus/dsbapi.dart';
 
@@ -111,8 +112,7 @@ class DsbTestCase extends TestCase {
 
   Future<String> _getFromCache(String url) async {
     for (var key in htmlCache.keys)
-      if (key.toLowerCase().contains(url.toLowerCase()) ||
-          url.toLowerCase().contains(key.toLowerCase())) return htmlCache[key];
+      if (strcontain(key, url)) return htmlCache[key];
     return null;
   }
 }

@@ -4,6 +4,7 @@ import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
 
@@ -154,14 +155,6 @@ TTDay ttMatchDay(String s) {
     throw '[TT] Unknown day: $s';
 }
 
-bool _subjectsEqual(String s1, String s2) {
-  if (s1 == null) return s2 == null;
-  if (s2 == null) return false;
-  s1 = s1.toLowerCase();
-  s2 = s2.toLowerCase();
-  return s1.contains(s2) || s2.contains(s1);
-}
-
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   for (var plan in plans) {
     for (var i = 0; i < table.length; i++) {
@@ -170,7 +163,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
         for (var i = 0; i < column.lessons.length; i++) {
           for (var sub in plan.subs) {
             if (sub.actualHours.contains(i + 1) &&
-                _subjectsEqual(sub.subject, column.lessons[i].subject)) {
+                strcontain(sub.subject, column.lessons[i].subject)) {
               column.lessons[i].teacher = sub.teacher;
               column.lessons[i].notes = sub.notes;
               column.lessons[i].isFree = sub.isFree;

@@ -6,6 +6,7 @@ import 'package:Amplessimus/langs/english.dart';
 import 'package:Amplessimus/langs/german.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/utils.dart';
 
 abstract class Language {
   String get code;
@@ -72,8 +73,7 @@ abstract class Language {
 
   static Language fromCode(String code) {
     if (code == null) return _langs[0];
-    for (var lang in _langs)
-      if (code.contains(lang.code) || lang.code.contains(code)) return lang;
+    for (var lang in _langs) if (strcontain(code, lang.code)) return lang;
     return _langs[0];
   }
 

@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:Amplessimus/dsbutil.dart';
 import 'package:Amplessimus/first_login.dart';
-import 'package:Amplessimus/intutils.dart';
+import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
