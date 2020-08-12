@@ -1,18 +1,16 @@
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'dsb_test.dart';
+import 'testlib.dart';
 
 void main() {
   testWidgets('The one and only UI test', (tester) async {
-    Prefs.initTestPrefs();
-    ampDisableLogging();
+    testInit();
     var screen = FirstLoginScreen(
         testing: true,
         httpPostFunc: (url, body, id, headers, {getCache, setCache}) async =>
@@ -43,7 +41,6 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.setupTimetable));
     await tester.pumpAndSettle();
-    //this is where a timetable test should be
     await tester.tap(find.text(Language.current.dayToString(Day.Monday)));
     await tester.pumpAndSettle();
     await tester

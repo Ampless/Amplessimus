@@ -15,10 +15,7 @@ class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: ampMatApp(
-          title: AmpStrings.appTitle,
-          home: DevOptionsScreenPage(),
-        ),
+        child: ampMatApp(DevOptionsScreenPage()),
         onWillPop: () async {
           await dsbUpdateWidget();
           ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
@@ -107,7 +104,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 }),
                 ampRaisedButton('Ladebildschirm', () {
                   ampEaseOutBack(
-                    ampMatApp(title: 'Load', home: AmpLoadingAnimation()),
+                    ampMatApp(AmpLoadingAnimation()),
                     context,
                   );
                 }),

@@ -129,9 +129,7 @@ void setTimer(int i, Function() f) {
       : Timer.periodic(Duration(minutes: i), (timer) => f());
 }
 
-set isDarkMode(bool b) {
-  _prefs.setBool('is_dark_mode', b);
-}
+set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
 
 bool get isDarkMode {
   if (!_prefs.isInitialized) return true;
@@ -144,12 +142,12 @@ String toJson() => _prefs.toJson();
 //any value), but it waits for any set operations in progress to finish.
 Future<Null> waitForMutex() => _prefs.waitForMutex();
 
-void initTestPrefs() {
+void initTest() {
   _prefs = CachedSharedPreferences();
   _prefs.platformSharedPrefSupportFalse();
 }
 
-Future<Null> loadPrefs() async {
+Future<Null> load() async {
   _prefs = CachedSharedPreferences();
   try {
     await _prefs.ctor();

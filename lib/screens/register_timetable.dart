@@ -12,10 +12,7 @@ class RegisterTimetableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: ampMatApp(
-        title: AmpStrings.appTitle,
-        home: RegisterTimetableScreenPage(),
-      ),
+      child: ampMatApp(RegisterTimetableScreenPage()),
       onWillPop: () async {
         if (RegisterTimetableScreenPageState.tabController.index > 0)
           RegisterTimetableScreenPageState.tabController.animateTo(0);

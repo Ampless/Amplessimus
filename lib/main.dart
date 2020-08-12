@@ -44,7 +44,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     ]);
     super.initState();
     (() async {
-      await Prefs.loadPrefs();
+      await Prefs.load();
       ttColumns = ttLoadFromPrefs();
 
       if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
@@ -102,10 +102,7 @@ class AmpApp extends StatelessWidget {
     try {
       ampInfo(ctx: 'AmpApp', message: 'Building Main Page');
       return WillPopScope(
-        child: ampMatApp(
-          title: AmpStrings.appTitle,
-          home: AmpHomePage(initialIndex),
-        ),
+        child: ampMatApp(AmpHomePage(initialIndex)),
         onWillPop: () async => Prefs.closeAppOnBackPress,
       );
     } catch (e) {

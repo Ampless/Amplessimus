@@ -38,13 +38,17 @@ class ExpectTestCase extends TestCase {
   }
 }
 
+void testInit() {
+  Prefs.initTest();
+  ampDisableLogging();
+}
+
 void tests(List<TestCase> testCases, String groupName) {
   group(groupName, () {
     var i = 1;
     for (var testCase in testCases)
       test('case ${i++}', () async {
-        Prefs.initTestPrefs();
-        ampDisableLogging();
+        testInit();
         await testCase.run();
       });
   });

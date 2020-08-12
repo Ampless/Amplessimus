@@ -35,10 +35,7 @@ class FirstLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AmpColors.isDarkMode = true;
     return WillPopScope(
-        child: ampMatApp(
-          title: AmpStrings.appTitle,
-          home: _page = FirstLoginScreenPage(),
-        ),
+        child: ampMatApp(_page = FirstLoginScreenPage()),
         onWillPop: () async {
           if (page.state.tabController.index > 0)
             page.state.tabController

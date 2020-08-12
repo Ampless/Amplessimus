@@ -12,7 +12,6 @@ import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/values.dart';
 import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;

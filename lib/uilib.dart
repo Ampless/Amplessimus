@@ -243,11 +243,11 @@ class _AmpBehavior extends ScrollBehavior {
   Widget buildViewportChrome(context, child, axisDirection) => child;
 }
 
-MaterialApp ampMatApp({@required String title, @required Widget home}) {
+MaterialApp ampMatApp(Widget home) {
   return MaterialApp(
     builder: (context, child) =>
         ScrollConfiguration(behavior: _AmpBehavior(), child: child),
-    title: title,
+    title: AmpStrings.appTitle,
     theme: ampThemeData,
     home: home,
     debugShowCheckedModeBanner: false,
