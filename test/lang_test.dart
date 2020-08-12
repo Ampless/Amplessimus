@@ -1,6 +1,6 @@
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
@@ -29,10 +29,10 @@ class LanguageCodeTestCase extends TestCase {
 
 List<LanguageTestCase> languageTestCases = [
   LanguageTestCase((lang) {
-    for (var day in TTDay.values) lang.ttDayToString(day);
+    for (var day in Day.values) lang.dayToString(day);
   }),
   LanguageTestCase((lang) {
-    lang.ttDayToString(null);
+    lang.dayToString(null);
   }),
   LanguageTestCase((lang) {
     assert(Language.fromCode(lang.code) == lang);

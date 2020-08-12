@@ -1,7 +1,8 @@
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
-import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
@@ -36,15 +37,15 @@ class RegisterTimetableScreenPage extends StatefulWidget {
 class RegisterTimetableScreenPageState
     extends State<RegisterTimetableScreenPage>
     with SingleTickerProviderStateMixin {
-  TTDay currentDropdownDay = TTDay.Monday;
+  Day currentDropdownDay = Day.Monday;
   TTColumn ttColumn;
   int currentDropdownHour = StaticState.ttHours[5];
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
   bool tempCurrentTTLessonIsFree = false;
 
-  void updateTTColumn(int newLength, TTDay day) {
-    var index = TTDay.values.indexOf(currentDropdownDay);
+  void updateTTColumn(int newLength, Day day) {
+    var index = Day.values.indexOf(currentDropdownDay);
     if (ttColumn.lessons.length <= newLength) {
       for (var i = 0; i < newLength; i++) {
         if (i + 1 > StaticState.ttColumns[index].lessons.length) {
@@ -64,7 +65,7 @@ class RegisterTimetableScreenPageState
     if (StaticState.ttColumns.isEmpty)
       for (var day in ttWeek)
         StaticState.ttColumns.add(TTColumn(<TTLesson>[], day));
-    curTTColumnIndex = TTDay.values.indexOf(currentDropdownDay);
+    curTTColumnIndex = Day.values.indexOf(currentDropdownDay);
     ttColumn = StaticState.ttColumns[curTTColumnIndex];
     currentDropdownHour = ttColumn.lessons.length;
     RegisterTimetableValues.tabController =
@@ -92,13 +93,13 @@ class RegisterTimetableScreenPageState
                         ampDropdownButton(
                           value: currentDropdownDay,
                           itemToDropdownChild: (i) =>
-                              ampText(Language.current.ttDayToString(i)),
+                              ampText(Language.current.dayToString(i)),
                           items: ttWeek,
                           onChanged: (value) {
                             setState(() {
                               currentDropdownDay = value;
                               ttColumn = StaticState.ttColumns[
-                                  TTDay.values.indexOf(currentDropdownDay)];
+                                  Day.values.indexOf(currentDropdownDay)];
                               currentDropdownHour = ttColumn.lessons.length;
                             });
                           },

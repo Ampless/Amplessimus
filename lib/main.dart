@@ -8,7 +8,7 @@ import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/register_timetable.dart';
-import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/values.dart';

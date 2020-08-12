@@ -1,6 +1,6 @@
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/timetables.dart';
 import 'package:flutter/material.dart';
 
 class StaticState {

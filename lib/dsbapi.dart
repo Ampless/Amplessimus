@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbutil.dart';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:archive/archive.dart';
@@ -129,19 +130,19 @@ class DsbSubstitution {
 }
 
 class DsbPlan {
-  TTDay day;
+  Day day;
   String date;
   List<DsbSubstitution> subs;
 
   DsbPlan(this.day, this.subs, this.date);
 
   DsbPlan.fromJson(Map<String, dynamic> json)
-      : day = ttDayFromInt(json['day']),
+      : day = dayFromInt(json['day']),
         date = json['date'],
         subs = subsFromJson(json['subs']);
 
   dynamic toJson() => {
-        'day': ttDayToInt(day),
+        'day': dayToInt(day),
         'date': date,
         'subs': subsToJson(),
       };
@@ -254,11 +255,11 @@ Future<List<DsbPlan>> dsbGetAndParse(
       var subs = <DsbSubstitution>[];
       for (var i = 1; i < html.length; i++)
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
-      plans.add(DsbPlan(ttMatchDay(planTitle), subs, planTitle));
+      plans.add(DsbPlan(matchDay(planTitle), subs, planTitle));
     } catch (e) {
       ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
       plans.add(DsbPlan(
-          TTDay.Null,
+          Day.Null,
           [
             DsbSubstitution('', [0], '', lang.dsbListErrorTitle,
                 lang.dsbListErrorSubtitle, true)
@@ -357,7 +358,7 @@ Widget dsbGetGoodList(
     }
     widgets.add(ListTile(
       title: Row(children: <Widget>[
-        ampText(' ${Language.current.ttDayToString(plan.day)}', size: 22),
+        ampText(' ${Language.current.dayToString(plan.day)}', size: 22),
         IconButton(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,

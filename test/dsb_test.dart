@@ -1,6 +1,5 @@
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/langs/english.dart';
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:Amplessimus/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Amplessimus/dsbapi.dart';
@@ -18,14 +17,14 @@ final Map<String, String> dsbTest1Cache = {
 
 final List<DsbPlan> dsbTest1Expct = [
   DsbPlan(
-    TTDay.Tuesday,
+    Day.Tuesday,
     [
       DsbSubstitution('11q', [7, 8], '---', '1sk1', '', true),
     ],
     '23.6.2020 Dienstag',
   ),
   DsbPlan(
-    TTDay.Wednesday,
+    Day.Wednesday,
     [],
     '24.6.2020 Mittwoch',
   ),
@@ -42,12 +41,12 @@ final Map<String, String> dsbTest2Cache = {
 
 final List<DsbPlan> dsbTest2Expct = [
   DsbPlan(
-    TTDay.Tuesday,
+    Day.Tuesday,
     [],
     '23.6.2020 Dienstag',
   ),
   DsbPlan(
-    TTDay.Wednesday,
+    Day.Wednesday,
     [],
     '24.6.2020 Mittwoch',
   ),

@@ -1,11 +1,11 @@
 import 'dart:collection';
 
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/czech.dart';
 import 'package:Amplessimus/langs/english.dart';
 import 'package:Amplessimus/langs/german.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/timetable/timetables.dart';
 import 'package:Amplessimus/utils.dart';
 
 abstract class Language {
@@ -58,6 +58,7 @@ abstract class Language {
   String get useForDsb;
   String dsbSubtoTitle(DsbSubstitution sub);
   String dsbSubtoSubtitle(DsbSubstitution sub);
+  String dayToString(Day day);
   String catchDsbGetData(dynamic e);
   LinkedHashMap<String, String> get subjectLut;
 
@@ -76,8 +77,6 @@ abstract class Language {
     for (var lang in _langs) if (strcontain(code, lang.code)) return lang;
     return _langs[0];
   }
-
-  String ttDayToString(TTDay day);
 
   @override
   String toString() => name;

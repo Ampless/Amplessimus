@@ -1,8 +1,8 @@
 import 'dart:collection';
 
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/timetable/timetables.dart';
 
 class German extends Language {
   @override
@@ -175,20 +175,20 @@ class German extends Language {
   String get darkMode => 'Dark Mode';
 
   @override
-  String ttDayToString(TTDay day) {
+  String dayToString(Day day) {
     if (day == null) return '';
     switch (day) {
-      case TTDay.Null:
+      case Day.Null:
         return '';
-      case TTDay.Monday:
+      case Day.Monday:
         return 'Montag';
-      case TTDay.Tuesday:
+      case Day.Tuesday:
         return 'Dienstag';
-      case TTDay.Wednesday:
+      case Day.Wednesday:
         return 'Mittwoch';
-      case TTDay.Thursday:
+      case Day.Thursday:
         return 'Donnerstag';
-      case TTDay.Friday:
+      case Day.Friday:
         return 'Freitag';
       default:
         throw UnimplementedError('Unbekannter Tag!');

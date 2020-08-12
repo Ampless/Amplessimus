@@ -1,8 +1,8 @@
 import 'dart:collection';
 
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/timetable/timetables.dart';
 
 class Czech extends Language {
   @override
@@ -169,20 +169,20 @@ class Czech extends Language {
   String get darkMode => 'tmavý režim';
 
   @override
-  String ttDayToString(TTDay day) {
+  String dayToString(Day day) {
     if (day == null) return '';
     switch (day) {
-      case TTDay.Null:
+      case Day.Null:
         return '';
-      case TTDay.Monday:
+      case Day.Monday:
         return 'Pondělí';
-      case TTDay.Tuesday:
+      case Day.Tuesday:
         return 'Úterý';
-      case TTDay.Wednesday:
+      case Day.Wednesday:
         return 'Středa';
-      case TTDay.Thursday:
+      case Day.Thursday:
         return 'Čtvrtek';
-      case TTDay.Friday:
+      case Day.Friday:
         return 'Pátek';
       default:
         throw UnimplementedError('Neznámý den!');

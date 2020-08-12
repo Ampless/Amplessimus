@@ -1,6 +1,7 @@
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/timetable/timetables.dart';
+import 'package:Amplessimus/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
@@ -34,32 +35,32 @@ final List<TTColumn> ttTest1Input1 = [
   TTColumn([
     TTLesson('Mathe', 'Wolf', 'lostes Fach', false),
     TTLesson(null, null, null, true),
-  ], TTDay.Monday),
+  ], Day.Monday),
   TTColumn([
     TTLesson('Deutsch', 'Rosemann', 'mega lost', false),
     TTLesson(null, null, null, true),
-  ], TTDay.Tuesday),
+  ], Day.Tuesday),
 ];
 
 final List<DsbPlan> ttTest1Input2 = [
   DsbPlan(
-      TTDay.Monday,
+      Day.Monday,
       [
         DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false),
       ],
       '13.12.-1'),
-  DsbPlan(TTDay.Tuesday, [], 'drölf'),
+  DsbPlan(Day.Tuesday, [], 'drölf'),
 ];
 
 final List<TTColumn> ttTest1Output = [
   TTColumn([
     TTLesson('Mathe', 'Gnan', 'Mitbetreuung', false),
     TTLesson(null, null, null, true),
-  ], TTDay.Monday),
+  ], Day.Monday),
   TTColumn([
     TTLesson('Deutsch', 'Rosemann', 'mega lost', false),
     TTLesson(null, null, null, true),
-  ], TTDay.Tuesday),
+  ], Day.Tuesday),
 ];
 
 final List<TTTestCase> ttTestCases = [

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
@@ -8,58 +9,9 @@ import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
 
-enum TTDay {
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Null,
-}
-
-TTDay ttDayFromInt(int i) {
-  if (i == null) return TTDay.Null;
-  switch (i) {
-    case 0:
-      return TTDay.Monday;
-    case 1:
-      return TTDay.Tuesday;
-    case 2:
-      return TTDay.Wednesday;
-    case 3:
-      return TTDay.Thursday;
-    case 4:
-      return TTDay.Friday;
-    case -1:
-      return TTDay.Null;
-    default:
-      throw UnimplementedError();
-  }
-}
-
-int ttDayToInt(TTDay day) {
-  if (day == null) return -1;
-  switch (day) {
-    case TTDay.Monday:
-      return 0;
-    case TTDay.Tuesday:
-      return 1;
-    case TTDay.Wednesday:
-      return 2;
-    case TTDay.Thursday:
-      return 3;
-    case TTDay.Friday:
-      return 4;
-    case TTDay.Null:
-      return -1;
-    default:
-      throw UnimplementedError();
-  }
-}
-
 List<DsbPlan> timetablePlans = [];
 
-List<dynamic> timetableDays = [TTDay.Monday, TTDay.Tuesday];
+List<dynamic> timetableDays = [Day.Monday, Day.Tuesday];
 
 void updateTimetableDays(List<DsbPlan> plans) {
   timetableDays = [];
@@ -95,17 +47,17 @@ class TTLesson {
 
 class TTColumn {
   List<TTLesson> lessons;
-  TTDay day;
+  Day day;
 
   TTColumn(this.lessons, this.day);
 
   TTColumn.fromJson(Map<String, dynamic> json)
       : lessons = lessonsFromJson(json['lessons']),
-        day = ttDayFromInt(json['day']);
+        day = dayFromInt(json['day']);
 
   Map<String, dynamic> toJson() => {
         'lessons': lessonsToJson(lessons),
-        'day': ttDayToInt(day),
+        'day': dayToInt(day),
       };
 
   List<dynamic> lessonsToJson(List<TTLesson> lessons) {
@@ -128,32 +80,13 @@ class TTColumn {
   String toString() => '{$day, $lessons}';
 }
 
-const List<TTDay> ttWeek = [
-  TTDay.Monday,
-  TTDay.Tuesday,
-  TTDay.Wednesday,
-  TTDay.Thursday,
-  TTDay.Friday
+const List<Day> ttWeek = [
+  Day.Monday,
+  Day.Tuesday,
+  Day.Wednesday,
+  Day.Thursday,
+  Day.Friday
 ];
-
-TTDay ttMatchDay(String s) {
-  if (s == null || s.isEmpty) return TTDay.Null;
-  s = s.toLowerCase();
-  if (s.contains('null') || s.contains('none'))
-    return TTDay.Null;
-  else if (s.contains('mo') || s.contains('po'))
-    return TTDay.Monday;
-  else if (s.contains('di') || s.contains('tue') || s.contains('út'))
-    return TTDay.Tuesday;
-  else if (s.contains('mi') || s.contains('wed') || (s.contains('stř')))
-    return TTDay.Wednesday;
-  else if (s.contains('do') || s.contains('thu') || s.contains('čt'))
-    return TTDay.Thursday;
-  else if (s.contains('fr') || s.contains('pá'))
-    return TTDay.Friday;
-  else
-    throw '[TT] Unknown day: $s';
-}
 
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   for (var plan in plans) {
@@ -200,9 +133,9 @@ List<Widget> ttWidgets(List<DsbPlan> plans, [bool filtered = true]) {
       dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   var widgets = <Widget>[];
   for (var plan in tempPlans) {
-    var ttColumnIndex = TTDay.values.indexOf(plan.day);
+    var ttColumnIndex = Day.values.indexOf(plan.day);
     widgets.add(ListTile(
-      title: ampText(' ${Language.current.ttDayToString(plan.day)}', size: 24),
+      title: ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
     ));
     var unthemedWidgets = <Widget>[];
     var lessons = StaticState.ttColumns[ttColumnIndex].lessons;
