@@ -216,26 +216,56 @@ Future<String> dsbGetData(
   }
 }
 
-Future<Map<String, String>> dsbGetHtml(
+Future<List<DsbPlan>> dsbGetAndParse(
   String jsontext, {
   bool cacheGetRequests = true,
   Future<String> Function(Uri url,
           {String Function(String) getCache,
           void Function(String, String, Duration) setCache})
       httpGet = httpGet,
+  @required Language lang,
 }) async {
   var json = jsonDecode(jsontext);
   if (json['Resultcode'] != 0) throw json['ResultStatusInfo'];
   json = json['ResultMenuItems'][0]['Childs'][0];
-  var map = <String, String>{};
+  var plans = <DsbPlan>[];
   for (var plan in json['Root']['Childs']) {
     String url = plan['Childs'][0]['Detail'];
-    map[plan['Title']] = await httpGet(
+    var title = plan['Title'];
+    var rawHtml = await httpGet(
       Uri.parse(url),
       getCache: cacheGetRequests ? Prefs.getCache : null,
     );
+    try {
+      ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
+      var html = HtmlParser(rawHtml)
+          .parse()
+          .children
+          .first
+          .children[1]
+          .children; //body
+      var planTitle = _searchHtml(html, 'mon_title').innerHtml;
+      html = _searchHtml(html, 'mon_list')
+          .children
+          .first //for some reason <table>s like to contain <tbody>s
+          //(just taking first isnt even standard-compliant, but it works rn)
+          .children;
+      var subs = <DsbSubstitution>[];
+      for (var i = 1; i < html.length; i++)
+        subs.add(DsbSubstitution.fromElementArray(html[i].children));
+      plans.add(DsbPlan(ttMatchDay(planTitle), subs, planTitle));
+    } catch (e) {
+      ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
+      plans.add(DsbPlan(
+          TTDay.Null,
+          [
+            DsbSubstitution('', [0], '', lang.dsbListErrorTitle,
+                lang.dsbListErrorSubtitle, true)
+          ],
+          title));
+    }
   }
-  return map;
+  return plans;
 }
 
 dom.Element _searchHtml(List<dom.Element> rootNode, String className) {
@@ -264,44 +294,14 @@ Future<List<DsbPlan>> dsbGetAllSubs(
   @required String dsbLanguage,
   @required Language lang,
 }) async {
-  var plans = <DsbPlan>[];
   if (cacheGetRequests || cachePostRequests) Prefs.flushCache();
   var json = await dsbGetData(username, password,
       cachePostRequests: cachePostRequests,
       httpPost: httpPost,
       dsbLanguage: dsbLanguage,
       lang: lang);
-  var htmls = await dsbGetHtml(json,
-      cacheGetRequests: cacheGetRequests, httpGet: httpGet);
-  for (var title in htmls.keys) {
-    try {
-      plans.add(dsbParseHtml(title, htmls[title]));
-    } catch (e) {
-      ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
-      plans.add(DsbPlan(
-          TTDay.Null,
-          [
-            DsbSubstitution('', [0], '', lang.dsbListErrorTitle,
-                lang.dsbListErrorSubtitle, true)
-          ],
-          title));
-    }
-  }
-  return plans;
-}
-
-DsbPlan dsbParseHtml(String title, String res) {
-  ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
-  var html = HtmlParser(res).parse().children[0].children[1].children; //body
-  var planTitle = _searchHtml(html, 'mon_title').innerHtml;
-  html = _searchHtml(html, 'mon_list')
-      .children
-      .first
-      .children; //for some reason <table>s like to contain <tbody>s
-  var subs = <DsbSubstitution>[];
-  for (var i = 1; i < html.length; i++)
-    subs.add(DsbSubstitution.fromElementArray(html[i].children));
-  return DsbPlan(ttMatchDay(planTitle), subs, planTitle);
+  return dsbGetAndParse(json,
+      cacheGetRequests: cacheGetRequests, httpGet: httpGet, lang: lang);
 }
 
 List<DsbPlan> dsbSearchClass(List<DsbPlan> plans, String stage, String char) {
