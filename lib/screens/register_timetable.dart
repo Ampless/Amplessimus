@@ -34,12 +34,15 @@ class RegisterTimetableScreenPage extends StatefulWidget {
   State<StatefulWidget> createState() => RegisterTimetableScreenPageState();
 }
 
+final ttLessons = <int>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+var ttColumns = <TTColumn>[];
+
 class RegisterTimetableScreenPageState
     extends State<RegisterTimetableScreenPage>
     with SingleTickerProviderStateMixin {
   Day currentDropdownDay = Day.Monday;
   TTColumn ttColumn;
-  int currentDropdownHour = StaticState.ttHours[5];
+  int currentDropdownHour = 0;
   TTLesson selectedTTLesson;
   int curTTColumnIndex;
   bool tempCurrentTTLessonIsFree = false;
@@ -48,25 +51,24 @@ class RegisterTimetableScreenPageState
     var index = Day.values.indexOf(currentDropdownDay);
     if (ttColumn.lessons.length <= newLength) {
       for (var i = 0; i < newLength; i++) {
-        if (i + 1 > StaticState.ttColumns[index].lessons.length) {
-          StaticState.ttColumns[index].lessons.add(TTLesson('', '', '', false));
+        if (i + 1 > ttColumns[index].lessons.length) {
+          ttColumns[index].lessons.add(TTLesson('', '', '', false));
         }
       }
     } else {
       for (var i = ttColumn.lessons.length; i > newLength; --i) {
-        StaticState.ttColumns[index].lessons.removeAt(i - 1);
+        ttColumns[index].lessons.removeAt(i - 1);
       }
     }
   }
 
   @override
   void initState() {
-    StaticState.ttColumns = ttLoadFromPrefs();
-    if (StaticState.ttColumns.isEmpty)
-      for (var day in ttWeek)
-        StaticState.ttColumns.add(TTColumn(<TTLesson>[], day));
+    ttColumns = ttLoadFromPrefs();
+    if (ttColumns.isEmpty)
+      for (var day in ttWeek) ttColumns.add(TTColumn(<TTLesson>[], day));
     curTTColumnIndex = Day.values.indexOf(currentDropdownDay);
-    ttColumn = StaticState.ttColumns[curTTColumnIndex];
+    ttColumn = ttColumns[curTTColumnIndex];
     currentDropdownHour = ttColumn.lessons.length;
     RegisterTimetableValues.tabController =
         TabController(length: 2, vsync: this);
@@ -98,7 +100,7 @@ class RegisterTimetableScreenPageState
                           onChanged: (value) {
                             setState(() {
                               currentDropdownDay = value;
-                              ttColumn = StaticState.ttColumns[
+                              ttColumn = ttColumns[
                                   Day.values.indexOf(currentDropdownDay)];
                               currentDropdownHour = ttColumn.lessons.length;
                             });
@@ -107,7 +109,7 @@ class RegisterTimetableScreenPageState
                         ampPadding(10),
                         ampDropdownButton(
                           value: currentDropdownHour,
-                          items: StaticState.ttHours,
+                          items: ttLessons,
                           onChanged: (value) {
                             setState(() {
                               currentDropdownHour = value;
@@ -212,7 +214,7 @@ class RegisterTimetableScreenPageState
                                       tempCurrentTTLessonIsFree;
                                 });
                                 Navigator.pop(context);
-                                ttSaveToPrefs(StaticState.ttColumns);
+                                ttSaveToPrefs(ttColumns);
                               },
                             ),
                             context: context,
@@ -249,7 +251,7 @@ class RegisterTimetableScreenPageState
             floatingActionButton: ampFab(
               onPressed: () async {
                 await dsbUpdateWidget();
-                ttSaveToPrefs(StaticState.ttColumns);
+                ttSaveToPrefs(ttColumns);
                 ampEaseOutBack(
                   AmpApp(1),
                   context,
@@ -264,7 +266,7 @@ class RegisterTimetableScreenPageState
             floatingActionButton: ampFab(
               onPressed: () {
                 RegisterTimetableValues.tabController.animateTo(0);
-                ttSaveToPrefs(StaticState.ttColumns);
+                ttSaveToPrefs(ttColumns);
               },
               label: Language.current.firstStartupDone,
               icon: MdiIcons.arrowRight,

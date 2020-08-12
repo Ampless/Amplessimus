@@ -1,34 +1,6 @@
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/timetables.dart';
 import 'package:flutter/material.dart';
-
-class StaticState {
-  static final ttHours = <int>[
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15
-  ];
-
-  static var ttColumns = <TTColumn>[];
-
-  static final homeScaffoldKey = GlobalKey<ScaffoldState>();
-  static final settingsScaffoldKey = GlobalKey<ScaffoldState>();
-  static final refreshKey = GlobalKey<RefreshIndicatorState>();
-}
 
 class AmpStrings {
   static const String appTitle = 'Amplessimus';

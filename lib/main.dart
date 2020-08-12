@@ -45,7 +45,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     (() async {
       await Prefs.loadPrefs();
-      StaticState.ttColumns = ttLoadFromPrefs();
+      ttColumns = ttLoadFromPrefs();
 
       if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
@@ -122,6 +122,10 @@ class AmpHomePage extends StatefulWidget {
   AmpHomePageState createState() => AmpHomePageState();
 }
 
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
+final settingsScaffoldKey = GlobalKey<ScaffoldState>();
+final refreshKey = GlobalKey<RefreshIndicatorState>();
+
 class AmpHomePageState extends State<AmpHomePage>
     with SingleTickerProviderStateMixin {
   bool circularProgressIndicatorActive = false;
@@ -158,7 +162,7 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   Future<Null> rebuildDragDown() async {
-    unawaited(StaticState.refreshKey.currentState?.show());
+    unawaited(refreshKey.currentState?.show());
     await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
   }
 
@@ -338,11 +342,11 @@ class AmpHomePageState extends State<AmpHomePage>
           duration: Duration(milliseconds: 150),
           color: AmpColors.colorBackground,
           child: Scaffold(
-            key: StaticState.homeScaffoldKey,
+            key: homeScaffoldKey,
             appBar: ampAppBar(AmpStrings.appTitle),
             backgroundColor: Colors.transparent,
             body: RefreshIndicator(
-              key: StaticState.refreshKey,
+              key: refreshKey,
               child: !circularProgressIndicatorActive
                   ? ListView(
                       scrollDirection: Axis.vertical,
@@ -405,6 +409,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       Column(
                         children: ttWidgets(
                           timetablePlans,
+                          ttColumns,
                           Prefs.filterTimetables,
                         ),
                       ),
@@ -436,7 +441,7 @@ class AmpHomePageState extends State<AmpHomePage>
           color: Colors.transparent,
           child: Scaffold(
             appBar: ampAppBar(Language.current.settings),
-            key: StaticState.settingsScaffoldKey,
+            key: settingsScaffoldKey,
             backgroundColor: Colors.transparent,
             body: GridView.count(
               crossAxisCount: 2,
@@ -470,8 +475,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
                     await dsbUpdateWidget();
                     rebuild();
-                    StaticState.settingsScaffoldKey.currentState
-                        ?.showSnackBar(ampSnackBar(
+                    settingsScaffoldKey.currentState?.showSnackBar(ampSnackBar(
                       Language.current.changedAppearance,
                       ampSnackBarAction(
                         Language.current.show,

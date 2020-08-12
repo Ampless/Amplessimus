@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:Amplessimus/day.dart';
 import 'package:Amplessimus/dsbutil.dart';
 import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
@@ -363,8 +364,7 @@ Widget dsbGetGoodList(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
-            StaticState.homeScaffoldKey.currentState
-                ?.showSnackBar(ampSnackBar(plan.date));
+            homeScaffoldKey.currentState?.showSnackBar(ampSnackBar(plan.date));
           },
         ),
       ]),
@@ -462,12 +462,6 @@ Widget getThemedWidget(Widget child, int themeId) {
           border: Border.all(color: AmpColors.colorForeground),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: child,
-      );
-    case -1:
-      return Card(
-        elevation: 0,
-        color: AmpColors.lightBackground,
         child: child,
       );
     default:

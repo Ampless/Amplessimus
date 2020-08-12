@@ -6,7 +6,6 @@ import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/utils.dart';
-import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
 
 List<DsbPlan> timetablePlans = [];
@@ -128,7 +127,11 @@ void ttSaveToPrefs(List<TTColumn> table) =>
     Prefs.jsonTimetable = ttToJson(table);
 List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
-List<Widget> ttWidgets(List<DsbPlan> plans, [bool filtered = true]) {
+List<Widget> ttWidgets(
+  List<DsbPlan> plans,
+  List<TTColumn> columns, [
+  bool filtered = true,
+]) {
   var tempPlans =
       dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   var widgets = <Widget>[];
@@ -138,7 +141,7 @@ List<Widget> ttWidgets(List<DsbPlan> plans, [bool filtered = true]) {
       title: ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
     ));
     var unthemedWidgets = <Widget>[];
-    var lessons = StaticState.ttColumns[ttColumnIndex].lessons;
+    var lessons = columns[ttColumnIndex].lessons;
     var tempLength = lessons.length;
     for (var lesson in lessons) {
       var finishedFiltering = false, isReplaced = false;
