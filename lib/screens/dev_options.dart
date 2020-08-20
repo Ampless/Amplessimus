@@ -32,7 +32,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    ampInfo(ctx: 'DevOptionsScreenPageState', message: 'initState()');
+    ampInfo('DevOptionsScreenPageState', 'initState()');
     super.initState();
   }
 

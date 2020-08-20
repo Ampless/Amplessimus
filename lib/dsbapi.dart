@@ -191,7 +191,7 @@ Future<String> dsbGetData(
       ),
     );
   } catch (e) {
-    ampErr(ctx: 'DSB][dsbGetData', message: errorString(e));
+    ampErr(['DSB', 'dsbGetData'], errorString(e));
     throw lang.catchDsbGetData(e);
   }
 }
@@ -218,7 +218,7 @@ Future<List<DsbPlan>> dsbGetAndParse(
       getCache: cacheGetRequests ? Prefs.getCache : null,
     );
     try {
-      ampInfo(ctx: 'DSB', message: 'Trying to parse $title...');
+      ampInfo('DSB', 'Trying to parse $title...');
       var html = HtmlParser(rawHtml)
           .parse()
           .children
@@ -236,7 +236,7 @@ Future<List<DsbPlan>> dsbGetAndParse(
         subs.add(DsbSubstitution.fromElementArray(html[i].children));
       plans.add(DsbPlan(matchDay(planTitle), subs, planTitle));
     } catch (e) {
-      ampErr(ctx: 'DSB][dsbGetAllSubs', message: errorString(e));
+      ampErr(['DSB', 'dsbGetAllSubs'], errorString(e));
       plans.add(DsbPlan(
           Day.Null,
           [
@@ -315,7 +315,7 @@ Widget dsbGetGoodList(
   String grade,
   int themeId,
 ) {
-  ampInfo(ctx: 'DSB', message: 'Rendering plans: $plans');
+  ampInfo('DSB', 'Rendering plans: $plans');
   var widgets = <Widget>[];
   for (var plan in plans) {
     var dayWidgets = <Widget>[];
@@ -412,7 +412,7 @@ Future<Null> dsbUpdateWidget(
     dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
     dsbPlans = plans;
   } catch (e) {
-    ampErr(ctx: 'DSB][dsbUpdateWidget', message: errorString(e));
+    ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = SizedBox(
       child: Container(
         child: ampThemedList(

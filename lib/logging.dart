@@ -10,7 +10,8 @@ void ampClearLog() => Prefs.log = '';
 Widget get ampLogWidget =>
     ampText(Prefs.log, font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
 
-void _log(String level, Object ctx, Object message) {
+void ampLog(String lvl, dynamic ctx, Object message) {
+  if (_loggingDisabled) return;
   var now = DateTime.now(),
       s = now.second.toString(),
       m = now.minute.toString(),
@@ -21,7 +22,15 @@ void _log(String level, Object ctx, Object message) {
   if (h.length == 1) h = '0' + h;
   if (ms.length == 1) ms = '0' + ms;
   if (ms.length == 2) ms = '0' + ms;
-  ampRawLog('$h:$m:$s.$ms [$level][$ctx] $message');
+  if (!(ctx is List)) ctx = [ctx];
+  ctx.insert(0, lvl);
+  var context = '';
+  var aftercontext = '';
+  for (var c in ctx) {
+    context += '[$c]';
+    aftercontext = ' ';
+  }
+  ampRawLog('$h:$m:$s.$ms $context$aftercontext$message');
 }
 
 void ampRawLog(Object msg) {
@@ -31,9 +40,6 @@ void ampRawLog(Object msg) {
   print(msg);
 }
 
-void ampErr({@required Object ctx, @required Object message}) =>
-    _log('Error', ctx, message);
-void ampWarn({@required Object ctx, @required Object message}) =>
-    _log('Warning', ctx, message);
-void ampInfo({@required Object ctx, @required Object message}) =>
-    _log('Info', ctx, message);
+void ampErr(Object ctx, Object msg) => ampLog('Error', ctx, msg);
+void ampWarn(Object ctx, Object msg) => ampLog('Warning', ctx, msg);
+void ampInfo(Object ctx, Object msg) => ampLog('Info', ctx, msg);

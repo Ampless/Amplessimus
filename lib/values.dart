@@ -35,20 +35,18 @@ class AmpColors {
       isDarkMode ? Brightness.dark : Brightness.light;
   static set brightness(Brightness b) {
     if (Brightness.values.length > 2)
-      ampWarn(
-          ctx: 'AmpColors',
-          message:
-              'set brightness called, but more than 2 Brightness states exist.');
+      ampWarn('AmpColors',
+          'set brightness called, but more than 2 Brightness states exist.');
     if (b == null) return;
     Prefs.isDarkMode = b != Brightness.light;
-    ampInfo(ctx: 'AmpColors', message: 'set brightness = $b');
+    ampInfo('AmpColors', 'set brightness = $b');
   }
 
   static bool get isDarkMode => Prefs.isDarkMode;
   static set isDarkMode(bool b) {
     if (b == null) return;
     Prefs.isDarkMode = b;
-    ampInfo(ctx: 'AmpColors', message: 'set isDarkMode = $isDarkMode');
+    ampInfo('AmpColors', 'set isDarkMode = $isDarkMode');
   }
 
   static void switchMode() => isDarkMode = !isDarkMode;

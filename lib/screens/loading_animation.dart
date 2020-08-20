@@ -18,7 +18,7 @@ class _AmpLoadingAnimationState extends State<AmpLoadingAnimation> {
   Widget build(BuildContext context) {
     var f = min(window.physicalSize.width, window.physicalSize.height) /
         window.devicePixelRatio;
-    //ampInfo(ctx: 'Loading', message: 'f = $f');
+    //ampInfo('Loading', 'f = $f');
     Timer(Duration(milliseconds: 20),
         () => setState(() => {frame++, frame %= 50}));
     var rotorblyat = Container(

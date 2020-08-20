@@ -75,13 +75,13 @@ Future<String> httpPost(
     var cachedResp = getCache(id);
     if (cachedResp != null) return cachedResp;
   }
-  ampInfo(ctx: 'HTTP][POST', message: '$url $headers: $body');
+  ampInfo(['HTTP', 'POST'], '$url $headers: $body');
   var req = await _httpClient.postUrl(url);
   headers.forEach((key, value) => req.headers.add(key, value));
   req.writeln(body);
   var res = await req.close();
   var bytes = await res.toList();
-  ampInfo(ctx: 'HTTP][POST', message: 'Done.');
+  ampInfo(['HTTP', 'POST'], 'Done.');
   var actualBytes = <int>[];
   for (var b in bytes) actualBytes.addAll(b);
   var r = utf8.decode(actualBytes);
@@ -97,7 +97,7 @@ Future<String> httpGet(Uri url,
     var cachedResp = getCache('$url');
     if (cachedResp != null) return cachedResp;
   }
-  ampInfo(ctx: 'HTTP][GET', message: '$url');
+  ampInfo(['HTTP', 'GET'], '$url');
   var req = await _httpClient.getUrl(url);
   await req.flush();
   var res = await req.close();
@@ -126,7 +126,7 @@ Future<String> httpGet(Uri url,
       .replaceAll(RegExp(r' +'), ' ')
       .replaceAll(RegExp(r'<br />'), '')
       .replaceAll(RegExp(r'<!-- .*? -->'), '');
-  ampInfo(ctx: 'HTTP][GET', message: 'Done.');
+  ampInfo(['HTTP', 'GET'], 'Done.');
   if (res.statusCode == 200 && setCache != null)
     setCache('$url', r, Duration(days: 4));
   return r;

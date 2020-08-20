@@ -69,7 +69,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     try {
-      ampInfo(ctx: 'SplashScreen', message: 'Buiding Splash Screen');
+      ampInfo('SplashScreen', 'Buiding Splash Screen');
       return Scaffold(
         body: Center(
           child: AnimatedContainer(
@@ -88,7 +88,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         bottomSheet: ampLinearProgressIndicator(),
       );
     } catch (e) {
-      ampErr(ctx: 'SplashScreenPageState', message: errorString(e));
+      ampErr('SplashScreenPageState', errorString(e));
       return ampText(errorString(e));
     }
   }
@@ -100,13 +100,13 @@ class AmpApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-      ampInfo(ctx: 'AmpApp', message: 'Building Main Page');
+      ampInfo('AmpApp', 'Building Main Page');
       return ampMatApp(
         AmpHomePage(initialIndex),
         pop: () async => Prefs.closeAppOnBackPress,
       );
     } catch (e) {
-      ampErr(ctx: 'AmpApp', message: errorString(e));
+      ampErr('AmpApp', errorString(e));
       return ampText(errorString(e));
     }
   }
@@ -140,7 +140,7 @@ class AmpHomePageState extends State<AmpHomePage>
 
   @override
   void initState() {
-    ampInfo(ctx: 'AmpHomePageState', message: 'initState()');
+    ampInfo('AmpHomePageState', 'initState()');
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
@@ -152,9 +152,9 @@ class AmpHomePageState extends State<AmpHomePage>
   void rebuild() {
     try {
       setState(() {});
-      ampInfo(ctx: 'AmpApp', message: 'rebuilt!');
+      ampInfo('AmpApp', 'rebuilt!');
     } catch (e) {
-      ampInfo(ctx: 'AmpHomePageState][rebuild', message: errorString(e));
+      ampInfo('AmpHomePageState.rebuild', errorString(e));
     }
   }
 
@@ -322,7 +322,7 @@ class AmpHomePageState extends State<AmpHomePage>
   @override
   Widget build(BuildContext context) {
     try {
-      ampInfo(ctx: 'MyHomePage', message: 'Building MyHomePage...');
+      ampInfo('MyHomePage', 'Building MyHomePage...');
       if (dsbWidget == null) {
         dsbUpdateWidget();
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
@@ -468,7 +468,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 ),
                 ampBigAmpButton(
                   onTap: () async {
-                    ampInfo(ctx: 'MyApp', message: 'switching design mode');
+                    ampInfo('MyApp', 'switching design mode');
                     Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
                     await dsbUpdateWidget();
                     rebuild();
@@ -578,7 +578,7 @@ class AmpHomePageState extends State<AmpHomePage>
         ],
       ));
     } catch (e) {
-      ampErr(ctx: 'AmpHomePageState', message: errorString(e));
+      ampErr('AmpHomePageState', errorString(e));
       return ampText(errorString(e));
     }
   }

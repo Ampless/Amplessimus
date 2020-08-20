@@ -50,20 +50,20 @@ void clearCache() {
   for (var hash in cachedHashes) {
     _prefs.setString('CACHE_VAL_$hash', null);
     _prefs.setInt('CACHE_TTL_$hash', null);
-    ampInfo(ctx: 'CACHE', message: 'Removed $hash');
+    ampInfo('CACHE', 'Removed $hash');
   }
   _prefs.setStringList('CACHE_URLS', []);
 }
 
 void listCache() {
-  ampInfo(ctx: 'Cache', message: '{');
+  ampInfo('Cache', '{');
   for (var hash in _prefs.getStringList('CACHE_URLS', []))
     ampRawLog(jsonEncode({
       'hash': hash,
       'len': _prefs.getString('CACHE_VAL_$hash', '').length,
       'ttl': _prefs.getInt('CACHE_TTL_$hash', -1)
     }));
-  ampInfo(ctx: 'Cache', message: '}');
+  ampInfo('Cache', '}');
 }
 
 int timesToggleDarkModePressed = 0;
@@ -152,7 +152,7 @@ Future<Null> load() async {
   try {
     await _prefs.ctor();
   } catch (e) {
-    ampErr(ctx: 'Prefs', message: 'Initialization failed: ${errorString(e)}');
+    ampErr('Prefs', 'Initialization failed: ${errorString(e)}');
   }
 }
 
@@ -160,5 +160,5 @@ void clear() async {
   if (_prefs == null)
     throw 'HOLY SHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
   await _prefs.clear();
-  ampInfo(ctx: 'Prefs', message: 'Cleared SharedPreferences.');
+  ampInfo('Prefs', 'Cleared SharedPreferences.');
 }
