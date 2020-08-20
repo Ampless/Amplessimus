@@ -2,45 +2,43 @@ import 'package:Amplessimus/day.dart';
 
 import 'testlib.dart';
 
-class DayTestCase extends ExpectTestCase {
-  DayTestCase(input, expct, bool error, [Function tfunc = matchDay])
-      : super(() async => tfunc(input), expct, error);
-}
+testCase dayTestCase(input, expct, bool error, [Function tfunc = matchDay]) =>
+    expectTestCase(() async => tfunc(input), expct, error);
 
-List<DayTestCase> dayTestCases = [
-  DayTestCase(null, Day.Null, false),
-  DayTestCase('', Day.Null, false),
-  DayTestCase('_kEkW_freiTaG_llUUULW', Day.Friday, false),
-  DayTestCase('FvCkDaY', null, true),
-  DayTestCase('Montag', Day.Monday, false),
-  DayTestCase('Monday', Day.Monday, false),
-  DayTestCase('Pondělí', Day.Monday, false),
-  DayTestCase('Dienstag', Day.Tuesday, false),
-  DayTestCase('Tuesday', Day.Tuesday, false),
-  DayTestCase('Úterý', Day.Tuesday, false),
-  DayTestCase('Mittwoch', Day.Wednesday, false),
-  DayTestCase('Wednesday', Day.Wednesday, false),
-  DayTestCase('Středa', Day.Wednesday, false),
-  DayTestCase('Donnerstag', Day.Thursday, false),
-  DayTestCase('Thursday', Day.Thursday, false),
-  DayTestCase('Čtvrtek', Day.Thursday, false),
-  DayTestCase('Freitag', Day.Friday, false),
-  DayTestCase('Friday', Day.Friday, false),
-  DayTestCase('Pátek', Day.Friday, false),
-  DayTestCase(Day.Monday, 0, false, dayToInt),
-  DayTestCase(Day.Tuesday, 1, false, dayToInt),
-  DayTestCase(Day.Wednesday, 2, false, dayToInt),
-  DayTestCase(Day.Thursday, 3, false, dayToInt),
-  DayTestCase(Day.Friday, 4, false, dayToInt),
-  DayTestCase(Day.Null, -1, false, dayToInt),
-  DayTestCase(null, -1, false, dayToInt),
-  DayTestCase(0, Day.Monday, false, dayFromInt),
-  DayTestCase(1, Day.Tuesday, false, dayFromInt),
-  DayTestCase(2, Day.Wednesday, false, dayFromInt),
-  DayTestCase(3, Day.Thursday, false, dayFromInt),
-  DayTestCase(4, Day.Friday, false, dayFromInt),
-  DayTestCase(-1, Day.Null, false, dayFromInt),
-  DayTestCase(null, Day.Null, false, dayFromInt),
+List<testCase> dayTestCases = [
+  dayTestCase(null, Day.Null, false),
+  dayTestCase('', Day.Null, false),
+  dayTestCase('_kEkW_freiTaG_llUUULW', Day.Friday, false),
+  dayTestCase('FvCkDaY', null, true),
+  dayTestCase('Montag', Day.Monday, false),
+  dayTestCase('Monday', Day.Monday, false),
+  dayTestCase('Pondělí', Day.Monday, false),
+  dayTestCase('Dienstag', Day.Tuesday, false),
+  dayTestCase('Tuesday', Day.Tuesday, false),
+  dayTestCase('Úterý', Day.Tuesday, false),
+  dayTestCase('Mittwoch', Day.Wednesday, false),
+  dayTestCase('Wednesday', Day.Wednesday, false),
+  dayTestCase('Středa', Day.Wednesday, false),
+  dayTestCase('Donnerstag', Day.Thursday, false),
+  dayTestCase('Thursday', Day.Thursday, false),
+  dayTestCase('Čtvrtek', Day.Thursday, false),
+  dayTestCase('Freitag', Day.Friday, false),
+  dayTestCase('Friday', Day.Friday, false),
+  dayTestCase('Pátek', Day.Friday, false),
+  dayTestCase(Day.Monday, 0, false, dayToInt),
+  dayTestCase(Day.Tuesday, 1, false, dayToInt),
+  dayTestCase(Day.Wednesday, 2, false, dayToInt),
+  dayTestCase(Day.Thursday, 3, false, dayToInt),
+  dayTestCase(Day.Friday, 4, false, dayToInt),
+  dayTestCase(Day.Null, -1, false, dayToInt),
+  dayTestCase(null, -1, false, dayToInt),
+  dayTestCase(0, Day.Monday, false, dayFromInt),
+  dayTestCase(1, Day.Tuesday, false, dayFromInt),
+  dayTestCase(2, Day.Wednesday, false, dayFromInt),
+  dayTestCase(3, Day.Thursday, false, dayFromInt),
+  dayTestCase(4, Day.Friday, false, dayFromInt),
+  dayTestCase(-1, Day.Null, false, dayFromInt),
+  dayTestCase(null, Day.Null, false, dayFromInt),
 ];
 
 void main() {

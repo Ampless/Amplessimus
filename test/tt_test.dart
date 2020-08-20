@@ -6,30 +6,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'testlib.dart';
 
-class TTTestCase extends TestCase {
-  dynamic expct;
-  bool error;
-  Future<dynamic> Function() tfunc;
-
-  TTTestCase(this.tfunc, this.expct, this.error);
-
-  @override
-  Future<Null> run() async {
-    dynamic res;
-    try {
-      res = await tfunc();
-    } catch (e) {
-      if (!error)
-        rethrow;
-      else
-        return;
-    }
-    if (error) throw 'No error.';
-    expect(res.length, expct.length);
-    for (var i = 0; i < res.length; i++)
-      expect(res[i].toString(), expct[i].toString());
-  }
-}
+testCase ttTestCase(
+  Future<dynamic> Function() tfunc,
+  dynamic expct,
+  bool error,
+) =>
+    () async {
+      dynamic res;
+      try {
+        res = await tfunc();
+      } catch (e) {
+        if (!error)
+          rethrow;
+        else
+          return;
+      }
+      if (error) throw 'No error.';
+      expect(res.length, expct.length);
+      for (var i = 0; i < res.length; i++)
+        expect(res[i].toString(), expct[i].toString());
+    };
 
 final List<TTColumn> ttTest1Input1 = [
   TTColumn([
@@ -63,16 +59,16 @@ final List<TTColumn> ttTest1Output = [
   ], Day.Tuesday),
 ];
 
-final List<TTTestCase> ttTestCases = [
-  TTTestCase(() async => ttSubTable(ttTest1Input1, ttTest1Input2),
+final List<testCase> ttTestCases = [
+  ttTestCase(() async => ttSubTable(ttTest1Input1, ttTest1Input2),
       ttTest1Output, false),
-  TTTestCase(() async {
+  ttTestCase(() async {
     ttSaveToPrefs(ttTest1Input1);
     await Prefs.waitForMutex();
     return ttLoadFromPrefs();
   }, ttTest1Output, false),
-  TTTestCase(() async => ttFromJson(null), [], false),
-  TTTestCase(() async => ttToJson(null), '[]', false),
+  ttTestCase(() async => ttFromJson(null), [], false),
+  ttTestCase(() async => ttToJson(null), '[]', false),
 ];
 
 void main() {

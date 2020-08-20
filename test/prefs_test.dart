@@ -9,7 +9,7 @@ const String expectedJson =
 
 void main() {
   tests([
-    ExpectTestCase(() async {
+    expectTestCase(() async {
       Prefs.char = 'c';
       Prefs.closeAppOnBackPress = false;
       Prefs.currentThemeId = 42;

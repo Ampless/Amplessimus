@@ -71,73 +71,60 @@ void assertDsbPlanListsEqual(List<DsbPlan> l1, List<DsbPlan> l2) {
   }
 }
 
-class DsbTestCase extends TestCase {
-  String username;
-  String password;
-  Map<String, String> htmlCache;
-  List<DsbPlan> expectedPlans;
-  String stage;
-  String char;
+testCase dsbTestCase(
+  String username,
+  String password,
+  Map<String, String> htmlCache,
+  List<DsbPlan> expectedPlans,
+  String stage,
+  String char, {
   Future<List<DsbPlan>> Function(
-      String, String, Function, Function, String, String) tfunc;
-
-  DsbTestCase(this.username, this.password, this.htmlCache, this.expectedPlans,
-      this.stage, this.char,
-      {this.tfunc});
-
-  @override
-  Future<Null> run() async {
-    tfunc ??= (username, password, httpGet, httpPost, stage, char) async {
-      return dsbSortAllByHour(dsbSearchClass(
-          await dsbGetAllSubs(username, password,
-              lang: English(),
-              httpGet: httpGet,
-              httpPost: httpPost,
-              dsbLanguage: 'de',
-              cacheGetRequests: false,
-              cachePostRequests: false),
+          String, String, Function, Function, String, String)
+      tfunc,
+}) =>
+    () async {
+      tfunc ??= (username, password, httpGet, httpPost, stage, char) async {
+        return dsbSortAllByHour(dsbSearchClass(
+            await dsbGetAllSubs(username, password,
+                lang: English(),
+                httpGet: httpGet,
+                httpPost: httpPost,
+                dsbLanguage: 'de',
+                cacheGetRequests: false,
+                cachePostRequests: false),
+            stage,
+            char));
+      };
+      var getFromCache = (String url) async {
+        for (var key in htmlCache.keys)
+          if (strcontain(key, url)) return htmlCache[key];
+        return null;
+      };
+      var plans = await tfunc(
+          username,
+          password,
+          (url, {getCache, setCache}) => getFromCache(url.toString()),
+          (url, _, __, ___, {getCache, setCache}) =>
+              getFromCache(url.toString()),
           stage,
-          char));
+          char);
+      assertDsbPlanListsEqual(plans, expectedPlans);
     };
-    var plans = await tfunc(
-        username,
-        password,
-        (url, {getCache, setCache}) => _getFromCache(url.toString()),
-        (url, _, __, ___, {getCache, setCache}) =>
-            _getFromCache(url.toString()),
-        stage,
-        char);
-    assertDsbPlanListsEqual(plans, expectedPlans);
-  }
 
-  Future<String> _getFromCache(String url) async {
-    for (var key in htmlCache.keys)
-      if (strcontain(key, url)) return htmlCache[key];
-    return null;
-  }
-}
-
-List<DsbTestCase> dsbTestCases = [
-  DsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, '11', 'q'),
-  DsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, '11', null),
-  DsbTestCase(null, null, dsbTest2Cache, dsbTest2Expct, null, 'q'),
-  DsbTestCase('invalid', 'none', dsbTest2Cache, dsbTest2Expct, null, null),
+List<testCase> dsbTestCases = [
+  dsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, '11', 'q'),
+  dsbTestCase(null, null, dsbTest1Cache, dsbTest1Expct, '11', null),
+  dsbTestCase(null, null, dsbTest2Cache, dsbTest2Expct, null, 'q'),
+  dsbTestCase('invalid', 'none', dsbTest2Cache, dsbTest2Expct, null, null),
 ];
 
-class JsonTestCase extends TestCase {
-  List<DsbPlan> plans;
+testCase jsonTestCase(List<DsbPlan> plans) => () async {
+      assertDsbPlanListsEqual(plansFromJson(plansToJson(plans)), plans);
+    };
 
-  JsonTestCase(this.plans);
-
-  @override
-  Future<Null> run() async {
-    assertDsbPlanListsEqual(plansFromJson(plansToJson(plans)), plans);
-  }
-}
-
-List<JsonTestCase> jsonTestCases = [
-  JsonTestCase(dsbTest1Expct),
-  JsonTestCase(dsbTest2Expct),
+List<testCase> jsonTestCases = [
+  jsonTestCase(dsbTest1Expct),
+  jsonTestCase(dsbTest2Expct),
 ];
 
 void main() {
