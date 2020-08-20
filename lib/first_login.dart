@@ -12,7 +12,6 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-// ignore: must_be_immutable
 class FirstLoginScreen extends StatelessWidget {
   FirstLoginScreen(
       {bool testing = false,
@@ -29,27 +28,26 @@ class FirstLoginScreen extends StatelessWidget {
     FirstLoginValues.httpPostFunc = httpPostFunc;
     FirstLoginValues.httpGetFunc = httpGetFunc;
   }
-  FirstLoginScreenPage _page;
-  FirstLoginScreenPage get page => _page;
   @override
   Widget build(BuildContext context) {
     AmpColors.isDarkMode = true;
-    return ampMatApp(_page = FirstLoginScreenPage(), pop: () async {
-      if (page.state.tabController.index > 0)
-        page.state.tabController.animateTo(page.state.tabController.index - 1);
+    return ampMatApp(FirstLoginScreenPage(), pop: () async {
+      if (firstLoginTabController.index > 0)
+        firstLoginTabController.animateTo(firstLoginTabController.index - 1);
       return false;
     });
   }
 }
 
-// ignore: must_be_immutable
 class FirstLoginScreenPage extends StatefulWidget {
   FirstLoginScreenPage();
-  FirstLoginScreenPageState _state;
-  FirstLoginScreenPageState get state => _state;
   @override
-  State<StatefulWidget> createState() => _state = FirstLoginScreenPageState();
+  State<StatefulWidget> createState() => FirstLoginScreenPageState();
 }
+
+final usernameInputFormKey = GlobalKey<FormFieldState>();
+final passwordInputFormKey = GlobalKey<FormFieldState>();
+TabController firstLoginTabController;
 
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
     with SingleTickerProviderStateMixin {
@@ -62,17 +60,14 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
   String letterDropDownValue = Prefs.char.trim().toLowerCase();
   bool passwordHidden = true;
-  final usernameInputFormKey = GlobalKey<FormFieldState>();
-  final passwordInputFormKey = GlobalKey<FormFieldState>();
   final usernameInputFormController =
       TextEditingController(text: Prefs.username);
   final passwordInputFormController =
       TextEditingController(text: Prefs.password);
-  TabController tabController;
 
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this);
+    firstLoginTabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -85,7 +80,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
     return Scaffold(
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
-        controller: tabController,
+        controller: firstLoginTabController,
         children: <Widget>[
           AnimatedContainer(
             duration: Duration(milliseconds: 150),
@@ -198,7 +193,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       textString = '';
                     });
                     FocusScope.of(context).unfocus();
-                    tabController.animateTo(1);
+                    firstLoginTabController.animateTo(1);
                   } catch (e) {
                     setState(() {
                       credentialsAreLoading = false;

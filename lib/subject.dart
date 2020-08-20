@@ -1,14 +1,14 @@
 import 'package:Amplessimus/langs/language.dart';
 
+final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
+final _letters = RegExp(r'[a-zA-Z]');
+final _numeric = RegExp(r'[0-9]');
+
 bool _isNum(String s, int i) {
   if (s == null || s.length <= i || i < 0) return false;
   var cu = s.codeUnitAt(i);
   return cu >= _zero && cu <= _nine;
 }
-
-final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
-final _letters = RegExp(r'[a-zA-Z]');
-final _numeric = RegExp(r'[0-9]');
 
 String realSubject(String subject, [Language lang]) {
   lang ??= Language.current;
