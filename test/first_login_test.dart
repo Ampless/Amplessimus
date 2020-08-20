@@ -21,11 +21,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('5'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('11').first);
+    await tester.tap(find.text('11').last);
     await tester.pumpAndSettle();
     await tester.tap(find.text('a'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('q').first);
+    await tester.tap(find.text('q').last);
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(usernameInputFormKey), 'username');
     await tester.pumpAndSettle();
@@ -41,12 +41,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.dayToString(Day.Monday)));
     await tester.pumpAndSettle();
-    await tester
-        .tap(find.text(Language.current.dayToString(Day.Tuesday)).first);
+    await tester.tap(find.text(Language.current.dayToString(Day.Tuesday)).last);
     await tester.pumpAndSettle();
     await tester.tap(find.text('0'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('6').first);
+    await tester.tap(find.text('6').last);
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.save));
     await tester.pumpAndSettle();
