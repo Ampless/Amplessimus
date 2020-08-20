@@ -9,29 +9,6 @@ class AmpStrings {
 }
 
 class AmpColors {
-  static MaterialColor _color(int code) {
-    var c = Color(code);
-    return MaterialColor(code, {
-      50: c,
-      100: c,
-      200: c,
-      300: c,
-      400: c,
-      500: c,
-      600: c,
-      700: c,
-      800: c,
-      900: c
-    });
-  }
-
-  static final MaterialColor _primaryBlack = _color(0xFF000000);
-  static final MaterialColor _primaryWhite = _color(0xFFFFFFFF);
-  static MaterialColor get materialColorForeground =>
-      isDarkMode ? _primaryWhite : _primaryBlack;
-  static MaterialColor get materialColorBackground =>
-      isDarkMode ? _primaryBlack : _primaryWhite;
-
   static final Color _blankBlack = Color.fromRGBO(0, 0, 0, 1);
   static final Color _blankWhite = Color.fromRGBO(255, 255, 255, 1);
   static final Color _greyBlack = Color.fromRGBO(75, 75, 75, 1);
@@ -75,19 +52,4 @@ class AmpColors {
   }
 
   static void switchMode() => isDarkMode = !isDarkMode;
-
-  static TweenSequenceItem _rainbowSequenceElement(
-      MaterialColor begin, MaterialColor end) {
-    return TweenSequenceItem(
-        weight: 1.0, tween: ColorTween(begin: begin, end: end));
-  }
-
-  static final Animatable<Color> rainbowBackgroundAnimation =
-      TweenSequence<Color>(
-    [
-      _rainbowSequenceElement(Colors.red, Colors.green),
-      _rainbowSequenceElement(Colors.green, Colors.blue),
-      _rainbowSequenceElement(Colors.blue, Colors.pink),
-    ],
-  );
 }

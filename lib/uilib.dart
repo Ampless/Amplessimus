@@ -231,13 +231,6 @@ AppBar ampAppBar(String text) {
   );
 }
 
-ThemeData get ampThemeData => ThemeData(
-      brightness: AmpColors.brightness,
-      canvasColor: AmpColors.materialColorBackground,
-      primarySwatch: AmpColors.materialColorForeground,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    );
-
 class _AmpBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(context, child, axisDirection) => child;
@@ -249,7 +242,6 @@ WillPopScope ampMatApp(Widget home, {@required Future<bool> Function() pop}) {
       builder: (context, child) =>
           ScrollConfiguration(behavior: _AmpBehavior(), child: child),
       title: AmpStrings.appTitle,
-      theme: ampThemeData,
       home: home,
       debugShowCheckedModeBanner: false,
     ),
