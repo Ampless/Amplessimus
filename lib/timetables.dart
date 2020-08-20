@@ -50,15 +50,15 @@ class TTColumn {
   TTColumn(this.lessons, this.day);
 
   TTColumn.fromJson(Map<String, dynamic> json)
-      : lessons = lessonsFromJson(json['lessons']),
+      : lessons = _lessonsFromJson(json['lessons']),
         day = dayFromInt(json['day']);
 
   Map<String, dynamic> toJson() => {
-        'lessons': lessonsToJson(lessons),
+        'lessons': _lessonsToJson(lessons),
         'day': dayToInt(day),
       };
 
-  List<dynamic> lessonsToJson(List<TTLesson> lessons) {
+  List<dynamic> _lessonsToJson(List<TTLesson> lessons) {
     var lessonsStrings = <dynamic>[];
     for (var lesson in lessons) {
       lessonsStrings.add(lesson.toJson());
@@ -66,7 +66,7 @@ class TTColumn {
     return lessonsStrings;
   }
 
-  static List<TTLesson> lessonsFromJson(List<dynamic> lessonsStrings) {
+  static List<TTLesson> _lessonsFromJson(List<dynamic> lessonsStrings) {
     var tempLessons = <TTLesson>[];
     for (dynamic tempString in lessonsStrings) {
       tempLessons.add(TTLesson.fromJson(tempString));
@@ -86,8 +86,10 @@ const List<Day> ttWeek = [
   Day.Friday
 ];
 
+//applies plans to a copy of table, which is then returned
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   var tbl = <TTColumn>[];
+  //copy table -> tbl
   for (var c in table) {
     var ls = <TTLesson>[];
     for (var l in c.lessons)
@@ -128,10 +130,11 @@ List<TTColumn> ttFromJson(String jsontext) {
   return table;
 }
 
-void ttSaveToPrefs(List<TTColumn> table) =>
-    Prefs.jsonTimetable = ttToJson(table);
+void ttSaveToPrefs(List<TTColumn> tbl) => Prefs.jsonTimetable = ttToJson(tbl);
 List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
+//if(filtered) table = ttSubTable(table, plans)
+//then makes ampThemedLists from table
 List<Widget> ttWidgets(
   List<DsbPlan> plans,
   List<TTColumn> table, [

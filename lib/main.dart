@@ -129,10 +129,9 @@ class AmpHomePageState extends State<AmpHomePage>
   TabController tabController;
 
   void checkBrightness() {
-    if (Prefs.useSystemTheme &&
-        SchedulerBinding.instance.window.platformBrightness !=
-            AmpColors.brightness) {
-      AmpColors.switchMode();
+    if (Prefs.useSystemTheme) {
+      AmpColors.brightness =
+          SchedulerBinding.instance.window.platformBrightness;
       rebuildNewBuild();
       Future.delayed(Duration(milliseconds: 150), rebuild);
     }
