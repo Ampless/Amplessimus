@@ -63,6 +63,7 @@ replaceversions:
 	mv -f lib/values.dart lib/values.dart.def
 	sed "s/0.0.0-1/$(ACTUAL_VERSION)/" lib/values.dart.def > lib/values.dart
 
+# TODO: call this always
 rollbackversions:
 	@which mv
 	mv -f pubspec.yaml.def pubspec.yaml
@@ -105,21 +106,33 @@ aab:
 
 webbuild:
 	@which flutter mv
+	flutter channel master
+	flutter upgrade
+	flutter config --enable-web
 	flutter build web $(WEB_FLAGS)
 	mv build/web $(OUTPUT_WEB)
 
 winx64:
 	@which flutter mv
+	flutter channel master
+	flutter upgrade
+	flutter config --enable-windows-desktop
 	flutter build windows $(WIN_FLAGS)
 	mv build/windows/x64/Release/Runner $(OUTPUT_WIN)
 
 linux64:
 	@which flutter mv
+	flutter channel master
+	flutter upgrade
+	flutter config --enable-linux-desktop
 	flutter build linux $(GTK_FLAGS)
 	mv build/linux/release/bundle $(OUTPUT_GTK)
 
 macapp:
 	@which flutter strip
+	flutter channel master
+	flutter upgrade
+	flutter config --enable-macos-desktop
 	flutter build macos $(MAC_FLAGS)
 	$(STRIP) $(MAC_STRIP_LIST) || true
 
@@ -137,12 +150,6 @@ mkdirs:
 cleanartifacts:
 	@which rm
 	rm -rf $(TMP)/*
-
-# by now this is actually taken straight from the flutter docs
-# (linux alpha gang)
-setup:
-	@which sudo apt
-	sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev
 
 test:
 	flutter test $(TEST_FLAGS) || make test
