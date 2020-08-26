@@ -35,7 +35,7 @@ void ampLog(String lvl, dynamic ctx, Object message) {
 
 void ampRawLog(Object msg) {
   if (_loggingDisabled) return;
-  Prefs.log += msg;
+  Prefs.log += msg.toString();
   Prefs.log += '\n';
   print(msg);
 }
