@@ -8,6 +8,7 @@ import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/register_timetable.dart';
+import 'package:Amplessimus/screens/timeout.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/utils.dart';
@@ -44,6 +45,15 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     ]);
     super.initState();
     (() async {
+      // if the program wont start within 30 secs, show some debug info
+      var timeout = Timer(
+        Duration(seconds: 30),
+        () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => Timeout()),
+        ),
+      );
+
       await Prefs.load();
       ttColumns = ttLoadFromPrefs();
 
@@ -56,6 +66,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if (!Prefs.firstLogin) await dsbUpdateWidget();
 
       Future.delayed(Duration(seconds: 1), () {
+        timeout.cancel();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
