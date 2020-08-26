@@ -4,9 +4,8 @@ import 'dart:io';
 import 'package:Amplessimus/logging.dart';
 import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
-class CachedSharedPreferences extends SharedPreferencesStorePlatform {
+class CachedSharedPreferences {
   SharedPreferences _prefs;
   RandomAccessFile _prefFile;
   final Mutex _prefFileMutex = Mutex();
@@ -40,7 +39,7 @@ class CachedSharedPreferences extends SharedPreferencesStorePlatform {
         await _prefs.setBool(key, value);
       else if (value is double)
         await _prefs.setDouble(key, value);
-      else
+      else if (value != null)
         ampWarn(
           'PrefCache',
           'value "$value" '
@@ -57,23 +56,25 @@ class CachedSharedPreferences extends SharedPreferencesStorePlatform {
   Future<Null> setStringList(String k, List<String> v) => _set(k, v);
   Future<Null> setBool(String k, bool v) => _set(k, v);
 
-  dynamic _get(String key, dynamic defaultValue) {
+  dynamic _get(String key, dynamic defaultValue, dynamic Function(String) f) {
     if (_prefs == null && _platformSupportsSharedPrefs)
       ampWarn('PrefCache', 'Getting $key before initialization is done.');
 
     if (_cache.containsKey(key))
       return _cache[key];
-    else if (_prefs != null && _prefs.containsKey(key))
-      return _prefs.get(key);
-    else
+    else if (_prefs != null && _prefs.containsKey(key)) {
+      var v = f(key);
+      return v;
+    } else
       return defaultValue;
   }
 
-  int getInt(String key, int dflt) => _get(key, dflt);
-  double getDouble(String key, double dflt) => _get(key, dflt);
-  String getString(String key, String dflt) => _get(key, dflt);
-  bool getBool(String key, bool dflt) => _get(key, dflt);
-  List<String> getStringList(String key, List<String> dflt) => _get(key, dflt);
+  int getInt(String k, int dflt) => _get(k, dflt, _prefs.getInt);
+  double getDouble(String k, double dflt) => _get(k, dflt, _prefs.getDouble);
+  String getString(String k, String dflt) => _get(k, dflt, _prefs.getString);
+  bool getBool(String k, bool dflt) => _get(k, dflt, _prefs.getBool);
+  List<String> getStringList(String k, List<String> dflt) =>
+      _get(k, dflt, _prefs.getStringList);
 
   String toJson() {
     var prefs = [];
@@ -87,21 +88,17 @@ class CachedSharedPreferences extends SharedPreferencesStorePlatform {
     return jsonEncode(prefs);
   }
 
-  Future<Null> flush() async {
-    await _prefFileMutex.acquire();
-    if (_prefFile != null) {
-      await _prefFile.setPosition(0);
-      await _prefFile.truncate(0);
-      await _prefFile.writeString(toJson());
-      await _prefFile.flush();
-    }
-    _prefFileMutex.release();
-  }
+  Future<Null> flush() => _prefFileMutex.protect(() async {
+        if (_prefFile != null) {
+          await _prefFile.setPosition(0);
+          await _prefFile.truncate(0);
+          await _prefFile.writeString(toJson());
+          await _prefFile.flush();
+        }
+        _prefFileMutex.release();
+      });
 
-  Future<Null> waitForMutex() async {
-    await _prefFileMutex.acquire();
-    _prefFileMutex.release();
-  }
+  Future<Null> waitForMutex() => _prefFileMutex.protect(() {});
 
   Future<Null> ctorSharedPrefs() async {
     _prefs = await SharedPreferences.getInstance();
@@ -112,29 +109,28 @@ class CachedSharedPreferences extends SharedPreferencesStorePlatform {
 
   // this is a constructor for the prealpha desktop version
   // (only used on windows and hopefully not much longer)
-  Future<Null> ctorPrealphaDesktop() async {
-    await _prefFileMutex.acquire();
-    _prefFile =
-        await File('.amplissimus_prealpha_data').open(mode: FileMode.append);
-    if (await _prefFile.length() > 1) {
-      await _prefFile.setPosition(0);
-      var bytes = await _prefFile.read(await _prefFile.length());
-      //this kind of creates a race condition, but that doesn't really matter lol
-      for (dynamic json in jsonDecode(utf8.decode(bytes))) {
-        dynamic key = json['k'];
-        dynamic val = json['v'];
-        dynamic typ = json['t'];
-        if (typ == 3)
-          _cache[key] = val == 1;
-        else if (typ == 4) {
-          _cache[key] = [];
-          for (dynamic s in val) _cache[key].add(s);
-        } else
-          _cache[key] = val;
-      }
-    }
-    _prefFileMutex.release();
-  }
+  Future<Null> ctorPrealphaDesktop() => _prefFileMutex.protect(() async {
+        _prefFile = await File('.amplissimus_prealpha_data')
+            .open(mode: FileMode.append);
+        if (await _prefFile.length() > 1) {
+          await _prefFile.setPosition(0);
+          var bytes = await _prefFile.read(await _prefFile.length());
+          //this kind of creates a race condition, but that doesn't really matter lol
+          //as of 2020/08/26 i dont see it
+          for (dynamic json in jsonDecode(utf8.decode(bytes))) {
+            dynamic key = json['k'];
+            dynamic val = json['v'];
+            dynamic typ = json['t'];
+            if (typ == 3)
+              _cache[key] = val == 1;
+            else if (typ == 4) {
+              _cache[key] = <String>[];
+              for (dynamic s in val) _cache[key].add(s);
+            } else
+              _cache[key] = val;
+          }
+        }
+      });
 
   void checkPlatformSharedPrefSupport() {
     try {
@@ -158,8 +154,7 @@ class CachedSharedPreferences extends SharedPreferencesStorePlatform {
         : ctorPrealphaDesktop)();
   }
 
-  @override
-  Future<bool> clear() async {
+  void clear() async {
     await _prefFileMutex.acquire();
     _cache.clear();
     if (_prefs == null) {
@@ -167,20 +162,11 @@ class CachedSharedPreferences extends SharedPreferencesStorePlatform {
       if (_platformSupportsSharedPrefs)
         throw 'PREFS NOT LOADED';
       else
-        return true;
+        return;
     }
     await _prefs.clear();
     _prefFileMutex.release();
     await flush();
-    return true;
+    return;
   }
-
-  @override
-  Future<Map<String, Object>> getAll() async => _cache;
-
-  @override
-  Future<bool> remove(String key) => _set(key, null);
-
-  @override
-  Future<bool> setValue(String _, String key, Object value) => _set(key, value);
 }
