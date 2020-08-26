@@ -100,7 +100,7 @@ class CachedSharedPreferences {
 
   Future<Null> waitForMutex() => _prefFileMutex.protect(() {});
 
-  Future<Null> ctorSharedPrefs() async {
+  Future<void> ctorSharedPrefs() async {
     _prefs = await SharedPreferences.getInstance();
     await _prefFileMutex.protect(() async {
       for (var k in _cache.keys) await _set(k, _cache[k]);
@@ -109,7 +109,7 @@ class CachedSharedPreferences {
 
   // this is a constructor for the prealpha desktop version
   // (only used on windows and hopefully not much longer)
-  Future<Null> ctorPrealphaDesktop() => _prefFileMutex.protect(() async {
+  Future<void> ctorPrealphaDesktop() => _prefFileMutex.protect(() async {
         _prefFile = await File('.amplissimus_prealpha_data')
             .open(mode: FileMode.append);
         if (await _prefFile.length() > 1) {
@@ -147,9 +147,9 @@ class CachedSharedPreferences {
     _platformSupportsSharedPrefs = false;
   }
 
-  Future<Null> ctor() async {
+  Future<void> ctor() {
     checkPlatformSharedPrefSupport();
-    await (_platformSupportsSharedPrefs
+    return (_platformSupportsSharedPrefs
         ? ctorSharedPrefs
         : ctorPrealphaDesktop)();
   }

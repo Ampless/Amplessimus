@@ -32,8 +32,8 @@ Widget ampLinearProgressIndicator([bool loading = true]) {
   return !loading
       ? ampNull
       : LinearProgressIndicator(
-          backgroundColor: AmpColors.colorBackground,
-          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          backgroundColor: Colors.black,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         );
 }
 

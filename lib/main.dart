@@ -39,14 +39,19 @@ class SplashScreenPage extends StatefulWidget {
 class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     super.initState();
-    (() async {
+    _initState();
+  }
+
+  void _initState() async {
+    try {
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+
       // if the program wont start within 30 secs, show some debug info
-      var timeout = Timer(
+      final timeout = Timer(
         Duration(seconds: 30),
         () => Navigator.pushReplacement(
           context,
@@ -54,7 +59,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         ),
       );
 
+      ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
+      ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
       ttColumns = ttLoadFromPrefs();
 
       if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
@@ -74,7 +81,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           ),
         );
       });
-    })();
+    } catch (e) {
+      ampErr('SplashScreenPageState.initState', errorString(e));
+    }
   }
 
   @override
