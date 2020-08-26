@@ -98,7 +98,6 @@ class CachedSharedPreferences {
           await _prefFile.writeString(toJson());
           await _prefFile.flush();
         }
-        _prefFileMutex.release();
       });
 
   Future<void> waitForMutex() => _prefFileMutex.protect(() {});
