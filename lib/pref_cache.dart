@@ -1,160 +1,89 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Amplessimus/logging.dart';
 import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
-class CachedSharedPreferences {
+class CachedSharedPreferences extends SharedPreferencesStorePlatform {
   SharedPreferences _prefs;
   RandomAccessFile _prefFile;
   final Mutex _prefFileMutex = Mutex();
-  final List<String> _editsString = [];
-  final List<String> _editsInt = [];
-  final List<String> _editsDouble = [];
-  final List<String> _editsBool = [];
-  final List<String> _editsStrings = [];
-  final Map<String, String> _cacheString = {};
-  final Map<String, int> _cacheInt = {};
-  final Map<String, double> _cacheDouble = {};
-  final Map<String, bool> _cacheBool = {};
-  final Map<String, List<String>> _cacheStrings = {};
+  final Map<String, dynamic> _cache = {};
 
   bool _platformSupportsSharedPrefs;
 
   // always returns false on windows, but that's fine, because prealpha
+  // (this also leads to the "lights on/off wont work" bug i talked about in
+  //  a commit comment)
   bool get isInitialized => _platformSupportsSharedPrefs && _prefs != null;
 
-  Future<Null> setString(String key, String value) async {
-    await _prefFileMutex.acquire();
-    _cacheString[key] = value;
-    _prefFileMutex.release();
-    if (_prefs != null)
-      await _prefs.setString(key, value);
-    else if (_prefFile == null) _editsString.add(key);
-    await flush();
-  }
-
-  Future<Null> setInt(String key, int value) async {
-    await _prefFileMutex.acquire();
-    _cacheInt[key] = value;
-    _prefFileMutex.release();
-    if (_prefs != null)
-      await _prefs.setInt(key, value);
-    else if (_prefFile == null) _editsInt.add(key);
-    await flush();
-  }
-
-  Future<Null> setDouble(String key, double value) async {
-    await _prefFileMutex.acquire();
-    _cacheDouble[key] = value;
-    _prefFileMutex.release();
-    if (_prefs != null)
-      await _prefs.setDouble(key, value);
-    else if (_prefFile == null) _editsDouble.add(key);
-    await flush();
-  }
-
-  Future<Null> setStringList(String key, List<String> value) async {
-    await _prefFileMutex.acquire();
-    _cacheStrings[key] = value;
-    _prefFileMutex.release();
-    if (_prefs != null)
-      await _prefs.setStringList(key, value);
-    else if (_prefFile == null) _editsStrings.add(key);
-    await flush();
-  }
-
-  Future<Null> setBool(String key, bool value) async {
-    await _prefFileMutex.acquire();
-    _cacheBool[key] = value;
-    _prefFileMutex.release();
-    if (_prefs != null)
-      await _prefs.setBool(key, value);
-    else if (_prefFile == null) _editsBool.add(key);
-    await flush();
-  }
-
-  int getInt(String key, int defaultValue) {
-    if (_cacheInt.containsKey(key)) return _cacheInt[key];
-    if (_prefs == null) {
-      if (_platformSupportsSharedPrefs)
-        throw 'PREFSI NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
-      else
-        return defaultValue;
+  Future<Null> _set(
+    String key,
+    dynamic value, [
+    bool setCacheAndFlush = true,
+  ]) async {
+    if (setCacheAndFlush) {
+      await _prefFileMutex.acquire();
+      _cache[key] = value;
+      _prefFileMutex.release();
     }
-    var i = _prefs.getInt(key);
-    i ??= defaultValue;
-    return i;
+    if (_prefs != null) {
+      if (value is String)
+        await _prefs.setString(key, value);
+      else if (value is int)
+        await _prefs.setInt(key, value);
+      else if (value is List)
+        await _prefs.setStringList(key, value);
+      else if (value is bool)
+        await _prefs.setBool(key, value);
+      else if (value is double)
+        await _prefs.setDouble(key, value);
+      else
+        ampWarn(
+          'PrefCache',
+          'value "$value" '
+              '(runtimeType: ${value.runtimeType}) '
+              'not supported',
+        );
+    }
+    if (setCacheAndFlush) await flush();
   }
 
-  double getDouble(String key, double defaultValue) {
-    if (_cacheDouble.containsKey(key)) return _cacheDouble[key];
-    if (_prefs == null) {
-      if (_platformSupportsSharedPrefs)
-        throw 'PREFSD NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
-      else
-        return defaultValue;
-    }
-    var d = _prefs.getDouble(key);
-    d ??= defaultValue;
-    return d;
+  Future<Null> setString(String k, String v) => _set(k, v);
+  Future<Null> setInt(String k, int v) => _set(k, v);
+  Future<Null> setDouble(String k, double v) => _set(k, v);
+  Future<Null> setStringList(String k, List<String> v) => _set(k, v);
+  Future<Null> setBool(String k, bool v) => _set(k, v);
+
+  dynamic _get(String key, dynamic defaultValue) {
+    if (_prefs == null && _platformSupportsSharedPrefs)
+      ampWarn('PrefCache', 'Getting $key before initialization is done.');
+
+    if (_cache.containsKey(key))
+      return _cache[key];
+    else if (_prefs != null && _prefs.containsKey(key))
+      return _prefs.get(key);
+    else
+      return defaultValue;
   }
 
-  String getString(String key, String defaultValue) {
-    if (_cacheString.containsKey(key)) return _cacheString[key];
-    if (_prefs == null) {
-      if (_platformSupportsSharedPrefs)
-        throw 'PREFSS NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
-      else
-        return defaultValue;
-    }
-    var s = _prefs.getString(key);
-    s ??= defaultValue;
-    return s;
-  }
-
-  bool getBool(String key, bool defaultValue) {
-    if (_cacheBool.containsKey(key)) return _cacheBool[key];
-    if (_prefs == null) {
-      if (_platformSupportsSharedPrefs)
-        throw 'PREFSB NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
-      else
-        return defaultValue;
-    }
-    var b = _prefs.getBool(key);
-    b ??= defaultValue;
-    return b;
-  }
-
-  List<String> getStringList(String key, List<String> defaultValue) {
-    if (_cacheStrings.containsKey(key)) return _cacheStrings[key];
-    if (_prefs == null) {
-      if (_platformSupportsSharedPrefs)
-        throw 'PREFSSL NOT INITIALIZED, THIS IS A SEVERE CODE BUG';
-      else
-        return defaultValue;
-    }
-    var s = _prefs.getStringList(key);
-    s ??= defaultValue;
-    return s;
-  }
+  int getInt(String key, int dflt) => _get(key, dflt);
+  double getDouble(String key, double dflt) => _get(key, dflt);
+  String getString(String key, String dflt) => _get(key, dflt);
+  bool getBool(String key, bool dflt) => _get(key, dflt);
+  List<String> getStringList(String key, List<String> dflt) => _get(key, dflt);
 
   String toJson() {
     var prefs = [];
-    for (var k in _cacheString.keys)
-      if (_cacheString[k] != null)
-        prefs.add({'k': k, 'v': _cacheString[k], 't': 0});
-    for (var k in _cacheInt.keys)
-      if (_cacheInt[k] != null) prefs.add({'k': k, 'v': _cacheInt[k], 't': 1});
-    for (var k in _cacheDouble.keys)
-      if (_cacheDouble[k] != null)
-        prefs.add({'k': k, 'v': _cacheDouble[k], 't': 2});
-    for (var k in _cacheBool.keys)
-      if (_cacheBool[k] != null)
-        prefs.add({'k': k, 'v': _cacheBool[k] ? 1 : 0, 't': 3});
-    for (var k in _cacheStrings.keys)
-      if (_cacheStrings[k] != null)
-        prefs.add({'k': k, 'v': _cacheStrings[k], 't': 4});
+    for (var k in _cache.keys)
+      if (_cache[k] != null)
+        prefs.add({
+          'k': k,
+          'v': _cache[k] is bool ? (_cache[k] ? 1 : 0) : _cache[k],
+          't': _cache[k] is bool ? 3 : _cache[k] is List<String> ? 4 : -1
+        });
     return jsonEncode(prefs);
   }
 
@@ -176,19 +105,13 @@ class CachedSharedPreferences {
 
   Future<Null> ctorSharedPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-    await waitForMutex();
-    for (var key in _editsString) await setString(key, _cacheString[key]);
-    for (var key in _editsInt) await setInt(key, _cacheInt[key]);
-    for (var key in _editsDouble) await setDouble(key, _cacheDouble[key]);
-    for (var key in _editsBool) await setBool(key, _cacheBool[key]);
-    for (var key in _editsStrings) await setStringList(key, _cacheStrings[key]);
-    _editsString.clear();
-    _editsInt.clear();
-    _editsDouble.clear();
-    _editsBool.clear();
-    _editsStrings.clear();
+    await _prefFileMutex.protect(() async {
+      for (var k in _cache.keys) await _set(k, _cache[k]);
+    });
   }
 
+  // this is a constructor for the prealpha desktop version
+  // (only used on windows and hopefully not much longer)
   Future<Null> ctorPrealphaDesktop() async {
     await _prefFileMutex.acquire();
     _prefFile =
@@ -201,19 +124,13 @@ class CachedSharedPreferences {
         dynamic key = json['k'];
         dynamic val = json['v'];
         dynamic typ = json['t'];
-        if (typ == 0)
-          _cacheString[key] = val;
-        else if (typ == 1)
-          _cacheInt[key] = val;
-        else if (typ == 2)
-          _cacheDouble[key] = val;
-        else if (typ == 3)
-          _cacheBool[key] = val == 1;
+        if (typ == 3)
+          _cache[key] = val == 1;
         else if (typ == 4) {
-          _cacheStrings[key] = [];
-          for (dynamic s in val) _cacheStrings[key].add(s);
+          _cache[key] = [];
+          for (dynamic s in val) _cache[key].add(s);
         } else
-          throw 'Prefs doesn\'t know the pref type "$typ".';
+          _cache[key] = val;
       }
     }
     _prefFileMutex.release();
@@ -228,6 +145,8 @@ class CachedSharedPreferences {
     }
   }
 
+  //_platformSupportsSharedPrefs = false;
+  //(only used in the tests)
   void platformSharedPrefSupportFalse() {
     _platformSupportsSharedPrefs = false;
   }
@@ -239,22 +158,29 @@ class CachedSharedPreferences {
         : ctorPrealphaDesktop)();
   }
 
-  void clear() async {
+  @override
+  Future<bool> clear() async {
     await _prefFileMutex.acquire();
-    _cacheBool.clear();
-    _cacheDouble.clear();
-    _cacheInt.clear();
-    _cacheString.clear();
-    _cacheStrings.clear();
+    _cache.clear();
     if (_prefs == null) {
       _prefFileMutex.release();
       if (_platformSupportsSharedPrefs)
-        throw 'PREFS NOT LODADA D A D AD';
+        throw 'PREFS NOT LOADED';
       else
-        return;
+        return true;
     }
     await _prefs.clear();
     _prefFileMutex.release();
     await flush();
+    return true;
   }
+
+  @override
+  Future<Map<String, Object>> getAll() async => _cache;
+
+  @override
+  Future<bool> remove(String key) => _set(key, null);
+
+  @override
+  Future<bool> setValue(String _, String key, Object value) => _set(key, value);
 }
