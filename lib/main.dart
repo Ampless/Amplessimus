@@ -61,6 +61,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
+      Prefs.devOptionsEnabled = Prefs.devOptionsEnabled;
       ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
       ttColumns = ttLoadFromPrefs();
 

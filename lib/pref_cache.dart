@@ -56,25 +56,28 @@ class CachedSharedPreferences {
   Future<Null> setStringList(String k, List<String> v) => _set(k, v);
   Future<Null> setBool(String k, bool v) => _set(k, v);
 
-  dynamic _get(String key, dynamic defaultValue, dynamic Function(String) f) {
+  dynamic _get(String key, dynamic dflt, Function(String) Function() f) {
     if (_prefs == null && _platformSupportsSharedPrefs)
       ampWarn('PrefCache', 'Getting $key before initialization is done.');
 
     if (_cache.containsKey(key))
       return _cache[key];
-    else if (_prefs != null && _prefs.containsKey(key)) {
-      var v = f(key);
-      return v;
-    } else
-      return defaultValue;
+    else if (_prefs != null && _prefs.containsKey(key))
+      return f()(key);
+    else
+      return dflt;
   }
 
-  int getInt(String k, int dflt) => _get(k, dflt, _prefs.getInt);
-  double getDouble(String k, double dflt) => _get(k, dflt, _prefs.getDouble);
-  String getString(String k, String dflt) => _get(k, dflt, _prefs.getString);
-  bool getBool(String k, bool dflt) => _get(k, dflt, _prefs.getBool);
-  List<String> getStringList(String k, List<String> dflt) =>
-      _get(k, dflt, _prefs.getStringList);
+  Function(String) _pGetInt() => _prefs.getInt;
+  Function(String) _pGetDbl() => _prefs.getDouble;
+  Function(String) _pGetStr() => _prefs.getString;
+  Function(String) _pGetBol() => _prefs.getBool;
+  Function(String) _pGetStrs() => _prefs.getStringList;
+  int getInt(String k, int d) => _get(k, d, _pGetInt);
+  double getDouble(String k, double d) => _get(k, d, _pGetDbl);
+  String getString(String k, String d) => _get(k, d, _pGetStr);
+  bool getBool(String k, bool d) => _get(k, d, _pGetBol);
+  List<String> getStringList(String k, List<String> d) => _get(k, d, _pGetStrs);
 
   String toJson() {
     var prefs = [];
@@ -88,7 +91,7 @@ class CachedSharedPreferences {
     return jsonEncode(prefs);
   }
 
-  Future<Null> flush() => _prefFileMutex.protect(() async {
+  Future<void> flush() => _prefFileMutex.protect(() async {
         if (_prefFile != null) {
           await _prefFile.setPosition(0);
           await _prefFile.truncate(0);
@@ -98,7 +101,7 @@ class CachedSharedPreferences {
         _prefFileMutex.release();
       });
 
-  Future<Null> waitForMutex() => _prefFileMutex.protect(() {});
+  Future<void> waitForMutex() => _prefFileMutex.protect(() {});
 
   Future<void> ctorSharedPrefs() async {
     _prefs = await SharedPreferences.getInstance();

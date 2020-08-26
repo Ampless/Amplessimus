@@ -126,21 +126,17 @@ void setTimer(int i, Function() f) {
   if (_updateTimer != null) _updateTimer.cancel();
   _updateTimer = FirstLoginValues.testing
       ? null
-      : Timer.periodic(Duration(minutes: i), (timer) => f());
+      : Timer.periodic(Duration(minutes: i), (_) => f());
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
-
-bool get isDarkMode {
-  if (!_prefs.isInitialized) return true;
-  return _prefs.getBool('is_dark_mode', true);
-}
+bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
 
 String toJson() => _prefs.toJson();
 
 //This does practically nothing (it is internally called when setting
 //any value), but it waits for any set operations in progress to finish.
-Future<Null> waitForMutex() => _prefs.waitForMutex();
+Future<void> waitForMutex() => _prefs.waitForMutex();
 
 void initTest() {
   _prefs = CachedSharedPreferences();
