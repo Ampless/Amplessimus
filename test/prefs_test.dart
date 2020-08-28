@@ -5,7 +5,7 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'testlib.dart';
 
 const String expectedJson =
-    '[{"k":"char","v":"c","t":0},{"k":"DSB_JSON_CACHE","v":"[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]","t":0},{"k":"grade","v":"10","t":0},{"k":"json_timetable","v":"[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]","t":0},{"k":"password_dsb","v":"password1","t":0},{"k":"lang","v":"cz","t":0},{"k":"username_dsb","v":"158681","t":0},{"k":"current_theme_id","v":42,"t":1},{"k":"sub_list_item_space","v":500.0,"t":2},{"k":"close_app_on_back_press","v":0,"t":3},{"k":"dev_options_enabled","v":1,"t":3},{"k":"dsb_use_language","v":0,"t":3},{"k":"filter_timetables","v":0,"t":3},{"k":"first_login","v":0,"t":3},{"k":"is_dark_mode","v":1,"t":3},{"k":"one_class_only","v":0,"t":3},{"k":"use_json_cache","v":0,"t":3},{"k":"use_system_theme","v":0,"t":3}]';
+    '[{"k":"char","v":"c","t":-1},{"k":"close_app_on_back_press","v":0,"t":3},{"k":"current_theme_id","v":42,"t":-1},{"k":"dev_options_enabled","v":1,"t":3},{"k":"DSB_JSON_CACHE","v":"[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]","t":-1},{"k":"dsb_use_language","v":0,"t":3},{"k":"filter_timetables","v":0,"t":3},{"k":"first_login","v":0,"t":3},{"k":"grade","v":"10","t":-1},{"k":"is_dark_mode","v":1,"t":3},{"k":"json_timetable","v":"[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]","t":-1},{"k":"one_class_only","v":0,"t":3},{"k":"password_dsb","v":"password1","t":-1},{"k":"lang","v":"cz","t":-1},{"k":"sub_list_item_space","v":500.0,"t":-1},{"k":"use_json_cache","v":0,"t":3},{"k":"use_system_theme","v":0,"t":3},{"k":"username_dsb","v":"158681","t":-1}]';
 
 void main() {
   tests([

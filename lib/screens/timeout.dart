@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
@@ -27,6 +29,10 @@ class TimeoutPage extends StatefulWidget {
 }
 
 class TimeoutPageState extends State<TimeoutPage> {
+  TimeoutPageState() {
+    Timer.periodic(Duration(seconds: 5), (_) => setState(() {}));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ampColumn([
@@ -34,6 +40,7 @@ class TimeoutPageState extends State<TimeoutPage> {
         'Amplessimus did not initialize correctly within 30 seconds.\n'
         'Please contact ampless@chrissx.de.',
       ),
+      ampText(ampText('nostr'), toString: (t) => t.toStringShallow()),
       ampLogWidget,
     ]);
   }
