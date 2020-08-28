@@ -84,7 +84,7 @@ make android
 make linux
 ```
 #### Output
-* `$VERSION/` a folder containing the Amplessimus binary and all deps
+* `$VERSION.linux/` a folder containing the Amplessimus binary and all deps
 
 ### iOS
 #### Prepare
@@ -95,8 +95,8 @@ make linux
 make ios
 ```
 #### Output
-* `$VERSION.deb`
-* `$VERSION.ipa`
+* `$VERSION.deb` a cydia package (maybe broken)
+* `$VERSION.ipa` an unsigned app (works)
 
 ### macOS
 #### Prepare
@@ -114,7 +114,7 @@ make mac
 make web
 ```
 #### Output
-* `$VERSION.web` a folder containing your `/var/www/html/*` basically
+* `$VERSION.web/` a folder containing your `/var/www/html/*` basically
 #### Notes
 It won't work, because browsers like "security".
 
@@ -126,5 +126,11 @@ It won't work, because browsers like "security".
 ```
 make win
 ```
-#### Output
-* TODO: write this down
+#### Compile without make (buggy)
+```
+make\_win
+```
+#### Output (make)
+* `$VERSION.win/`
+#### Output (without make)
+* `amplessimus.win/`
