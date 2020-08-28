@@ -64,7 +64,7 @@ are placed in the `bin/` folder created automatically.
 ```
 make android
 ```
-# Output
+#### Output
 * `$VERSION.aab`
 * `$VERSION.apk`
 
