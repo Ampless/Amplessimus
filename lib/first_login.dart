@@ -5,9 +5,9 @@ import 'package:Amplessimus/dsbutil.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/utils.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -181,7 +181,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     Map<String, dynamic> map = jsonDecode(await dsbGetData(
                       Prefs.username,
                       Prefs.password,
-                      httpPost: FirstLoginValues.httpPostFunc,
+                      FirstLoginValues.httpPostFunc,
                     ));
                     if (map['Resultcode'] != 0)
                       throw Language.current

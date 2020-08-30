@@ -1,12 +1,10 @@
 import 'dart:convert';
 
-import 'package:Amplessimus/day.dart';
-import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/subject.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/utils.dart';
+import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
 List<dynamic> timetableDays = [Day.Monday, Day.Tuesday];
@@ -101,7 +99,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
       if (column.day == plan.day) {
         for (var i = 0; i < column.lessons.length; i++) {
           for (var sub in plan.subs) {
-            if (sub.actualHours.contains(i + 1) &&
+            if (sub.actualLessons.contains(i + 1) &&
                 strcontain(sub.subject, column.lessons[i].subject)) {
               column.lessons[i].teacher = sub.teacher;
               column.lessons[i].notes = sub.notes;

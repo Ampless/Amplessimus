@@ -28,13 +28,18 @@ Downloads folder, click the file and then on `Install`.
 #### AltStore 1.3
 AltStore allows you to install IPAs. Download the IPA and install it,
 either with the `+` button in AltStore or by using `open in` AltStore.
-#### AltStore 1.4 (beta)
+#### AltStore 1.4 (beta < 5)
 AltStore 1.4 (currently in beta) allows you to add custom software
 repositories. Go to `Browse` → `Sources` → `+` and enter:
 ```
 https://ampless.chrissx.de/altstore/stable.json
 ```
 and you can install Amplessimus like you would install Riley's apps.
+#### AltStore 1.4
+In Beta 5 of AltStore 1.4 a new feature was added: You can add the Amplessimus
+source by clicking
+[this](altstore://source?url=https://ampless.chrissx.de/altstore/stable.json)
+link.
 #### Cydia (broken, help needed)
 There is an apt repo at
 ```

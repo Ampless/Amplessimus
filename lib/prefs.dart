@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/pref_cache.dart';
-import 'package:Amplessimus/utils.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dsbuntis/dsbuntis.dart';
 
 CachedSharedPreferences _prefs;
 

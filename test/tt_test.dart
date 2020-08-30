@@ -1,5 +1,4 @@
-import 'package:Amplessimus/day.dart';
-import 'package:Amplessimus/dsbapi.dart';
+import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/timetables.dart';
 import 'package:flutter_test/flutter_test.dart';

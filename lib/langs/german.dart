@@ -1,7 +1,6 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/day.dart';
-import 'package:Amplessimus/dsbapi.dart';
+import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/subject.dart';
 
@@ -64,7 +63,7 @@ class German extends Language {
     var notesaddon =
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
-        ? 'Freistunde${sub.hours.length == 1 ? '' : 'n'}$notesaddon'
+        ? 'Freistunde${sub.lessons.length == 1 ? '' : 'n'}$notesaddon'
         : 'Vertreten durch ${sub.teacher}$notesaddon';
   }
 
@@ -72,8 +71,8 @@ class German extends Language {
   String dsbSubtoTitle(DsbSubstitution sub) {
     if (sub == null) return 'null';
     var hour = '';
-    if (sub.hours != null) {
-      for (var h in sub.hours) hour += hour.isEmpty ? h.toString() : '-$h';
+    if (sub.lessons != null) {
+      for (var h in sub.lessons) hour += hour.isEmpty ? h.toString() : '-$h';
     } else
       hour = 'null';
     return '$hour. Stunde ${realSubject(sub.subject, this)}';

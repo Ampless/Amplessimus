@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/utils.dart';
+import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
 class Timeout extends StatelessWidget {

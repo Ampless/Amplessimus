@@ -1,7 +1,6 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/day.dart';
-import 'package:Amplessimus/dsbapi.dart';
+import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/subject.dart';
 
@@ -68,10 +67,10 @@ class Czech extends Language {
   String dsbSubtoTitle(DsbSubstitution sub) {
     if (sub == null) return 'null';
     var s = '';
-    if (sub.hours == null)
+    if (sub.lessons == null)
       s = 'null';
     else
-      for (var h in sub.hours) s += s.isEmpty ? h.toString() : '-$h';
+      for (var h in sub.lessons) s += s.isEmpty ? h.toString() : '-$h';
     return '$s. hodina ${realSubject(sub.subject, this)}';
   }
 

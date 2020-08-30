@@ -1,4 +1,4 @@
-import 'package:Amplessimus/day.dart';
+import 'package:dsbuntis/day.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
