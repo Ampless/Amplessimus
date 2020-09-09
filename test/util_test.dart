@@ -14,19 +14,28 @@ testCase httpTestCase(String url, HttpMethod method, Object body,
       var _setCacheCalled = false;
       var _getCacheCalled = false;
       if (method == HttpMethod.GET)
-        await httpGet(Uri.parse(url),
-            setCache: (_, __, ___) => _setCacheCalled = true,
-            getCache: (_) {
-              _getCacheCalled = true;
-              return null;
-            });
+        await httpGet(
+          Uri.parse(url),
+          setCache: (_, __, ___) => _setCacheCalled = true,
+          getCache: (_) {
+            _getCacheCalled = true;
+            return null;
+          },
+          flushCache: null,
+        );
       else if (method == HttpMethod.POST)
-        await httpPost(Uri.parse(url), body, null, headers,
-            setCache: (_, __, ___) => _setCacheCalled = true,
-            getCache: (_) {
-              _getCacheCalled = true;
-              return null;
-            });
+        await httpPost(
+          Uri.parse(url),
+          body,
+          null,
+          headers,
+          setCache: (_, __, ___) => _setCacheCalled = true,
+          getCache: (_) {
+            _getCacheCalled = true;
+            return null;
+          },
+          flushCache: null,
+        );
       else
         throw 'The test is broken.';
       assert(_setCacheCalled && _getCacheCalled);

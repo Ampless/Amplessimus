@@ -8,16 +8,7 @@ import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'dart:async';
 
-String _x(int i) => (i < 16 ? '0' : '') + i.toRadixString(16);
-
 var rand = Random();
-int _r(int max) => rand.nextInt(max);
-String get _r0 => _x(_r(0x100));
-String get _r2 => _r0 + _r0;
-String get _r4 => _x(_r(0x10) | 0x40);
-String get _r8 => _x(_r(0x40) | 0x80);
-
-String get uuid4 => '$_r2$_r2-$_r2-$_r4$_r0-$_r8$_r0-$_r2$_r2$_r2';
 
 String htmlUnescape(String data) {
   //this optimization is kind of unnecessary for small strings
@@ -68,9 +59,15 @@ String htmlUnescape(String data) {
 var _httpClient = HttpClient();
 
 Future<String> httpPost(
-    Uri url, Object body, String id, Map<String, String> headers,
-    {String Function(String) getCache = Prefs.getCache,
-    void Function(String, String, Duration) setCache = Prefs.setCache}) async {
+  Uri url,
+  Object body,
+  String id,
+  Map<String, String> headers, {
+  String Function(String) getCache = Prefs.getCache,
+  void Function(String, String, Duration) setCache = Prefs.setCache,
+  Function() flushCache = Prefs.flushCache,
+}) async {
+  if (flushCache != null) Prefs.flushCache();
   if (getCache != null) {
     var cachedResp = getCache(id);
     if (cachedResp != null) return cachedResp;
@@ -90,9 +87,13 @@ Future<String> httpPost(
   return r;
 }
 
-Future<String> httpGet(Uri url,
-    {String Function(String) getCache = Prefs.getCache,
-    void Function(String, String, Duration) setCache = Prefs.setCache}) async {
+Future<String> httpGet(
+  Uri url, {
+  String Function(String) getCache = Prefs.getCache,
+  void Function(String, String, Duration) setCache = Prefs.setCache,
+  Function() flushCache = Prefs.flushCache,
+}) async {
+  if (flushCache != null) Prefs.flushCache();
   if (getCache != null) {
     var cachedResp = getCache('$url');
     if (cachedResp != null) return cachedResp;
