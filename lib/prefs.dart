@@ -14,10 +14,21 @@ CachedSharedPreferences _prefs;
 //but because it is only 128 bits, it saves 128 bits compared to sha256,
 //which translates to 384 bits / 48 bytes saved per cached url
 //(and also it saves quite a bit of cpu)
+//still there is one consideration: if a school wanted to break this app, they
+//would just have to create collisions. we will switch to sha2/3, once we notice
+//something like that happening.
 String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
 
-String getCache(String url) =>
-    _prefs.getString('CACHE_VAL_${_hashCache(url)}', null);
+String getCache(String url) {
+  var hash = _hashCache(url);
+  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  if (!cachedHashes.contains(hash)) return null;
+  var ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
+  if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch)
+    return _prefs.getString('CACHE_VAL_$hash', null);
+  _prefs.setString('CACHE_VAL_$hash', null);
+  return null;
+}
 
 void setCache(String url, String html, Duration ttl) {
   var hash = _hashCache(url);
@@ -27,21 +38,6 @@ void setCache(String url, String html, Duration ttl) {
   _prefs.setString('CACHE_VAL_$hash', html);
   _prefs.setInt(
       'CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
-}
-
-void flushCache() {
-  var toRemove = <String>[];
-  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  for (var hash in cachedHashes) {
-    var ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
-    if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) continue;
-    toRemove.add(hash);
-    _prefs.setString('CACHE_VAL_$hash', null);
-    _prefs.setInt('CACHE_TTL_$hash', null);
-  }
-  if (toRemove.isEmpty) return;
-  cachedHashes.removeWhere((element) => toRemove.contains(element));
-  _prefs.setStringList('CACHE_URLS', cachedHashes);
 }
 
 void clearCache() {

@@ -13,17 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class FirstLoginScreen extends StatelessWidget {
-  FirstLoginScreen(
-      {bool testing = false,
-      Future<String> Function(
-              Uri url, Object body, String id, Map<String, String> headers,
-              {String Function(String) getCache,
-              void Function(String, String, Duration) setCache})
-          httpPostFunc = httpPost,
-      Future<String> Function(Uri url,
-              {String Function(String) getCache,
-              void Function(String, String, Duration) setCache})
-          httpGetFunc = httpGet}) {
+  FirstLoginScreen({
+    bool testing = false,
+    Future<String> Function(
+            Uri url, Object body, String id, Map<String, String> headers)
+        httpPostFunc = httpPost,
+    Future<String> Function(Uri url) httpGetFunc = httpGet,
+  }) {
     FirstLoginValues.testing = testing;
     FirstLoginValues.httpPostFunc = httpPostFunc;
     FirstLoginValues.httpGetFunc = httpGetFunc;
@@ -249,13 +245,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 class FirstLoginValues {
   static bool testing = false;
   static Future<String> Function(
-          Uri url, Object body, String id, Map<String, String> headers,
-          {String Function(String) getCache,
-          void Function(String, String, Duration) setCache}) httpPostFunc =
-      httpPost;
-  static Future<String> Function(Uri url,
-      {String Function(String) getCache,
-      void Function(String, String, Duration) setCache}) httpGetFunc = httpGet;
+          Uri url, Object body, String id, Map<String, String> headers)
+      httpPostFunc = httpPost;
+  static Future<String> Function(Uri url) httpGetFunc = httpGet;
   static List<Widget> settingsButtons;
 
   static List<String> get grades =>

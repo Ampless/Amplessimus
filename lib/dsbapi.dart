@@ -82,7 +82,6 @@ Future<Null> dsbUpdateWidget(
     int themeId,
     Language lang}) async {
   await Prefs.waitForMutex();
-  Prefs.flushCache();
   httpPost ??= FirstLoginValues.httpPostFunc;
   httpGet ??= FirstLoginValues.httpGetFunc;
   cacheJsonPlans ??= Prefs.useJsonCache;

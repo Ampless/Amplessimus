@@ -1,11 +1,9 @@
 // this code is based on the pub packages 'uuid' and 'html_unescape'
 
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'package:Amplessimus/dsbhtmlcodes.dart' as htmlcodes;
-import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:schttp/schttp.dart';
 import 'dart:async';
 
 var rand = Random();
@@ -56,79 +54,36 @@ String htmlUnescape(String data) {
   return buf.toString();
 }
 
-var _httpClient = HttpClient();
+var _httpClient = ScHttpClient(Prefs.getCache, Prefs.setCache);
 
 Future<String> httpPost(
   Uri url,
   Object body,
   String id,
-  Map<String, String> headers, {
-  String Function(String) getCache = Prefs.getCache,
-  void Function(String, String, Duration) setCache = Prefs.setCache,
-  Function() flushCache = Prefs.flushCache,
-}) async {
-  if (flushCache != null) flushCache();
-  if (getCache != null) {
-    var cachedResp = getCache(id);
-    if (cachedResp != null) return cachedResp;
-  }
-  ampInfo(['HTTP', 'POST'], '$url $headers: $body');
-  var req = await _httpClient.postUrl(url);
-  headers.forEach((key, value) => req.headers.add(key, value));
-  req.writeln(body);
-  var res = await req.close();
-  var bytes = await res.toList();
-  ampInfo(['HTTP', 'POST'], 'Done.');
-  var actualBytes = <int>[];
-  for (var b in bytes) actualBytes.addAll(b);
-  var r = utf8.decode(actualBytes);
-  if (res.statusCode == 200 && setCache != null)
-    setCache(id, r, Duration(minutes: 15));
-  return r;
-}
+  Map<String, String> headers,
+) =>
+    _httpClient.post(url, body, id, headers);
 
-Future<String> httpGet(
-  Uri url, {
-  String Function(String) getCache = Prefs.getCache,
-  void Function(String, String, Duration) setCache = Prefs.setCache,
-  Function() flushCache = Prefs.flushCache,
-}) async {
-  if (flushCache != null) flushCache();
-  if (getCache != null) {
-    var cachedResp = getCache('$url');
-    if (cachedResp != null) return cachedResp;
-  }
-  ampInfo(['HTTP', 'GET'], '$url');
-  var req = await _httpClient.getUrl(url);
-  await req.flush();
-  var res = await req.close();
-  var bytes = await res.toList();
-  var actualBytes = <int>[];
-  for (var b in bytes) actualBytes.addAll(b);
-  var r = htmlUnescape(String.fromCharCodes(actualBytes))
-      .replaceAll('\n', '')
-      .replaceAll('\r', '')
-      //just fyi: these regexes only work because there are no more newlines
-      .replaceAll(RegExp(r'<h1.*?</h1>'), '')
-      .replaceAll(RegExp(r'</?p.*?>'), '')
-      .replaceAll(RegExp(r'<th.*?</th>'), '')
-      .replaceAll(RegExp(r'<head.*?</head>'), '')
-      .replaceAll(RegExp(r'<script.*?</script>'), '')
-      .replaceAll(RegExp(r'<style.*?</style>'), '')
-      .replaceAll(RegExp(r'</?html.*?>'), '')
-      .replaceAll(RegExp(r'</?body.*?>'), '')
-      .replaceAll(RegExp(r'</?font.*?>'), '')
-      .replaceAll(RegExp(r'</?span.*?>'), '')
-      .replaceAll(RegExp(r'</?center.*?>'), '')
-      .replaceAll(RegExp(r'</?a.*?>'), '')
-      .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
-      .replaceAll(RegExp(r'<td.*?>'), '<td>')
-      .replaceAll(RegExp(r'<th.*?>'), '<th>')
-      .replaceAll(RegExp(r' +'), ' ')
-      .replaceAll(RegExp(r'<br />'), '')
-      .replaceAll(RegExp(r'<!-- .*? -->'), '');
-  ampInfo(['HTTP', 'GET'], 'Done.');
-  if (res.statusCode == 200 && setCache != null)
-    setCache('$url', r, Duration(days: 4));
-  return r;
-}
+Future<String> httpGet(Uri url) async =>
+    htmlUnescape(await _httpClient.get(url))
+        .replaceAll('\n', '')
+        .replaceAll('\r', '')
+        //just fyi: these regexes only work because there are no more newlines
+        .replaceAll(RegExp(r'<h1.*?</h1>'), '')
+        .replaceAll(RegExp(r'</?p.*?>'), '')
+        .replaceAll(RegExp(r'<th.*?</th>'), '')
+        .replaceAll(RegExp(r'<head.*?</head>'), '')
+        .replaceAll(RegExp(r'<script.*?</script>'), '')
+        .replaceAll(RegExp(r'<style.*?</style>'), '')
+        .replaceAll(RegExp(r'</?html.*?>'), '')
+        .replaceAll(RegExp(r'</?body.*?>'), '')
+        .replaceAll(RegExp(r'</?font.*?>'), '')
+        .replaceAll(RegExp(r'</?span.*?>'), '')
+        .replaceAll(RegExp(r'</?center.*?>'), '')
+        .replaceAll(RegExp(r'</?a.*?>'), '')
+        .replaceAll(RegExp(r'<tr.*?>'), '<tr>')
+        .replaceAll(RegExp(r'<td.*?>'), '<td>')
+        .replaceAll(RegExp(r'<th.*?>'), '<th>')
+        .replaceAll(RegExp(r' +'), ' ')
+        .replaceAll(RegExp(r'<br />'), '')
+        .replaceAll(RegExp(r'<!-- .*? -->'), '');
