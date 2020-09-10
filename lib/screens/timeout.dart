@@ -35,13 +35,17 @@ class TimeoutPageState extends State<TimeoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ampColumn([
-      ampText(
-        'Amplessimus did not initialize correctly within 30 seconds.\n'
-        'Please contact ampless@chrissx.de.',
+    return SafeArea(
+      child: Scaffold(
+        body: Column(children: [
+          Text(
+            'Amplessimus did not initialize correctly within 30 seconds.\n'
+            'Please contact ampless@chrissx.de with a screenshot/video of this page.',
+            style: TextStyle(color: Colors.red),
+          ),
+          ampLogWidget,
+        ]),
       ),
-      ampText(ampText('nostr'), toString: (t) => t.toStringShallow()),
-      ampLogWidget,
-    ]);
+    );
   }
 }
