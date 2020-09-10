@@ -22,11 +22,15 @@ String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
 String getCache(String url) {
   var hash = _hashCache(url);
   var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
-  if (!cachedHashes.contains(hash)) return null;
+  if (!cachedHashes.contains(hash)) {
+    ampInfo('Prefs', 'HTTP Cache miss: $url');
+    return null;
+  }
   var ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
   if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch)
     return _prefs.getString('CACHE_VAL_$hash', null);
   _prefs.setString('CACHE_VAL_$hash', null);
+  ampInfo('Prefs', 'HTTP Cache TTL reached: $url');
   return null;
 }
 
