@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +38,11 @@ class TimeoutPageState extends State<TimeoutPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AmpColors.colorBackground,
         body: Column(children: [
-          Text(
+          ampText(
             'Amplessimus did not initialize correctly within 30 seconds.\n'
             'Please contact ampless@chrissx.de with a screenshot/video of this page.',
-            style: TextStyle(color: Colors.red),
           ),
           ampLogWidget,
         ]),
