@@ -67,7 +67,7 @@ Future<String> httpPost(
   void Function(String, String, Duration) setCache = Prefs.setCache,
   Function() flushCache = Prefs.flushCache,
 }) async {
-  if (flushCache != null) Prefs.flushCache();
+  if (flushCache != null) flushCache();
   if (getCache != null) {
     var cachedResp = getCache(id);
     if (cachedResp != null) return cachedResp;
@@ -93,7 +93,7 @@ Future<String> httpGet(
   void Function(String, String, Duration) setCache = Prefs.setCache,
   Function() flushCache = Prefs.flushCache,
 }) async {
-  if (flushCache != null) Prefs.flushCache();
+  if (flushCache != null) flushCache();
   if (getCache != null) {
     var cachedResp = getCache('$url');
     if (cachedResp != null) return cachedResp;
