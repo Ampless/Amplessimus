@@ -64,14 +64,9 @@ Future<Null> dsbUpdateWidget(
     bool cachePostRequests = true,
     bool cacheJsonPlans,
     Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers,
-            {String Function(String) getCache,
-            void Function(String, String, Duration) setCache})
+            Uri url, Object body, String id, Map<String, String> headers)
         httpPost,
-    Future<String> Function(Uri url,
-            {String Function(String) getCache,
-            void Function(String, String, Duration) setCache})
-        httpGet,
+    Future<String> Function(Uri url) httpGet,
     String dsbLanguage,
     String dsbJsonCache,
     String username,
