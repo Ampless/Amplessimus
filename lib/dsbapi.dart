@@ -91,20 +91,30 @@ Future<Null> dsbUpdateWidget(
   char ??= Prefs.char;
   themeId ??= Prefs.currentThemeId;
   try {
-    if (username.isEmpty || password.isEmpty) throw lang.noLogin;
-    var useJCache = cacheJsonPlans && dsbJsonCache != null;
-    var plans = useJCache
-        ? plansFromJson(dsbJsonCache)
-        : await dsbGetAllSubs(username, password, httpGet, httpPost,
-            cacheGetRequests: cacheGetRequests,
-            cachePostRequests: cachePostRequests,
-            dsbLanguage: dsbLanguage);
-    if (!useJCache) dsbJsonCache = plansToJson(plans);
-    if (oneClassOnly)
-      plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
-    updateTimetableDays(plans);
-    dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
-    dsbPlans = plans;
+    try {
+      if (username.isEmpty || password.isEmpty) throw lang.noLogin;
+      var useJCache = cacheJsonPlans && dsbJsonCache != null;
+      var plans = useJCache
+          ? plansFromJson(dsbJsonCache)
+          : await dsbGetAllSubs(username, password, httpGet, httpPost,
+              cacheGetRequests: cacheGetRequests,
+              cachePostRequests: cachePostRequests,
+              dsbLanguage: dsbLanguage);
+      try {
+        if (!useJCache) dsbJsonCache = plansToJson(plans);
+        if (oneClassOnly)
+          plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
+        updateTimetableDays(plans);
+        dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
+        dsbPlans = plans;
+      } catch (e) {
+        ampRawLog('2');
+        rethrow;
+      }
+    } catch (e) {
+      ampRawLog('1');
+      rethrow;
+    }
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = SizedBox(
