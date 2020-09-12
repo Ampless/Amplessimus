@@ -32,7 +32,7 @@ dependencies:
   archive: ^2.0.13
   crypto: ^2.1.5
   mutex: ^1.1.0
-  dsbuntis: ^0.1.9
+  dsbuntis: ^0.1.10
   schttp: ^0.2.0
 
 dev_dependencies:
