@@ -94,6 +94,8 @@ Future<Null> dsbUpdateWidget(
     try {
       if (username.isEmpty || password.isEmpty) throw lang.noLogin;
       var useJCache = cacheJsonPlans && dsbJsonCache != null;
+      await dsbGetData(username, password, httpPost);
+      ampRawLog('managed to lol.');
       var plans = useJCache
           ? plansFromJson(dsbJsonCache)
           : await dsbGetAllSubs(username, password, httpGet, httpPost,
