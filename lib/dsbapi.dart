@@ -94,14 +94,12 @@ Future<Null> dsbUpdateWidget(
     try {
       if (username.isEmpty || password.isEmpty) throw lang.noLogin;
       var useJCache = cacheJsonPlans && dsbJsonCache != null;
-      ampRawLog(useJCache);
       var plans = useJCache
           ? plansFromJson(dsbJsonCache)
           : await dsbGetAllSubs(username, password, httpGet, httpPost,
               cacheGetRequests: cacheGetRequests,
               cachePostRequests: cachePostRequests,
               dsbLanguage: dsbLanguage);
-      ampRawLog('lel');
       if (!useJCache) dsbJsonCache = plansToJson(plans);
       if (oneClassOnly)
         plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
