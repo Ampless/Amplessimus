@@ -66,9 +66,12 @@ Future<String> httpPost(
     _httpClient.post(url, body, id, headers);
 
 Future<String> httpGet(Uri url) async {
+  //this cannot ever be null
+  ampRawLog(_httpClient);
+  ampRawLog(_httpClient.hashCode);
+  ampRawLog(_httpClient.runtimeType);
   var raw = await _httpClient.get(url);
-  ampRawLog('1');
-  htmlUnescape(raw)
+  return htmlUnescape(raw)
       .replaceAll('\n', '')
       .replaceAll('\r', '')
       //just fyi: these regexes only work because there are no more newlines
