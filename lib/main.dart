@@ -48,6 +48,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
       ]);
 
       // if the program wont start within 30 secs, show some debug info
