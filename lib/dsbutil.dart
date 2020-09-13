@@ -66,10 +66,6 @@ Future<String> httpPost(
     _httpClient.post(url, body, id, headers);
 
 Future<String> httpGet(Uri url) async {
-  //this cannot ever be null
-  ampRawLog(_httpClient);
-  ampRawLog(_httpClient.hashCode);
-  ampRawLog(_httpClient.runtimeType);
   var raw = await _httpClient.get(url);
   return htmlUnescape(raw)
       .replaceAll('\n', '')

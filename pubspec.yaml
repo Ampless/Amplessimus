@@ -33,7 +33,7 @@ dependencies:
   crypto: ^2.1.5
   mutex: ^1.1.0
   dsbuntis: ^0.1.11
-  schttp: ^0.2.3
+  schttp: ^0.2.5
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.5
