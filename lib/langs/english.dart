@@ -162,6 +162,7 @@ class English extends Language {
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
     'spo': 'Physical Education (sports)',
     'e': 'English',
+    'ev': 'Protestant Religion',
     'd': 'German',
     'i': 'Computer Science',
     'g': 'History',

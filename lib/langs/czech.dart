@@ -145,6 +145,8 @@ class Czech extends Language {
   LinkedHashMap<String, String> get subjectLut => LinkedHashMap.from({
         'spo': 'tělesná výchova',
         'e': 'Anglický jazyk',
+        //TODO: get an actually accurate translation
+        'ev': 'Evangelický',
         'd': 'Německý jazyk',
         'i': 'Informatika',
         'g': 'Dějepis',
