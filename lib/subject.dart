@@ -13,6 +13,7 @@ bool _isNum(String s, int i) {
 String realSubject(String subject, [Language lang]) {
   lang ??= Language.current;
   if (subject == null) return null;
+  //TODO: this code breaks with some newer systems
   if (_isNum(subject, 0) || _isNum(subject, subject.length - 1))
     return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang)} '
         '${subject.substring(subject.lastIndexOf(_numeric))} (${subject.substring(0, subject.indexOf(_letters))})';

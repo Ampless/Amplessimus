@@ -116,8 +116,8 @@ set savedLangCode(String s) => _prefs.setString('lang', s);
 String get jsonTimetable => _prefs.getString('json_timetable', null);
 set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
 
-//this is only temporary
-//the temporary windows shared prefs just don't allow this to work well
+//this is only temporary; the temporary windows shared prefs
+//just don't allow us to use sharedprefs for that
 String log = '';
 
 bool get dsbUseLanguage => _prefs.getBool('dsb_use_language', false);
@@ -160,7 +160,7 @@ Future<Null> load() async {
 
 void clear() async {
   if (_prefs == null)
-    throw 'HOLY SHIT YOU FUCKED EVERYTHING UP WITH PREFS CLEAR';
+    throw 'PREFS.CLEAR CALLED BEFORE INIT, THIS IS A SEVERE CODE BUG.';
   await _prefs.clear();
   ampInfo('Prefs', 'Cleared SharedPreferences.');
 }
