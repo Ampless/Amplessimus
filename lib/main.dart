@@ -465,13 +465,9 @@ class AmpHomePageState extends State<AmpHomePage>
               children: FirstLoginValues.settingsButtons = <Widget>[
                 ampBigAmpButton(
                   onTap: () {
-                    Prefs.devOptionsTimerCache();
-                    if (Prefs.timesToggleDarkModePressed >= 10) {
-                      Prefs.devOptionsEnabled = !Prefs.devOptionsEnabled;
-                      Prefs.timesToggleDarkModePressed = 0;
-                    }
-                    AmpColors.switchMode();
+                    Prefs.toggleDarkModePressed();
                     Prefs.useSystemTheme = false;
+                    AmpColors.switchMode();
                     dsbUpdateWidget();
                     Future.delayed(
                         Duration(

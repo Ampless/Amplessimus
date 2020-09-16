@@ -66,14 +66,20 @@ void listCache() {
   ampInfo('Cache', '}');
 }
 
-int timesToggleDarkModePressed = 0;
-int lastPressedToggleDarkMode = 0;
+int _toggleDarkModePressed = 0;
+int _lastToggleDarkModePress = 0;
 
-void devOptionsTimerCache() {
-  if (DateTime.now().millisecondsSinceEpoch > lastPressedToggleDarkMode + 10000)
-    timesToggleDarkModePressed = 0;
-  timesToggleDarkModePressed += 1;
-  lastPressedToggleDarkMode = DateTime.now().millisecondsSinceEpoch;
+void toggleDarkModePressed() {
+  if (DateTime.now().millisecondsSinceEpoch > _lastToggleDarkModePress + 10000)
+    _toggleDarkModePressed = 0;
+
+  _toggleDarkModePressed++;
+  _lastToggleDarkModePress = DateTime.now().millisecondsSinceEpoch;
+
+  if (_toggleDarkModePressed >= 10) {
+    devOptionsEnabled = !devOptionsEnabled;
+    _toggleDarkModePressed = 0;
+  }
 }
 
 double get subListItemSpace => _prefs.getDouble('sub_list_item_space', 0);
