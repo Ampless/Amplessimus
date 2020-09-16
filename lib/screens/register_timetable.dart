@@ -227,11 +227,7 @@ class RegisterTimetableScreenPageState
               onPressed: () async {
                 await dsbUpdateWidget();
                 ttSaveToPrefs(ttColumns);
-                ampEaseOutBack(
-                  AmpApp(1),
-                  context,
-                  push: Navigator.pushReplacement,
-                );
+                ampEaseOutBackReplacement(AmpApp(1), context);
               },
               label: Language.current.save,
               icon: Icons.save,

@@ -203,12 +203,12 @@ Text ampText(
 }) {
   toString ??= (o) => o.toString();
   color ??= AmpColors.colorForeground;
-  //font ??= ['SF Pro Display'];
+  font ??= [];
   var style = TextStyle(
     fontSize: size,
     fontWeight: weight,
     color: color,
-    fontFamily: font != null && font.isNotEmpty ? font.first : null,
+    fontFamily: font.isNotEmpty ? font.first : null,
     fontFamilyFallback: font,
   );
   return Text(
@@ -285,11 +285,14 @@ FloatingActionButton ampFab({
   );
 }
 
+void ampEaseOutBackReplacement(Widget w, BuildContext context) =>
+    ampEaseOutBack(w, context, Navigator.pushReplacement);
+
 void ampEaseOutBack(
   Widget w,
-  BuildContext context, {
+  BuildContext context, [
   Function(BuildContext, Route) push = Navigator.push,
-}) =>
+]) =>
     push(
       context,
       PageRouteBuilder(

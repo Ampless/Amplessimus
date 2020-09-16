@@ -65,8 +65,7 @@ Future<String> httpPost(
     _httpClient.post(url, body, id, headers);
 
 Future<String> httpGet(Uri url) async {
-  var raw = await _httpClient.get(url);
-  return htmlUnescape(raw)
+  return htmlUnescape(await _httpClient.get(url))
       .replaceAll('\n', '')
       .replaceAll('\r', '')
       //just fyi: these regexes only work because there are no more newlines

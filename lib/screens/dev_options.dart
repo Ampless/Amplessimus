@@ -16,7 +16,7 @@ class DevOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ampMatApp(DevOptionsScreenPage(), pop: () async {
       await dsbUpdateWidget();
-      ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
+      ampEaseOutBackReplacement(AmpApp(2), context);
       return false;
     });
   }
@@ -100,13 +100,13 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   Prefs.jsonTimetable = null;
                   setState(() {});
                 }),
-                ampRaisedButton('Ladebildschirm', () {
+                ampRaisedButton('Schlechte Ladeanimation', () {
                   ampEaseOutBack(
                     ampMatApp(AmpLoadingAnimation(), pop: () async => false),
                     context,
                   );
                 }),
-                ampRaisedButton('Clear log', () => setState(ampClearLog)),
+                ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
                 ampRaisedButton(
                   'App-Daten löschen',
                   () {
@@ -133,7 +133,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         floatingActionButton: ampFab(
           onPressed: () {
             dsbUpdateWidget();
-            ampEaseOutBack(AmpApp(2), context, push: Navigator.pushReplacement);
+            ampEaseOutBackReplacement(AmpApp(2), context);
           },
           label: 'zurück',
           icon: Icons.arrow_back,

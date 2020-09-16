@@ -404,10 +404,9 @@ class AmpHomePageState extends State<AmpHomePage>
                       splashColor: AmpColors.colorForeground,
                       borderRadius: BorderRadius.circular(32),
                       onTap: () {
-                        ampEaseOutBack(
+                        ampEaseOutBackReplacement(
                           RegisterTimetableScreen(),
                           context,
-                          push: Navigator.pushReplacement,
                         );
                       },
                       child: ampColumn(
@@ -446,10 +445,9 @@ class AmpHomePageState extends State<AmpHomePage>
           floatingActionButton: Prefs.jsonTimetable == null
               ? ampNull
               : ampFab(
-                  onPressed: () => ampEaseOutBack(
+                  onPressed: () => ampEaseOutBackReplacement(
                     RegisterTimetableScreen(),
                     context,
-                    push: Navigator.pushReplacement,
                   ),
                   label: Language.current.edit,
                   icon: Icons.edit,
@@ -552,10 +550,9 @@ class AmpHomePageState extends State<AmpHomePage>
                 ampBigAmpButton(
                   onTap: () {
                     if (Prefs.devOptionsEnabled)
-                      ampEaseOutBack(
+                      ampEaseOutBackReplacement(
                         DevOptionsScreen(),
                         context,
-                        push: Navigator.pushReplacement,
                       );
                   },
                   icon: MdiIcons.codeBrackets,
