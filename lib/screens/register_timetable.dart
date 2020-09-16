@@ -56,7 +56,7 @@ class RegisterTimetableScreenPageState
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: tabController,
-        children: <Widget>[
+        children: [
           Scaffold(
             body: Container(
               margin: EdgeInsets.only(left: 12, right: 12),

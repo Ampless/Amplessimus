@@ -569,7 +569,7 @@ class AmpHomePageState extends State<AmpHomePage>
       ];
       return SafeArea(
           child: Stack(
-        children: <Widget>[
+        children: [
           AnimatedContainer(
             duration: Duration(milliseconds: 150),
             color: AmpColors.colorBackground,
@@ -587,7 +587,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 controller: tabController,
                 indicatorColor: AmpColors.colorForeground,
                 labelColor: AmpColors.colorForeground,
-                tabs: <Widget>[
+                tabs: [
                   ampTab(Icons.home, Language.current.start),
                   ampTab(MdiIcons.timetable, Language.current.timetable),
                   ampTab(Icons.settings, Language.current.settings),

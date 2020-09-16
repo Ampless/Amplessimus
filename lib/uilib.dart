@@ -203,11 +203,12 @@ Text ampText(
 }) {
   toString ??= (o) => o.toString();
   color ??= AmpColors.colorForeground;
+  font ??= ['SF Pro Display'];
   var style = TextStyle(
     fontSize: size,
     fontWeight: weight,
     color: color,
-    fontFamily: font != null && font.isNotEmpty ? font.first : null,
+    fontFamily: font.isNotEmpty ? font.first : null,
     fontFamilyFallback: font,
   );
   return Text(
@@ -226,8 +227,8 @@ AppBar ampAppBar(String text) {
   return AppBar(
     elevation: 0,
     backgroundColor: Colors.transparent,
-    title: ampText(text, size: 25),
-    centerTitle: true,
+    title: ampText(text, size: 30, weight: FontWeight.w600),
+    centerTitle: false,
   );
 }
 

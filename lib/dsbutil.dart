@@ -1,8 +1,7 @@
-// this code is based on the pub packages 'uuid' and 'html_unescape'
+// this code is based on the pub package 'html_unescape'
 
 import 'dart:math';
 import 'package:Amplessimus/dsbhtmlcodes.dart' as htmlcodes;
-import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:schttp/schttp.dart';
 import 'dart:async';
