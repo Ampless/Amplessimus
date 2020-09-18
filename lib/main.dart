@@ -404,10 +404,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       splashColor: AmpColors.colorForeground,
                       borderRadius: BorderRadius.circular(32),
                       onTap: () {
-                        ampEaseOutBackReplacement(
-                          RegisterTimetableScreen(),
-                          context,
-                        );
+                        ampChangeScreen(RegisterTimetableScreen(), context);
                       },
                       child: ampColumn(
                         [
@@ -445,7 +442,7 @@ class AmpHomePageState extends State<AmpHomePage>
           floatingActionButton: Prefs.jsonTimetable == null
               ? ampNull
               : ampFab(
-                  onPressed: () => ampEaseOutBackReplacement(
+                  onPressed: () => ampChangeScreen(
                     RegisterTimetableScreen(),
                     context,
                   ),
@@ -544,10 +541,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 ampBigAmpButton(
                   onTap: () {
                     if (Prefs.devOptionsEnabled)
-                      ampEaseOutBackReplacement(
-                        DevOptionsScreen(),
-                        context,
-                      );
+                      ampChangeScreen(DevOptionsScreen(), context);
                   },
                   icon: MdiIcons.codeBrackets,
                   text: 'Entwickleroptionen',

@@ -16,7 +16,7 @@ class DevOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ampMatApp(DevOptionsScreenPage(), pop: () async {
       await dsbUpdateWidget();
-      ampEaseOutBackReplacement(AmpApp(2), context);
+      ampChangeScreen(AmpApp(2), context);
       return false;
     });
   }
@@ -101,7 +101,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   setState(() {});
                 }),
                 ampRaisedButton('Schlechte Ladeanimation', () {
-                  ampEaseOutBack(
+                  ampChangeScreen(
                     ampMatApp(AmpLoadingAnimation(), pop: () async => false),
                     context,
                   );
@@ -133,7 +133,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         floatingActionButton: ampFab(
           onPressed: () {
             dsbUpdateWidget();
-            ampEaseOutBackReplacement(AmpApp(2), context);
+            ampChangeScreen(AmpApp(2), context);
           },
           label: 'zurück',
           icon: Icons.arrow_back,

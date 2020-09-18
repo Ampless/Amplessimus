@@ -285,21 +285,18 @@ FloatingActionButton ampFab({
   );
 }
 
-void ampEaseOutBackReplacement(Widget w, BuildContext context) =>
-    ampEaseOutBack(w, context, Navigator.pushReplacement);
-
-void ampEaseOutBack(
+void ampChangeScreen(
   Widget w,
   BuildContext context, [
-  Function(BuildContext, Route) push = Navigator.push,
+  Function(BuildContext, Route) push = Navigator.pushReplacement,
 ]) =>
     push(
       context,
       PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 200),
+        transitionDuration: Duration(microseconds: 1),
         transitionsBuilder: (context, animatn, secondaryAnimation, child) =>
             ScaleTransition(
-          scale: CurvedAnimation(parent: animatn, curve: Curves.easeInOutBack),
+          scale: CurvedAnimation(parent: animatn, curve: Curves.ease),
           alignment: Alignment.center,
           child: child,
         ),
