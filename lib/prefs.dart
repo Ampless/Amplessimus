@@ -164,3 +164,5 @@ void clear() async {
   await _prefs.clear();
   ampInfo('Prefs', 'Cleared SharedPreferences.');
 }
+
+bool get isInitialized => _prefs != null && _prefs.isInitialized;
