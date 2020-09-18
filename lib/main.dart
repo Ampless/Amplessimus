@@ -490,10 +490,8 @@ class AmpHomePageState extends State<AmpHomePage>
                     rebuild();
                     settingsScaffoldKey.currentState?.showSnackBar(ampSnackBar(
                       Language.current.changedAppearance,
-                      ampSnackBarAction(
-                        Language.current.show,
-                        () => setState(() => tabController.index = 0),
-                      ),
+                      Language.current.show,
+                      () => setState(() => tabController.index = 0),
                     ));
                   },
                   icon: AmpColors.isDarkMode

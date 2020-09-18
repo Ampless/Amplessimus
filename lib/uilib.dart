@@ -9,12 +9,11 @@ Future<Null> ampDialog({
   @required List<Widget> Function(BuildContext) actions,
   @required BuildContext context,
   @required Widget Function(List<Widget>) widgetBuilder,
-}) {
-  return showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return AlertDialog(
+}) =>
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
         title: ampText(title),
         backgroundColor: AmpColors.colorBackground,
         content: StatefulBuilder(
@@ -23,17 +22,16 @@ Future<Null> ampDialog({
           ),
         ),
         actions: actions(context),
-      );
-    },
-  );
-}
+      ),
+    );
 
 Widget ampLinearProgressIndicator([bool loading = true]) {
   return !loading
       ? ampNull
       : LinearProgressIndicator(
-          backgroundColor: Colors.black,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          backgroundColor: AmpColors.colorBackground,
+          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          semanticsLabel: 'Loading (accessibility is being...worked on)',
         );
 }
 
@@ -250,16 +248,18 @@ WillPopScope ampMatApp(Widget home, {@required Future<bool> Function() pop}) {
   );
 }
 
-SnackBar ampSnackBar(String content, [SnackBarAction action]) => SnackBar(
+SnackBar ampSnackBar(
+  String content, [
+  String label,
+  Function() action,
+]) =>
+    SnackBar(
       backgroundColor: AmpColors.colorBackground,
       content: ampText(content),
-      action: action,
+      action: label != null ? ampSnackBarAction(label, action) : ampNull,
     );
 
-SnackBarAction ampSnackBarAction(
-  String label,
-  Function() onPressed,
-) =>
+SnackBarAction ampSnackBarAction(String label, Function() onPressed) =>
     SnackBarAction(
       textColor: AmpColors.colorForeground,
       label: label,
