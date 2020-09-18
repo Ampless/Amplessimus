@@ -225,7 +225,7 @@ AppBar ampAppBar(String text) {
   return AppBar(
     elevation: 0,
     backgroundColor: Colors.transparent,
-    title: ampText(text, size: 40, weight: FontWeight.w600),
+    title: ampText(text, size: 36, weight: FontWeight.bold),
     centerTitle: false,
   );
 }
