@@ -307,13 +307,13 @@ void ampEaseOutBack(
       ),
     );
 
-Widget ampThemedList(Widget child, int themeId) {
+Widget ampList(List<Widget> children, int themeId) {
   switch (themeId) {
     case 0:
       return Card(
         elevation: 0,
         color: AmpColors.lightBackground,
-        child: child,
+        child: ampColumn(children),
       );
     case 1:
       return Container(
@@ -322,9 +322,9 @@ Widget ampThemedList(Widget child, int themeId) {
           border: Border.all(color: AmpColors.colorForeground),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: child,
+        child: ampColumn(children),
       );
     default:
-      return ampThemedList(child, 0);
+      return ampList(children, 0);
   }
 }

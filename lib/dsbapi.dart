@@ -49,7 +49,7 @@ Widget dsbGetGoodList(
         ),
       ]),
     ));
-    widgets.add(ampThemedList(ampColumn(dayWidgets), themeId));
+    widgets.add(ampList(dayWidgets, themeId));
   }
   widgets.add(ampPadding(12));
   return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
@@ -109,10 +109,7 @@ Future<Null> dsbUpdateWidget(
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-        child: ampThemedList(
-          ListTile(title: ampText(errorString(e))),
-          themeId,
-        ),
+        child: ampList([ListTile(title: ampText(errorString(e)))], themeId),
         padding: EdgeInsets.only(top: 15),
       ),
     );

@@ -132,7 +132,7 @@ void ttSaveToPrefs(List<TTColumn> tbl) => Prefs.jsonTimetable = ttToJson(tbl);
 List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
 
 //if(filtered) table = ttSubTable(table, plans)
-//then makes ampThemedLists from table
+//then makes ampLists from table
 List<Widget> ttWidgets(
   List<DsbPlan> plans,
   List<TTColumn> table, [
@@ -181,8 +181,7 @@ List<Widget> ttWidgets(
       if (lessons.indexOf(lesson) < lessonLength - 1)
         unthemedWidgets.add(ampSizedDivider(0));
     }
-    widgets.add(
-        ampThemedList(Column(children: unthemedWidgets), Prefs.currentThemeId));
+    widgets.add(ampList(unthemedWidgets, Prefs.currentThemeId));
     widgets.add(ampPadding(12));
   }
   return widgets;
