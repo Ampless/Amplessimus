@@ -61,7 +61,6 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/anims/splash_screen.json
-    - assets/anims/get_ready.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

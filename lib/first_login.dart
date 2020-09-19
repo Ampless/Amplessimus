@@ -27,11 +27,8 @@ class FirstLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AmpColors.isDarkMode = true;
-    return ampMatApp(FirstLoginScreenPage(), pop: () async {
-      if (firstLoginTabController.index > 0)
-        firstLoginTabController.animateTo(firstLoginTabController.index - 1);
-      return false;
-    });
+    return ampMatApp(FirstLoginScreenPage(),
+        pop: () async => Prefs.closeAppOnBackPress);
   }
 }
 
@@ -43,13 +40,11 @@ class FirstLoginScreenPage extends StatefulWidget {
 
 final usernameInputFormKey = GlobalKey<FormFieldState>();
 final passwordInputFormKey = GlobalKey<FormFieldState>();
-TabController firstLoginTabController;
 
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
     with SingleTickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool credentialsAreLoading = false;
-  bool dsbWidgetIsLoading = false;
+  bool loading = false;
   bool isError = false;
   String textString = '';
   String animString = 'intro';
@@ -62,181 +57,143 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
       TextEditingController(text: Prefs.password);
 
   @override
-  void initState() {
-    firstLoginTabController = TabController(length: 2, vsync: this);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (Prefs.char.trim().isEmpty)
       letterDropDownValue = FirstLoginValues.letters.first;
     if (Prefs.grade.trim().isEmpty)
       gradeDropDownValue = FirstLoginValues.grades.first;
     return Scaffold(
-      body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: firstLoginTabController,
-        children: <Widget>[
-          AnimatedContainer(
-            duration: Duration(milliseconds: 150),
-            color: AmpColors.colorBackground,
-            child: Scaffold(
-              key: scaffoldKey,
-              backgroundColor: Colors.transparent,
-              appBar: ampAppBar(Language.current.changeLoginPopup),
-              body: Center(
-                heightFactor: 1,
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ampText(Language.current.selectClass, size: 20),
-                        ampRow([
-                          ampDropdownButton(
-                            value: gradeDropDownValue,
-                            items: FirstLoginValues.grades,
-                            onChanged: (value) {
-                              setState(() {
-                                gradeDropDownValue = value;
-                                Prefs.grade = value;
-                              });
-                            },
-                          ),
-                          ampPadding(10),
-                          ampDropdownButton(
-                            value: letterDropDownValue,
-                            items: FirstLoginValues.letters,
-                            onChanged: (value) {
-                              setState(() {
-                                letterDropDownValue = value;
-                                Prefs.char = value;
-                              });
-                            },
-                          ),
-                        ]),
-                        ampSizedDivider(20),
-                        ampPadding(4),
-                        ampFormField(
-                          controller: usernameInputFormController,
-                          key: usernameInputFormKey,
-                          labelText: Language.current.username,
-                          keyboardType: TextInputType.visiblePassword,
-                          autofillHints: [AutofillHints.username],
-                        ),
-                        ampPadding(6),
-                        ampFormField(
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() => passwordHidden = !passwordHidden);
-                            },
-                            icon: passwordHidden
-                                ? ampIcon(Icons.visibility)
-                                : ampIcon(Icons.visibility_off),
-                          ),
-                          controller: passwordInputFormController,
-                          key: passwordInputFormKey,
-                          labelText: Language.current.password,
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: passwordHidden,
-                          autofillHints: [AutofillHints.password],
-                        ),
-                        ampSizedDivider(20),
-                        ampPadding(4),
-                        ampText(Language.current.changeLanguage, size: 20),
-                        ampDropdownButton(
-                          value: Language.current,
-                          itemToDropdownChild: (i) => ampText(i.name),
-                          items: Language.all,
-                          onChanged: (v) =>
-                              setState(() => Language.current = v),
-                        ),
-                        ampSizedDivider(5),
-                        ampText(
-                          textString,
-                          color: Colors.red,
-                          weight: FontWeight.bold,
-                          size: 20,
-                        ),
-                      ],
+      body: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        color: AmpColors.colorBackground,
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Colors.transparent,
+          appBar: ampAppBar(Language.current.changeLoginPopup),
+          body: Center(
+            heightFactor: 1,
+            child: Container(
+              margin: EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ampText(Language.current.selectClass, size: 20),
+                    ampRow([
+                      ampDropdownButton(
+                        value: gradeDropDownValue,
+                        items: FirstLoginValues.grades,
+                        onChanged: (value) {
+                          setState(() {
+                            gradeDropDownValue = value;
+                            Prefs.grade = value;
+                          });
+                        },
+                      ),
+                      ampPadding(10),
+                      ampDropdownButton(
+                        value: letterDropDownValue,
+                        items: FirstLoginValues.letters,
+                        onChanged: (value) {
+                          setState(() {
+                            letterDropDownValue = value;
+                            Prefs.char = value;
+                          });
+                        },
+                      ),
+                    ]),
+                    ampSizedDivider(20),
+                    ampPadding(4),
+                    ampFormField(
+                      controller: usernameInputFormController,
+                      key: usernameInputFormKey,
+                      labelText: Language.current.username,
+                      keyboardType: TextInputType.visiblePassword,
+                      autofillHints: [AutofillHints.username],
                     ),
-                  ),
+                    ampPadding(6),
+                    ampFormField(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() => passwordHidden = !passwordHidden);
+                        },
+                        icon: passwordHidden
+                            ? ampIcon(Icons.visibility)
+                            : ampIcon(Icons.visibility_off),
+                      ),
+                      controller: passwordInputFormController,
+                      key: passwordInputFormKey,
+                      labelText: Language.current.password,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: passwordHidden,
+                      autofillHints: [AutofillHints.password],
+                    ),
+                    ampSizedDivider(20),
+                    ampPadding(4),
+                    ampText(Language.current.changeLanguage, size: 20),
+                    ampDropdownButton(
+                      value: Language.current,
+                      itemToDropdownChild: (i) => ampText(i.name),
+                      items: Language.all,
+                      onChanged: (v) => setState(() => Language.current = v),
+                    ),
+                    ampSizedDivider(5),
+                    ampText(
+                      textString,
+                      color: Colors.red,
+                      weight: FontWeight.bold,
+                      size: 20,
+                    ),
+                  ],
                 ),
-              ),
-              bottomSheet: ampLinearProgressIndicator(credentialsAreLoading),
-              floatingActionButton: ampFab(
-                onPressed: () async {
-                  setState(() => credentialsAreLoading = true);
-                  try {
-                    Prefs.username = usernameInputFormController.text.trim();
-                    Prefs.password = passwordInputFormController.text.trim();
-                    await Prefs.waitForMutex();
-                    Map<String, dynamic> map = jsonDecode(await dsbGetData(
-                      Prefs.username,
-                      Prefs.password,
-                      FirstLoginValues.httpPostFunc,
-                    ));
-                    if (map['Resultcode'] != 0)
-                      throw Language.current
-                          .catchDsbGetData(map['ResultStatusInfo']);
-
-                    setState(() {
-                      isError = false;
-                      credentialsAreLoading = false;
-                      textString = '';
-                    });
-                    FocusScope.of(context).unfocus();
-                    firstLoginTabController.animateTo(1);
-                  } catch (e) {
-                    setState(() {
-                      credentialsAreLoading = false;
-                      textString = errorString(e);
-                      isError = true;
-                    });
-                  }
-                },
-                label: Language.current.save,
-                icon: Icons.save,
               ),
             ),
           ),
-          Stack(
-            children: [
-              Container(
-                child: FlareActor(
-                  'assets/anims/get_ready.json',
-                  animation: animString,
-                  callback: (name) {
-                    setState(() => animString = (name == 'i1' ? 'i2' : 'i1'));
-                  },
-                ),
-                color: Colors.black,
-              ),
-              Scaffold(
-                backgroundColor: Colors.transparent,
-                appBar: ampAppBar(AmpStrings.appTitle),
-                floatingActionButton: ampFab(
-                  onPressed: () async {
-                    FocusScope.of(context).unfocus();
-                    Prefs.firstLogin = false;
-                    setState(() => dsbWidgetIsLoading = false);
-                    await dsbUpdateWidget();
-                    await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => AmpApp()),
-                    );
-                  },
-                  label: Language.current.done,
-                  icon: MdiIcons.arrowRight,
-                ),
-                bottomSheet: ampLinearProgressIndicator(dsbWidgetIsLoading),
-              ),
-            ],
+          bottomSheet: ampLinearProgressIndicator(loading),
+          floatingActionButton: ampFab(
+            onPressed: () async {
+              setState(() => loading = true);
+              try {
+                Prefs.username = usernameInputFormController.text.trim();
+                Prefs.password = passwordInputFormController.text.trim();
+                await Prefs.waitForMutex();
+                //TODO: put this code into dsbuntis
+                Map<String, dynamic> map = jsonDecode(await dsbGetData(
+                  Prefs.username,
+                  Prefs.password,
+                  FirstLoginValues.httpPostFunc,
+                ));
+                if (map['Resultcode'] != 0)
+                  throw Language.current
+                      .catchDsbGetData(map['ResultStatusInfo']);
+
+                await dsbUpdateWidget();
+
+                setState(() {
+                  isError = false;
+                  loading = false;
+                  textString = '';
+                });
+
+                Prefs.firstLogin = false;
+                FocusScope.of(context).unfocus();
+                await Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => AmpApp()),
+                );
+              } catch (e) {
+                setState(() {
+                  loading = false;
+                  textString = errorString(e);
+                  isError = true;
+                });
+              }
+            },
+            label: Language.current.save,
+            icon: Icons.save,
           ),
-        ],
+        ),
       ),
     );
   }
