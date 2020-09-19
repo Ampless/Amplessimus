@@ -322,9 +322,9 @@ class AmpHomePageState extends State<AmpHomePage>
         ? ampNull
         : Stack(
             children: <Widget>[
-              ListTile(
-                title: ampText(Language.current.allClasses),
-                trailing: ampText('${Prefs.grade}${Prefs.char}'),
+              ampListTile(
+                Language.current.allClasses,
+                trailing: '${Prefs.grade}${Prefs.char}',
               ),
               Align(
                 child: ampSwitch(
