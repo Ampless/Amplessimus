@@ -67,14 +67,14 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       setState(() => Prefs.useJsonCache = value),
                 ),
                 ampDivider,
-                ListTile(
-                  title: ampText('Listenelementabstand'),
-                  trailing: ampText('${Prefs.subListItemSpace}'),
+                ampListTile(
+                  'Listenelementabstand',
+                  trailing: '${Prefs.subListItemSpace}',
                   onTap: () => showInputSubListItemSpacingDialog(context),
                 ),
-                ListTile(
-                  title: ampText('Refreshtimer (Minuten)'),
-                  trailing: ampText('${Prefs.timer}'),
+                ampListTile(
+                  'Refreshtimer (Minuten)',
+                  trailing: '${Prefs.timer}',
                   onTap: () => showInputTimerDialog(context),
                 ),
                 ampDivider,

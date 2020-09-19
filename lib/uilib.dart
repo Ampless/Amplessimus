@@ -325,3 +325,18 @@ Widget ampList(List<Widget> children, int themeId) {
       return ampList(children, 0);
   }
 }
+
+ListTile ampListTile(
+  String title, {
+  String subtitle,
+  String leading,
+  String trailing,
+  Function() onTap,
+}) =>
+    ListTile(
+      title: ampText(title),
+      subtitle: ampText(subtitle),
+      leading: ampText(leading),
+      trailing: ampText(trailing),
+      onTap: onTap,
+    );

@@ -2,7 +2,7 @@ VERSION = 2.2.0
 ACTUAL_VERSION = $(VERSION).$$(git rev-parse @ | cut -c 1-7)
 
 FLAGS = --release --suppress-analytics
-BIN_FLAGS = $(FLAGS) --split-debug-info=debug_symbols --obfuscate
+BIN_FLAGS = $(FLAGS) --split-debug-info=/tmp --obfuscate
 IOS_FLAGS = $(BIN_FLAGS)
 APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm64,android-x64
 AAB_FLAGS = $(APK_FLAGS)
@@ -39,7 +39,6 @@ OUTPUT_WEB = $(OUTPUT_DIR)/$(ACTUAL_VERSION).web
 OUTPUT_WIN = $(OUTPUT_DIR)/$(ACTUAL_VERSION).win
 
 TMP         = tmp
-TMP_SYMBOLS = $(TMP)/debug_symbols
     IPA_DIR = Payload
 TMP_IPA_DIR = $(TMP)/$(IPA_DIR)
 TMP_DEB_DIR = $(TMP)/deb
@@ -145,7 +144,7 @@ macdmg:
 
 mkdirs:
 	@which mkdir
-	mkdir -p $(TMP_SYMBOLS) $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
+	mkdir -p $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
 
 cleanartifacts:
 	@which rm

@@ -22,18 +22,16 @@ Widget dsbGetGoodList(
   for (var plan in plans) {
     var dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
-      dayWidgets.add(ListTile(
-        title: ampText(Language.current.noSubs),
-      ));
+      dayWidgets.add(ampListTile(Language.current.noSubs));
     }
     var i = 0;
     for (var sub in plan.subs) {
-      dayWidgets.add(ListTile(
-        title: ampText(Language.current.dsbSubtoTitle(sub)),
-        subtitle: ampText(Language.current.dsbSubtoSubtitle(sub)),
+      dayWidgets.add(ampListTile(
+        Language.current.dsbSubtoTitle(sub),
+        subtitle: Language.current.dsbSubtoSubtitle(sub),
         trailing: (char.isEmpty || grade.isEmpty || !oneClassOnly)
-            ? ampText(sub.affectedClass)
-            : ampNull,
+            ? sub.affectedClass
+            : '',
       ));
       if (++i < plan.subs.length) dayWidgets.add(ampDivider);
     }
@@ -109,7 +107,7 @@ Future<Null> dsbUpdateWidget(
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-        child: ampList([ListTile(title: ampText(errorString(e)))], themeId),
+        child: ampList([ampListTile(errorString(e))], themeId),
         padding: EdgeInsets.only(top: 15),
       ),
     );
