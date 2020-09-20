@@ -24,9 +24,7 @@ class FirstLoginScreen extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    AmpColors.isDarkMode = true;
-    return ampMatApp(FirstLoginScreenPage(),
-        pop: () async => Prefs.closeAppOnBackPress);
+    return ampMatApp(FirstLoginScreenPage());
   }
 }
 

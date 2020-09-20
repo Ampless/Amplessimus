@@ -10,10 +10,7 @@ import 'package:flutter/material.dart';
 class RegisterTimetableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ampMatApp(
-      RegisterTimetableScreenPage(),
-      pop: () async => false,
-    );
+    return ampMatApp(RegisterTimetableScreenPage());
   }
 }
 

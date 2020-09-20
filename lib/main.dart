@@ -124,10 +124,7 @@ class AmpApp extends StatelessWidget {
   Widget build(BuildContext context) {
     try {
       ampInfo('AmpApp', 'Building Main Page');
-      return ampMatApp(
-        AmpHomePage(initialIndex),
-        pop: () async => Prefs.closeAppOnBackPress,
-      );
+      return ampMatApp(AmpHomePage(initialIndex));
     } catch (e) {
       ampErr('AmpApp', errorString(e));
       return ampText(errorString(e));

@@ -13,11 +13,7 @@ import 'package:flutter/services.dart';
 class DevOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ampMatApp(DevOptionsScreenPage(), pop: () async {
-      await dsbUpdateWidget();
-      ampChangeScreen(AmpApp(2), context);
-      return false;
-    });
+    return ampMatApp(DevOptionsScreenPage());
   }
 }
 
@@ -93,7 +89,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 }),
                 ampRaisedButton('Schlechte Ladeanimation', () {
                   ampChangeScreen(
-                    ampMatApp(AmpLoadingAnimation(), pop: () async => false),
+                    ampMatApp(AmpLoadingAnimation()),
                     context,
                   );
                 }),

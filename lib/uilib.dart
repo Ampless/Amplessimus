@@ -235,7 +235,7 @@ class _AmpBehavior extends ScrollBehavior {
   Widget buildViewportChrome(context, child, axisDirection) => child;
 }
 
-WillPopScope ampMatApp(Widget home, {@required Future<bool> Function() pop}) {
+WillPopScope ampMatApp(Widget home) {
   return WillPopScope(
     child: MaterialApp(
       builder: (context, child) =>
@@ -244,7 +244,7 @@ WillPopScope ampMatApp(Widget home, {@required Future<bool> Function() pop}) {
       home: home,
       debugShowCheckedModeBanner: false,
     ),
-    onWillPop: pop,
+    onWillPop: () async => Prefs.closeAppOnBackPress,
   );
 }
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
@@ -12,10 +11,7 @@ class Timeout extends StatelessWidget {
   Widget build(BuildContext context) {
     try {
       ampInfo('Timeout', 'Building Main Page');
-      return ampMatApp(
-        TimeoutPage(),
-        pop: () async => Prefs.closeAppOnBackPress,
-      );
+      return ampMatApp(TimeoutPage());
     } catch (e) {
       ampErr('Timeout', errorString(e));
       return ampText(errorString(e));
