@@ -334,9 +334,9 @@ ListTile ampListTile(
   Function() onTap,
 }) =>
     ListTile(
-      title: ampText(title),
-      subtitle: ampText(subtitle),
-      leading: ampText(leading),
-      trailing: ampText(trailing),
+      title: title == null ? null : ampText(title),
+      subtitle: subtitle == null ? null : ampText(subtitle),
+      leading: leading == null ? null : ampText(leading),
+      trailing: trailing == null ? null : ampText(trailing),
       onTap: onTap,
     );

@@ -8,9 +8,7 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class FirstLoginScreen extends StatelessWidget {
   FirstLoginScreen({
