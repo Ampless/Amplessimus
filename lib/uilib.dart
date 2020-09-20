@@ -270,14 +270,12 @@ FloatingActionButton ampFab({
   @required String label,
   @required IconData icon,
   @required void Function() onPressed,
-  Color backgroundColor,
 }) {
-  backgroundColor ??= AmpColors.colorBackground;
   return FloatingActionButton.extended(
     elevation: 0,
     onPressed: onPressed,
     highlightElevation: 0,
-    backgroundColor: backgroundColor,
+    backgroundColor: AmpColors.colorBackground,
     focusColor: Colors.transparent,
     splashColor: AmpColors.colorForeground,
     label: ampText(label),

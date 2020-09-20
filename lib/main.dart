@@ -357,39 +357,34 @@ class AmpHomePageState extends State<AmpHomePage>
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       var containers = [
-        AnimatedContainer(
-          duration: Duration(milliseconds: 150),
-          color: AmpColors.colorBackground,
-          child: Scaffold(
-            key: homeScaffoldKey,
-            appBar: ampAppBar(AmpStrings.appTitle),
-            backgroundColor: Colors.transparent,
-            body: RefreshIndicator(
-              key: refreshKey,
-              child: !circularProgressIndicatorActive
-                  ? ListView(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      children: [
-                        dsbWidget,
-                        ampDivider,
-                        changeSubVisibilityWidget,
-                      ],
-                    )
-                  : Center(
-                      child: SizedBox(
-                      child: SpinKitWave(
-                        size: 100,
-                        duration: Duration(milliseconds: 1050),
-                        color: AmpColors.colorForeground,
-                      ),
-                      height: 200,
-                      width: 200,
-                    )),
-              onRefresh: rebuildDragDown,
-            ),
+        Scaffold(
+          key: homeScaffoldKey,
+          appBar: ampAppBar(AmpStrings.appTitle),
+          backgroundColor: Colors.transparent,
+          body: RefreshIndicator(
+            key: refreshKey,
+            child: !circularProgressIndicatorActive
+                ? ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: [
+                      dsbWidget,
+                      ampDivider,
+                      changeSubVisibilityWidget,
+                    ],
+                  )
+                : Center(
+                    child: SizedBox(
+                    child: SpinKitWave(
+                      size: 100,
+                      duration: Duration(milliseconds: 1050),
+                      color: AmpColors.colorForeground,
+                    ),
+                    height: 200,
+                    width: 200,
+                  )),
+            onRefresh: rebuildDragDown,
           ),
-          margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
         ),
         Scaffold(
           appBar: ampAppBar(Language.current.timetable),
