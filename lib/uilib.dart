@@ -340,3 +340,16 @@ ListTile ampListTile(
       trailing: trailing == null ? null : ampText(trailing),
       onTap: onTap,
     );
+
+ListTile ampLessonTile({
+  @required String subject,
+  @required String lesson,
+  @required String subtitle,
+  @required String trailing,
+}) =>
+    ListTile(
+      title: ampText(subject, size: 22),
+      leading: ampText(lesson.toString(), weight: FontWeight.bold, size: 30),
+      subtitle: ampText(subtitle, size: 16),
+      trailing: ampText(trailing, size: 16),
+    );

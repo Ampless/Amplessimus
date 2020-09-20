@@ -5,6 +5,7 @@ import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'package:Amplessimus/subject.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
@@ -26,8 +27,9 @@ Widget dsbGetGoodList(
     }
     var i = 0;
     for (var sub in plan.subs) {
-      dayWidgets.add(ampListTile(
-        Language.current.dsbSubtoTitle(sub),
+      dayWidgets.add(ampLessonTile(
+        subject: realSubject(sub.subject, Language.current),
+        lesson: lesson(sub.lessons),
         subtitle: Language.current.dsbSubtoSubtitle(sub),
         trailing: (char.isEmpty || grade.isEmpty || !oneClassOnly)
             ? sub.affectedClass
@@ -36,7 +38,7 @@ Widget dsbGetGoodList(
       if (++i < plan.subs.length) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
-      title: Row(children: <Widget>[
+      title: Row(children: [
         ampText(' ${Language.current.dayToString(plan.day)}', size: 22),
         IconButton(
           icon: ampIcon(Icons.info),

@@ -68,17 +68,6 @@ class German extends Language {
   }
 
   @override
-  String dsbSubtoTitle(DsbSubstitution sub) {
-    if (sub == null) return 'null';
-    var hour = '';
-    if (sub.lessons != null) {
-      for (var h in sub.lessons) hour += hour.isEmpty ? h.toString() : '-$h';
-    } else
-      hour = 'null';
-    return '$hour. Stunde ${realSubject(sub.subject, this)}';
-  }
-
-  @override
   String catchDsbGetData(dynamic e) {
     return 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
   }

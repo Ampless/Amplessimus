@@ -59,29 +59,6 @@ class English extends Language {
   }
 
   @override
-  String dsbSubtoTitle(DsbSubstitution sub) {
-    if (sub == null) return 'null';
-    var hour = '';
-    if (sub.lessons != null) {
-      for (var h in sub.lessons) {
-        if (hour.isNotEmpty) hour += '-';
-        hour += h.toString();
-        var r = h % 10;
-        if (r == 1 && h != 11)
-          hour += 'st';
-        else if (r == 2 && h != 12)
-          hour += 'nd';
-        else if (r == 3 && h != 13)
-          hour += 'rd';
-        else
-          hour += 'th';
-      }
-    } else
-      hour = 'null';
-    return '$hour lesson ${realSubject(sub.subject, this)}';
-  }
-
-  @override
   String catchDsbGetData(dynamic e) =>
       'Please check your internet connection. (Error: $e)';
 

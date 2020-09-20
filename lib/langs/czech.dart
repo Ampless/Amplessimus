@@ -64,17 +64,6 @@ class Czech extends Language {
   }
 
   @override
-  String dsbSubtoTitle(DsbSubstitution sub) {
-    if (sub == null) return 'null';
-    var s = '';
-    if (sub.lessons == null)
-      s = 'null';
-    else
-      for (var h in sub.lessons) s += s.isEmpty ? h.toString() : '-$h';
-    return '$s. hodina ${realSubject(sub.subject, this)}';
-  }
-
-  @override
   String catchDsbGetData(e) => 'Ověřte zda jste připojeni k síti. (Fehler: $e)';
 
   @override

@@ -23,3 +23,10 @@ String realSubject(String subject, [Language lang]) {
   for (var key in lut.keys) if (sub.startsWith(key)) s = lut[key];
   return s;
 }
+
+String lesson(List<int> lessons) {
+  if (lessons == null) return 'null';
+  var lesson = '';
+  for (var l in lessons) lesson += lesson.isEmpty ? l.toString() : '-$l';
+  return lesson;
+}
