@@ -256,7 +256,7 @@ SnackBar ampSnackBar(
     SnackBar(
       backgroundColor: AmpColors.colorBackground,
       content: ampText(content),
-      action: label != null ? ampSnackBarAction(label, action) : ampNull,
+      action: label != null ? ampSnackBarAction(label, action) : null,
     );
 
 SnackBarAction ampSnackBarAction(String label, Function() onPressed) =>

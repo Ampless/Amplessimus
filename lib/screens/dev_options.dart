@@ -7,7 +7,6 @@ import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/loading_animation.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

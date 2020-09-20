@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/subject.dart';
 
 class English extends Language {
   @override
