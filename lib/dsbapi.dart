@@ -39,7 +39,7 @@ Widget dsbGetGoodList(
     }
     widgets.add(ListTile(
       title: Row(children: [
-        ampText(' ${Language.current.dayToString(plan.day)}', size: 22),
+        ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
         IconButton(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,

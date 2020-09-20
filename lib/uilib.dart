@@ -304,7 +304,8 @@ void ampChangeScreen(
       ),
     );
 
-Widget ampList(List<Widget> children, int themeId) {
+Widget ampList(List<Widget> children, [int themeId]) {
+  themeId ??= Prefs.currentThemeId;
   switch (themeId) {
     case 0:
       return Card(
@@ -348,8 +349,8 @@ ListTile ampLessonTile({
   @required String trailing,
 }) =>
     ListTile(
-      title: ampText(subject, size: 22),
-      leading: ampText(lesson.toString(), weight: FontWeight.bold, size: 30),
+      title: ampText(subject, size: 20),
+      leading: ampText(lesson.toString(), weight: FontWeight.bold, size: 32),
       subtitle: ampText(subtitle, size: 16),
       trailing: ampText(trailing, size: 16),
     );

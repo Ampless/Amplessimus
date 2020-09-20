@@ -321,7 +321,7 @@ class AmpHomePageState extends State<AmpHomePage>
     return Prefs.grade.isEmpty && Prefs.char.isEmpty
         ? ampNull
         : Stack(
-            children: <Widget>[
+            children: [
               ampListTile(
                 Language.current.allClasses,
                 trailing: '${Prefs.grade}${Prefs.char}',
