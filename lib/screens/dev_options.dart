@@ -31,19 +31,11 @@ class DevOptionsScreenPage extends StatefulWidget {
 class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
     with SingleTickerProviderStateMixin {
   @override
-  void initState() {
-    ampInfo('DevOptionsScreenPageState', 'initState()');
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) => Scaffold(
         appBar: ampAppBar('Entwickleroptionen'),
         backgroundColor: Colors.transparent,
-        body: Container(
-          color: AmpColors.colorBackground,
-          margin: EdgeInsets.all(16),
-          child: Center(
+        body: ampPageBase(
+          Center(
             child: ListView(
               children: [
                 ampDivider,

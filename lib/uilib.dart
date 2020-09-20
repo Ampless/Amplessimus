@@ -354,3 +354,9 @@ ListTile ampLessonTile({
       subtitle: ampText(subtitle, size: 16),
       trailing: ampText(trailing, size: 16),
     );
+
+Widget ampPageBase(Widget child) => AnimatedContainer(
+      duration: Duration(milliseconds: 150),
+      color: AmpColors.colorBackground,
+      child: SafeArea(child: child),
+    );

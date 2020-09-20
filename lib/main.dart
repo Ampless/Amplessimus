@@ -552,37 +552,27 @@ class AmpHomePageState extends State<AmpHomePage>
           ),
         )
       ];
-      return SafeArea(
-          child: Stack(
-        children: [
-          AnimatedContainer(
-            duration: Duration(milliseconds: 150),
-            color: AmpColors.colorBackground,
+      return ampPageBase(Scaffold(
+        backgroundColor: Colors.transparent,
+        body: TabBarView(
+          controller: tabController,
+          physics: ClampingScrollPhysics(),
+          children: containers,
+        ),
+        bottomNavigationBar: SizedBox(
+          height: 55,
+          child: TabBar(
+            controller: tabController,
+            indicatorColor: AmpColors.colorForeground,
+            labelColor: AmpColors.colorForeground,
+            tabs: [
+              ampTab(Icons.home, Language.current.start),
+              ampTab(MdiIcons.timetable, Language.current.timetable),
+              ampTab(Icons.settings, Language.current.settings),
+            ],
           ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            body: TabBarView(
-              controller: tabController,
-              physics: ClampingScrollPhysics(),
-              children: containers,
-            ),
-            bottomNavigationBar: SizedBox(
-              height: 55,
-              child: TabBar(
-                controller: tabController,
-                indicatorColor: AmpColors.colorForeground,
-                labelColor: AmpColors.colorForeground,
-                tabs: [
-                  ampTab(Icons.home, Language.current.start),
-                  ampTab(MdiIcons.timetable, Language.current.timetable),
-                  ampTab(Icons.settings, Language.current.settings),
-                ],
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-          )
-        ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ));
     } catch (e) {
       ampErr('AmpHomePageState', errorString(e));
