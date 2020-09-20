@@ -153,35 +153,22 @@ List<Widget> ttWidgets(
           ? Language.current.freeLesson
           : realSubject(lesson.subject);
 
-      unthemedWidgets.add(ListTile(
-        title: ampText(
-          title.trim().isEmpty && !lesson.isFree
-              ? Language.current.subject
-              : title.trim(),
-          size: 22,
-        ),
-        leading: ampText(
-          (lessons.indexOf(lesson) + 1).toString(),
-          weight: FontWeight.bold,
-          size: 30,
-        ),
-        subtitle: ampText(
-          lesson.notes.trim().isEmpty
-              ? Language.current.notes
-              : lesson.notes.trim(),
-          size: 16,
-        ),
-        trailing: ampText(
-          lesson.teacher.trim().isEmpty && !lesson.isFree
-              ? Language.current.teacher
-              : lesson.teacher.trim(),
-          size: 16,
-        ),
+      unthemedWidgets.add(ampLessonTile(
+        subject: title.trim().isEmpty && !lesson.isFree
+            ? Language.current.subject
+            : title.trim(),
+        lesson: (lessons.indexOf(lesson) + 1).toString(),
+        subtitle: lesson.notes.trim().isEmpty
+            ? Language.current.notes
+            : lesson.notes.trim(),
+        trailing: lesson.teacher.trim().isEmpty && !lesson.isFree
+            ? Language.current.teacher
+            : lesson.teacher.trim(),
       ));
       if (lessons.indexOf(lesson) < lessonLength - 1)
         unthemedWidgets.add(ampSizedDivider(0));
     }
-    widgets.add(ampList(unthemedWidgets, Prefs.currentThemeId));
+    widgets.add(ampList(unthemedWidgets));
     widgets.add(ampPadding(12));
   }
   return widgets;
