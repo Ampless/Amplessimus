@@ -5,7 +5,6 @@ import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/screens/loading_animation.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,12 +85,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ampRaisedButton('Stundenplan löschen', () {
                   Prefs.jsonTimetable = null;
                   setState(() {});
-                }),
-                ampRaisedButton('Schlechte Ladeanimation', () {
-                  ampChangeScreen(
-                    ampMatApp(AmpLoadingAnimation()),
-                    context,
-                  );
                 }),
                 ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
                 ampRaisedButton(
