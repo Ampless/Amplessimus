@@ -130,7 +130,7 @@ problem, but it also makes web Amplessimus impossible)
 * Recent Visual Studio (2019 as of writing this)
 #### Compile if make would work
 ```
-make win
+make.exe win
 ```
 #### Compile without make (buggy)
 ```
