@@ -136,7 +136,7 @@ class CachedSharedPreferences {
 
   void checkPlatformSharedPrefSupport() {
     try {
-      _platformSupportsSharedPrefs = !Platform.isWindows;
+      _platformSupportsSharedPrefs = true;
     } catch (e) {
       //it should only fail on web (it doesnt with universal_io)
       _platformSupportsSharedPrefs = true;
