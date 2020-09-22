@@ -151,13 +151,14 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
             onPressed: () async {
               setState(() => loading = true);
               try {
-                Prefs.username = usernameInputFormController.text.trim();
-                Prefs.password = passwordInputFormController.text.trim();
-                await Prefs.waitForMutex();
+                var username = usernameInputFormController.text.trim();
+                var password = passwordInputFormController.text.trim();
+                Prefs.username = username;
+                Prefs.password = password;
                 //TODO: put this code into dsbuntis
                 Map<String, dynamic> map = jsonDecode(await dsbGetData(
-                  Prefs.username,
-                  Prefs.password,
+                  username,
+                  password,
                   FirstLoginValues.httpPostFunc,
                 ));
                 if (map['Resultcode'] != 0)

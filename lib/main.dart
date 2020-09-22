@@ -218,7 +218,6 @@ class AmpHomePageState extends State<AmpHomePage>
         save: () async {
           Prefs.grade = gradeDropDownValue;
           Prefs.char = letterDropDownValue;
-          await Prefs.waitForMutex();
           unawaited(rebuildNewBuild());
           Navigator.pop(context);
         },
@@ -252,7 +251,6 @@ class AmpHomePageState extends State<AmpHomePage>
         save: () async {
           Language.current = lang;
           Prefs.dsbUseLanguage = use;
-          await Prefs.waitForMutex();
           unawaited(rebuildNewBuild());
 
           FirstLoginValues.grades[0] = Language.current.empty;
@@ -305,7 +303,6 @@ class AmpHomePageState extends State<AmpHomePage>
         save: () async {
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();
-          await Prefs.waitForMutex();
           unawaited(rebuildDragDown());
           Navigator.pop(context);
         },
@@ -491,7 +488,6 @@ class AmpHomePageState extends State<AmpHomePage>
                 ampBigAmpButton(
                   onTap: () async {
                     Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                    await Prefs.waitForMutex();
                     checkBrightness();
                   },
                   icon: MdiIcons.brightness6,

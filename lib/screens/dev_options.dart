@@ -143,7 +143,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           if (!inputFormKey.currentState.validate()) return;
           Prefs.subListItemSpace =
               double.parse(inputFormController.text.trim());
-          setState(Prefs.waitForMutex);
+          setState(() {});
           Navigator.pop(context);
         },
       ),

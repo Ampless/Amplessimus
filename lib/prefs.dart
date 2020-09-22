@@ -138,17 +138,6 @@ void setTimer(int i, Function() f) {
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
 bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
 
-String toJson() => _prefs.toJson();
-
-//This does practically nothing (it is internally called when setting
-//any value), but it waits for any set operations in progress to finish.
-Future<void> waitForMutex() => _prefs.waitForMutex();
-
-void initTest() {
-  _prefs = CachedSharedPreferences();
-  _prefs.platformSharedPrefSupportFalse();
-}
-
 Future<Null> load() async {
   _prefs = CachedSharedPreferences();
   try {

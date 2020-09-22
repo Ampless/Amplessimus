@@ -1,68 +1,23 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:Amplessimus/logging.dart';
-import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CachedSharedPreferences {
   SharedPreferences _prefs;
-  RandomAccessFile _prefFile;
-  final Mutex _prefFileMutex = Mutex();
-  final Map<String, dynamic> _cache = {};
 
-  bool _platformSupportsSharedPrefs;
+  bool get isInitialized => _prefs != null;
 
-  // always returns false on windows, but that's fine, because prealpha
-  // (this also leads to the "lights on/off wont work" bug i talked about in
-  //  a commit comment)
-  bool get isInitialized => _platformSupportsSharedPrefs && _prefs != null;
-
-  Future<Null> _set(
-    String key,
-    dynamic value, [
-    bool setCacheAndFlush = true,
-  ]) async {
-    if (setCacheAndFlush) {
-      await _prefFileMutex.acquire();
-      _cache[key] = value;
-      _prefFileMutex.release();
-    }
-    if (_prefs != null) {
-      if (value is String)
-        await _prefs.setString(key, value);
-      else if (value is int)
-        await _prefs.setInt(key, value);
-      else if (value is List)
-        await _prefs.setStringList(key, value);
-      else if (value is bool)
-        await _prefs.setBool(key, value);
-      else if (value is double)
-        await _prefs.setDouble(key, value);
-      else if (value != null)
-        ampWarn(
-          'PrefCache',
-          'value "$value" '
-              '(runtimeType: ${value.runtimeType}) '
-              'not supported',
-        );
-    }
-    if (setCacheAndFlush) await flush();
-  }
-
-  Future<Null> setString(String k, String v) => _set(k, v);
-  Future<Null> setInt(String k, int v) => _set(k, v);
-  Future<Null> setDouble(String k, double v) => _set(k, v);
-  Future<Null> setStringList(String k, List<String> v) => _set(k, v);
-  Future<Null> setBool(String k, bool v) => _set(k, v);
+  Future<bool> setString(String k, String v) => _prefs.setString(k, v);
+  Future<bool> setInt(String k, int v) => _prefs.setInt(k, v);
+  Future<bool> setDouble(String k, double v) => _prefs.setDouble(k, v);
+  Future<bool> setStringList(String k, List<String> v) =>
+      _prefs.setStringList(k, v);
+  Future<bool> setBool(String k, bool v) => _prefs.setBool(k, v);
 
   dynamic _get(String key, dynamic dflt, Function(String) Function() f) {
-    if (_prefs == null && _platformSupportsSharedPrefs)
+    if (_prefs == null)
       ampWarn('PrefCache', 'Getting $key before initialization is done.');
 
-    if (_cache.containsKey(key))
-      return _cache[key];
-    else if (_prefs != null && _prefs.containsKey(key))
+    if (_prefs != null && _prefs.containsKey(key))
       return f()(key);
     else
       return dflt;
@@ -79,96 +34,18 @@ class CachedSharedPreferences {
   bool getBool(String k, bool d) => _get(k, d, _pGetBol);
   List<String> getStringList(String k, List<String> d) => _get(k, d, _pGetStrs);
 
-  String toJson() {
-    var prefs = [];
-    for (var k in _cache.keys)
-      if (_cache[k] != null)
-        prefs.add({
-          'k': k,
-          'v': _cache[k] is bool ? (_cache[k] ? 1 : 0) : _cache[k],
-          't': _cache[k] is bool ? 3 : _cache[k] is List<String> ? 4 : -1
-        });
-    return jsonEncode(prefs);
-  }
-
-  Future<void> flush() => _prefFileMutex.protect(() async {
-        if (_prefFile != null) {
-          await _prefFile.setPosition(0);
-          await _prefFile.truncate(0);
-          await _prefFile.writeString(toJson());
-          await _prefFile.flush();
-        }
-      });
-
-  Future<void> waitForMutex() => _prefFileMutex.protect(() {});
-
   Future<void> ctorSharedPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-    await _prefFileMutex.protect(() async {
-      for (var k in _cache.keys) await _set(k, _cache[k]);
-    });
-  }
-
-  // this is a constructor for the prealpha desktop version
-  // (only used on windows and hopefully not much longer)
-  Future<void> ctorPrealphaDesktop() => _prefFileMutex.protect(() async {
-        _prefFile = await File('.amplissimus_prealpha_data')
-            .open(mode: FileMode.append);
-        if (await _prefFile.length() > 1) {
-          await _prefFile.setPosition(0);
-          var bytes = await _prefFile.read(await _prefFile.length());
-          //this kind of creates a race condition, but that doesn't really matter lol
-          //as of 2020/08/26 i dont see it
-          for (dynamic json in jsonDecode(utf8.decode(bytes))) {
-            dynamic key = json['k'];
-            dynamic val = json['v'];
-            dynamic typ = json['t'];
-            if (typ == 3)
-              _cache[key] = val == 1;
-            else if (typ == 4) {
-              _cache[key] = <String>[];
-              for (dynamic s in val) _cache[key].add(s);
-            } else
-              _cache[key] = val;
-          }
-        }
-      });
-
-  void checkPlatformSharedPrefSupport() {
-    try {
-      _platformSupportsSharedPrefs = true;
-    } catch (e) {
-      //it should only fail on web (it doesnt with universal_io)
-      _platformSupportsSharedPrefs = true;
-    }
-  }
-
-  //_platformSupportsSharedPrefs = false;
-  //(only used in the tests)
-  void platformSharedPrefSupportFalse() {
-    _platformSupportsSharedPrefs = false;
   }
 
   Future<void> ctor() {
-    checkPlatformSharedPrefSupport();
-    return (_platformSupportsSharedPrefs
-        ? ctorSharedPrefs
-        : ctorPrealphaDesktop)();
+    return ctorSharedPrefs();
   }
 
-  void clear() async {
-    await _prefFileMutex.acquire();
-    _cache.clear();
+  Future<bool> clear() {
     if (_prefs == null) {
-      _prefFileMutex.release();
-      if (_platformSupportsSharedPrefs)
-        throw 'PREFS NOT LOADED';
-      else
-        return;
+      throw 'PREFS NOT LOADED';
     }
-    await _prefs.clear();
-    _prefFileMutex.release();
-    await flush();
-    return;
+    return _prefs.clear();
   }
 }
