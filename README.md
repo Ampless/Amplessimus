@@ -48,7 +48,7 @@ https://apt.chrissx.de/cydia
 containing a build that is broken and outdated. Making
 Cydia-compatible builds is hard. Many older Cydia apps are broken in
 similar ways and since there is not a lot of documentation it is
-really hard to lear it.
+really hard to learn it.
 
 ## <a name="build"></a> Building
 Building on Windows is a mess, because Windows is a mess. Luckily
@@ -57,21 +57,21 @@ everything except Windows will assume you are running macOS or Linux,
 as the instructions for Windows are a lot more complicated. However,
 for all build targets a recent version of
 [Flutter](https://flutter.dev/docs/get-started/install) is required.
-Additionally you currently need make for these build instructions
+Additionally you currently need `make` for these build instructions
 (except for Windows). In the Output sections `$VERSION` means
 "the full name of the version you are building". All of the outputs
-are placed in the `bin/` folder created automatically.
+are placed in the `bin/` folder, which created automatically.
 
 ### Android
 #### Prepare
-* Install the [Android SDK](https://developer.android.com/studio)
+* The [Android SDK](https://developer.android.com/studio)
 #### Compile
 ```
 make android
 ```
 #### Output
-* `$VERSION.aab`
-* `$VERSION.apk`
+* `$VERSION.aab` an application bundle
+* `$VERSION.apk` an application bundle
 
 ### Linux
 #### Prepare
@@ -111,7 +111,7 @@ make ios
 make mac
 ```
 #### Output
-* TODO: write this down
+* `$VERSION.dmg` an installer image for macOS 10.13+
 
 ### Web
 #### Compile
@@ -121,19 +121,20 @@ make web
 #### Output
 * `$VERSION.web/` a folder containing your `/var/www/html/*` basically
 #### Notes
-It won't work, because browsers like "security".
+It won't work, because browsers like "security". (CSRF is a serious security
+problem, but it also makes web Amplessimus impossible)
 
 ### Windows
 #### Prepare
-* Windows
-* Visual Studio 2019
+* Recent Windows
+* Recent Visual Studio (2019 as of writing this)
 #### Compile if make would work
 ```
 make win
 ```
 #### Compile without make (buggy)
 ```
-make\_win
+make\_win.bat
 ```
 #### Output (make)
 * `$VERSION.win/`
