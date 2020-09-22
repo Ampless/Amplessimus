@@ -4,7 +4,7 @@ ACTUAL_VERSION = $(VERSION).$$(git rev-parse @ | cut -c 1-7)
 FLAGS = --release --suppress-analytics
 BIN_FLAGS = $(FLAGS) --split-debug-info=/tmp --obfuscate
 IOS_FLAGS = $(BIN_FLAGS)
-APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm64,android-x64
+APK_FLAGS = $(BIN_FLAGS) --shrink --target-platform android-arm,android-arm64,android-x64
 AAB_FLAGS = $(APK_FLAGS)
 WIN_FLAGS = $(BIN_FLAGS)
 GTK_FLAGS = $(BIN_FLAGS)
