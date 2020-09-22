@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^0.5.10
+  shared_preferences: ^0.5.11
   material_design_icons_flutter: ^4.0.5555
   pull_to_refresh: ^1.6.1
   flutter_spinkit: ^4.1.2+1
