@@ -63,7 +63,6 @@ final List<testCase> ttTestCases = [
       ttTest1Output, false),
   ttTestCase(() async {
     ttSaveToPrefs(ttTest1Input1);
-    await Prefs.waitForMutex();
     return ttLoadFromPrefs();
   }, ttTest1Input1, false),
   ttTestCase(() async => ttFromJson(null), [], false),
