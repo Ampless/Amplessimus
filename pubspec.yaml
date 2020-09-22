@@ -24,19 +24,17 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^0.5.11
-  material_design_icons_flutter: ^4.0.5555
-  pull_to_refresh: ^1.6.1
+  material_design_icons_flutter: ^4.0.5655
+  pull_to_refresh: ^1.6.2
   flutter_spinkit: ^4.1.2+1
-  flare_loading: ^2.1.1
   flare_flutter: ^2.0.6
   archive: ^2.0.13
   crypto: ^2.1.5
-  mutex: ^1.1.0
   dsbuntis: ^0.1.11
   schttp: ^0.2.7
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.7.5
+  flutter_launcher_icons: ^0.8.0
   flutter_test:
     sdk: flutter
   pedantic: ^1.9.0
