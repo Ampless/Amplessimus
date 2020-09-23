@@ -72,9 +72,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         AmpColors.brightness =
             SchedulerBinding.instance.window.platformBrightness;
 
-      if (!Prefs.firstLogin) unawaited(dsbUpdateWidget());
+      if (!Prefs.firstLogin) await dsbUpdateWidget();
 
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(Duration(milliseconds: 100), () {
         timeout.cancel();
         Navigator.pushReplacement(
           context,
