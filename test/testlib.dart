@@ -23,8 +23,8 @@ testCase expectTestCase(
       expect(res, expct);
     };
 
-void testInit() {
-  Prefs.initTest();
+void testInit() async {
+  await Prefs.load();
   ampDisableLogging();
 }
 
@@ -33,7 +33,7 @@ void tests(List<testCase> testCases, String groupName) {
     var i = 1;
     for (var testCase in testCases)
       test('case ${i++}', () async {
-        testInit();
+        await testInit();
         await testCase();
       });
   });

@@ -18,7 +18,7 @@ final Map<String, String> dsbTest1Cache = {
 
 void main() {
   testWidgets('The one and only UI test', (tester) async {
-    testInit();
+    await testInit();
     var screen = FirstLoginScreen(
         testing: true,
         httpPostFunc: (url, body, id, headers, {getCache, setCache}) async =>
@@ -33,15 +33,13 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('a'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('q').last);
+    await tester.tap(find.text('').last);
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(usernameInputFormKey), 'username');
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(passwordInputFormKey), 'password');
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.save));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text(Language.current.done));
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.timetable));
     await tester.pumpAndSettle();
