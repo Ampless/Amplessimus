@@ -63,7 +63,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
-      Prefs.devOptionsEnabled = Prefs.devOptionsEnabled;
       ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
       ttColumns = ttLoadFromPrefs();
 
@@ -73,9 +72,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         AmpColors.brightness =
             SchedulerBinding.instance.window.platformBrightness;
 
-      if (!Prefs.firstLogin) await dsbUpdateWidget();
+      if (!Prefs.firstLogin) unawaited(dsbUpdateWidget());
 
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(Duration(milliseconds: 500), () {
         timeout.cancel();
         Navigator.pushReplacement(
           context,
