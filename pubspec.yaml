@@ -1,13 +1,10 @@
 name: Amplessimus
 description: An alternative to the 'Amplissimus' app.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+# Don't publish to pub.
+publish_to: 'none'
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
+# A version number is sth like 1.2.3+4. (a.b.c+build_number)
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
@@ -23,13 +20,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^0.5.11
+  shared_preferences: ^0.5.12
   material_design_icons_flutter: ^4.0.5655
   pull_to_refresh: ^1.6.2
   flutter_spinkit: ^4.1.2+1
   flare_flutter: ^2.0.6
   archive: ^2.0.13
   crypto: ^2.1.5
+  html_unescape: ^1.0.2
   dsbuntis: ^0.1.11
   schttp: ^0.2.7
 
@@ -44,27 +42,17 @@ flutter_icons:
   android: true
   image_path: "assets/images/logo.png"
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
+  # Make sure that the Material Icons font is included.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/logo.png
-    - assets/anims/splash_screen.json
+    - assets/logo.png
+    - assets/splash_screen.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
 
   # for fonts do this:
   # fonts:
@@ -73,10 +61,7 @@ flutter:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
+  #       - asset: fonts/Schyler-Bold.ttf
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,

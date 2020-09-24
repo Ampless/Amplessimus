@@ -102,7 +102,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
             width: double.infinity,
             duration: Duration(seconds: 1),
             child: FlareActor(
-              'assets/anims/splash_screen.json',
+              'assets/splash_screen.json',
               alignment: Alignment.center,
               fit: BoxFit.contain,
               animation: 'anim',
@@ -520,7 +520,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       applicationName: AmpStrings.appTitle,
                       applicationVersion: AmpStrings.version,
                       applicationIcon:
-                          Image.asset('assets/images/logo.png', height: 40),
+                          Image.asset('assets/logo.png', height: 40),
                       children: [Text(Language.current.appInfo)]),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.folderInformation
