@@ -61,6 +61,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         ),
       );
 
+      final minimalLoadingTime = Future.delayed(Duration(seconds: 1));
+
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
       ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
@@ -74,15 +76,15 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       if (!Prefs.firstLogin) await dsbUpdateWidget();
 
-      Future.delayed(Duration(milliseconds: 100), () {
-        timeout.cancel();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-          ),
-        );
-      });
+      await minimalLoadingTime;
+
+      timeout.cancel();
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
+        ),
+      );
     } catch (e) {
       ampErr('SplashScreenPageState.initState', errorString(e));
     }
