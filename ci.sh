@@ -83,8 +83,8 @@ main() {
 
                 mkdir -p /usr/local/var/www/amplessimus
 
-                echo "Running tests..."
-                flutter test
+                # echo "Running tests..."
+                # flutter test
 
                 echo "[Amplessimus-Build][$(date)] Running make to build $version_name."
 
