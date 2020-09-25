@@ -151,6 +151,7 @@ class English extends Language {
     'm': 'Maths',
     'mu': 'Music',
     'b': 'Biology',
+    'bwl': 'Business administration',
     'c': 'Chemistry',
     'k': 'Art',
     'p': 'Physics',

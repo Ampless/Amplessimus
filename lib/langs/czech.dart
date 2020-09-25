@@ -147,6 +147,8 @@ class Czech extends Language {
         'm': 'Matematika',
         'mu': 'Hudební výchova',
         'b': 'Biologie',
+        //TODO: see above
+        'bwl': 'Obchodní administrativa',
         'c': 'Chemie',
         'k': 'Výtvarná výchova',
         'p': 'Fyzika',

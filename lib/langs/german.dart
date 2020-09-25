@@ -152,6 +152,7 @@ class German extends Language {
     'm': 'Mathematik',
     'mu': 'Musik',
     'b': 'Biologie',
+    'bwl': 'Betriebswirtschaftslehre',
     'c': 'Chemie',
     'k': 'Kunst',
     'p': 'Physik',
