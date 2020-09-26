@@ -52,16 +52,16 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         DeviceOrientation.landscapeRight,
       ]);
 
-      // if the program wont start within 30 secs, show some debug info
+      // if the program wont start within 15 secs, show some debug info
       final timeout = Timer(
-        Duration(seconds: 20),
+        Duration(seconds: 15),
         () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => Timeout()),
         ),
       );
 
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 700));
+      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 500));
 
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
