@@ -198,12 +198,9 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
 class FirstLoginValues {
   static bool testing = false;
-  static Future<String> Function(
-          Uri url, Object body, String id, Map<String, String> headers)
+  static Future<String> Function(Uri, Object, String, Map<String, String>)
       httpPostFunc = httpPost;
-  static Future<String> Function(Uri url) httpGetFunc = httpGet;
-  //TODO: get rid of this horrible hack for testing
-  static List<Widget> settingsButtons;
+  static Future<String> Function(Uri) httpGetFunc = httpGet;
 
   static List<String> get grades =>
       ['5', '6', '7', '8', '9', '10', '11', '12', '13'];

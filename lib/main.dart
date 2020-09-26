@@ -429,7 +429,7 @@ class AmpHomePageState extends State<AmpHomePage>
             backgroundColor: Colors.transparent,
             body: GridView.count(
               crossAxisCount: 2,
-              children: FirstLoginValues.settingsButtons = [
+              children: [
                 ampBigButton(
                   onTap: () {
                     Prefs.toggleDarkModePressed();

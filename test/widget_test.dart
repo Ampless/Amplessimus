@@ -1,11 +1,9 @@
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'testlib.dart';
 
 final Map<String, String> dsbTest1Cache = {
   'GetData':
@@ -18,7 +16,7 @@ final Map<String, String> dsbTest1Cache = {
 
 void main() {
   testWidgets('The one and only UI test', (tester) async {
-    await testInit();
+    ampDisableLogging();
     var screen = FirstLoginScreen(
         testing: true,
         httpPostFunc: (url, body, id, headers, {getCache, setCache}) async =>
@@ -64,12 +62,13 @@ void main() {
       await tester.tap(find.text(w));
       await tester.pumpAndSettle();
     }
-    for (var i = 0; i < 10; i++) {
-      await tester.tap(find.byWidget(FirstLoginValues.settingsButtons.first));
+    for (var i = 0; i < 5; i++) {
+      await tester.tap(find.text(Language.current.lightsOn));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(Language.current.lightsOff));
       await tester.pumpAndSettle();
     }
-    assert(FirstLoginValues.settingsButtons.last is Card);
-    ((FirstLoginValues.settingsButtons.last as Card).child as InkWell).onTap();
+    await tester.tap(find.text('Entwickleroptionen'));
     await tester.pumpAndSettle();
   });
 }
