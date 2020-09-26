@@ -141,8 +141,8 @@ Divider ampSizedDivider(double size) =>
 
 Divider get ampDivider => ampSizedDivider(Prefs.subListItemSpace);
 
-List<Widget> ampDialogButtonsSaveAndCancel(
-    {@required BuildContext context, @required Function() save}) {
+List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
+    {@required Function() save}) {
   return [
     ampDialogButton(Language.current.cancel, Navigator.of(context).pop),
     ampDialogButton(Language.current.save, save),

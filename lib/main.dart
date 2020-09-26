@@ -26,8 +26,7 @@ void main() {
 
 class SplashScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) =>
-      MaterialApp(title: AmpStrings.appTitle, home: SplashScreenPage());
+  Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
 }
 
 class SplashScreenPage extends StatefulWidget {
@@ -60,7 +59,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         ),
       );
 
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 500));
+      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 700));
 
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
@@ -207,7 +206,7 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        context: context,
+        context,
         save: () async {
           Prefs.grade = gradeDropDownValue;
           Prefs.char = letterDropDownValue;
@@ -240,7 +239,7 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        context: context,
+        context,
         save: () async {
           Language.current = lang;
           Prefs.dsbUseLanguage = use;
@@ -292,7 +291,7 @@ class AmpHomePageState extends State<AmpHomePage>
         )
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        context: context,
+        context,
         save: () async {
           Prefs.username = usernameInputFormController.text.trim();
           Prefs.password = passwordInputFormController.text.trim();

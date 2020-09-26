@@ -160,7 +160,7 @@ class RegisterTimetableScreenPageState
                           ),
                         ],
                         actions: (context) => ampDialogButtonsSaveAndCancel(
-                          context: context,
+                          context,
                           save: () {
                             setState(() {
                               lesson.subject =

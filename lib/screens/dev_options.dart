@@ -96,7 +96,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       widgetBuilder: ampRow,
                       children: (_, __) => [ampText('Sicher?')],
                       actions: (context) => ampDialogButtonsSaveAndCancel(
-                        context: context,
+                        context,
                         save: () async {
                           await Prefs.clear();
                           exit(0);
@@ -138,7 +138,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        context: context,
+        context,
         save: () {
           if (!inputFormKey.currentState.validate()) return;
           Prefs.subListItemSpace =
@@ -166,7 +166,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        context: context,
+        context,
         save: () {
           Prefs.dsbJsonCache = inputFormController.text.trim();
           Navigator.pop(context);
@@ -194,7 +194,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
-        context: context,
+        context,
         save: () {
           if (!timerInputFormKey.currentState.validate()) return;
           try {
