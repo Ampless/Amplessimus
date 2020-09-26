@@ -17,7 +17,6 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -146,14 +145,13 @@ final refreshKey = GlobalKey<RefreshIndicatorState>();
 
 class AmpHomePageState extends State<AmpHomePage>
     with SingleTickerProviderStateMixin {
-  bool circularProgressIndicatorActive = false;
   TabController tabController;
 
   void checkBrightness() {
     if (Prefs.useSystemTheme) {
       AmpColors.brightness =
           SchedulerBinding.instance.window.platformBrightness;
-      rebuildNewBuild();
+      rebuildDragDown();
       Future.delayed(Duration(milliseconds: 150), rebuild);
     }
   }
@@ -181,12 +179,6 @@ class AmpHomePageState extends State<AmpHomePage>
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
     await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
-  }
-
-  Future<Null> rebuildNewBuild() async {
-    setState(() => circularProgressIndicatorActive = true);
-    await dsbUpdateWidget();
-    setState(() => circularProgressIndicatorActive = false);
   }
 
   Future<Null> showInputSelectCurrentClass(BuildContext context) {
@@ -219,7 +211,7 @@ class AmpHomePageState extends State<AmpHomePage>
         save: () async {
           Prefs.grade = gradeDropDownValue;
           Prefs.char = letterDropDownValue;
-          unawaited(rebuildNewBuild());
+          unawaited(rebuildDragDown());
           Navigator.pop(context);
         },
       ),
@@ -252,7 +244,7 @@ class AmpHomePageState extends State<AmpHomePage>
         save: () async {
           Language.current = lang;
           Prefs.dsbUseLanguage = use;
-          unawaited(rebuildNewBuild());
+          unawaited(rebuildDragDown());
 
           FirstLoginValues.grades[0] = Language.current.empty;
           FirstLoginValues.letters[0] = Language.current.empty;
@@ -323,8 +315,8 @@ class AmpHomePageState extends State<AmpHomePage>
               ),
               Align(
                 child: ampSwitch(
-                  value: Prefs.oneClassOnly,
-                  onChanged: (value) {
+                  Prefs.oneClassOnly,
+                  (value) {
                     Prefs.oneClassOnly = value;
                     dsbUpdateWidget(callback: rebuild);
                   },
@@ -358,26 +350,15 @@ class AmpHomePageState extends State<AmpHomePage>
           backgroundColor: Colors.transparent,
           body: RefreshIndicator(
             key: refreshKey,
-            child: !circularProgressIndicatorActive
-                ? ListView(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    children: [
-                      dsbWidget,
-                      ampDivider,
-                      changeSubVisibilityWidget,
-                    ],
-                  )
-                : Center(
-                    child: SizedBox(
-                    child: SpinKitWave(
-                      size: 100,
-                      duration: Duration(milliseconds: 1050),
-                      color: AmpColors.colorForeground,
-                    ),
-                    height: 200,
-                    width: 200,
-                  )),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: [
+                dsbWidget,
+                ampDivider,
+                changeSubVisibilityWidget,
+              ],
+            ),
             onRefresh: rebuildDragDown,
           ),
         ),
@@ -449,8 +430,8 @@ class AmpHomePageState extends State<AmpHomePage>
             backgroundColor: Colors.transparent,
             body: GridView.count(
               crossAxisCount: 2,
-              children: FirstLoginValues.settingsButtons = <Widget>[
-                ampBigAmpButton(
+              children: FirstLoginValues.settingsButtons = [
+                ampBigButton(
                   onTap: () {
                     Prefs.toggleDarkModePressed();
                     Prefs.useSystemTheme = false;
@@ -469,7 +450,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       ? Language.current.lightsOn
                       : Language.current.lightsOff,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () async {
                     ampInfo('MyApp', 'switching design mode');
                     Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
@@ -486,7 +467,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       : MdiIcons.clipboardListOutline,
                   text: Language.current.changeAppearance,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () async {
                     Prefs.useSystemTheme = !Prefs.useSystemTheme;
                     checkBrightness();
@@ -496,25 +477,25 @@ class AmpHomePageState extends State<AmpHomePage>
                       ? Language.current.lightsNoSystem
                       : Language.current.lightsUseSystem,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () => showInputChangeLanguage(context),
                   icon: MdiIcons.translate,
                   text: Language.current.changeLanguage,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () => showInputEntryCredentials(context),
                   icon:
                       AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
                   text: Language.current.changeLogin,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () => showInputSelectCurrentClass(context),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.school
                       : MdiIcons.schoolOutline,
                   text: Language.current.selectClass,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () => showAboutDialog(
                       context: context,
                       applicationName: AmpStrings.appTitle,
@@ -527,7 +508,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       : MdiIcons.folderInformationOutline,
                   text: Language.current.settingsAppInfo,
                 ),
-                ampBigAmpButton(
+                ampBigButton(
                   onTap: () {
                     if (Prefs.devOptionsEnabled)
                       ampChangeScreen(DevOptionsScreen(), context);
@@ -548,19 +529,11 @@ class AmpHomePageState extends State<AmpHomePage>
           physics: ClampingScrollPhysics(),
           children: containers,
         ),
-        bottomNavigationBar: SizedBox(
-          height: 55,
-          child: TabBar(
-            controller: tabController,
-            indicatorColor: AmpColors.colorForeground,
-            labelColor: AmpColors.colorForeground,
-            tabs: [
-              ampTab(Icons.home, Language.current.start),
-              ampTab(MdiIcons.timetable, Language.current.timetable),
-              ampTab(Icons.settings, Language.current.settings),
-            ],
-          ),
-        ),
+        bottomNavigationBar: ampTabBar(tabController, [
+          ampTab(Icons.home, Language.current.start),
+          ampTab(MdiIcons.timetable, Language.current.timetable),
+          ampTab(Icons.settings, Language.current.settings),
+        ]),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ));
     } catch (e) {

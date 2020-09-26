@@ -117,7 +117,7 @@ DropdownButton ampDropdownButton({
   );
 }
 
-Switch ampSwitch({@required bool value, @required Function(bool) onChanged}) {
+Switch ampSwitch(bool value, Function(bool) onChanged) {
   return Switch(
     activeColor: AmpColors.colorForeground,
     value: value,
@@ -125,13 +125,14 @@ Switch ampSwitch({@required bool value, @required Function(bool) onChanged}) {
   );
 }
 
-ListTile ampSwitchWithText(
-    {@required String text,
-    @required bool value,
-    @required Function(bool) onChanged}) {
+ListTile ampSwitchWithText({
+  @required String text,
+  @required bool value,
+  @required Function(bool) onChanged,
+}) {
   return ListTile(
     title: ampText(text),
-    trailing: ampSwitch(value: value, onChanged: onChanged),
+    trailing: ampSwitch(value, onChanged),
   );
 }
 
@@ -148,11 +149,12 @@ List<Widget> ampDialogButtonsSaveAndCancel(
   ];
 }
 
-Widget ampBigAmpButton(
-    {@required void Function() onTap,
-    @required IconData icon,
-    @required String text,
-    bool visible = true}) {
+Widget ampBigButton({
+  @required void Function() onTap,
+  @required IconData icon,
+  @required String text,
+  bool visible = true,
+}) {
   return visible
       ? Card(
           elevation: 0,
@@ -357,4 +359,11 @@ Widget ampPageBase(Widget child) => AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
       child: SafeArea(child: child),
+    );
+
+TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
+      controller: controller,
+      indicatorColor: AmpColors.colorForeground,
+      labelColor: AmpColors.colorForeground,
+      tabs: tabs,
     );

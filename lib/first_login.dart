@@ -202,6 +202,7 @@ class FirstLoginValues {
           Uri url, Object body, String id, Map<String, String> headers)
       httpPostFunc = httpPost;
   static Future<String> Function(Uri url) httpGetFunc = httpGet;
+  //TODO: get rid of this horrible hack for testing
   static List<Widget> settingsButtons;
 
   static List<String> get grades =>
