@@ -101,12 +101,12 @@ FlatButton ampDialogButton(String text, Function() onPressed) {
 DropdownButton ampDropdownButton({
   @required dynamic value,
   @required List<dynamic> items,
-  Widget Function(dynamic) itemToDropdownChild = ampText,
   @required void Function(dynamic) onChanged,
+  Widget Function(dynamic) itemToDropdownChild = ampText,
 }) {
   return DropdownButton(
     underline: Container(height: 2, color: AmpColors.colorForeground),
-    dropdownColor: AmpColors.colorBackground,
+    dropdownColor: AmpColors.lightBackground,
     focusColor: AmpColors.colorBackground,
     style: AmpColors.textStyleForeground,
     value: value,
