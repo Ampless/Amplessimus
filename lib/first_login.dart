@@ -207,5 +207,5 @@ class FirstLoginValues {
 
   static List<String> get grades =>
       ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
-  static List<String> get letters => ['a', 'b', 'c', 'd', 'e', 'f', 'g', ''];
+  static List<String> get letters => ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];
 }
