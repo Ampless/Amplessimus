@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:Amplessimus/dsbapi.dart';
-import 'package:Amplessimus/dsbutil.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/uilib.dart';
@@ -9,6 +6,9 @@ import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
+import 'package:schttp/schttp.dart';
+
+final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
 
 class FirstLoginScreen extends StatelessWidget {
   FirstLoginScreen({
@@ -16,9 +16,10 @@ class FirstLoginScreen extends StatelessWidget {
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers)
         httpPostFunc,
-    Future<String> Function(Uri url) httpGetFunc = httpGet,
+    Future<String> Function(Uri url) httpGetFunc,
   }) {
     httpPostFunc ??= http.post;
+    httpGetFunc ??= http.get;
     FirstLoginValues.testing = testing;
     FirstLoginValues.httpPostFunc = httpPostFunc;
     FirstLoginValues.httpGetFunc = httpGetFunc;
@@ -159,15 +160,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 var password = passwordInputFormController.text.trim();
                 Prefs.username = username;
                 Prefs.password = password;
-                //TODO: put this code into dsbuntis
-                Map<String, dynamic> map = jsonDecode(await dsbGetData(
+                var error = dsbCheckCredentials(
                   username,
                   password,
                   FirstLoginValues.httpPostFunc,
-                ));
-                if (map['Resultcode'] != 0)
-                  throw Language.current
-                      .catchDsbGetData(map['ResultStatusInfo']);
+                );
+                if (error != null)
+                  throw Language.current.catchDsbGetData(error);
 
                 await dsbUpdateWidget();
 
@@ -204,5 +203,5 @@ class FirstLoginValues {
   static bool testing = false;
   static Future<String> Function(Uri, Object, String, Map<String, String>)
       httpPostFunc = http.post;
-  static Future<String> Function(Uri) httpGetFunc = httpGet;
+  static Future<String> Function(Uri) httpGetFunc = http.get;
 }

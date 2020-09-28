@@ -138,7 +138,7 @@ List<Widget> ttWidgets(
   List<TTColumn> table, [
   bool filtered = true,
 ]) {
-  plans = dsbSortAllByHour(dsbSearchClass(plans, Prefs.grade, Prefs.char));
+  plans = dsbSortByLesson(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   if (filtered) table = ttSubTable(table, plans);
   var widgets = <Widget>[];
   for (var plan in plans) {

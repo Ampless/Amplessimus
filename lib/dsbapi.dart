@@ -100,7 +100,7 @@ Future<Null> dsbUpdateWidget(
             dsbLanguage: dsbLanguage);
     if (!useJCache) dsbJsonCache = plansToJson(plans);
     if (oneClassOnly)
-      plans = dsbSortAllByHour(dsbSearchClass(plans, grade, char));
+      plans = dsbSortByLesson(dsbSearchClass(plans, grade, char));
     updateTimetableDays(plans);
     dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
     dsbPlans = plans;
