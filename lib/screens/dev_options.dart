@@ -39,13 +39,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   onChanged: (value) =>
                       setState(() => Prefs.devOptionsEnabled = value),
                 ),
-                ampDivider,
-                ampSwitchWithText(
-                  text: 'App schließt bei zurück-Taste',
-                  value: Prefs.closeAppOnBackPress,
-                  onChanged: (value) =>
-                      setState(() => Prefs.closeAppOnBackPress = value),
-                ),
                 ampSwitchWithText(
                   text: 'JSON Cache benutzen',
                   value: Prefs.useJsonCache,
@@ -53,11 +46,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                       setState(() => Prefs.useJsonCache = value),
                 ),
                 ampDivider,
-                ampListTile(
-                  'Listenelementabstand',
-                  trailing: '${Prefs.subListItemSpace}',
-                  onTap: () => showInputSubListItemSpacingDialog(context),
-                ),
                 ampListTile(
                   'Refreshtimer (Minuten)',
                   trailing: '${Prefs.timer}',
@@ -69,10 +57,10 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ampRaisedButton('Clear Cache', Prefs.clearCache),
                 ampRaisedButton(
                   'Set Cache to Kekw',
-                  () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"24.7.2020 Freitag\",\"subs\":['
+                  () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"25.9.2020 Freitag\",\"subs\":['
                       '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
-                      '{\"day\":0,\"date\":\"27.7.2020 Montag\",\"subs\":['
+                      '{\"day\":0,\"date\":\"28.9.2020 Montag\",\"subs\":['
                       '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
                       '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Albl\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
@@ -82,10 +70,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                 ),
                 ampRaisedButton(
                     'Set Cache to Input', () => showCacheDialog(context)),
-                ampRaisedButton('Stundenplan löschen', () {
-                  Prefs.jsonTimetable = null;
-                  setState(() {});
-                }),
                 ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
                 ampRaisedButton(
                   'App-Daten löschen',
@@ -119,37 +103,6 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
           icon: Icons.arrow_back,
         ),
       );
-
-  void showInputSubListItemSpacingDialog(BuildContext context) {
-    final inputFormKey = GlobalKey<FormFieldState>();
-    final inputFormController =
-        TextEditingController(text: Prefs.subListItemSpace.toString());
-    ampDialog(
-      context: context,
-      title: 'Listenelementabstand',
-      children: (context, setAlState) => [
-        ampFormField(
-          controller: inputFormController,
-          key: inputFormKey,
-          keyboardType: TextInputType.number,
-          validator: (value) => num.tryParse(value) == null
-              ? Language.current.widgetValidatorInvalid
-              : null,
-        ),
-      ],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
-        context,
-        save: () {
-          if (!inputFormKey.currentState.validate()) return;
-          Prefs.subListItemSpace =
-              double.parse(inputFormController.text.trim());
-          setState(() {});
-          Navigator.pop(context);
-        },
-      ),
-      widgetBuilder: ampColumn,
-    );
-  }
 
   void showCacheDialog(BuildContext context) {
     final inputFormKey = GlobalKey<FormFieldState>();

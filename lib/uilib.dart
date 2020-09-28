@@ -139,7 +139,7 @@ ListTile ampSwitchWithText({
 Divider ampSizedDivider(double size) =>
     Divider(color: AmpColors.colorForeground, height: size);
 
-Divider get ampDivider => ampSizedDivider(Prefs.subListItemSpace);
+Divider get ampDivider => ampSizedDivider(0);
 
 List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
     {@required Function() save}) {
@@ -246,7 +246,7 @@ WillPopScope ampMatApp(Widget home) {
       home: home,
       debugShowCheckedModeBanner: false,
     ),
-    onWillPop: () async => Prefs.closeAppOnBackPress,
+    onWillPop: () async => true,
   );
 }
 

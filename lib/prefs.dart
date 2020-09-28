@@ -82,8 +82,6 @@ void toggleDarkModePressed() {
   }
 }
 
-double get subListItemSpace => _prefs.getDouble('sub_list_item_space', 0);
-set subListItemSpace(double d) => _prefs.setDouble('sub_list_item_space', d);
 int get currentThemeId => _prefs.getInt('current_theme_id', 0);
 set currentThemeId(int i) => _prefs.setInt('current_theme_id', i);
 String get username => _prefs.getString('username_dsb', '');
@@ -96,9 +94,6 @@ String get char => _prefs.getString('char', 'a').trim().toLowerCase();
 set char(String s) => _prefs.setString('char', s.trim().toLowerCase());
 bool get oneClassOnly => _prefs.getBool('one_class_only', false);
 set oneClassOnly(bool b) => _prefs.setBool('one_class_only', b);
-bool get closeAppOnBackPress =>
-    _prefs.getBool('close_app_on_back_press', false);
-set closeAppOnBackPress(bool b) => _prefs.setBool('close_app_on_back_press', b);
 bool get devOptionsEnabled => _prefs.getBool('dev_options_enabled', false);
 set devOptionsEnabled(bool b) => _prefs.setBool('dev_options_enabled', b);
 bool get firstLogin => _prefs.getBool('first_login', true);
