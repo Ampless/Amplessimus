@@ -180,36 +180,32 @@ class AmpHomePageState extends State<AmpHomePage>
     await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
   }
 
-  Future<Null> showInputSelectCurrentClass(BuildContext context) {
-    var letterDropDownValue = Prefs.char.trim().toLowerCase();
-    var gradeDropDownValue = Prefs.grade.trim().toLowerCase();
-    if (letterDropDownValue.isEmpty ||
-        !FirstLoginValues.letters.contains(letterDropDownValue))
-      letterDropDownValue = FirstLoginValues.letters[0];
-    if (gradeDropDownValue.isEmpty ||
-        !FirstLoginValues.grades.contains(gradeDropDownValue))
-      gradeDropDownValue = FirstLoginValues.grades[0];
+  Future<Null> selectClassDialog(BuildContext context) {
+    var letter = Prefs.char.trim().toLowerCase();
+    var grade = Prefs.grade.trim().toLowerCase();
+    if (letter.isEmpty || !dsbLetters.contains(letter)) letter = dsbLetters[0];
+    if (grade.isEmpty || !dsbGrades.contains(grade)) grade = dsbGrades[0];
     return ampDialog(
       context: context,
       title: Language.current.selectClass,
       children: (alertContext, setAlState) => [
         ampDropdownButton(
-          value: gradeDropDownValue,
-          items: FirstLoginValues.grades,
-          onChanged: (value) => setAlState(() => gradeDropDownValue = value),
+          value: grade,
+          items: dsbGrades,
+          onChanged: (value) => setAlState(() => grade = value),
         ),
         ampPadding(10),
         ampDropdownButton(
-          value: letterDropDownValue,
-          items: FirstLoginValues.letters,
-          onChanged: (value) => setAlState(() => letterDropDownValue = value),
+          value: letter,
+          items: dsbLetters,
+          onChanged: (value) => setAlState(() => letter = value),
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () async {
-          Prefs.grade = gradeDropDownValue;
-          Prefs.char = letterDropDownValue;
+          Prefs.grade = grade;
+          Prefs.char = letter;
           unawaited(rebuildDragDown());
           Navigator.pop(context);
         },
@@ -218,7 +214,7 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  Future<Null> showInputChangeLanguage(BuildContext context) {
+  Future<Null> changeLanguageDialog(BuildContext context) {
     var lang = Language.current;
     var use = Prefs.dsbUseLanguage;
     return ampDialog(
@@ -244,9 +240,6 @@ class AmpHomePageState extends State<AmpHomePage>
           Language.current = lang;
           Prefs.dsbUseLanguage = use;
           unawaited(rebuildDragDown());
-
-          FirstLoginValues.grades[0] = Language.current.empty;
-          FirstLoginValues.letters[0] = Language.current.empty;
           Navigator.pop(context);
         },
       ),
@@ -254,7 +247,7 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  Future<Null> showInputEntryCredentials(BuildContext context) {
+  Future<Null> credentialDialog(BuildContext context) {
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
     final usernameInputFormController =
@@ -451,7 +444,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 ),
                 ampBigButton(
                   onTap: () async {
-                    ampInfo('MyApp', 'switching design mode');
+                    ampInfo('AmpApp', 'switching design mode');
                     Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
                     await dsbUpdateWidget();
                     rebuild();
@@ -477,18 +470,18 @@ class AmpHomePageState extends State<AmpHomePage>
                       : Language.current.lightsUseSystem,
                 ),
                 ampBigButton(
-                  onTap: () => showInputChangeLanguage(context),
+                  onTap: () => changeLanguageDialog(context),
                   icon: MdiIcons.translate,
                   text: Language.current.changeLanguage,
                 ),
                 ampBigButton(
-                  onTap: () => showInputEntryCredentials(context),
+                  onTap: () => credentialDialog(context),
                   icon:
                       AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
                   text: Language.current.changeLogin,
                 ),
                 ampBigButton(
-                  onTap: () => showInputSelectCurrentClass(context),
+                  onTap: () => selectClassDialog(context),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.school
                       : MdiIcons.schoolOutline,

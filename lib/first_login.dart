@@ -54,10 +54,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
   @override
   Widget build(BuildContext context) {
-    if (Prefs.char.trim().isEmpty)
-      letterDropDownValue = FirstLoginValues.letters.first;
-    if (Prefs.grade.trim().isEmpty)
-      gradeDropDownValue = FirstLoginValues.grades.first;
+    if (Prefs.char.isEmpty) letterDropDownValue = dsbLetters.first;
+    if (Prefs.grade.isEmpty) gradeDropDownValue = dsbGrades.first;
     return Scaffold(
       body: AnimatedContainer(
         duration: Duration(milliseconds: 150),
@@ -79,7 +77,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     ampRow([
                       ampDropdownButton(
                         value: gradeDropDownValue,
-                        items: FirstLoginValues.grades,
+                        items: dsbGrades,
                         onChanged: (value) {
                           setState(() {
                             gradeDropDownValue = value;
@@ -90,7 +88,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       ampPadding(10),
                       ampDropdownButton(
                         value: letterDropDownValue,
-                        items: FirstLoginValues.letters,
+                        items: dsbLetters,
                         onChanged: (value) {
                           setState(() {
                             letterDropDownValue = value;
@@ -201,8 +199,4 @@ class FirstLoginValues {
   static Future<String> Function(Uri, Object, String, Map<String, String>)
       httpPostFunc = httpPost;
   static Future<String> Function(Uri) httpGetFunc = httpGet;
-
-  static List<String> get grades =>
-      ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
-  static List<String> get letters => ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];
 }

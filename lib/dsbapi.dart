@@ -115,3 +115,9 @@ Future<Null> dsbUpdateWidget(
   }
   callback();
 }
+
+//this is a really bad place to put this and
+//some bad prefixes, but we can fix that later
+
+List<String> get dsbGrades => ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
+List<String> get dsbLetters => ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];
