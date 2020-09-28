@@ -83,8 +83,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           setState(() {
                             gradeDropDownValue = value;
                             Prefs.grade = value;
-                            if (value > 10)
-                              letterDropDownValue = Prefs.char = '';
+                            try {
+                              if (int.parse(value) > 10)
+                                letterDropDownValue = Prefs.char = '';
+                              // ignore: empty_catches
+                            } catch (e) {}
                           });
                         },
                       ),

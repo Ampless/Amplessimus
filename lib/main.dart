@@ -194,7 +194,10 @@ class AmpHomePageState extends State<AmpHomePage>
           items: dsbGrades,
           onChanged: (value) => setAlState(() {
             grade = value;
-            if (value > 10) letter = '';
+            try {
+              if (int.parse(value) > 10) letter = '';
+              // ignore: empty_catches
+            } catch (e) {}
           }),
         ),
         ampPadding(10),
