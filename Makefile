@@ -1,4 +1,4 @@
-VERSION = 2.2.4
+VERSION = 2.3.0
 ACTUAL_VERSION = $(VERSION).$$(git rev-parse @ | cut -c 1-7)
 
 FLAGS = --release --suppress-analytics
