@@ -15,9 +15,10 @@ class FirstLoginScreen extends StatelessWidget {
     bool testing = false,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers)
-        httpPostFunc = httpPost,
+        httpPostFunc,
     Future<String> Function(Uri url) httpGetFunc = httpGet,
   }) {
+    httpPostFunc ??= http.post;
     FirstLoginValues.testing = testing;
     FirstLoginValues.httpPostFunc = httpPostFunc;
     FirstLoginValues.httpGetFunc = httpGetFunc;
@@ -197,6 +198,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 class FirstLoginValues {
   static bool testing = false;
   static Future<String> Function(Uri, Object, String, Map<String, String>)
-      httpPostFunc = httpPost;
+      httpPostFunc = http.post;
   static Future<String> Function(Uri) httpGetFunc = httpGet;
 }

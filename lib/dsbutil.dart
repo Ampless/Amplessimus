@@ -8,14 +8,6 @@ final rand = Random();
 final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
 final unescape = HtmlUnescape();
 
-Future<String> httpPost(
-  Uri url,
-  Object body,
-  String id,
-  Map<String, String> headers,
-) =>
-    http.post(url, body, id, headers);
-
 Future<String> httpGet(Uri url) async {
   return unescape
       .convert(await http.get(url))
