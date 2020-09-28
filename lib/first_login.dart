@@ -44,8 +44,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   bool isError = false;
   String textString = '';
   String animString = 'intro';
-  String gradeDropDownValue = Prefs.grade.trim().toLowerCase();
-  String letterDropDownValue = Prefs.char.trim().toLowerCase();
+  String gradeDropDownValue = Prefs.grade;
+  String letterDropDownValue = Prefs.char;
   bool passwordHidden = true;
   final usernameInputFormController =
       TextEditingController(text: Prefs.username);

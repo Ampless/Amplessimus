@@ -181,8 +181,8 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   Future<Null> selectClassDialog(BuildContext context) {
-    var letter = Prefs.char.trim().toLowerCase();
-    var grade = Prefs.grade.trim().toLowerCase();
+    var letter = Prefs.char;
+    var grade = Prefs.grade;
     if (letter.isEmpty || !dsbLetters.contains(letter)) letter = dsbLetters[0];
     if (grade.isEmpty || !dsbGrades.contains(grade)) grade = dsbGrades[0];
     return ampDialog(
