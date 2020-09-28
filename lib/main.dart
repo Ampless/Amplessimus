@@ -192,7 +192,10 @@ class AmpHomePageState extends State<AmpHomePage>
         ampDropdownButton(
           value: grade,
           items: dsbGrades,
-          onChanged: (value) => setAlState(() => grade = value),
+          onChanged: (value) => setAlState(() {
+            grade = value;
+            if (value > 10) letter = '';
+          }),
         ),
         ampPadding(10),
         ampDropdownButton(
