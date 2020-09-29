@@ -63,7 +63,7 @@ class German extends Language {
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Freistunde${sub.lessons.length == 1 ? '' : 'n'}$notesaddon'
-        : 'Vertreten durch ${sub.teacher}$notesaddon';
+        : 'Vertreten durch ${sub.subTeacher}$notesaddon';
   }
 
   @override

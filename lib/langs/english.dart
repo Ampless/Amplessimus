@@ -54,7 +54,7 @@ class English extends Language {
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Free lesson${sub.lessons.length == 1 ? '' : 's'}$notesaddon'
-        : 'Substituted by ${sub.teacher}$notesaddon';
+        : 'Substituted by ${sub.subTeacher}$notesaddon';
   }
 
   @override

@@ -25,15 +25,16 @@ List<testCase> languageTestCases = [
     lang.dsbSubtoSubtitle(null);
   }),
   languageTestCase((lang) {
-    lang.dsbSubtoSubtitle(DsbSubstitution(null, null, null, null, null, false));
+    lang.dsbSubtoSubtitle(
+        DsbSubstitution(null, null, null, null, null, false, null));
   }),
   languageTestCase((lang) {
-    lang.dsbSubtoSubtitle(
-        DsbSubstitution('lul', [], 'kek', 'subJEeKE', 'notesnotes', false));
+    lang.dsbSubtoSubtitle(DsbSubstitution(
+        'lul', [], 'kek', 'subJEeKE', 'notesnotes', false, 'subkekk'));
   }),
   languageTestCase((lang) {
-    lang.dsbSubtoSubtitle(
-        DsbSubstitution('lul', [1, 3, 5], '---', 'sub', 'not', true));
+    lang.dsbSubtoSubtitle(DsbSubstitution(
+        'lul', [1, 3, 5], '---', 'sub', 'not', true, 'zdenek je v prdeli'));
   }),
 ];
 

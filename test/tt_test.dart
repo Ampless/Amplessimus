@@ -40,7 +40,7 @@ final List<DsbPlan> ttTest1Input2 = [
   DsbPlan(
       Day.Monday,
       [
-        DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false),
+        DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false, null),
       ],
       '13.12.-1'),
   DsbPlan(Day.Tuesday, [], 'drölf'),

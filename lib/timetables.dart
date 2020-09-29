@@ -101,7 +101,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
           for (var sub in plan.subs) {
             if (sub.actualLessons.contains(i + 1) &&
                 strcontain(sub.subject, column.lessons[i].subject)) {
-              column.lessons[i].teacher = sub.teacher;
+              column.lessons[i].teacher = sub.subTeacher;
               column.lessons[i].notes = sub.notes;
               column.lessons[i].isFree = sub.isFree;
             }

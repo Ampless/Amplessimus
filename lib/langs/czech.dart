@@ -59,7 +59,7 @@ class Czech extends Language {
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
     if (sub == null) return 'null';
-    return sub.isFree ? 'volná hodina' : 'Supluje ${sub.teacher}';
+    return sub.isFree ? 'volná hodina' : 'Supluje ${sub.subTeacher}';
   }
 
   @override

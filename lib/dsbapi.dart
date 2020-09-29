@@ -28,7 +28,8 @@ Widget dsbGetGoodList(
     var i = 0;
     for (var sub in plan.subs) {
       dayWidgets.add(ampLessonTile(
-        subject: realSubject(sub.subject, Language.current),
+        subject:
+            '${realSubject(sub.subject, Language.current)} (${sub.orgTeacher})',
         lesson: lesson(sub.lessons),
         subtitle: Language.current.dsbSubtoSubtitle(sub),
         trailing: (char.isEmpty || grade.isEmpty || !oneClassOnly)
