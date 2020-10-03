@@ -161,9 +161,10 @@ List<Widget> ttWidgets(
         subtitle: lesson.notes.trim().isEmpty
             ? Language.current.notes
             : lesson.notes.trim(),
-        trailing: lesson.teacher.trim().isEmpty && !lesson.isFree
+        teacher: lesson.teacher.trim().isEmpty && !lesson.isFree
             ? Language.current.teacher
             : lesson.teacher.trim(),
+        affClass: '',
       ));
       if (lessons.indexOf(lesson) < lessonLength - 1)
         unthemedWidgets.add(ampSizedDivider(0));

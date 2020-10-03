@@ -345,14 +345,15 @@ ListTile ampListTile(
 ListTile ampLessonTile({
   @required String subject,
   @required String lesson,
+  @required String teacher,
   @required String subtitle,
-  @required String trailing,
+  @required String affClass,
 }) =>
     ListTile(
-      title: ampText(subject, size: 20),
-      leading: ampText(lesson.toString(), weight: FontWeight.bold, size: 32),
+      title: ampText('$subject ($teacher)', size: 18),
+      leading: ampText(lesson, weight: FontWeight.bold, size: 34),
       subtitle: ampText(subtitle, size: 16),
-      trailing: ampText(trailing, size: 16),
+      trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
     );
 
 Widget ampPageBase(Widget child) => AnimatedContainer(

@@ -28,11 +28,11 @@ Widget dsbRenderPlans(
     var i = 0;
     for (var sub in plan.subs) {
       dayWidgets.add(ampLessonTile(
-        subject:
-            '${realSubject(sub.subject, Language.current)} (${sub.orgTeacher})',
+        subject: realSubject(sub.subject, Language.current),
+        teacher: sub.orgTeacher,
         lesson: lesson(sub.lessons),
         subtitle: Language.current.dsbSubtoSubtitle(sub),
-        trailing: (char.isEmpty || grade.isEmpty || !oneClassOnly)
+        affClass: (char.isEmpty || grade.isEmpty || !oneClassOnly)
             ? sub.affectedClass
             : '',
       ));
