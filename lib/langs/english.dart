@@ -136,7 +136,7 @@ class English extends Language {
 
   @override
   final LinkedHashMap<String, String> subjectLut = LinkedHashMap.from({
-    'spo': 'Physical Education (sports)',
+    'spo': 'Physical Education / Sports',
     'e': 'English',
     'ev': 'Protestant Religion',
     'd': 'German',
@@ -146,12 +146,12 @@ class English extends Language {
     'l': 'Latin',
     'it': 'Italian',
     'f': 'French',
-    'so': 'Social Studies (politics)',
-    'sk': 'Social Studies (politics)',
+    'so': 'Social Studies / Politics',
+    'sk': 'Social Studies / Politics',
     'm': 'Maths',
     'mu': 'Music',
     'b': 'Biology',
-    'bwl': 'Business administration',
+    'bwl': 'Business Administration',
     'c': 'Chemistry',
     'k': 'Art',
     'p': 'Physics',

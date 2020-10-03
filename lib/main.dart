@@ -25,6 +25,20 @@ void main() {
 }
 
 class SplashScreen extends StatelessWidget {
+  SplashScreen({
+    bool testing = false,
+    Future<String> Function(
+            Uri url, Object body, String id, Map<String, String> headers)
+        httpPostFunc,
+    Future<String> Function(Uri url) httpGetFunc,
+  }) {
+    httpPostFunc ??= http.post;
+    httpGetFunc ??= http.get;
+    FirstLoginValues.testing = testing;
+    FirstLoginValues.httpPostFunc = httpPostFunc;
+    FirstLoginValues.httpGetFunc = httpGetFunc;
+  }
+
   @override
   Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
 }

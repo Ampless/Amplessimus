@@ -11,23 +11,8 @@ import 'package:schttp/schttp.dart';
 final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
 
 class FirstLoginScreen extends StatelessWidget {
-  FirstLoginScreen({
-    bool testing = false,
-    Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers)
-        httpPostFunc,
-    Future<String> Function(Uri url) httpGetFunc,
-  }) {
-    httpPostFunc ??= http.post;
-    httpGetFunc ??= http.get;
-    FirstLoginValues.testing = testing;
-    FirstLoginValues.httpPostFunc = httpPostFunc;
-    FirstLoginValues.httpGetFunc = httpGetFunc;
-  }
   @override
-  Widget build(BuildContext context) {
-    return ampMatApp(FirstLoginScreenPage());
-  }
+  Widget build(BuildContext context) => ampMatApp(FirstLoginScreenPage());
 }
 
 class FirstLoginScreenPage extends StatefulWidget {

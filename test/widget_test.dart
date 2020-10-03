@@ -1,6 +1,7 @@
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
+import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,13 +18,15 @@ final Map<String, String> dsbTest1Cache = {
 void main() {
   testWidgets('The one and only UI test', (tester) async {
     ampDisableLogging();
-    var screen = FirstLoginScreen(
+    await tester.pumpWidget(
+      SplashScreen(
         testing: true,
         httpPostFunc: (url, body, id, headers, {getCache, setCache}) async =>
             dsbTest1Cache['GetData'],
         httpGetFunc: (url, {getCache, setCache}) async =>
-            dsbTest1Cache['44a7def4-aaa3-4177-959d-e2921176cde9.htm']);
-    await tester.pumpWidget(screen);
+            dsbTest1Cache['44a7def4-aaa3-4177-959d-e2921176cde9.htm'],
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('5'));
     await tester.pumpAndSettle();
