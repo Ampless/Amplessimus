@@ -38,8 +38,7 @@ and you can install Amplessimus like you would install Riley's apps.
 #### AltStore 1.4
 In Beta 5 of AltStore 1.4 a new feature was added: You can add the Amplessimus
 source by clicking
-[this](altstore://source?url=https://ampless.chrissx.de/altstore/stable.json)
-link.
+[this link](altstore://source?url=https://ampless.chrissx.de/altstore/stable.json).
 #### Cydia (broken, help needed)
 There is an apt repo at
 ```
