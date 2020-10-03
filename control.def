@@ -9,6 +9,6 @@ Depends: system-cmds
 Architecture: $ARCH
 Author: Ampless <ampless@chrissx.de>
 Maintainer: Ampless <ampless@chrissx.de>
-Description: A Amplissimus substitution ;)
+Description: An Amplissimus substitution ;)
  This is just a better version of Amplissimus.
 Homepage: https://ampless.chrissx.de

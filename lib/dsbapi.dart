@@ -11,7 +11,7 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
-Widget dsbGetGoodList(
+Widget dsbRenderPlans(
   List<DsbPlan> plans,
   bool oneClassOnly,
   String char,
@@ -103,7 +103,7 @@ Future<Null> dsbUpdateWidget(
     if (oneClassOnly)
       plans = dsbSortByLesson(dsbSearchClass(plans, grade, char));
     updateTimetableDays(plans);
-    dsbWidget = dsbGetGoodList(plans, oneClassOnly, char, grade, themeId);
+    dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, themeId);
     dsbPlans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
