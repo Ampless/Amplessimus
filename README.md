@@ -133,7 +133,7 @@ make.exe win
 ```
 #### Compile without make (buggy)
 ```
-make\_win.bat
+make_win.bat
 ```
 #### Output (make)
 * `$VERSION.win/`
