@@ -26,6 +26,7 @@ dependencies:
   flare_flutter: ^2.0.6
   archive: ^2.0.13
   crypto: ^2.1.5
+  url_launcher: ^5.7.2
   dsbuntis: ^0.3.1
   schttp: ^0.2.7
 

@@ -9,10 +9,11 @@ Future<Null> ampDialog({
   @required List<Widget> Function(BuildContext) actions,
   @required BuildContext context,
   @required Widget Function(List<Widget>) widgetBuilder,
+  bool barrierDismissible = true,
 }) =>
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: barrierDismissible,
       builder: (context) => AlertDialog(
         title: ampText(title),
         backgroundColor: AmpColors.colorBackground,

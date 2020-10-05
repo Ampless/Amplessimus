@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:Amplessimus/screens/dev_options.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -145,6 +147,13 @@ class AmpApp extends StatelessWidget {
   }
 }
 
+class UpdateInfo {
+  String version, url;
+  bool newer;
+
+  UpdateInfo(this.version, this.url, this.newer);
+}
+
 class AmpHomePage extends StatefulWidget {
   AmpHomePage(this.initialIndex, {Key key}) : super(key: key);
   final int initialIndex;
@@ -169,6 +178,24 @@ class AmpHomePageState extends State<AmpHomePage>
     }
   }
 
+  Future<UpdateInfo> getUpdateInfo() async {
+    try {
+      var json = jsonDecode(await http.get(Uri.parse(
+        'https://api.github.com/repos/Ampless/Amplessimus/releases',
+      )));
+      for (var release in json)
+        if (!release['prerelease'])
+          return UpdateInfo(
+            release['tag_name'],
+            release['html_url'],
+            AmpStrings.version != release['tag_name'],
+          );
+    } catch (e) {
+      ampErr('UpdateNotifier', errorString(e));
+      return null;
+    }
+  }
+
   @override
   void initState() {
     ampInfo('AmpHomePageState', 'initState()');
@@ -178,6 +205,22 @@ class AmpHomePageState extends State<AmpHomePage>
     tabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialIndex);
     Prefs.setTimer(Prefs.timer, () => dsbUpdateWidget(callback: rebuild));
+    (() async {
+      var update = await getUpdateInfo();
+      if (update != null && update.newer)
+        //TODO: get translations for all of this
+        await ampDialog(
+          title: 'Update',
+          children: (alContext, setAlState) =>
+              [ampText('You might want to update to ${update.version}.')],
+          actions: (alContext) => [
+            ampDialogButton('Dismiss', Navigator.of(alContext).pop),
+            ampDialogButton('Open', () => launch(update.url)),
+          ],
+          context: context,
+          widgetBuilder: ampRow,
+        );
+    })();
   }
 
   void rebuild() {
