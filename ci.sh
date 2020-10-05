@@ -92,9 +92,9 @@ main() {
                 make mac || { make cleanartifacts rollbackversions ; }
         } 2>&1 | tee bin/ci.log
 
-        output
-
         update_altstore
+
+        output
 }
 
 main
