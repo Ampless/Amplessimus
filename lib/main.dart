@@ -192,8 +192,8 @@ class AmpHomePageState extends State<AmpHomePage>
           );
     } catch (e) {
       ampErr('UpdateNotifier', errorString(e));
-      return null;
     }
+    return null;
   }
 
   @override

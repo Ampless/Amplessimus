@@ -45,9 +45,8 @@ flutter_update() {
 update_altstore() {
         cd
         [ ! -d ampless.chrissx.de ] && git clone https://github.com/Ampless/ampless.chrissx.de
-        cd ampless.chrissx.de
+        cd ampless.chrissx.de/altstore
         git pull
-        cd altstore
         sed -E 's/^ *"version": ".*",$/      "version": "'"$version_name"'",/' alpha.json | \
         sed -E 's/^ *"versionDate": ".*",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
         sed -E 's/^ *"versionDescription": ".*",$/      "versionDescription": "As of '"$(date)"'",/' | \
@@ -92,7 +91,7 @@ main() {
                 make mac || { make cleanartifacts rollbackversions ; }
         } 2>&1 | tee bin/ci.log
 
-        update_altstore
+        (update_altstore) &
 
         output
 }
