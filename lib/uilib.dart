@@ -350,7 +350,10 @@ ListTile ampLessonTile({
   @required String affClass,
 }) =>
     ListTile(
-      title: ampText('$subject ($teacher)', size: 18),
+      title: ampText(
+        teacher == null ? '$subject' : '$subject ($teacher)',
+        size: 18,
+      ),
       leading: ampText(lesson, weight: FontWeight.bold, size: 34),
       subtitle: ampText(subtitle, size: 16),
       trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
