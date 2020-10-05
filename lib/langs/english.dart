@@ -196,4 +196,13 @@ class English extends Language {
 
   @override
   String get useForDsb => 'Use for DSB (not recommended)';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get update => 'Update';
 }

@@ -208,14 +208,14 @@ class AmpHomePageState extends State<AmpHomePage>
     (() async {
       var update = await getUpdateInfo();
       if (update != null && update.newer)
-        //TODO: get translations for all of this
         await ampDialog(
-          title: 'Update',
+          title: Language.current.update,
           children: (alContext, setAlState) =>
+              //TODO: get translations for this
               [ampText('You might want to update to ${update.version}.')],
-          actions: (alContext) => [
-            ampDialogButton('Dismiss', Navigator.of(alContext).pop),
-            ampDialogButton('Open', () => launch(update.url)),
+          actions: (alCtx) => [
+            ampDialogButton(Language.current.dismiss, Navigator.of(alCtx).pop),
+            ampDialogButton(Language.current.open, () => launch(update.url)),
           ],
           context: context,
           widgetBuilder: ampRow,

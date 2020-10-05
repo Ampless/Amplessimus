@@ -196,4 +196,13 @@ class German extends Language {
 
   @override
   String get useForDsb => 'An DSB senden (nicht empfohlen)';
+
+  @override
+  String get dismiss => 'Schließen';
+
+  @override
+  String get open => 'Öffnen';
+
+  @override
+  String get update => 'Update';
 }

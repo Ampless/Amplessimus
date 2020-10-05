@@ -192,4 +192,14 @@ class Czech extends Language {
 
   @override
   String get useForDsb => 'Použít pro DSB (nedoporučeno)';
+
+  //TODO: see above
+  @override
+  String get dismiss => 'Zavrhnout';
+
+  @override
+  String get open => 'Otevřeno';
+
+  @override
+  String get update => 'Update';
 }
