@@ -208,5 +208,6 @@ class German extends Language {
   String get update => 'Update';
 
   @override
-  String get plsUpdate => 'Eine neue ${AmpStrings.appTitle} ist verfügbar.';
+  String get plsUpdate =>
+      'Eine neue ${AmpStrings.appTitle}-Version ist verfügbar.';
 }

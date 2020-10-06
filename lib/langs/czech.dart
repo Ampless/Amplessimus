@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -204,6 +205,6 @@ class Czech extends Language {
   String get update => 'Update';
 
   @override
-  //TODO: get translation
-  String get plsUpdate => 'New version available.';
+  //TODO: see above
+  String get plsUpdate => 'Je k dispozici nová verze ${AmpStrings.appTitle}.';
 }
