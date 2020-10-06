@@ -77,8 +77,8 @@ Future<Null> dsbUpdateWidget(
     String char,
     int themeId,
     Language lang}) async {
-  httpPost ??= FirstLoginValues.httpPostFunc;
-  httpGet ??= FirstLoginValues.httpGetFunc;
+  httpPost ??= httpPostFunc;
+  httpGet ??= httpGetFunc;
   cacheJsonPlans ??= Prefs.useJsonCache;
   callback ??= () {};
   dsbLanguage ??= Prefs.dsbLanguage;

@@ -28,17 +28,17 @@ void main() {
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({
-    bool testing = false,
+    bool test = false,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers)
-        httpPostFunc,
-    Future<String> Function(Uri url) httpGetFunc,
+        httpPost,
+    Future<String> Function(Uri url) httpGet,
   }) {
     httpPostFunc ??= http.post;
     httpGetFunc ??= http.get;
-    FirstLoginValues.testing = testing;
-    FirstLoginValues.httpPostFunc = httpPostFunc;
-    FirstLoginValues.httpGetFunc = httpGetFunc;
+    testing = test;
+    httpPostFunc = httpPost;
+    httpGetFunc = httpGet;
   }
 
   @override
@@ -184,7 +184,7 @@ class AmpHomePageState extends State<AmpHomePage>
       var update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
         AmpStrings.version,
-        FirstLoginValues.httpGetFunc,
+        uncachedHttpGetFunc,
       );
       if (update != null)
         await ampDialog(
@@ -470,10 +470,9 @@ class AmpHomePageState extends State<AmpHomePage>
                     AmpColors.switchMode();
                     dsbUpdateWidget();
                     Future.delayed(
-                        Duration(
-                          microseconds: FirstLoginValues.testing ? 1 : 150000,
-                        ),
-                        rebuild);
+                      Duration(microseconds: testing ? 1 : 150000),
+                      rebuild,
+                    );
                   },
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.lightbulbOn

@@ -125,9 +125,8 @@ int get timer => _prefs.getInt('update_dsb_timer', 15);
 void setTimer(int i, Function() f) {
   _prefs.setInt('update_dsb_timer', i);
   if (_updateTimer != null) _updateTimer.cancel();
-  _updateTimer = FirstLoginValues.testing
-      ? null
-      : Timer.periodic(Duration(minutes: i), (_) => f());
+  _updateTimer =
+      testing ? null : Timer.periodic(Duration(minutes: i), (_) => f());
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);

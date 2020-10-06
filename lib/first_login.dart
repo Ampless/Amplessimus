@@ -8,8 +8,6 @@ import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:schttp/schttp.dart';
 
-final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
-
 class FirstLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ampMatApp(FirstLoginScreenPage());
@@ -148,7 +146,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 var error = dsbCheckCredentials(
                   username,
                   password,
-                  FirstLoginValues.httpPostFunc,
+                  httpPostFunc,
                 );
                 if (error != null)
                   throw Language.current.catchDsbGetData(error);
@@ -184,9 +182,14 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   }
 }
 
-class FirstLoginValues {
-  static bool testing = false;
-  static Future<String> Function(Uri, Object, String, Map<String, String>)
-      httpPostFunc = http.post;
-  static Future<String> Function(Uri) httpGetFunc = http.get;
-}
+bool testing = false;
+
+final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
+Future<String> Function(Uri, Object, String, Map<String, String>) httpPostFunc =
+    http.post;
+Future<String> Function(Uri) httpGetFunc = http.get;
+
+final uncachedHttp = ScHttpClient();
+Future<String> Function(Uri, Object, String, Map<String, String>)
+    uncachedHttpPostFunc = uncachedHttp.post;
+Future<String> Function(Uri) uncachedHttpGetFunc = uncachedHttp.get;

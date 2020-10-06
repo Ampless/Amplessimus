@@ -20,10 +20,10 @@ void main() {
     ampDisableLogging();
     await tester.pumpWidget(
       SplashScreen(
-        testing: true,
-        httpPostFunc: (url, body, id, headers, {getCache, setCache}) async =>
+        test: true,
+        httpPost: (url, body, id, headers, {getCache, setCache}) async =>
             dsbTest1Cache['GetData'],
-        httpGetFunc: (url, {getCache, setCache}) async =>
+        httpGet: (url, {getCache, setCache}) async =>
             dsbTest1Cache['44a7def4-aaa3-4177-959d-e2921176cde9.htm'],
       ),
     );

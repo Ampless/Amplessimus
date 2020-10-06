@@ -28,7 +28,7 @@ dependencies:
   crypto: ^2.1.5
   url_launcher: ^5.7.2
   dsbuntis: ^0.3.1
-  schttp: ^0.2.7
+  schttp: ^0.2.8
   update: ^0.0.1
 
 dev_dependencies:
