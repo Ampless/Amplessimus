@@ -11,7 +11,6 @@ import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:Amplessimus/screens/timeout.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/update.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -20,6 +19,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:update/update.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
