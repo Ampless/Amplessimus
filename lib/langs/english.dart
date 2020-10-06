@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -205,4 +206,7 @@ class English extends Language {
 
   @override
   String get update => 'Update';
+
+  @override
+  String get plsUpdate => 'A new ${AmpStrings.appTitle} version is available.';
 }

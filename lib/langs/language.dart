@@ -57,6 +57,7 @@ abstract class Language {
   String get dismiss;
   String get open;
   String get update;
+  String get plsUpdate;
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String dayToString(Day day);
   String catchDsbGetData(dynamic e);

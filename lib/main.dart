@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:Amplessimus/screens/dev_options.dart';
@@ -12,6 +11,7 @@ import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:Amplessimus/screens/timeout.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
+import 'package:Amplessimus/update.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -147,13 +147,6 @@ class AmpApp extends StatelessWidget {
   }
 }
 
-class UpdateInfo {
-  String version, url;
-  bool newer;
-
-  UpdateInfo(this.version, this.url, this.newer);
-}
-
 class AmpHomePage extends StatefulWidget {
   AmpHomePage(this.initialIndex, {Key key}) : super(key: key);
   final int initialIndex;
@@ -178,24 +171,6 @@ class AmpHomePageState extends State<AmpHomePage>
     }
   }
 
-  Future<UpdateInfo> getUpdateInfo() async {
-    try {
-      var json = jsonDecode(await http.get(Uri.parse(
-        'https://api.github.com/repos/Ampless/Amplessimus/releases',
-      )));
-      for (var release in json)
-        if (!release['prerelease'])
-          return UpdateInfo(
-            release['tag_name'],
-            release['html_url'],
-            AmpStrings.version != release['tag_name'],
-          );
-    } catch (e) {
-      ampErr('UpdateNotifier', errorString(e));
-    }
-    return null;
-  }
-
   @override
   void initState() {
     ampInfo('AmpHomePageState', 'initState()');
@@ -206,13 +181,15 @@ class AmpHomePageState extends State<AmpHomePage>
         length: 3, vsync: this, initialIndex: widget.initialIndex);
     Prefs.setTimer(Prefs.timer, () => dsbUpdateWidget(callback: rebuild));
     (() async {
-      var update = await getUpdateInfo();
-      if (update != null && update.newer)
+      var update = await UpdateInfo.getFromGitHub(
+        'Ampless/Amplessimus',
+        AmpStrings.version,
+        FirstLoginValues.httpGetFunc,
+      );
+      if (update != null)
         await ampDialog(
           title: Language.current.update,
-          children: (alContext, setAlState) =>
-              //TODO: get translations for this
-              [ampText('You might want to update to ${update.version}.')],
+          children: (_, __) => [ampText(Language.current.plsUpdate)],
           actions: (alCtx) => [
             ampDialogButton(Language.current.dismiss, Navigator.of(alCtx).pop),
             ampDialogButton(Language.current.open, () => launch(update.url)),

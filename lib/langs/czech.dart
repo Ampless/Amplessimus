@@ -202,4 +202,8 @@ class Czech extends Language {
 
   @override
   String get update => 'Update';
+
+  @override
+  //TODO: get translation
+  String get plsUpdate => 'New version available.';
 }

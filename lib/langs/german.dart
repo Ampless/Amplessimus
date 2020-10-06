@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -205,4 +206,7 @@ class German extends Language {
 
   @override
   String get update => 'Update';
+
+  @override
+  String get plsUpdate => 'Eine neue ${AmpStrings.appTitle} ist verfügbar.';
 }
