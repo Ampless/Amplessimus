@@ -158,6 +158,8 @@ final homeScaffoldKey = GlobalKey<ScaffoldState>();
 final settingsScaffoldKey = GlobalKey<ScaffoldState>();
 final refreshKey = GlobalKey<RefreshIndicatorState>();
 
+var checkForUpdates = true;
+
 class AmpHomePageState extends State<AmpHomePage>
     with SingleTickerProviderStateMixin {
   TabController tabController;
@@ -181,6 +183,8 @@ class AmpHomePageState extends State<AmpHomePage>
         length: 3, vsync: this, initialIndex: widget.initialIndex);
     Prefs.setTimer(Prefs.timer, () => dsbUpdateWidget(callback: rebuild));
     (() async {
+      if (!checkForUpdates) return;
+      checkForUpdates = false;
       var update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
         AmpStrings.version,
