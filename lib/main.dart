@@ -183,7 +183,7 @@ class AmpHomePageState extends State<AmpHomePage>
         length: 3, vsync: this, initialIndex: widget.initialIndex);
     Prefs.setTimer(Prefs.timer, () => dsbUpdateWidget(callback: rebuild));
     (() async {
-      if (!checkForUpdates) return;
+      if (!checkForUpdates || !Prefs.updatePopup) return;
       checkForUpdates = false;
       var update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',

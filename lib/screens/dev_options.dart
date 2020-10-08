@@ -45,6 +45,11 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
                   onChanged: (value) =>
                       setState(() => Prefs.useJsonCache = value),
                 ),
+                ampSwitchWithText(
+                  text: 'Update Notifier',
+                  value: Prefs.updatePopup,
+                  onChanged: (v) => setState(() => Prefs.updatePopup = v),
+                ),
                 ampDivider,
                 ampListTile(
                   'Refreshtimer (Minuten)',

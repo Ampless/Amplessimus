@@ -110,9 +110,10 @@ String get savedLangCode => _prefs.getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
 String get jsonTimetable => _prefs.getString('json_timetable', null);
 set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
+bool get updatePopup => _prefs.getBool('update_popup', true);
+set updatePopup(bool b) => _prefs.setBool('update_popup', b);
 
-//this is only temporary; the temporary windows shared prefs
-//just don't allow us to use sharedprefs for that
+//this is only temporary; the log should be shared pref saved soon
 String log = '';
 
 bool get dsbUseLanguage => _prefs.getBool('dsb_use_language', false);
