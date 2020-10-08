@@ -29,7 +29,7 @@ dependencies:
   url_launcher: ^5.7.2
   dsbuntis: ^0.3.1
   schttp: ^0.2.8
-  update: ^0.0.1
+  update: ^0.1.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.8.0
