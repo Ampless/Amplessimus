@@ -122,12 +122,23 @@ set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', b);
 String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 
 Timer _updateTimer;
+Function() _timerFunction;
+void timerInit(Function() f) {
+  _timerFunction = f;
+  _updateUpdateTimer(timer);
+}
+
 int get timer => _prefs.getInt('update_dsb_timer', 15);
-void setTimer(int i, Function() f) {
+set timer(int i) {
   _prefs.setInt('update_dsb_timer', i);
+  _updateUpdateTimer(i);
+}
+
+void _updateUpdateTimer(int i) {
   if (_updateTimer != null) _updateTimer.cancel();
-  _updateTimer =
-      testing ? null : Timer.periodic(Duration(minutes: i), (_) => f());
+  _updateTimer = testing
+      ? null
+      : Timer.periodic(Duration(minutes: i), (_) => _timerFunction());
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
@@ -142,7 +153,7 @@ Future<Null> load() async {
   }
 }
 
-void clear() async {
+Future<Null> clear() async {
   if (_prefs == null)
     throw 'PREFS.CLEAR CALLED BEFORE INIT, THIS IS A SEVERE CODE BUG.';
   await _prefs.clear();

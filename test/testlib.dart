@@ -23,7 +23,7 @@ testCase expectTestCase(
       expect(res, expct);
     };
 
-void testInit() async {
+Future<Null> testInit() async {
   await Prefs.load();
   ampDisableLogging();
 }

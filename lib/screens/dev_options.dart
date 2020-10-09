@@ -156,8 +156,8 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         save: () {
           if (!timerInputFormKey.currentState.validate()) return;
           try {
-            setState(() => Prefs.setTimer(
-                int.parse(timerInputFormController.text.trim()), () {}));
+            setState(() =>
+                Prefs.timer = int.parse(timerInputFormController.text.trim()));
           } catch (e) {
             return;
           }

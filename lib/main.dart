@@ -181,7 +181,7 @@ class AmpHomePageState extends State<AmpHomePage>
     super.initState();
     tabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialIndex);
-    Prefs.setTimer(Prefs.timer, () => dsbUpdateWidget(callback: rebuild));
+    Prefs.timerInit(() => dsbUpdateWidget(callback: rebuild));
     (() async {
       if (!checkForUpdates || !Prefs.updatePopup) return;
       checkForUpdates = false;
