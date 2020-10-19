@@ -2,6 +2,7 @@ import 'package:Amplessimus/first_login.dart';
 import 'package:html_search/html_search.dart';
 
 Future<Map<String, String>> wpemails(String domain) async {
+  final result = <String, String>{};
   var html = htmlParse(
     await httpGetFunc(Uri.parse('https://$domain/schulfamilie/lehrkraefte/')),
   );
@@ -13,5 +14,10 @@ Future<Map<String, String>> wpemails(String domain) async {
           e.innerHtml.contains('(') &&
           e.innerHtml.contains('.') &&
           !e.innerHtml.contains('<'));
-  for (final p in html) print(p.innerHtml);
+  for (final p in html) {
+    final raw = p.innerHtml.replaceAll(RegExp('[ ­]'), '').split(',');
+    final fn = raw[1].split('.').first, ln = raw[0];
+    result['$ln $fn.'] = '$fn.$ln@gympeg.de'.toLowerCase();
+  }
+  return result;
 }
