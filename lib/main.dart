@@ -380,13 +380,13 @@ class AmpHomePageState extends State<AmpHomePage>
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       var containers = [
-        Scaffold(
-          key: homeScaffoldKey,
-          appBar: ampAppBar(AmpStrings.appTitle),
-          backgroundColor: Colors.transparent,
-          body: RefreshIndicator(
-            key: refreshKey,
-            child: ListView(
+        RefreshIndicator(
+          key: refreshKey,
+          child: Scaffold(
+            key: homeScaffoldKey,
+            appBar: ampAppBar(AmpStrings.appTitle),
+            backgroundColor: Colors.transparent,
+            body: ListView(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
@@ -395,8 +395,8 @@ class AmpHomePageState extends State<AmpHomePage>
                 changeSubVisibilityWidget,
               ],
             ),
-            onRefresh: rebuildDragDown,
           ),
+          onRefresh: rebuildDragDown,
         ),
         Scaffold(
           appBar: ampAppBar(Language.current.timetable),
