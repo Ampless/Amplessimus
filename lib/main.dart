@@ -344,184 +344,192 @@ class AmpHomePageState extends State<AmpHomePage>
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       var containers = [
-        RefreshIndicator(
-          key: refreshKey,
-          child: Scaffold(
-            key: homeScaffoldKey,
-            appBar: ampAppBar(AmpStrings.appTitle),
-            backgroundColor: Colors.transparent,
-            body: ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: [
-                dsbWidget,
-                ampDivider,
-                changeSubVisibilityWidget,
-              ],
+        SafeArea(
+          child: RefreshIndicator(
+            key: refreshKey,
+            child: Scaffold(
+              key: homeScaffoldKey,
+              appBar: ampAppBar(AmpStrings.appTitle),
+              backgroundColor: Colors.transparent,
+              body: ListView(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: [
+                  dsbWidget,
+                  ampDivider,
+                  changeSubVisibilityWidget,
+                ],
+              ),
             ),
+            onRefresh: rebuildDragDown,
           ),
-          onRefresh: rebuildDragDown,
         ),
-        Scaffold(
-          appBar: ampAppBar(Language.current.timetable),
-          backgroundColor: Colors.transparent,
-          body: Container(
-            margin: EdgeInsets.only(left: 10, right: 10),
-            color: Colors.transparent,
-            child: Prefs.jsonTimetable == null
-                ? Center(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: AmpColors.colorForeground,
-                      borderRadius: BorderRadius.circular(32),
-                      onTap: () {
-                        ampChangeScreen(RegisterTimetableScreen(), context);
-                      },
-                      child: ampColumn(
-                        [
-                          ampIcon(MdiIcons.timetable, size: 200),
-                          ampText(
-                            Language.current.setupTimetable,
-                            size: 32,
-                            textAlign: TextAlign.center,
-                          ),
-                          ampPadding(10),
-                        ],
-                      ),
-                    ),
-                  )
-                : ListView(
-                    children: [
-                      Column(
-                        children: ttWidgets(
-                          dsbPlans,
-                          ttColumns,
-                          Prefs.filterTimetables,
+        SafeArea(
+          child: Scaffold(
+            appBar: ampAppBar(Language.current.timetable),
+            backgroundColor: Colors.transparent,
+            body: Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              color: Colors.transparent,
+              child: Prefs.jsonTimetable == null
+                  ? Center(
+                      child: InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: AmpColors.colorForeground,
+                        borderRadius: BorderRadius.circular(32),
+                        onTap: () {
+                          ampChangeScreen(RegisterTimetableScreen(), context);
+                        },
+                        child: ampColumn(
+                          [
+                            ampIcon(MdiIcons.timetable, size: 200),
+                            ampText(
+                              Language.current.setupTimetable,
+                              size: 32,
+                              textAlign: TextAlign.center,
+                            ),
+                            ampPadding(10),
+                          ],
                         ),
                       ),
-                      ampDivider,
-                      ampSwitchWithText(
-                        text: Language.current.filterTimetables,
-                        value: Prefs.filterTimetables,
-                        onChanged: (value) =>
-                            setState(() => Prefs.filterTimetables = value),
-                      ),
-                      ampPadding(24),
-                    ],
+                    )
+                  : ListView(
+                      children: [
+                        Column(
+                          children: ttWidgets(
+                            dsbPlans,
+                            ttColumns,
+                            Prefs.filterTimetables,
+                          ),
+                        ),
+                        ampDivider,
+                        ampSwitchWithText(
+                          text: Language.current.filterTimetables,
+                          value: Prefs.filterTimetables,
+                          onChanged: (value) =>
+                              setState(() => Prefs.filterTimetables = value),
+                        ),
+                        ampPadding(24),
+                      ],
+                    ),
+            ),
+            floatingActionButton: Prefs.jsonTimetable == null
+                ? ampNull
+                : ampFab(
+                    onPressed: () => ampChangeScreen(
+                      RegisterTimetableScreen(),
+                      context,
+                    ),
+                    label: Language.current.edit,
+                    icon: Icons.edit,
                   ),
           ),
-          floatingActionButton: Prefs.jsonTimetable == null
-              ? ampNull
-              : ampFab(
-                  onPressed: () => ampChangeScreen(
-                    RegisterTimetableScreen(),
-                    context,
-                  ),
-                  label: Language.current.edit,
-                  icon: Icons.edit,
-                ),
         ),
-        AnimatedContainer(
-          duration: Duration(milliseconds: 150),
-          color: Colors.transparent,
-          child: Scaffold(
-            appBar: ampAppBar(Language.current.settings),
-            key: settingsScaffoldKey,
-            backgroundColor: Colors.transparent,
-            body: GridView.count(
-              crossAxisCount: 2,
-              children: [
-                ampBigButton(
-                  onTap: () {
-                    Prefs.toggleDarkModePressed();
-                    Prefs.useSystemTheme = false;
-                    AmpColors.switchMode();
-                    dsbUpdateWidget();
-                    Future.delayed(
-                      Duration(microseconds: testing ? 1 : 150000),
-                      rebuild,
-                    );
-                  },
-                  icon: AmpColors.isDarkMode
-                      ? MdiIcons.lightbulbOn
-                      : MdiIcons.lightbulbOnOutline,
-                  text: AmpColors.isDarkMode
-                      ? Language.current.lightsOn
-                      : Language.current.lightsOff,
-                ),
-                ampBigButton(
-                  onTap: () async {
-                    ampInfo('AmpApp', 'switching design mode');
-                    Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
-                    await dsbUpdateWidget();
-                    rebuild();
-                    settingsScaffoldKey.currentState?.showSnackBar(ampSnackBar(
-                      Language.current.changedAppearance,
-                      Language.current.show,
-                      () => setState(() => tabController.index = 0),
-                    ));
-                  },
-                  icon: AmpColors.isDarkMode
-                      ? MdiIcons.clipboardList
-                      : MdiIcons.clipboardListOutline,
-                  text: Language.current.changeAppearance,
-                ),
-                ampBigButton(
-                  onTap: () async {
-                    Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                    checkBrightness();
-                  },
-                  icon: MdiIcons.brightness6,
-                  text: Prefs.useSystemTheme
-                      ? Language.current.lightsNoSystem
-                      : Language.current.lightsUseSystem,
-                ),
-                ampBigButton(
-                  onTap: () => changeLanguageDialog(context),
-                  icon: MdiIcons.translate,
-                  text: Language.current.changeLanguage,
-                ),
-                ampBigButton(
-                  onTap: () => credentialDialog(context),
-                  icon:
-                      AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
-                  text: Language.current.changeLogin,
-                ),
-                ampBigButton(
-                  onTap: () => selectClassDialog(context),
-                  icon: AmpColors.isDarkMode
-                      ? MdiIcons.school
-                      : MdiIcons.schoolOutline,
-                  text: Language.current.selectClass,
-                ),
-                ampBigButton(
-                  onTap: () => showAboutDialog(
-                      context: context,
-                      applicationName: AmpStrings.appTitle,
-                      applicationVersion: AmpStrings.version,
-                      applicationIcon:
-                          Image.asset('assets/logo.png', height: 40),
-                      children: [Text(Language.current.appInfo)]),
-                  icon: AmpColors.isDarkMode
-                      ? MdiIcons.folderInformation
-                      : MdiIcons.folderInformationOutline,
-                  text: Language.current.settingsAppInfo,
-                ),
-                ampBigButton(
-                  onTap: () {
-                    if (Prefs.devOptionsEnabled)
-                      ampChangeScreen(DevOptionsScreen(), context);
-                  },
-                  icon: MdiIcons.codeBrackets,
-                  text: 'Entwickleroptionen',
-                  visible: Prefs.devOptionsEnabled,
-                ),
-              ],
+        SafeArea(
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 150),
+            color: Colors.transparent,
+            child: Scaffold(
+              appBar: ampAppBar(Language.current.settings),
+              key: settingsScaffoldKey,
+              backgroundColor: Colors.transparent,
+              body: GridView.count(
+                crossAxisCount: 2,
+                children: [
+                  ampBigButton(
+                    onTap: () {
+                      Prefs.toggleDarkModePressed();
+                      Prefs.useSystemTheme = false;
+                      AmpColors.switchMode();
+                      dsbUpdateWidget();
+                      Future.delayed(
+                        Duration(microseconds: testing ? 1 : 150000),
+                        rebuild,
+                      );
+                    },
+                    icon: AmpColors.isDarkMode
+                        ? MdiIcons.lightbulbOn
+                        : MdiIcons.lightbulbOnOutline,
+                    text: AmpColors.isDarkMode
+                        ? Language.current.lightsOn
+                        : Language.current.lightsOff,
+                  ),
+                  ampBigButton(
+                    onTap: () async {
+                      ampInfo('AmpApp', 'switching design mode');
+                      Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
+                      await dsbUpdateWidget();
+                      rebuild();
+                      settingsScaffoldKey.currentState
+                          ?.showSnackBar(ampSnackBar(
+                        Language.current.changedAppearance,
+                        Language.current.show,
+                        () => setState(() => tabController.index = 0),
+                      ));
+                    },
+                    icon: AmpColors.isDarkMode
+                        ? MdiIcons.clipboardList
+                        : MdiIcons.clipboardListOutline,
+                    text: Language.current.changeAppearance,
+                  ),
+                  ampBigButton(
+                    onTap: () async {
+                      Prefs.useSystemTheme = !Prefs.useSystemTheme;
+                      checkBrightness();
+                    },
+                    icon: MdiIcons.brightness6,
+                    text: Prefs.useSystemTheme
+                        ? Language.current.lightsNoSystem
+                        : Language.current.lightsUseSystem,
+                  ),
+                  ampBigButton(
+                    onTap: () => changeLanguageDialog(context),
+                    icon: MdiIcons.translate,
+                    text: Language.current.changeLanguage,
+                  ),
+                  ampBigButton(
+                    onTap: () => credentialDialog(context),
+                    icon: AmpColors.isDarkMode
+                        ? MdiIcons.key
+                        : MdiIcons.keyOutline,
+                    text: Language.current.changeLogin,
+                  ),
+                  ampBigButton(
+                    onTap: () => selectClassDialog(context),
+                    icon: AmpColors.isDarkMode
+                        ? MdiIcons.school
+                        : MdiIcons.schoolOutline,
+                    text: Language.current.selectClass,
+                  ),
+                  ampBigButton(
+                    onTap: () => showAboutDialog(
+                        context: context,
+                        applicationName: AmpStrings.appTitle,
+                        applicationVersion: AmpStrings.version,
+                        applicationIcon:
+                            Image.asset('assets/logo.png', height: 40),
+                        children: [Text(Language.current.appInfo)]),
+                    icon: AmpColors.isDarkMode
+                        ? MdiIcons.folderInformation
+                        : MdiIcons.folderInformationOutline,
+                    text: Language.current.settingsAppInfo,
+                  ),
+                  ampBigButton(
+                    onTap: () {
+                      if (Prefs.devOptionsEnabled)
+                        ampChangeScreen(DevOptionsScreen(), context);
+                    },
+                    icon: MdiIcons.codeBrackets,
+                    text: 'Entwickleroptionen',
+                    visible: Prefs.devOptionsEnabled,
+                  ),
+                ],
+              ),
             ),
           ),
         )
       ];
-      return ampPageBase(Scaffold(
+      return ampUnsafePageBase(Scaffold(
         backgroundColor: Colors.transparent,
         body: TabBarView(
           controller: tabController,

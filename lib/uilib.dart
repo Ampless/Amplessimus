@@ -360,11 +360,13 @@ ListTile ampLessonTile({
       trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
     );
 
-Widget ampPageBase(Widget child) => AnimatedContainer(
+Widget ampUnsafePageBase(Widget child) => AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: AmpColors.colorBackground,
-      child: SafeArea(child: child),
+      child: child,
     );
+
+Widget ampPageBase(Widget child) => ampUnsafePageBase(SafeArea(child: child));
 
 TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
       controller: controller,
