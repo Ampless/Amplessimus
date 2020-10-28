@@ -69,13 +69,10 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       // if the program wont start within 15 secs, show some debug info
       final timeout = Timer(
         Duration(seconds: 15),
-        () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Timeout()),
-        ),
+        () => ampChangeScreen(Timeout(), context),
       );
 
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 700));
+      //final minimalLoadingTime = Future.delayed(Duration(milliseconds: 700));
 
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
@@ -90,15 +87,11 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       if (!Prefs.firstLogin) await dsbUpdateWidget();
 
-      await minimalLoadingTime;
+      //await minimalLoadingTime;
 
       timeout.cancel();
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-        ),
-      );
+      ampChangeScreen(
+          Prefs.firstLogin ? FirstLoginScreen() : AmpApp(), context);
     } catch (e) {
       ampErr('SplashScreenPageState.initState', errorString(e));
     }
@@ -109,22 +102,23 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     try {
       ampInfo('SplashScreen', 'Buiding Splash Screen');
       return Scaffold(
-          //body: Center(
-          //  child: AnimatedContainer(
-          //    color: Colors.black,
-          //    height: double.infinity,
-          //    width: double.infinity,
-          //    duration: Duration(seconds: 1),
-          //    child: FlareActor(
-          //      'assets/splash_screen.json',
-          //      alignment: Alignment.center,
-          //      fit: BoxFit.contain,
-          //      animation: 'anim',
-          //    ),
-          //  ),
-          //),
-          //bottomSheet: ampLinearProgressIndicator(),
-          );
+        backgroundColor: Colors.black,
+        //body: Center(
+        //  child: AnimatedContainer(
+        //    color: Colors.black,
+        //    height: double.infinity,
+        //    width: double.infinity,
+        //    duration: Duration(seconds: 1),
+        //    child: FlareActor(
+        //      'assets/splash_screen.json',
+        //      alignment: Alignment.center,
+        //      fit: BoxFit.contain,
+        //      animation: 'anim',
+        //    ),
+        //  ),
+        //),
+        //bottomSheet: ampLinearProgressIndicator(),
+      );
     } catch (e) {
       ampErr('SplashScreenPageState', errorString(e));
       return ampText(errorString(e));
