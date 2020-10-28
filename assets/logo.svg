@@ -7,9 +7,27 @@
 <!--TODO: kekw rotorblyat-->
 <circle cx="500" cy="500" r="70" fill="white" />
 <circle cx="500" cy="500" r="50" fill="black" />
-<path d="
+<g transform="scale(0.5) translate(500 500)">
+<g transform="translate(-75 -75)">
+<path fill="white" d="
 M 500,500
 c 0,0 -620,-140 -500,-310
   120,-170 500,310 500,310
-z" fill="green" transform="scale(0.6) translate(300 300) rotate(0 500 500)" />
+z" transform="rotate(0 500 500)" />
+</g>
+<g transform="translate(75 -75)">
+<path fill="white" d="
+M 500,500
+c 0,0 -620,-140 -500,-310
+  120,-170 500,310 500,310
+z" transform="rotate(120 500 500)" />
+</g>
+<g transform="translate(0 105)">
+<path fill="white" d="
+M 500,500
+c 0,0 -620,-140 -500,-310
+  120,-170 500,310 500,310
+z" transform="rotate(-120 500 500)" />
+</g>
+</g>
 </svg>
