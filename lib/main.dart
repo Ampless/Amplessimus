@@ -13,7 +13,6 @@ import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -72,8 +71,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         () => ampChangeScreen(Timeout(), context),
       );
 
-      //final minimalLoadingTime = Future.delayed(Duration(milliseconds: 700));
-
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
       ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
@@ -87,8 +84,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       if (!Prefs.firstLogin) await dsbUpdateWidget();
 
-      //await minimalLoadingTime;
-
       timeout.cancel();
       ampChangeScreen(
           Prefs.firstLogin ? FirstLoginScreen() : AmpApp(), context);
@@ -98,32 +93,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    try {
-      ampInfo('SplashScreen', 'Buiding Splash Screen');
-      return Scaffold(
-        backgroundColor: Colors.black,
-        //body: Center(
-        //  child: AnimatedContainer(
-        //    color: Colors.black,
-        //    height: double.infinity,
-        //    width: double.infinity,
-        //    duration: Duration(seconds: 1),
-        //    child: FlareActor(
-        //      'assets/splash_screen.json',
-        //      alignment: Alignment.center,
-        //      fit: BoxFit.contain,
-        //      animation: 'anim',
-        //    ),
-        //  ),
-        //),
-        //bottomSheet: ampLinearProgressIndicator(),
-      );
-    } catch (e) {
-      ampErr('SplashScreenPageState', errorString(e));
-      return ampText(errorString(e));
-    }
-  }
+  Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.black);
 }
 
 class AmpApp extends StatelessWidget {
