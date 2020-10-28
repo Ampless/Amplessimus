@@ -39,7 +39,6 @@ gh_upload_binary() {
 flutter_update() {
         flutter channel master
         flutter upgrade
-        flutter config --enable-web --enable-macos-desktop
 }
 
 update_altstore() {
@@ -77,6 +76,7 @@ main() {
         version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
         output_dir="/usr/local/var/www/amplessimus/$version_name"
         mkdir -p bin
+
         {
                 flutter_update
 
@@ -85,8 +85,9 @@ main() {
                 # echo "Running tests..."
                 # flutter test
 
-                echo "[Amplessimus-Build][$(date)] Running make to build $version_name."
+                echo "[AmpCI][$(date)] Running make to build $version_name."
 
+                flutter config --enable-web #--enable-macos-desktop
                 make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
                 # make mac || { make cleanartifacts rollbackversions ; }
         } 2>&1 | tee bin/ci.log
