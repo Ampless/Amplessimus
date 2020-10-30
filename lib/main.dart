@@ -75,7 +75,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         ),
       );
 
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 700));
+      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 600));
 
       ampInfo('SplashScreen', 'Loading SharedPreferences...');
       await Prefs.load();
