@@ -15,8 +15,11 @@ Future<Map<String, String>> wpemails(String domain) async {
           e.innerHtml.contains('.') &&
           !e.innerHtml.contains('<'));
   for (final p in html) {
-    final raw = p.innerHtml.replaceAll(RegExp('[ ­]'), '').split(',');
-    final fn = raw[1].split('.').first, ln = raw[0];
+    final raw = p.innerHtml
+        .replaceAll(RegExp('[ ­]'), '')
+        .replaceAll(RegExp('&.+?;'), '')
+        .split(',');
+    final fn = raw[1].split('.').first, ln = raw[0].split('.').last;
     result['$ln $fn.'] = '$fn.$ln@gympeg.de'.toLowerCase();
   }
   return result;
