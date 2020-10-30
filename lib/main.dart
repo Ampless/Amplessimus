@@ -17,6 +17,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:update/update.dart';
@@ -536,7 +537,7 @@ class AmpHomePageState extends State<AmpHomePage>
                       applicationName: AmpStrings.appTitle,
                       applicationVersion: AmpStrings.version,
                       applicationIcon:
-                          Image.asset('assets/logo.png', height: 40),
+                          SvgPicture.asset('assets/logo.svg', height: 40),
                       children: [Text(Language.current.appInfo)]),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.folderInformation
