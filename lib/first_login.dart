@@ -139,11 +139,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
             onPressed: () async {
               setState(() => loading = true);
               try {
-                var username = usernameInputFormController.text.trim();
-                var password = passwordInputFormController.text.trim();
+                final username = usernameInputFormController.text.trim();
+                final password = passwordInputFormController.text.trim();
                 Prefs.username = username;
                 Prefs.password = password;
-                var error = dsbCheckCredentials(
+                final error = await dsbCheckCredentials(
                   username,
                   password,
                   httpPostFunc,
