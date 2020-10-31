@@ -29,9 +29,9 @@ void main() async {
     () => runApp(Timeout()),
   );
 
-  ampInfo('SplashScreen', 'Loading SharedPreferences...');
+  ampInfo('main', 'Loading SharedPreferences...');
   await Prefs.load();
-  ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
+  ampInfo('main', 'SharedPreferences successfully loaded.');
 
   ttColumns = ttLoadFromPrefs();
 

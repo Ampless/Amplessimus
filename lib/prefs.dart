@@ -145,9 +145,8 @@ set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
 bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
 
 Future<Null> load() async {
-  _prefs = CachedSharedPreferences();
   try {
-    await _prefs.ctor();
+    _prefs = await CachedSharedPreferences().ctor();
   } catch (e) {
     ampErr('Prefs', 'Initialization failed: ${errorString(e)}');
   }

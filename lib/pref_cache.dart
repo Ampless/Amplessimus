@@ -31,8 +31,11 @@ class CachedSharedPreferences {
   bool getBool(String k, bool d) => _get(k, d, _pGetBol());
   List<String> getStringList(String k, List<String> d) => _get(k, d, _pGetSs());
 
-  Future<void> ctor() async {
+  Future<CachedSharedPreferences> ctor() async {
+    ampInfo('CSP', 'I be doin my gettin instance.');
     _prefs = await SharedPreferences.getInstance();
+    ampInfo('CSP', 'Got muh instance.');
+    return this;
   }
 
   Future<bool> clear() {
