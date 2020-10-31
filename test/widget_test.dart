@@ -19,7 +19,7 @@ void main() {
   testWidgets('The one and only UI test', (tester) async {
     ampDisableLogging();
     await tester.pumpWidget(
-      SplashScreen(
+      FirstLoginScreen(
         test: true,
         httpPost: (url, body, id, headers, {getCache, setCache}) async =>
             dsbTest1Cache['GetData'],

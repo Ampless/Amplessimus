@@ -22,7 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   flutter::DartProject project(L"data");
   FlutterWindow window(&run_loop, project);
-  Win32Window::Point origin(10, 10);
+  Win32Window::Point origin(100, 100);
   Win32Window::Size size(450, 900);
   if (!window.CreateAndShow(L"Amplessimus", origin, size)) {
     return EXIT_FAILURE;

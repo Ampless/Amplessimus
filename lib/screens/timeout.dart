@@ -39,6 +39,7 @@ class TimeoutPageState extends State<TimeoutPage> {
           ampText(
             'Amplessimus did not initialize correctly within 15 seconds.\n'
             'Please contact ampless@chrissx.de with a screenshot/video of this page.',
+            size: 20,
           ),
           ampLogWidget,
         ]),

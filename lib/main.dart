@@ -13,7 +13,6 @@ import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -23,114 +22,29 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:update/update.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void main() {
-  runApp(SplashScreen());
-}
+void main() async {
+  // if the app wont start within 15 secs, show some debug info
+  final timeout = Timer(
+    Duration(seconds: 15),
+    () => runApp(Timeout()),
+  );
 
-class SplashScreen extends StatelessWidget {
-  SplashScreen({
-    bool test = false,
-    Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers)
-        httpPost,
-    Future<String> Function(Uri url) httpGet,
-  }) {
-    httpPost ??= http.post;
-    httpGet ??= http.get;
-    testing = test;
-    httpPostFunc = httpPost;
-    httpGetFunc = httpGet;
-  }
+  ampInfo('SplashScreen', 'Loading SharedPreferences...');
+  await Prefs.load();
+  ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
 
-  @override
-  Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
-}
+  ttColumns = ttLoadFromPrefs();
 
-class SplashScreenPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => SplashScreenPageState();
-}
+  if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-class SplashScreenPageState extends State<SplashScreenPage> {
-  @override
-  void initState() {
-    super.initState();
-    _initState();
-  }
+  if (Prefs.useSystemTheme)
+    AmpColors.brightness = SchedulerBinding.instance.window.platformBrightness;
 
-  void _initState() async {
-    try {
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+  if (!Prefs.firstLogin) await dsbUpdateWidget();
 
-      // if the program wont start within 15 secs, show some debug info
-      final timeout = Timer(
-        Duration(seconds: 15),
-        () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Timeout()),
-        ),
-      );
-
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
-
-      ampInfo('SplashScreen', 'Loading SharedPreferences...');
-      await Prefs.load();
-      ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
-      ttColumns = ttLoadFromPrefs();
-
-      if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-
-      if (Prefs.useSystemTheme)
-        AmpColors.brightness =
-            SchedulerBinding.instance.window.platformBrightness;
-
-      if (!Prefs.firstLogin) await dsbUpdateWidget();
-
-      await minimalLoadingTime;
-
-      timeout.cancel();
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-        ),
-      );
-    } catch (e) {
-      ampErr('SplashScreenPageState.initState', errorString(e));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    try {
-      ampInfo('SplashScreen', 'Buiding Splash Screen');
-      return Scaffold(
-        body: Center(
-          child: AnimatedContainer(
-            color: Colors.black,
-            height: double.infinity,
-            width: double.infinity,
-            duration: Duration(seconds: 1),
-            child: FlareActor(
-              'assets/splash_screen.json',
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-              animation: 'anim',
-            ),
-          ),
-        ),
-        bottomSheet: ampLinearProgressIndicator(),
-      );
-    } catch (e) {
-      ampErr('SplashScreenPageState', errorString(e));
-      return ampText(errorString(e));
-    }
-  }
+  if (!timeout.isActive) return;
+  timeout.cancel();
+  runApp(Prefs.firstLogin ? FirstLoginScreen() : AmpApp());
 }
 
 class AmpApp extends StatelessWidget {
@@ -177,6 +91,12 @@ class AmpHomePageState extends State<AmpHomePage>
   @override
   void initState() {
     ampInfo('AmpHomePageState', 'initState()');
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();

@@ -9,6 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:schttp/schttp.dart';
 
 class FirstLoginScreen extends StatelessWidget {
+  FirstLoginScreen({
+    bool test = false,
+    Future<String> Function(
+            Uri url, Object body, String id, Map<String, String> headers)
+        httpPost,
+    Future<String> Function(Uri url) httpGet,
+  }) {
+    httpPost ??= http.post;
+    httpGet ??= http.get;
+    testing = test;
+    httpPostFunc = httpPost;
+    httpGetFunc = httpGet;
+  }
   @override
   Widget build(BuildContext context) => ampMatApp(FirstLoginScreenPage());
 }
