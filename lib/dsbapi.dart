@@ -19,9 +19,9 @@ Widget dsbRenderPlans(
   int themeId,
 ) {
   ampInfo('DSB', 'Rendering plans: $plans');
-  var widgets = <Widget>[];
+  final widgets = <Widget>[];
   for (var plan in plans) {
-    var dayWidgets = <Widget>[];
+    final dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
       dayWidgets.add(ampListTile(Language.current.noSubs));
     }
@@ -92,7 +92,7 @@ Future<Null> dsbUpdateWidget(
   themeId ??= Prefs.currentThemeId;
   try {
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
-    var useJCache = cacheJsonPlans && dsbJsonCache != null;
+    final useJCache = cacheJsonPlans && dsbJsonCache != null;
     var plans = useJCache
         ? plansFromJson(dsbJsonCache)
         : await dsbGetAllSubs(username, password, httpGet, httpPost,

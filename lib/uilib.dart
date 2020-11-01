@@ -205,7 +205,7 @@ Text ampText(
   toString ??= (o) => o.toString();
   color ??= AmpColors.colorForeground;
   font ??= [];
-  var style = TextStyle(
+  final style = TextStyle(
     fontSize: size,
     fontWeight: weight,
     color: color,
@@ -291,19 +291,7 @@ void ampChangeScreen(
   BuildContext context, [
   Function(BuildContext, Route) push = Navigator.pushReplacement,
 ]) =>
-    push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: Duration(microseconds: 1),
-        transitionsBuilder: (context, animatn, secondaryAnimation, child) =>
-            ScaleTransition(
-          scale: CurvedAnimation(parent: animatn, curve: Curves.ease),
-          alignment: Alignment.center,
-          child: child,
-        ),
-        pageBuilder: (context, animation, secondaryAnimation) => w,
-      ),
-    );
+    push(context, MaterialPageRoute(builder: (_) => w));
 
 Widget ampList(List<Widget> children, [int themeId]) {
   themeId ??= Prefs.currentThemeId;

@@ -60,7 +60,7 @@ class German extends Language {
   @override
   String dsbSubtoSubtitle(DsbSubstitution sub) {
     if (sub == null) return 'null';
-    var notesaddon =
+    final notesaddon =
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Freistunde${sub.lessons.length == 1 ? '' : 'n'}$notesaddon'

@@ -161,10 +161,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
 
                 Prefs.firstLogin = false;
                 FocusScope.of(context).unfocus();
-                await Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => AmpApp()),
-                );
+                ampChangeScreen(AmpApp(), context);
               } catch (e) {
                 setState(() {
                   loading = false;

@@ -20,13 +20,13 @@ CachedSharedPreferences _prefs;
 String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
 
 String getCache(String url) {
-  var hash = _hashCache(url);
-  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  final hash = _hashCache(url);
+  final cachedHashes = _prefs.getStringList('CACHE_URLS', []);
   if (!cachedHashes.contains(hash)) {
     ampInfo('Prefs', 'HTTP Cache miss: $url');
     return null;
   }
-  var ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
+  final ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
   if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch)
     return _prefs.getString('CACHE_VAL_$hash', null);
   _prefs.setString('CACHE_VAL_$hash', null);
@@ -35,8 +35,8 @@ String getCache(String url) {
 }
 
 void setCache(String url, String html, Duration ttl) {
-  var hash = _hashCache(url);
-  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  final hash = _hashCache(url);
+  final cachedHashes = _prefs.getStringList('CACHE_URLS', []);
   if (!cachedHashes.contains(hash)) cachedHashes.add(hash);
   _prefs.setStringList('CACHE_URLS', cachedHashes);
   _prefs.setString('CACHE_VAL_$hash', html);
@@ -45,7 +45,7 @@ void setCache(String url, String html, Duration ttl) {
 }
 
 void clearCache() {
-  var cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  final cachedHashes = _prefs.getStringList('CACHE_URLS', []);
   if (cachedHashes.isEmpty) return;
   for (var hash in cachedHashes) {
     _prefs.setString('CACHE_VAL_$hash', null);

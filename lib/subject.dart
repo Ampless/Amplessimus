@@ -6,7 +6,7 @@ final _numeric = RegExp(r'[0-9]');
 
 bool _isNum(String s, int i) {
   if (s == null || s.length <= i || i < 0) return false;
-  var cu = s.codeUnitAt(i);
+  final cu = s.codeUnitAt(i);
   return cu >= _zero && cu <= _nine;
 }
 
@@ -18,9 +18,9 @@ String realSubject(String subject, [Language lang]) {
     return '${realSubject(subject.substring(subject.indexOf(_letters), subject.lastIndexOf(_letters) + 1), lang)} '
         '${subject.substring(subject.lastIndexOf(_numeric))}'
         '${subject.indexOf(_letters) > 0 ? " (${subject.substring(0, subject.indexOf(_letters))})" : ""}';
-  var sub = subject.toLowerCase();
+  final sub = subject.toLowerCase();
   var s = subject;
-  var lut = lang.subjectLut;
+  final lut = lang.subjectLut;
   for (var key in lut.keys) if (sub.startsWith(key)) s = lut[key];
   return s;
 }

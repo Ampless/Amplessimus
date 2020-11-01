@@ -70,17 +70,14 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       // if the program wont start within 15 secs, show some debug info
       final timeout = Timer(
         Duration(seconds: 15),
-        () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Timeout()),
-        ),
+        () => ampChangeScreen(Timeout(), context),
       );
 
       final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
 
-      ampInfo('SplashScreen', 'Loading SharedPreferences...');
+      ampInfo('Splash', 'Loading SharedPreferences...');
       await Prefs.load();
-      ampInfo('SplashScreen', 'SharedPreferences successfully loaded.');
+      ampInfo('Splash', 'SharedPreferences (hopefully successfully) loaded.');
       ttColumns = ttLoadFromPrefs();
 
       if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
@@ -94,21 +91,19 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       await minimalLoadingTime;
 
       timeout.cancel();
-      await Navigator.pushReplacement(
+      ampChangeScreen(
+        Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
         context,
-        MaterialPageRoute(
-          builder: (_) => Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-        ),
       );
     } catch (e) {
-      ampErr('SplashScreenPageState.initState', errorString(e));
+      ampErr('Splash.initState', errorString(e));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     try {
-      ampInfo('SplashScreen', 'Buiding Splash Screen');
+      ampInfo('Splash', 'Buiding Splash Screen');
       return Scaffold(
         body: Center(
           child: AnimatedContainer(
@@ -127,7 +122,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         bottomSheet: ampLinearProgressIndicator(),
       );
     } catch (e) {
-      ampErr('SplashScreenPageState', errorString(e));
+      ampErr('Splash.build', errorString(e));
       return ampText(errorString(e));
     }
   }
@@ -186,7 +181,7 @@ class AmpHomePageState extends State<AmpHomePage>
     (() async {
       if (!checkForUpdates || !Prefs.updatePopup) return;
       checkForUpdates = false;
-      var update = await UpdateInfo.getFromGitHub(
+      final update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
         AmpStrings.version,
         uncachedHttpGetFunc,
@@ -380,7 +375,7 @@ class AmpHomePageState extends State<AmpHomePage>
         dsbUpdateWidget();
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
-      var containers = [
+      final containers = [
         RefreshIndicator(
           key: refreshKey,
           child: Scaffold(

@@ -57,7 +57,7 @@ class TTColumn {
       };
 
   List<dynamic> _lessonsToJson(List<TTLesson> lessons) {
-    var lessonsStrings = <dynamic>[];
+    final lessonsStrings = <dynamic>[];
     for (var lesson in lessons) {
       lessonsStrings.add(lesson.toJson());
     }
@@ -65,7 +65,7 @@ class TTColumn {
   }
 
   static List<TTLesson> _lessonsFromJson(List<dynamic> lessonsStrings) {
-    var tempLessons = <TTLesson>[];
+    final tempLessons = <TTLesson>[];
     for (dynamic tempString in lessonsStrings) {
       tempLessons.add(TTLesson.fromJson(tempString));
     }
@@ -86,10 +86,10 @@ const List<Day> ttWeek = [
 
 //applies plans to a copy of table, which is then returned
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
-  var tbl = <TTColumn>[];
+  final tbl = <TTColumn>[];
   //copy table -> tbl
   for (var c in table) {
-    var ls = <TTLesson>[];
+    final ls = <TTLesson>[];
     for (var l in c.lessons)
       ls.add(TTLesson(l.subject, l.teacher, l.notes, l.isFree));
     tbl.add(TTColumn(ls, c.day));
@@ -115,15 +115,15 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
 
 String ttToJson(List<TTColumn> tt) {
   if (tt == null) return '[]';
-  var columns = [];
+  final columns = [];
   for (var column in tt) columns.add(column.toJson());
   return jsonEncode(columns);
 }
 
 List<TTColumn> ttFromJson(String jsontext) {
   if (jsontext == null) return [];
-  var table = <TTColumn>[];
-  var columns = jsonDecode(jsontext);
+  final table = <TTColumn>[];
+  final columns = jsonDecode(jsontext);
   for (var s in columns) table.add(TTColumn.fromJson(s));
   return table;
 }
@@ -140,16 +140,16 @@ List<Widget> ttWidgets(
 ]) {
   plans = dsbSortByLesson(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   if (filtered) table = ttSubTable(table, plans);
-  var widgets = <Widget>[];
+  final widgets = <Widget>[];
   for (var plan in plans) {
     widgets.add(ListTile(
       title: ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
     ));
-    var unthemedWidgets = <Widget>[];
-    var lessons = table[Day.values.indexOf(plan.day)].lessons;
-    var lessonLength = lessons.length;
+    final unthemedWidgets = <Widget>[];
+    final lessons = table[Day.values.indexOf(plan.day)].lessons;
+    final lessonLength = lessons.length;
     for (var lesson in lessons) {
-      var title = lesson.isFree
+      final title = lesson.isFree
           ? Language.current.freeLesson
           : realSubject(lesson.subject);
 

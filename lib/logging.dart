@@ -12,8 +12,8 @@ Widget get ampLogWidget =>
 
 void ampLog(String lvl, dynamic ctx, Object message) {
   if (_loggingDisabled) return;
-  var now = DateTime.now(),
-      s = now.second.toString(),
+  final now = DateTime.now();
+  var s = now.second.toString(),
       m = now.minute.toString(),
       h = now.hour.toString(),
       ms = now.millisecond.toString();
