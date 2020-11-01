@@ -4,31 +4,45 @@ import 'dart:io';
 
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/pref_cache.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dsbuntis/dsbuntis.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-CachedSharedPreferences _prefs;
+SharedPreferences _prefs;
+
+dynamic _get(String key, dynamic dflt, Function(String) f) {
+  if (_prefs == null)
+    ampWarn('PrefCache', 'Getting $key before initialization is done.');
+
+  return _prefs != null && _prefs.containsKey(key) ? f(key) : dflt;
+}
+
+int _getInt(String k, int d) => _get(k, d, _prefs.getInt);
+double _getDouble(String k, double d) => _get(k, d, _prefs.getDouble);
+String _getString(String k, String d) => _get(k, d, _prefs.getString);
+bool _getBool(String k, bool d) => _get(k, d, _prefs.getBool);
+List<String> _getStringList(String k, List<String> d) =>
+    _get(k, d, _prefs.getStringList);
 
 //this is just a checksum basically so md5 is fine (collisions are next to impossible)
 //but because it is only 128 bits, it saves 128 bits compared to sha256,
 //which translates to 384 bits / 48 bytes saved per cached url
 //(and also it saves quite a bit of cpu)
 //still there is one consideration: if a school wanted to break this app, they
-//would just have to create collisions. we will switch to sha2/3, once we notice
-//something like that happening.
+//would just have to create collisions. we will switch to something better, once
+//we notice something like that happening.
 String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
 
 String getCache(String url) {
   final hash = _hashCache(url);
-  final cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  final cachedHashes = _getStringList('CACHE_URLS', []);
   if (!cachedHashes.contains(hash)) {
     ampInfo('Prefs', 'HTTP Cache miss: $url');
     return null;
   }
-  final ttl = _prefs.getInt('CACHE_TTL_$hash', 0);
+  final ttl = _getInt('CACHE_TTL_$hash', 0);
   if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch)
-    return _prefs.getString('CACHE_VAL_$hash', null);
+    return _getString('CACHE_VAL_$hash', null);
   _prefs.setString('CACHE_VAL_$hash', null);
   ampInfo('Prefs', 'HTTP Cache TTL reached: $url');
   return null;
@@ -36,7 +50,7 @@ String getCache(String url) {
 
 void setCache(String url, String html, Duration ttl) {
   final hash = _hashCache(url);
-  final cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  final cachedHashes = _getStringList('CACHE_URLS', []);
   if (!cachedHashes.contains(hash)) cachedHashes.add(hash);
   _prefs.setStringList('CACHE_URLS', cachedHashes);
   _prefs.setString('CACHE_VAL_$hash', html);
@@ -45,7 +59,7 @@ void setCache(String url, String html, Duration ttl) {
 }
 
 void clearCache() {
-  final cachedHashes = _prefs.getStringList('CACHE_URLS', []);
+  final cachedHashes = _getStringList('CACHE_URLS', []);
   if (cachedHashes.isEmpty) return;
   for (var hash in cachedHashes) {
     _prefs.setString('CACHE_VAL_$hash', null);
@@ -57,11 +71,11 @@ void clearCache() {
 
 void listCache() {
   ampInfo('Cache', '{');
-  for (var hash in _prefs.getStringList('CACHE_URLS', []))
+  for (var hash in _getStringList('CACHE_URLS', []))
     ampRawLog(jsonEncode({
       'hash': hash,
-      'len': _prefs.getString('CACHE_VAL_$hash', '').length,
-      'ttl': _prefs.getInt('CACHE_TTL_$hash', -1)
+      'len': _getString('CACHE_VAL_$hash', '').length,
+      'ttl': _getInt('CACHE_TTL_$hash', -1)
     }));
   ampInfo('Cache', '}');
 }
@@ -82,41 +96,41 @@ void toggleDarkModePressed() {
   }
 }
 
-int get currentThemeId => _prefs.getInt('current_theme_id', 0);
+int get currentThemeId => _getInt('current_theme_id', 0);
 set currentThemeId(int i) => _prefs.setInt('current_theme_id', i);
-String get username => _prefs.getString('username_dsb', '');
+String get username => _getString('username_dsb', '');
 set username(String s) => _prefs.setString('username_dsb', s);
-String get password => _prefs.getString('password_dsb', '');
+String get password => _getString('password_dsb', '');
 set password(String s) => _prefs.setString('password_dsb', s);
-String get grade => _prefs.getString('grade', '5').trim().toLowerCase();
+String get grade => _getString('grade', '5').trim().toLowerCase();
 set grade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
-String get char => _prefs.getString('char', 'a').trim().toLowerCase();
+String get char => _getString('char', 'a').trim().toLowerCase();
 set char(String s) => _prefs.setString('char', s.trim().toLowerCase());
-bool get oneClassOnly => _prefs.getBool('one_class_only', false);
+bool get oneClassOnly => _getBool('one_class_only', false);
 set oneClassOnly(bool b) => _prefs.setBool('one_class_only', b);
-bool get devOptionsEnabled => _prefs.getBool('dev_options_enabled', false);
+bool get devOptionsEnabled => _getBool('dev_options_enabled', false);
 set devOptionsEnabled(bool b) => _prefs.setBool('dev_options_enabled', b);
-bool get firstLogin => _prefs.getBool('first_login', true);
+bool get firstLogin => _getBool('first_login', true);
 set firstLogin(bool b) => _prefs.setBool('first_login', b);
-bool get useJsonCache => _prefs.getBool('use_json_cache', false);
+bool get useJsonCache => _getBool('use_json_cache', false);
 set useJsonCache(bool b) => _prefs.setBool('use_json_cache', b);
-bool get useSystemTheme => _prefs.getBool('use_system_theme', false);
+bool get useSystemTheme => _getBool('use_system_theme', false);
 set useSystemTheme(bool b) => _prefs.setBool('use_system_theme', b);
-bool get filterTimetables => _prefs.getBool('filter_timetables', true);
+bool get filterTimetables => _getBool('filter_timetables', true);
 set filterTimetables(bool b) => _prefs.setBool('filter_timetables', b);
-String get dsbJsonCache => _prefs.getString('DSB_JSON_CACHE', null);
+String get dsbJsonCache => _getString('DSB_JSON_CACHE', null);
 set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
-String get savedLangCode => _prefs.getString('lang', Platform.localeName);
+String get savedLangCode => _getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
-String get jsonTimetable => _prefs.getString('json_timetable', null);
+String get jsonTimetable => _getString('json_timetable', null);
 set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
-bool get updatePopup => _prefs.getBool('update_popup', true);
+bool get updatePopup => _getBool('update_popup', true);
 set updatePopup(bool b) => _prefs.setBool('update_popup', b);
 
 //this is only temporary; the log should be shared pref saved soon
 String log = '';
 
-bool get dsbUseLanguage => _prefs.getBool('dsb_use_language', false);
+bool get dsbUseLanguage => _getBool('dsb_use_language', false);
 set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', b);
 
 String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
@@ -128,7 +142,7 @@ void timerInit(Function() f) {
   _updateUpdateTimer(timer);
 }
 
-int get timer => _prefs.getInt('update_dsb_timer', 15);
+int get timer => _getInt('update_dsb_timer', 15);
 set timer(int i) {
   _prefs.setInt('update_dsb_timer', i);
   _updateUpdateTimer(i);
@@ -142,12 +156,11 @@ void _updateUpdateTimer(int i) {
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
-bool get isDarkMode => _prefs.getBool('is_dark_mode', true);
+bool get isDarkMode => _getBool('is_dark_mode', true);
 
 Future<Null> load() async {
-  _prefs = CachedSharedPreferences();
   try {
-    await _prefs.ctor();
+    _prefs = await SharedPreferences.getInstance();
   } catch (e) {
     ampErr('Prefs', 'Initialization failed: ${errorString(e)}');
   }
@@ -156,8 +169,7 @@ Future<Null> load() async {
 Future<Null> clear() async {
   if (_prefs == null)
     throw 'PREFS.CLEAR CALLED BEFORE INIT, THIS IS A SEVERE CODE BUG.';
-  await _prefs.clear();
-  ampInfo('Prefs', 'Cleared SharedPreferences.');
+  if (await _prefs.clear()) ampInfo('Prefs', 'Cleared SharedPreferences.');
 }
 
-bool get isInitialized => _prefs != null && _prefs.isInitialized;
+bool get isInitialized => _prefs != null;
