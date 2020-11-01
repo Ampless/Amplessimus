@@ -12,6 +12,7 @@ import 'package:Amplessimus/screens/timeout.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,13 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         AmpColors.brightness =
             SchedulerBinding.instance.window.platformBrightness;
 
-      if (!Prefs.firstLogin) await dsbUpdateWidget();
+      var dsbUpdate = (() async {})();
+
+      if (!Prefs.firstLogin) dsbUpdate = dsbUpdateWidget();
+      if (Prefs.wpeDomain.isNotEmpty)
+        wpemailsave = await wpemails(Prefs.wpeDomain);
+
+      await dsbUpdate;
 
       await minimalLoadingTime;
 
@@ -389,6 +396,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 dsbWidget,
                 ampDivider,
                 changeSubVisibilityWidget,
+                wpemailWidget(wpemailsave),
               ],
             ),
           ),
