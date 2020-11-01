@@ -396,7 +396,19 @@ class AmpHomePageState extends State<AmpHomePage>
                 dsbWidget,
                 ampDivider,
                 changeSubVisibilityWidget,
-                wpemailWidget(wpemailsave),
+                wpemailsave == null || wpemailsave.isEmpty
+                    ? ampRaisedButton(
+                        'Add WPEmail-Domain',
+                        () => ampDialog(
+                            //TODO: do this and make the pull to refresh work for wpemail
+                            title: 'WPEmail',
+                            children: null,
+                            actions: (dialogContext) =>
+                                ampDialogButtonsSaveAndCancel(dialogContext,
+                                    save: () => Prefs.wpeDomain = 'gympeg.de'),
+                            context: context,
+                            widgetBuilder: null))
+                    : wpemailWidget(wpemailsave),
               ],
             ),
           ),
