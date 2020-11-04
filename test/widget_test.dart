@@ -59,7 +59,7 @@ void main() {
     assert(ttColumns.where((element) => element.lessons.isNotEmpty).isNotEmpty);
     await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();
-    for (var w in <String>[
+    for (final w in <String>[
       Language.current.changeAppearance,
     ]) {
       await tester.tap(find.text(w));

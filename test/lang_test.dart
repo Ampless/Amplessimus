@@ -4,7 +4,7 @@ import 'package:Amplessimus/langs/language.dart';
 import 'testlib.dart';
 
 testCase languageTestCase(void Function(Language) func) => () async {
-      for (var lang in Language.all) func(lang);
+      for (final lang in Language.all) func(lang);
     };
 
 testCase languageCodeTestCase(String code) => () async {
@@ -13,7 +13,7 @@ testCase languageCodeTestCase(String code) => () async {
 
 List<testCase> languageTestCases = [
   languageTestCase((lang) {
-    for (var day in Day.values) lang.dayToString(day);
+    for (final day in Day.values) lang.dayToString(day);
   }),
   languageTestCase((lang) {
     lang.dayToString(null);

@@ -20,13 +20,13 @@ Widget dsbRenderPlans(
 ) {
   ampInfo('DSB', 'Rendering plans: $plans');
   final widgets = <Widget>[];
-  for (var plan in plans) {
+  for (final plan in plans) {
     final dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
       dayWidgets.add(ampListTile(Language.current.noSubs));
     }
     var i = 0;
-    for (var sub in plan.subs) {
+    for (final sub in plan.subs) {
       dayWidgets.add(ampLessonTile(
         subject: realSubject(sub.subject, Language.current),
         teacher: sub.orgTeacher,
@@ -45,6 +45,7 @@ Widget dsbRenderPlans(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
+            //TODO: fix this with a ScaffoldMessanger set in main
             homeScaffoldKey.currentState?.showSnackBar(ampSnackBar(plan.date));
           },
         ),

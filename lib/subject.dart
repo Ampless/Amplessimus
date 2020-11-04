@@ -28,7 +28,7 @@ String realSubject(String subject, [Language lang]) {
   final sub = subject.toLowerCase();
   var s = subject;
   final lut = lang.subjectLut;
-  for (var key in lut.keys) if (sub.startsWith(key)) s = lut[key];
+  for (final key in lut.keys) if (sub.startsWith(key)) s = lut[key];
 
   return s;
 }
@@ -36,6 +36,6 @@ String realSubject(String subject, [Language lang]) {
 String lesson(List<int> lessons) {
   if (lessons == null) return 'null';
   var lesson = '';
-  for (var l in lessons) lesson += lesson.isEmpty ? l.toString() : '-$l';
+  for (final l in lessons) lesson += lesson.isEmpty ? l.toString() : '-$l';
   return lesson;
 }

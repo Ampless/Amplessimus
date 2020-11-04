@@ -26,7 +26,7 @@ void ampLog(String lvl, dynamic ctx, Object message) {
   ctx.insert(0, lvl);
   var context = '';
   var aftercontext = '';
-  for (var c in ctx) {
+  for (final c in ctx) {
     context += '[$c]';
     aftercontext = ' ';
   }

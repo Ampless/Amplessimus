@@ -11,7 +11,7 @@ List<Day> timetableDays = [Day.Monday, Day.Tuesday];
 
 void updateTimetableDays(List<DsbPlan> plans) {
   timetableDays = [];
-  for (var plan in plans) timetableDays.add(plan.day);
+  for (final plan in plans) timetableDays.add(plan.day);
 }
 
 class TTLesson {
@@ -58,7 +58,7 @@ class TTColumn {
 
   List<dynamic> _lessonsToJson(List<TTLesson> lessons) {
     final lessonsStrings = <dynamic>[];
-    for (var lesson in lessons) {
+    for (final lesson in lessons) {
       lessonsStrings.add(lesson.toJson());
     }
     return lessonsStrings;
@@ -88,17 +88,17 @@ const List<Day> ttWeek = [
 List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
   final tbl = <TTColumn>[];
   //copy table -> tbl
-  for (var c in table) {
+  for (final c in table) {
     final ls = <TTLesson>[];
-    for (var l in c.lessons)
+    for (final l in c.lessons)
       ls.add(TTLesson(l.subject, l.teacher, l.notes, l.isFree));
     tbl.add(TTColumn(ls, c.day));
   }
-  for (var plan in plans) {
-    for (var column in tbl) {
+  for (final plan in plans) {
+    for (final column in tbl) {
       if (column.day == plan.day) {
         for (var i = 0; i < column.lessons.length; i++) {
-          for (var sub in plan.subs) {
+          for (final sub in plan.subs) {
             if (sub.actualLessons.contains(i + 1) &&
                 strcontain(sub.subject, column.lessons[i].subject)) {
               column.lessons[i].teacher = sub.subTeacher;
@@ -116,7 +116,7 @@ List<TTColumn> ttSubTable(List<TTColumn> table, List<DsbPlan> plans) {
 String ttToJson(List<TTColumn> tt) {
   if (tt == null) return '[]';
   final columns = [];
-  for (var column in tt) columns.add(column.toJson());
+  for (final column in tt) columns.add(column.toJson());
   return jsonEncode(columns);
 }
 
@@ -124,7 +124,7 @@ List<TTColumn> ttFromJson(String jsontext) {
   if (jsontext == null) return [];
   final table = <TTColumn>[];
   final columns = jsonDecode(jsontext);
-  for (var s in columns) table.add(TTColumn.fromJson(s));
+  for (final s in columns) table.add(TTColumn.fromJson(s));
   return table;
 }
 
@@ -141,14 +141,14 @@ List<Widget> ttWidgets(
   plans = dsbSortByLesson(dsbSearchClass(plans, Prefs.grade, Prefs.char));
   if (filtered) table = ttSubTable(table, plans);
   final widgets = <Widget>[];
-  for (var plan in plans) {
+  for (final plan in plans) {
     widgets.add(ListTile(
       title: ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
     ));
     final unthemedWidgets = <Widget>[];
     final lessons = table[Day.values.indexOf(plan.day)].lessons;
     final lessonLength = lessons.length;
-    for (var lesson in lessons) {
+    for (final lesson in lessons) {
       final title = lesson.isFree
           ? Language.current.freeLesson
           : realSubject(lesson.subject);

@@ -34,7 +34,7 @@ class RegisterTimetableScreenPageState
   void initState() {
     ttColumns = ttLoadFromPrefs();
     if (ttColumns.isEmpty)
-      for (var day in ttWeek) ttColumns.add(TTColumn(<TTLesson>[], day));
+      for (final day in ttWeek) ttColumns.add(TTColumn(<TTLesson>[], day));
     currentDropdownHour = ttColumn.lessons.length;
     super.initState();
   }

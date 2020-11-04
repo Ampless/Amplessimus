@@ -5,20 +5,20 @@ import 'dart:io';
 import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:crypto/crypto.dart';
-import 'package:dsbuntis/dsbuntis.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences _prefs;
 
 dynamic _get(String key, dynamic dflt, Function(String) f) {
-  if (_prefs == null)
+  if (_prefs == null) {
     ampWarn('PrefCache', 'Getting $key before initialization is done.');
+    return dflt;
+  }
 
-  return _prefs != null && _prefs.containsKey(key) ? f(key) : dflt;
+  return _prefs.containsKey(key) ? f(key) : dflt;
 }
 
 int _getInt(String k, int d) => _get(k, d, _prefs.getInt);
-double _getDouble(String k, double d) => _get(k, d, _prefs.getDouble);
 String _getString(String k, String d) => _get(k, d, _prefs.getString);
 bool _getBool(String k, bool d) => _get(k, d, _prefs.getBool);
 List<String> _getStringList(String k, List<String> d) =>
@@ -61,7 +61,7 @@ void setCache(String url, String html, Duration ttl) {
 void clearCache() {
   final cachedHashes = _getStringList('CACHE_URLS', []);
   if (cachedHashes.isEmpty) return;
-  for (var hash in cachedHashes) {
+  for (final hash in cachedHashes) {
     _prefs.setString('CACHE_VAL_$hash', null);
     _prefs.setInt('CACHE_TTL_$hash', null);
     ampInfo('CACHE', 'Removed $hash');
@@ -70,14 +70,14 @@ void clearCache() {
 }
 
 void listCache() {
-  ampInfo('Cache', '{');
-  for (var hash in _getStringList('CACHE_URLS', []))
+  ampRawLog('{');
+  for (final hash in _getStringList('CACHE_URLS', []))
     ampRawLog(jsonEncode({
       'hash': hash,
       'len': _getString('CACHE_VAL_$hash', '').length,
-      'ttl': _getInt('CACHE_TTL_$hash', -1)
+      'ttl': _getInt('CACHE_TTL_$hash', -1),
     }));
-  ampInfo('Cache', '}');
+  ampRawLog('}');
 }
 
 int _toggleDarkModePressed = 0;
@@ -161,17 +161,13 @@ set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
 bool get isDarkMode => _getBool('is_dark_mode', true);
 
 Future<Null> load() async {
-  try {
-    _prefs = await SharedPreferences.getInstance();
-  } catch (e) {
-    ampErr('Prefs', 'Initialization failed: ${errorString(e)}');
-  }
+  _prefs = await SharedPreferences.getInstance();
 }
 
-Future<Null> clear() async {
-  if (_prefs == null)
-    throw 'PREFS.CLEAR CALLED BEFORE INIT, THIS IS A SEVERE CODE BUG.';
-  if (await _prefs.clear()) ampInfo('Prefs', 'Cleared SharedPreferences.');
+Future<bool> clear() async {
+  final success = await _prefs.clear();
+  if (success) ampInfo('Prefs', 'Cleared SharedPreferences.');
+  return success;
 }
 
 bool get isInitialized => _prefs != null;

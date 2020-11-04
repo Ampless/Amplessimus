@@ -31,7 +31,7 @@ Future<Null> testInit() async {
 void tests(List<testCase> testCases, String groupName) {
   group(groupName, () {
     var i = 1;
-    for (var testCase in testCases)
+    for (final testCase in testCases)
       test('case ${i++}', () async {
         await testInit();
         await testCase();
