@@ -218,7 +218,10 @@ class AmpHomePageState extends State<AmpHomePage>
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
-    await dsbUpdateWidget(callback: rebuild, cachePostRequests: false);
+    final dsb = dsbUpdateWidget(cachePostRequests: false);
+    wpemailsave = await wpemails(Prefs.wpeDomain);
+    await dsb;
+    rebuild();
   }
 
   Future<Null> selectClassDialog(BuildContext context) {
@@ -401,7 +404,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     ? ampRaisedButton(
                         'Add WPEmail-Domain',
                         () => ampDialog(
-                            //TODO: do this and make the pull to refresh work for wpemail
+                            //TODO:
                             title: 'WPEmail',
                             children: null,
                             actions: (dialogContext) =>
