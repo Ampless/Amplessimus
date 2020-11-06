@@ -383,6 +383,7 @@ class AmpHomePageState extends State<AmpHomePage>
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       final containers = [
+        //TODO: make ptr work on the whole page (Expanded?)
         RefreshIndicator(
           key: refreshKey,
           child: Scaffold(
@@ -548,12 +549,15 @@ class AmpHomePageState extends State<AmpHomePage>
                 ),
                 ampBigButton(
                   onTap: () => showAboutDialog(
-                      context: context,
-                      applicationName: AmpStrings.appTitle,
-                      applicationVersion: AmpStrings.version,
-                      applicationIcon:
-                          SvgPicture.asset('assets/logo.svg', height: 40),
-                      children: [Text(Language.current.appInfo)]),
+                    context: context,
+                    applicationName: AmpStrings.appTitle,
+                    applicationVersion: AmpStrings.version,
+                    applicationIcon:
+                        SvgPicture.asset('assets/logo.svg', height: 40),
+                    children: [Text(Language.current.appInfo)],
+                    //TODO: flame flutter people for not letting me set the
+                    //background color
+                  ),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.folderInformation
                       : MdiIcons.folderInformationOutline,
