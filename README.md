@@ -25,20 +25,20 @@ we would have to pay Apple $99/year.
 #### Filza
 The easiest way to install any IPA is to just open Filza, go to the
 Downloads folder, click the file and then on `Install`.
-#### AltStore 1.3
-AltStore allows you to install IPAs. Download the IPA and install it,
-either with the `+` button in AltStore or by using `open in` AltStore.
-#### AltStore 1.4 (beta < 5)
+#### AltStore 1.4+
+In Beta 5 of AltStore 1.4 a new feature was added: You can add the Amplessimus
+source by clicking
+[this link](altstore://source?url=https://ampless.chrissx.de/altstore/stable.json).
+#### AltStore 1.4 beta 1-4
 AltStore 1.4 (currently in beta) allows you to add custom software
 repositories. Go to `Browse` → `Sources` → `+` and enter:
 ```
 https://ampless.chrissx.de/altstore/stable.json
 ```
 and you can install Amplessimus like you would install Riley's apps.
-#### AltStore 1.4
-In Beta 5 of AltStore 1.4 a new feature was added: You can add the Amplessimus
-source by clicking
-[this link](altstore://source?url=https://ampless.chrissx.de/altstore/stable.json).
+#### AltStore 1.3 and older
+AltStore allows you to install IPAs. Download the IPA and install it,
+either with the `+` button in AltStore or by using `open in` AltStore.
 #### Cydia (broken, help needed)
 There is an apt repo at
 ```
@@ -47,7 +47,8 @@ https://apt.chrissx.de/cydia
 containing a build that is broken and outdated. Making
 Cydia-compatible builds is hard. Many older Cydia apps are broken in
 similar ways and since there is not a lot of documentation it is
-really hard to learn it.
+really hard to learn it. If you know, how to build Flutter apps for
+Cydia, please contact us at `ampless@chrissx.de`.
 
 ## <a name="build"></a> Building
 Building on Windows is a mess, because Windows is a mess. Luckily
@@ -59,7 +60,7 @@ for all build targets a recent version of
 Additionally you currently need `make` for these build instructions
 (except for Windows). In the Output sections `$VERSION` means
 "the full name of the version you are building". All of the outputs
-are placed in the `bin/` folder, which created automatically.
+are placed in the `bin/` folder, which is created automatically.
 
 ### Android
 #### Prepare
@@ -92,20 +93,20 @@ make linux
 
 ### iOS
 #### Prepare
-* Recent macOS
-* Recent Xcode
+* macOS
+* Xcode
 #### Compile
 ```
 make ios
 ```
 #### Output
-* `$VERSION.deb` a cydia package (maybe broken)
+* `$VERSION.deb` a cydia package (probably broken)
 * `$VERSION.ipa` an unsigned app (works)
 
 ### macOS
 #### Prepare
-* Recent macOS
-* Recent Xcode
+* macOS
+* Xcode
 ```
 make mac
 ```
@@ -121,12 +122,12 @@ make web
 * `$VERSION.web/` a folder containing your `/var/www/html/*` basically
 #### Notes
 It won't work, because browsers like "security". (CSRF is a serious security
-problem, but it also makes web Amplessimus impossible)
+problem, but it also makes web Amplessimus impossible right now)
 
 ### Windows
 #### Prepare
-* Recent Windows
-* Recent Visual Studio (2019 as of writing this)
+* Windows
+* Visual Studio
 #### Compile if make would work
 ```
 make.exe win
