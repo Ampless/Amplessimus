@@ -36,9 +36,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('').last);
     await tester.pumpAndSettle();
-    await tester.enterText(find.byKey(usernameInputFormKey), 'username');
+    await tester.enterText(
+        find.byKey(FirstLoginScreenPageState.usernameInputFormKey), 'username');
     await tester.pumpAndSettle();
-    await tester.enterText(find.byKey(passwordInputFormKey), 'password');
+    await tester.enterText(
+        find.byKey(FirstLoginScreenPageState.passwordInputFormKey), 'password');
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.save));
     await tester.pumpAndSettle();

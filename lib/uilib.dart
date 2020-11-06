@@ -57,10 +57,9 @@ TextFormField ampFormField({
   TextInputType keyboardType = TextInputType.text,
   String labelText = '',
   bool obscureText = false,
-  List<String> autofillHints,
+  List<String> autofillHints = const [],
   Widget suffixIcon,
 }) {
-  autofillHints ??= [];
   suffixIcon ??= ampNull;
   return TextFormField(
     obscureText: obscureText,

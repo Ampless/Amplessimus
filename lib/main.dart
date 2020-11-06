@@ -224,7 +224,7 @@ class AmpHomePageState extends State<AmpHomePage>
     rebuild();
   }
 
-  Future<Null> selectClassDialog(BuildContext context) {
+  Future<Null> selectClassDialog() {
     var letter = Prefs.char;
     var grade = Prefs.grade;
     if (letter.isEmpty || !dsbLetters.contains(letter)) letter = dsbLetters[0];
@@ -264,7 +264,35 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  Future<Null> changeLanguageDialog(BuildContext context) {
+  Future<Null> wpemailDomainPopup() {
+    final domainInputFormKey = GlobalKey<FormFieldState>();
+    final domainInputFormController =
+        TextEditingController(text: Prefs.wpeDomain);
+    return ampDialog(
+      context: context,
+      title: 'domainchange',
+      children: (context, setAlState) => [
+        ampPadding(2),
+        ampFormField(
+          controller: domainInputFormController,
+          key: domainInputFormKey,
+          labelText: 'Enter domain:',
+          keyboardType: TextInputType.url,
+        ),
+      ],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        context,
+        save: () async {
+          Prefs.wpeDomain = domainInputFormController.text.trim();
+          unawaited(rebuildDragDown());
+          Navigator.pop(context);
+        },
+      ),
+      widgetBuilder: ampColumn,
+    );
+  }
+
+  Future<Null> changeLanguageDialog() {
     var lang = Language.current;
     var use = Prefs.dsbUseLanguage;
     return ampDialog(
@@ -297,7 +325,7 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  Future<Null> credentialDialog(BuildContext context) {
+  Future<Null> credentialDialog() {
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
     final usernameInputFormController =
@@ -402,16 +430,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 changeSubVisibilityWidget,
                 wpemailsave == null || wpemailsave.isEmpty
                     ? ampRaisedButton(
-                        'Add WPEmail-Domain',
-                        () => ampDialog(
-                            //TODO:
-                            title: 'WPEmail',
-                            children: null,
-                            actions: (dialogContext) =>
-                                ampDialogButtonsSaveAndCancel(dialogContext,
-                                    save: () => Prefs.wpeDomain = 'gympeg.de'),
-                            context: context,
-                            widgetBuilder: null))
+                        'Add WPEmail-Domain', () => wpemailDomainPopup())
                     : wpemailWidget(wpemailsave),
               ],
             ),
@@ -533,18 +552,18 @@ class AmpHomePageState extends State<AmpHomePage>
                       : Language.current.lightsUseSystem,
                 ),
                 ampBigButton(
-                  onTap: () => changeLanguageDialog(context),
+                  onTap: () => changeLanguageDialog(),
                   icon: MdiIcons.translate,
                   text: Language.current.changeLanguage,
                 ),
                 ampBigButton(
-                  onTap: () => credentialDialog(context),
+                  onTap: () => credentialDialog(),
                   icon:
                       AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
                   text: Language.current.changeLogin,
                 ),
                 ampBigButton(
-                  onTap: () => selectClassDialog(context),
+                  onTap: () => selectClassDialog(),
                   icon: AmpColors.isDarkMode
                       ? MdiIcons.school
                       : MdiIcons.schoolOutline,

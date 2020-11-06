@@ -19,9 +19,6 @@ class FirstLoginScreenPage extends StatefulWidget {
   State<StatefulWidget> createState() => FirstLoginScreenPageState();
 }
 
-final usernameInputFormKey = GlobalKey<FormFieldState>();
-final passwordInputFormKey = GlobalKey<FormFieldState>();
-
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
     with SingleTickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -36,6 +33,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
       TextEditingController(text: Prefs.username);
   final passwordInputFormController =
       TextEditingController(text: Prefs.password);
+  static final usernameInputFormKey = GlobalKey<FormFieldState>();
+  static final passwordInputFormKey = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
