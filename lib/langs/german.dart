@@ -210,4 +210,7 @@ class German extends Language {
   @override
   String get plsUpdate =>
       'Eine neue ${AmpStrings.appTitle}-Version ist verfügbar.';
+
+  @override
+  String get wpemailDomain => 'WPEmail-Domain';
 }

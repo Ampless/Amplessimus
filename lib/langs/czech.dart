@@ -207,4 +207,7 @@ class Czech extends Language {
   @override
   //TODO: see above
   String get plsUpdate => 'Je k dispozici nová verze ${AmpStrings.appTitle}.';
+
+  @override
+  String get wpemailDomain => 'WPEmail-Domain';
 }

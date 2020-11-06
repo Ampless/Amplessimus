@@ -270,13 +270,13 @@ class AmpHomePageState extends State<AmpHomePage>
         TextEditingController(text: Prefs.wpeDomain);
     return ampDialog(
       context: context,
-      title: 'domainchange',
+      title: Language.current.wpemailDomain,
       children: (context, setAlState) => [
         ampPadding(2),
         ampFormField(
           controller: domainInputFormController,
           key: domainInputFormKey,
-          labelText: 'Enter domain:',
+          labelText: Language.current.wpemailDomain,
           keyboardType: TextInputType.url,
         ),
       ],

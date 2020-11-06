@@ -209,4 +209,7 @@ class English extends Language {
 
   @override
   String get plsUpdate => 'A new ${AmpStrings.appTitle} version is available.';
+
+  @override
+  String get wpemailDomain => 'WPEmail-Domain';
 }
