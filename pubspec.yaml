@@ -32,7 +32,6 @@ dependencies:
   update: ^0.1.0
   html_search: ^0.0.3
   flutter_svg: ^0.19.1
-  clipboard_manager: ^0.0.4
 
 dev_dependencies:
   #flutter_launcher_icons: ^0.8.0

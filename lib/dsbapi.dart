@@ -8,10 +8,9 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/subject.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Widget dsbRenderPlans(
   List<DsbPlan> plans,
@@ -52,24 +51,20 @@ Widget dsbRenderPlans(
           },
         ),
         IconButton(
-          icon: ampIcon(Icons.copy),
+          icon: ampIcon(Icons.open_in_new),
           //TODO: translate
-          tooltip: 'Copy URL',
-          onPressed: () {
-            ClipboardManager.copyToClipBoard(plan.url).then((_) {
-              //TODO: fix this with a ScaffoldMessanger set in main
-              homeScaffoldKey.currentState
-                  ?.showSnackBar(ampSnackBar('Copied to Clipboard'));
-              //TODO: translate                    ^
-            });
-          },
+          tooltip: 'Open plan in browser',
+          onPressed: () => launch(plan.url),
         ),
       ]),
     ));
     widgets.add(ampList(dayWidgets, themeId));
   }
   widgets.add(ampPadding(12));
-  return Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
+  final column =
+      Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
+  ampInfo('DSB', 'Done rendering plans.');
+  return column;
 }
 
 List<DsbPlan> dsbPlans;
