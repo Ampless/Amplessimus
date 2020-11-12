@@ -27,11 +27,12 @@ dependencies:
   archive: ^2.0.13
   crypto: ^2.1.5
   url_launcher: ^5.7.2
-  dsbuntis: ^0.3.2
+  dsbuntis: ^0.4.0
   schttp: ^0.2.8
   update: ^0.1.0
   html_search: ^0.0.3
   flutter_svg: ^0.19.1
+  clipboard_manager: ^0.0.4
 
 dev_dependencies:
   #flutter_launcher_icons: ^0.8.0

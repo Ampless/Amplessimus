@@ -8,8 +8,10 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/subject.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Widget dsbRenderPlans(
   List<DsbPlan> plans,
@@ -47,6 +49,19 @@ Widget dsbRenderPlans(
           onPressed: () {
             //TODO: fix this with a ScaffoldMessanger set in main
             homeScaffoldKey.currentState?.showSnackBar(ampSnackBar(plan.date));
+          },
+        ),
+        IconButton(
+          icon: ampIcon(Icons.copy),
+          //TODO: translate
+          tooltip: 'Copy URL',
+          onPressed: () {
+            ClipboardManager.copyToClipBoard(plan.url).then((_) {
+              //TODO: fix this with a ScaffoldMessanger set in main
+              homeScaffoldKey.currentState
+                  ?.showSnackBar(ampSnackBar('Copied to Clipboard'));
+              //TODO: translate                    ^
+            });
           },
         ),
       ]),

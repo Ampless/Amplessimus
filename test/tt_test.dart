@@ -38,12 +38,14 @@ final List<TTColumn> ttTest1Input1 = [
 
 final List<DsbPlan> ttTest1Input2 = [
   DsbPlan(
-      Day.Monday,
-      [
-        DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false, null),
-      ],
-      '13.12.-1'),
-  DsbPlan(Day.Tuesday, [], 'drölf'),
+    Day.Monday,
+    [
+      DsbSubstitution(null, [1], 'Gnan', 'M', 'Mitbetreuung', false, null),
+    ],
+    '13.12.-1',
+    '',
+  ),
+  DsbPlan(Day.Tuesday, [], 'drölf', ''),
 ];
 
 final List<TTColumn> ttTest1Output = [
