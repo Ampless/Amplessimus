@@ -219,7 +219,8 @@ class AmpHomePageState extends State<AmpHomePage>
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
     final dsb = dsbUpdateWidget(cachePostRequests: false);
-    wpemailsave = await wpemails(Prefs.wpeDomain);
+    if (Prefs.wpeDomain.isNotEmpty)
+      wpemailsave = await wpemails(Prefs.wpeDomain);
     await dsb;
     rebuild();
   }
