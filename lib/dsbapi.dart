@@ -61,8 +61,7 @@ Widget dsbRenderPlans(
     widgets.add(ampList(dayWidgets, themeId));
   }
   widgets.add(ampPadding(12));
-  final column =
-      Column(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
+  final column = ampColumn(widgets);
   ampInfo('DSB', 'Done rendering plans.');
   return column;
 }
