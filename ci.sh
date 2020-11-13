@@ -87,9 +87,9 @@ main() {
 
                 echo "[AmpCI][$(date)] Running make to build $version_name."
 
-                flutter config --enable-web #--enable-macos-desktop
+                flutter config --enable-web --enable-macos-desktop
                 make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
-                # make mac || { make cleanartifacts rollbackversions ; }
+                make mac || { make cleanartifacts rollbackversions ; }
         } 2>&1 | tee bin/ci.log
 
         (update_altstore) &
