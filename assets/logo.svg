@@ -4,27 +4,21 @@
 <circle cx="500" cy="500" r="450" fill="black" />
 <circle cx="500" cy="500" r="375" fill="white" />
 <circle cx="500" cy="500" r="350" fill="black" />
-<g transform="translate(-37.5 -37.5)">
-<path fill="white" d="
-M 500,500
-c 0,0 -310,-70 -250,-155
-  60,-85 250,155 250,155
-z" transform="rotate(0 500 500)" />
-</g>
-<g transform="translate(37.5 -37.5)">
-<path fill="white" d="
-M 500,500
-c 0,0 -310,-70 -250,-155
-  60,-85 250,155 250,155
-z" transform="rotate(120 500 500)" />
-</g>
-<g transform="translate(0 52.5)">
-<path fill="white" d="
-M 500,500
-c 0,0 -310,-70 -250,-155
-  60,-85 250,155 250,155
-z" transform="rotate(-120 500 500)" />
-</g>
+<path fill="white"
+   d="M 500,550
+      c 0,0 -100,290 0,300
+        0,0 100,10 0,-300
+      z" transform="rotate(240 500 500)" />
+<path fill="white"
+   d="M 500,550
+      c 0,0 -100,290 0,300
+        0,0 100,10 0,-300
+      z" transform="rotate(120 500 500)" />
+<path fill="white"
+   d="M 500,550
+      c 0,0 -100,290 0,300
+        0,0 100,10 0,-300
+      z" transform="rotate(0 500 500)" />
 <circle cx="500" cy="500" r="70" fill="white" />
 <circle cx="500" cy="500" r="50" fill="black" />
 </svg>
