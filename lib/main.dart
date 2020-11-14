@@ -25,16 +25,35 @@ import 'package:update/update.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(SplashScreen());
+  final init = () async {
+    await Prefs.load();
+    ttColumns = ttLoadFromPrefs();
+
+    if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+
+    if (Prefs.useSystemTheme)
+      AmpColors.brightness =
+          SchedulerBinding.instance.window.platformBrightness;
+
+    var dsbUpdate = (() async {})();
+
+    if (!Prefs.firstLogin) dsbUpdate = dsbUpdateWidget();
+    if (Prefs.wpeDomain.isNotEmpty)
+      wpemailsave = await wpemails(Prefs.wpeDomain);
+
+    await dsbUpdate;
+  };
+  runApp(SplashScreen(init()));
 }
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({
+  final Future<void> init;
+
+  SplashScreen(
+    this.init, {
     bool test = false,
-    Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers)
-        httpPost,
-    Future<String> Function(Uri url) httpGet,
+    Future<String> Function(Uri, Object, String, Map<String, String>) httpPost,
+    Future<String> Function(Uri) httpGet,
   }) {
     httpPost ??= http.post;
     httpGet ??= http.get;
@@ -44,10 +63,12 @@ class SplashScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
+  Widget build(BuildContext context) => ampMatApp(SplashScreenPage(init));
 }
 
 class SplashScreenPage extends StatefulWidget {
+  final Future<void> init;
+  SplashScreenPage(this.init);
   @override
   State<StatefulWidget> createState() => SplashScreenPageState();
 }
@@ -61,6 +82,14 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
   void _initState() async {
     try {
+      // if the app wont start within 15 secs, show some debug info
+      final timeout = Timer(
+        Duration(seconds: 15),
+        () => ampChangeScreen(Timeout(), context),
+      );
+
+      //final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
+
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -68,34 +97,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         DeviceOrientation.landscapeRight,
       ]);
 
-      // if the program wont start within 15 secs, show some debug info
-      final timeout = Timer(
-        Duration(seconds: 15),
-        () => ampChangeScreen(Timeout(), context),
-      );
+      await widget.init;
 
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
-
-      ampInfo('Splash', 'Loading SharedPreferences...');
-      await Prefs.load();
-      ampInfo('Splash', 'SharedPreferences (hopefully successfully) loaded.');
-      ttColumns = ttLoadFromPrefs();
-
-      if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-
-      if (Prefs.useSystemTheme)
-        AmpColors.brightness =
-            SchedulerBinding.instance.window.platformBrightness;
-
-      var dsbUpdate = (() async {})();
-
-      if (!Prefs.firstLogin) dsbUpdate = dsbUpdateWidget();
-      if (Prefs.wpeDomain.isNotEmpty)
-        wpemailsave = await wpemails(Prefs.wpeDomain);
-
-      await dsbUpdate;
-
-      await minimalLoadingTime;
+      //await minimalLoadingTime;
 
       timeout.cancel();
       ampChangeScreen(
