@@ -46,14 +46,12 @@ Widget dsbRenderPlans(
           icon: ampIcon(Icons.info),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
-            //TODO: fix this with a ScaffoldMessanger set in main
-            homeScaffoldKey.currentState?.showSnackBar(ampSnackBar(plan.date));
+            scaffoldMessanger.showSnackBar(ampSnackBar(plan.date));
           },
         ),
         IconButton(
           icon: ampIcon(Icons.open_in_new),
-          //TODO: translate
-          tooltip: 'Open plan in browser',
+          tooltip: Language.current.openPlanInBrowser,
           onPressed: () => launch(plan.url),
         ),
       ]),

@@ -157,8 +157,7 @@ class AmpHomePage extends StatefulWidget {
   AmpHomePageState createState() => AmpHomePageState();
 }
 
-final homeScaffoldKey = GlobalKey<ScaffoldState>();
-final settingsScaffoldKey = GlobalKey<ScaffoldState>();
+ScaffoldMessengerState scaffoldMessanger;
 final refreshKey = GlobalKey<RefreshIndicatorState>();
 
 var checkForUpdates = true;
@@ -403,6 +402,7 @@ class AmpHomePageState extends State<AmpHomePage>
   Widget build(BuildContext context) {
     try {
       ampInfo('MyHomePage', 'Building MyHomePage...');
+      scaffoldMessanger = ScaffoldMessenger.of(context);
       if (dsbWidget == null) {
         dsbUpdateWidget();
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
@@ -419,7 +419,6 @@ class AmpHomePageState extends State<AmpHomePage>
         RefreshIndicator(
           key: refreshKey,
           child: Scaffold(
-            key: homeScaffoldKey,
             appBar: ampAppBar(AmpStrings.appTitle),
             backgroundColor: Colors.transparent,
             body: ListView(
@@ -502,7 +501,6 @@ class AmpHomePageState extends State<AmpHomePage>
           color: Colors.transparent,
           child: Scaffold(
             appBar: ampAppBar(Language.current.settings),
-            key: settingsScaffoldKey,
             backgroundColor: Colors.transparent,
             body: GridView.count(
               crossAxisCount: 2,
@@ -531,7 +529,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
                     await dsbUpdateWidget();
                     rebuild();
-                    settingsScaffoldKey.currentState?.showSnackBar(ampSnackBar(
+                    scaffoldMessanger.showSnackBar(ampSnackBar(
                       Language.current.changedAppearance,
                       Language.current.show,
                       () => setState(() => tabController.index = 0),
