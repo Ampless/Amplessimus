@@ -46,7 +46,7 @@ TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
 
-ci: mkdirs replaceversions iosapp ipa deb cydiainfo apk cleanartifacts rollbackversions
+ci: mkdirs replaceversions iosapp ipa apk cleanartifacts rollbackversions
 
 android: mkdirs replaceversions apk aab cleanartifacts rollbackversions
 ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
@@ -81,7 +81,8 @@ ipa:
 	rm -rf $(OUTPUT_IPA)
 	cd $(TMP) && zip -r -9 ../$(OUTPUT_IPA) $(IPA_DIR)
 
-# This is for Cydia: http://www.saurik.com/id/7
+# http://www.saurik.com/id/7
+# but its broken...
 deb:
 	@which cp sh du grep sed md5sum awk ls dpkg-deb
 	cp -rp $(IOS_BUILD_DIR) $(TMP_DEB_DIR)/Applications/
