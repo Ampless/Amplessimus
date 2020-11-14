@@ -59,6 +59,7 @@ abstract class Language {
   String get update;
   String get plsUpdate;
   String get wpemailDomain;
+  String get openPlanInBrowser;
   String dsbSubtoSubtitle(DsbSubstitution sub);
   String dayToString(Day day);
   String catchDsbGetData(dynamic e);
