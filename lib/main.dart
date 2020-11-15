@@ -25,35 +25,11 @@ import 'package:update/update.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  final init = () async {
-    //TODO: this seems to cause problems at least on ios, fix by using a list of
-    //Function Futures in _initState and going through them, and not using a
-    //separate init which doesnt work
-    await Prefs.load();
-    ttColumns = ttLoadFromPrefs();
-
-    if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-
-    if (Prefs.useSystemTheme)
-      AmpColors.brightness =
-          SchedulerBinding.instance.window.platformBrightness;
-
-    var dsbUpdate = (() async {})();
-
-    if (!Prefs.firstLogin) dsbUpdate = dsbUpdateWidget();
-    if (Prefs.wpeDomain.isNotEmpty)
-      wpemailsave = await wpemails(Prefs.wpeDomain);
-
-    await dsbUpdate;
-  };
-  runApp(SplashScreen(init()));
+  runApp(SplashScreen());
 }
 
 class SplashScreen extends StatelessWidget {
-  final Future<void> init;
-
-  SplashScreen(
-    this.init, {
+  SplashScreen({
     bool test = false,
     Future<String> Function(Uri, Object, String, Map<String, String>) httpPost,
     Future<String> Function(Uri) httpGet,
@@ -66,12 +42,11 @@ class SplashScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => ampMatApp(SplashScreenPage(init));
+  Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
 }
 
 class SplashScreenPage extends StatefulWidget {
-  final Future<void> init;
-  SplashScreenPage(this.init);
+  SplashScreenPage();
   @override
   State<StatefulWidget> createState() => SplashScreenPageState();
 }
@@ -92,14 +67,39 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     try {
       //final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
 
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+      final loadPrefs = Prefs.load();
 
-      await widget.init;
+      final initFutures = [
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ])
+      ];
+
+      await loadPrefs;
+
+      for (final initFunc in [
+        () async {
+          ttColumns = ttLoadFromPrefs();
+
+          if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+
+          if (Prefs.useSystemTheme)
+            AmpColors.brightness =
+                SchedulerBinding.instance.window.platformBrightness;
+        },
+        () async {
+          if (!Prefs.firstLogin) await dsbUpdateWidget();
+        },
+        () async {
+          if (Prefs.wpeDomain.isNotEmpty)
+            wpemailsave = await wpemails(Prefs.wpeDomain);
+        },
+      ]) initFutures.add(initFunc());
+
+      for (final future in initFutures) await future;
 
       //await minimalLoadingTime;
 
