@@ -26,6 +26,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   final init = () async {
+    //TODO: this seems to cause problems at least on ios, fix by using a list of
+    //Function Futures in _initState and going through them, and not using a
+    //separate init which doesnt work
     await Prefs.load();
     ttColumns = ttLoadFromPrefs();
 
@@ -81,13 +84,12 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   }
 
   void _initState() async {
+    // if the app wont start within 15 secs, show some debug info
+    final timeout = Timer(
+      Duration(seconds: 15),
+      () => ampChangeScreen(Timeout(), context),
+    );
     try {
-      // if the app wont start within 15 secs, show some debug info
-      final timeout = Timer(
-        Duration(seconds: 15),
-        () => ampChangeScreen(Timeout(), context),
-      );
-
       //final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
 
       await SystemChrome.setPreferredOrientations([
@@ -108,6 +110,8 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       );
     } catch (e) {
       ampErr('Splash.initState', errorString(e));
+      timeout.cancel();
+      ampChangeScreen(Timeout(), context);
     }
   }
 
