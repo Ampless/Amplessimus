@@ -27,7 +27,7 @@ class TimeoutPage extends StatefulWidget {
 
 class TimeoutPageState extends State<TimeoutPage> {
   TimeoutPageState() {
-    Timer.periodic(Duration(seconds: 5), (_) => setState(() {}));
+    Timer.periodic(Duration(seconds: 2), (_) => setState(() {}));
   }
 
   @override

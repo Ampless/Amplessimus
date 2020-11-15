@@ -26,16 +26,17 @@ var ttColumns = <TTColumn>[];
 class RegisterTimetableScreenPageState
     extends State<RegisterTimetableScreenPage>
     with SingleTickerProviderStateMixin {
-  Day currentDropdownDay = Day.Monday;
-  TTColumn get ttColumn => ttColumns[Day.values.indexOf(currentDropdownDay)];
-  int currentDropdownHour = 0;
+  Day dropdownDay = Day.Monday;
+  int dropdownLesson = 0;
+
+  TTColumn get column => ttColumns[Day.values.indexOf(dropdownDay)];
+  List<TTLesson> get lessons => column.lessons;
 
   @override
   void initState() {
-    ttColumns = ttLoadFromPrefs();
     if (ttColumns.isEmpty)
-      for (final day in ttWeek) ttColumns.add(TTColumn(<TTLesson>[], day));
-    currentDropdownHour = ttColumn.lessons.length;
+      for (final day in ttWeek) ttColumns.add(TTColumn([], day));
+    dropdownLesson = lessons.length;
     super.initState();
   }
 
@@ -54,32 +55,31 @@ class RegisterTimetableScreenPageState
                 child: ampRow(
                   [
                     ampDropdownButton(
-                      value: currentDropdownDay,
+                      value: dropdownDay,
                       itemToDropdownChild: (i) =>
                           ampText(Language.current.dayToString(i)),
                       items: ttWeek,
                       onChanged: (value) {
                         setState(() {
-                          currentDropdownDay = value;
-                          currentDropdownHour = ttColumn.lessons.length;
+                          dropdownDay = value;
+                          dropdownLesson = lessons.length;
                         });
                       },
                     ),
                     ampPadding(10),
                     ampDropdownButton(
-                      value: currentDropdownHour,
+                      value: dropdownLesson,
                       items: ttLessons,
                       onChanged: (value) {
                         setState(() {
-                          currentDropdownHour = value;
-                          if (ttColumn.lessons.length <= value) {
+                          dropdownLesson = value;
+                          if (lessons.length <= value) {
                             for (var i = 0; i < value; i++)
-                              if (i + 1 > ttColumn.lessons.length)
-                                ttColumn.lessons.add(TTLesson.empty);
+                              if (i + 1 > lessons.length)
+                                lessons.add(TTLesson.empty);
                           } else {
-                            for (var i = ttColumn.lessons.length;
-                                i > value;
-                                --i) ttColumn.lessons.removeAt(i - 1);
+                            for (var i = lessons.length; i > value; i--)
+                              lessons.removeAt(i - 1);
                           }
                         });
                       },
@@ -94,14 +94,14 @@ class RegisterTimetableScreenPageState
               ),
               Flexible(
                   child: ListView.separated(
-                itemCount: ttColumn.lessons.length + 1,
+                itemCount: lessons.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == currentDropdownHour) return ampSizedDivider(65);
-                  var lesson = ttColumn.lessons[index];
+                  if (index == dropdownLesson) return ampSizedDivider(60);
+                  var lesson = lessons[index];
                   var lessonIsFree = false;
                   String title;
                   String trailing;
-                  if (ttColumn.lessons[index].isFree) {
+                  if (lessons[index].isFree) {
                     title = Language.current.freeLesson;
                     trailing = '';
                   } else {
@@ -115,7 +115,7 @@ class RegisterTimetableScreenPageState
                       size: 30,
                     ),
                     onTap: () {
-                      lesson = ttColumn.lessons[index];
+                      lesson = lessons[index];
                       lessonIsFree = lesson.isFree;
                       final subjectInputFormKey = GlobalKey<FormFieldState>();
                       final notesInputFormKey = GlobalKey<FormFieldState>();
@@ -180,21 +180,21 @@ class RegisterTimetableScreenPageState
                       );
                     },
                     title: ampText(
-                      ttColumn.lessons[index].subject.trim().isEmpty &&
-                              !ttColumn.lessons[index].isFree
+                      lessons[index].subject.trim().isEmpty &&
+                              !lessons[index].isFree
                           ? Language.current.subject
                           : title,
                       size: 22,
                     ),
                     subtitle: ampText(
-                      ttColumn.lessons[index].notes.trim().isEmpty
+                      lessons[index].notes.trim().isEmpty
                           ? Language.current.notes
-                          : ttColumn.lessons[index].notes.trim(),
+                          : lessons[index].notes.trim(),
                       size: 16,
                     ),
                     trailing: ampText(
-                      ttColumn.lessons[index].teacher.trim().isEmpty &&
-                              !ttColumn.lessons[index].isFree
+                      lessons[index].teacher.trim().isEmpty &&
+                              !lessons[index].isFree
                           ? Language.current.teacher
                           : trailing,
                       size: 16,
