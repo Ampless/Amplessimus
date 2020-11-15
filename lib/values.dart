@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AmpStrings {
   static const String appTitle = 'Amplessimus';
   static const String version = '0.0.0-1';
-  static const List<String> authors = ['chrissx', 'miruslavus'];
+  static const List<String> authors = ['chrissx'];
 }
 
 class AmpColors {

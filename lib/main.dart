@@ -65,7 +65,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       () => ampChangeScreen(Timeout(), context),
     );
     try {
-      //final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
+      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 450));
 
       final loadPrefs = Prefs.load();
 
@@ -101,7 +101,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
       for (final future in initFutures) await future;
 
-      //await minimalLoadingTime;
+      await minimalLoadingTime;
 
       timeout.cancel();
       ampChangeScreen(

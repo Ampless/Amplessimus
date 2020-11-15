@@ -10,8 +10,7 @@ void ampClearLog() => Prefs.log = '';
 Widget get ampLogWidget =>
     ampText(Prefs.log, font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
 
-void ampLog(String lvl, dynamic ctx, Object message) {
-  if (_loggingDisabled) return;
+void ampLog(String lvl, dynamic ctx, Object msg) {
   final now = DateTime.now();
   var s = now.second.toString(),
       m = now.minute.toString(),
@@ -25,18 +24,15 @@ void ampLog(String lvl, dynamic ctx, Object message) {
   if (!(ctx is List)) ctx = [ctx];
   ctx.insert(0, lvl);
   var context = '';
-  var aftercontext = '';
   for (final c in ctx) {
     context += '[$c]';
-    aftercontext = ' ';
   }
-  ampRawLog('$h:$m:$s.$ms $context$aftercontext$message');
+  ampRawLog('$h:$m:$s.$ms $context $msg');
 }
 
 void ampRawLog(Object msg) {
   if (_loggingDisabled) return;
-  Prefs.log += msg.toString();
-  Prefs.log += '\n';
+  Prefs.log += '$msg\n';
   print(msg);
 }
 

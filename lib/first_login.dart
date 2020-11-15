@@ -21,31 +21,29 @@ class FirstLoginScreenPage extends StatefulWidget {
 
 class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
     with SingleTickerProviderStateMixin {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool loading = false;
-  bool isError = false;
-  String textString = '';
-  String animString = 'intro';
-  String gradeDropDownValue = Prefs.grade;
-  String letterDropDownValue = Prefs.char;
-  bool passwordHidden = true;
-  final usernameInputFormController =
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _loading = false;
+  String _error = '';
+  String _gradeDropDownValue = Prefs.grade;
+  String _letterDropDownValue = Prefs.char;
+  bool _passwordHidden = true;
+  final _usernameInputFormController =
       TextEditingController(text: Prefs.username);
-  final passwordInputFormController =
+  final _passwordInputFormController =
       TextEditingController(text: Prefs.password);
   static final usernameInputFormKey = GlobalKey<FormFieldState>();
   static final passwordInputFormKey = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
-    if (Prefs.char.isEmpty) letterDropDownValue = dsbLetters.first;
-    if (Prefs.grade.isEmpty) gradeDropDownValue = dsbGrades.first;
+    if (Prefs.char.isEmpty) _letterDropDownValue = dsbLetters.first;
+    if (Prefs.grade.isEmpty) _gradeDropDownValue = dsbGrades.first;
     return Scaffold(
       body: AnimatedContainer(
         duration: Duration(milliseconds: 150),
         color: AmpColors.colorBackground,
         child: Scaffold(
-          key: scaffoldKey,
+          key: _scaffoldKey,
           backgroundColor: Colors.transparent,
           appBar: ampAppBar(Language.current.changeLoginPopup),
           body: Center(
@@ -60,15 +58,15 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     ampText(Language.current.selectClass, size: 20),
                     ampRow([
                       ampDropdownButton(
-                        value: gradeDropDownValue,
+                        value: _gradeDropDownValue,
                         items: dsbGrades,
                         onChanged: (value) {
                           setState(() {
-                            gradeDropDownValue = value;
+                            _gradeDropDownValue = value;
                             Prefs.grade = value;
                             try {
                               if (int.parse(value) > 10)
-                                letterDropDownValue = Prefs.char = '';
+                                _letterDropDownValue = Prefs.char = '';
                               // ignore: empty_catches
                             } catch (e) {}
                           });
@@ -76,11 +74,11 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                       ),
                       ampPadding(10),
                       ampDropdownButton(
-                        value: letterDropDownValue,
+                        value: _letterDropDownValue,
                         items: dsbLetters,
                         onChanged: (value) {
                           setState(() {
-                            letterDropDownValue = value;
+                            _letterDropDownValue = value;
                             Prefs.char = value;
                           });
                         },
@@ -89,7 +87,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     ampSizedDivider(20),
                     ampPadding(4),
                     ampFormField(
-                      controller: usernameInputFormController,
+                      controller: _usernameInputFormController,
                       key: usernameInputFormKey,
                       labelText: Language.current.username,
                       keyboardType: TextInputType.visiblePassword,
@@ -99,17 +97,17 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     ampFormField(
                       suffixIcon: IconButton(
                         onPressed: () {
-                          setState(() => passwordHidden = !passwordHidden);
+                          setState(() => _passwordHidden = !_passwordHidden);
                         },
-                        icon: passwordHidden
+                        icon: _passwordHidden
                             ? ampIcon(Icons.visibility)
                             : ampIcon(Icons.visibility_off),
                       ),
-                      controller: passwordInputFormController,
+                      controller: _passwordInputFormController,
                       key: passwordInputFormKey,
                       labelText: Language.current.password,
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: passwordHidden,
+                      obscureText: _passwordHidden,
                       autofillHints: [AutofillHints.password],
                     ),
                     ampSizedDivider(20),
@@ -123,7 +121,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     ),
                     ampSizedDivider(5),
                     ampText(
-                      textString,
+                      _error,
                       color: Colors.red,
                       weight: FontWeight.bold,
                       size: 20,
@@ -133,13 +131,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               ),
             ),
           ),
-          bottomSheet: ampLinearProgressIndicator(loading),
+          bottomSheet: ampLinearProgressIndicator(_loading),
           floatingActionButton: ampFab(
             onPressed: () async {
-              setState(() => loading = true);
+              setState(() => _loading = true);
               try {
-                final username = usernameInputFormController.text.trim();
-                final password = passwordInputFormController.text.trim();
+                final username = _usernameInputFormController.text.trim();
+                final password = _passwordInputFormController.text.trim();
                 Prefs.username = username;
                 Prefs.password = password;
                 final error = await dsbCheckCredentials(
@@ -153,19 +151,16 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 await dsbUpdateWidget();
 
                 setState(() {
-                  isError = false;
-                  loading = false;
-                  textString = '';
+                  _loading = false;
+                  _error = '';
                 });
 
                 Prefs.firstLogin = false;
-                FocusScope.of(context).unfocus();
                 ampChangeScreen(AmpApp(), context);
               } catch (e) {
                 setState(() {
-                  loading = false;
-                  textString = errorString(e);
-                  isError = true;
+                  _loading = false;
+                  _error = errorString(e);
                 });
               }
             },

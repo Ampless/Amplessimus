@@ -68,7 +68,7 @@ List<DsbPlan> dsbPlans;
 Widget dsbWidget;
 
 Future<Null> dsbUpdateWidget(
-    {void Function() callback,
+    {Function() callback,
     bool cacheGetRequests = true,
     bool cachePostRequests = true,
     bool cacheJsonPlans,
