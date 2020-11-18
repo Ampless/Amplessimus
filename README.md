@@ -22,7 +22,7 @@ We try to build for it, but there are weird problems. Goto [`Building`](#build).
 ### iOS
 iOS installation is interesting, because, to run on iOS "officially",
 we would have to pay Apple $99/year.
-#### Filza
+#### Filza (jailbroken)
 The easiest way to install any IPA is to just open Filza, go to the
 Downloads folder, click the file and then on `Install`.
 #### AltStore 1.4+
@@ -104,6 +104,12 @@ make ios
 * `$VERSION.ipa` an unsigned app (works)
 
 ### macOS
+#### Notes
+Due to weird problems you might want to run these commands first:
+```
+rm -rf macos
+flutter create .
+```
 #### Prepare
 * macOS
 * Xcode
