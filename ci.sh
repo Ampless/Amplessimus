@@ -43,12 +43,12 @@ flutter_update() {
 
 update_altstore() {
         cd
-        [ ! -d ampless.chrissx.de ] && git clone https://github.com/Ampless/ampless.chrissx.de
+        [ -d ampless.chrissx.de ] || git clone https://github.com/Ampless/ampless.chrissx.de
         cd ampless.chrissx.de/altstore
         git pull
         sed -E 's/^ *"version": ".*",$/      "version": "'"$version_name"'",/' alpha.json | \
         sed -E 's/^ *"versionDate": ".*",$/      "versionDate": "'"$(date -u '+%FT%T')+00:00"'",/' | \
-        sed -E 's/^ *"versionDescription": ".*",$/      "versionDescription": "As of '"$(date)"'",/' | \
+        sed -E 's/^ *"versionDescription": ".*",$/      "versionDescription": "'"$(date '+%d.%m.%y %H:%M')"'",/' | \
         sed -E 's/^ *"downloadURL": ".*",$/      "downloadURL": "https:\/\/github.com\/Ampless\/Amplessimus\/releases\/download\/'"$version_name"'\/'"$version_name"'.ipa",/' > temp.json
         mv temp.json alpha.json
         git add alpha.json
@@ -59,11 +59,11 @@ update_altstore() {
 output() {
         mv -f bin "$output_dir"
 
-        [ ! -f /etc/ampci.creds ] && { echo "No GitHub creds found." ; exit 1 ; }
+        [ -f /etc/ampci.creds ] || { echo "No GitHub creds found." ; exit 1 ; }
         cd "$output_dir"
         upload_url="$(gh_create_release $commitid $version_name)"
         for fn in * ; do
-                gh_upload_binary "$upload_url" "$fn"
+                gh_upload_binary "$upload_url" "$fn" &
         done
 }
 
@@ -71,13 +71,14 @@ main() {
         git stash
         git pull
 
-        commitid=$(git rev-parse @)
-        raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
-        version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
-        output_dir="/usr/local/var/www/amplessimus/$version_name"
         mkdir -p bin
 
         {
+                commitid=$(git rev-parse @)
+                raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
+                version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
+                output_dir="/usr/local/var/www/amplessimus/$version_name"
+
                 flutter_update
 
                 mkdir -p /usr/local/var/www/amplessimus
@@ -87,9 +88,9 @@ main() {
 
                 echo "[AmpCI][$(date)] Running make to build $version_name."
 
-                flutter config --enable-web --enable-macos-desktop
+                flutter config --enable-web #--enable-macos-desktop
                 make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
-                make mac || { make cleanartifacts rollbackversions ; }
+                #make mac || { make cleanartifacts rollbackversions ; }
         } 2>&1 | tee bin/ci.log
 
         (update_altstore) &

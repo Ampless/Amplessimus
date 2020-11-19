@@ -5,10 +5,10 @@
 We currently don't see a reason to support older versions and backport
 security updates.
 
-| Version  | Supported          |
-| -------- | ------------------ |
-| ≥ 2.4.x+ | :white_check_mark: |
-| < 2.4.0  | :x:                |
+| Version | Supported          |
+| ------- | ------------------ |
+| ≥ 2.5   | :white_check_mark: |
+| < 2.5   | :x:                |
 
 ## Reporting a Vulnerability
 

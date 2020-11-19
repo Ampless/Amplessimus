@@ -17,8 +17,7 @@ IOS_BUILD_DIR = build/ios/Release-iphoneos/Runner.app
 IOS_STRIP_LIST = $(IOS_BUILD_DIR)/Runner \
 				 $(IOS_BUILD_DIR)/Frameworks/App.framework/App \
 				 $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter \
-				 $(IOS_BUILD_DIR)/Frameworks/shared_preferences.framework/shared_preferences \
-				 $(IOS_BUILD_DIR)/Frameworks/*.dylib
+				 $(IOS_BUILD_DIR)/Frameworks/shared_preferences.framework/shared_preferences
 MAC_BUILD_DIR = build/macos/Build/Products/Release/Amplessimus.app
 MAC_STRIP_LIST = $(MAC_BUILD_DIR)/Contents/Runner \
 				 $(MAC_BUILD_DIR)/Contents/Frameworks/App.framework/Versions/A/App \
@@ -73,8 +72,8 @@ iosapp:
 	flutter build ios $(IOS_FLAGS)
 	$(BITCODE_STRIP) $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
-	$(STRIP) $(IOS_STRIP_LIST) || true
 	rm -f $(IOS_BUILD_DIR)/Frameworks/libswift*
+	$(STRIP) $(IOS_STRIP_LIST) || true
 
 ipa:
 	@which cp rm cd zip
