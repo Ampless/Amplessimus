@@ -61,8 +61,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       () => ampChangeScreen(Timeout(), context),
     );
 
-    final minimalLoadingTime = Future.delayed(Duration(milliseconds: 400));
-
     final loadPrefs = Prefs.load();
 
     final initFutures = [
@@ -80,15 +78,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
         for (final initFunc in [
           () async {
-            ttColumns = ttLoadFromPrefs();
-
-            if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-
-            if (Prefs.useSystemTheme)
-              AmpColors.brightness =
-                  SchedulerBinding.instance.window.platformBrightness;
-          },
-          () async {
             if (!Prefs.firstLogin) await dsbUpdateWidget();
           },
           () async {
@@ -97,9 +86,15 @@ class SplashScreenPageState extends State<SplashScreenPage> {
           },
         ]) initFutures.add(initFunc());
 
-        for (final future in initFutures) await future;
+        ttColumns = ttLoadFromPrefs();
 
-        await minimalLoadingTime;
+        if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+
+        if (Prefs.useSystemTheme)
+          AmpColors.brightness =
+              SchedulerBinding.instance.window.platformBrightness;
+
+        for (final future in initFutures) await future;
 
         timeout.cancel();
         ampChangeScreen(
