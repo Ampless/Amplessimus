@@ -194,13 +194,15 @@ class AmpHomePageState extends State<AmpHomePage>
     Prefs.timerInit(() => dsbUpdateWidget(callback: rebuild));
     (() async {
       if (!checkForUpdates || !Prefs.updatePopup) return;
+      ampInfo('UN', 'Searching for updates...');
       checkForUpdates = false;
       final update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
         AmpStrings.version,
         uncachedHttpGetFunc,
       );
-      if (update != null)
+      if (update != null) {
+        ampInfo('UN', 'Found an update, displaying the dialog.');
         await ampDialog(
           title: Language.current.update,
           children: (_, __) => [ampText(Language.current.plsUpdate)],
@@ -211,6 +213,7 @@ class AmpHomePageState extends State<AmpHomePage>
           context: context,
           widgetBuilder: ampRow,
         );
+      }
     })();
   }
 
