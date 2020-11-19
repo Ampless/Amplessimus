@@ -104,8 +104,6 @@ Future<Null> dsbUpdateWidget(
     var plans = useJCache
         ? plansFromJson(dsbJsonCache)
         : await dsbGetAllSubs(username, password, httpGet, httpPost,
-            cacheGetRequests: cacheGetRequests,
-            cachePostRequests: cachePostRequests,
             dsbLanguage: dsbLanguage);
     if (!useJCache) dsbJsonCache = plansToJson(plans);
     if (oneClassOnly)

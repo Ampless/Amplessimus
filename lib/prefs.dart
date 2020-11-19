@@ -163,7 +163,7 @@ bool get isDarkMode => _getBool('is_dark_mode', true);
 Future<Null> load() async {
   ampInfo('Prefs', 'Loading SharedPreferences...');
   _prefs = await SharedPreferences.getInstance();
-  ampInfo('Splash', 'SharedPreferences (hopefully successfully) loaded.');
+  ampInfo('Prefs', 'SharedPreferences (hopefully successfully) loaded.');
 }
 
 Future<bool> clear() async {
