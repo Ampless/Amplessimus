@@ -14,7 +14,6 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -55,64 +54,64 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
     super.initState();
-    _initState();
-  }
 
-  void _initState() async {
     // if the app wont start within 15 secs, show some debug info
     final timeout = Timer(
       Duration(seconds: 15),
       () => ampChangeScreen(Timeout(), context),
     );
-    try {
-      final minimalLoadingTime = Future.delayed(Duration(milliseconds: 400));
 
-      final loadPrefs = Prefs.load();
+    final minimalLoadingTime = Future.delayed(Duration(milliseconds: 400));
 
-      final initFutures = [
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ])
-      ];
+    final loadPrefs = Prefs.load();
 
-      await loadPrefs;
+    final initFutures = [
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ])
+    ];
 
-      for (final initFunc in [
-        () async {
-          ttColumns = ttLoadFromPrefs();
+    (() async {
+      try {
+        await loadPrefs;
 
-          if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
+        for (final initFunc in [
+          () async {
+            ttColumns = ttLoadFromPrefs();
 
-          if (Prefs.useSystemTheme)
-            AmpColors.brightness =
-                SchedulerBinding.instance.window.platformBrightness;
-        },
-        () async {
-          if (!Prefs.firstLogin) await dsbUpdateWidget();
-        },
-        () async {
-          if (Prefs.wpeDomain.isNotEmpty)
-            wpemailsave = await wpemails(Prefs.wpeDomain);
-        },
-      ]) initFutures.add(initFunc());
+            if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
 
-      for (final future in initFutures) await future;
+            if (Prefs.useSystemTheme)
+              AmpColors.brightness =
+                  SchedulerBinding.instance.window.platformBrightness;
+          },
+          () async {
+            if (!Prefs.firstLogin) await dsbUpdateWidget();
+          },
+          () async {
+            if (Prefs.wpeDomain.isNotEmpty)
+              wpemailsave = await wpemails(Prefs.wpeDomain);
+          },
+        ]) initFutures.add(initFunc());
 
-      await minimalLoadingTime;
+        for (final future in initFutures) await future;
 
-      timeout.cancel();
-      ampChangeScreen(
-        Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-        context,
-      );
-    } catch (e) {
-      ampErr('Splash.initState', errorString(e));
-      timeout.cancel();
-      ampChangeScreen(Timeout(), context);
-    }
+        await minimalLoadingTime;
+
+        timeout.cancel();
+        ampChangeScreen(
+          Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
+          context,
+        );
+      } catch (e) {
+        ampErr('Splash.initState', errorString(e));
+        timeout.cancel();
+        ampChangeScreen(Timeout(), context);
+      }
+    })();
   }
 
   @override
@@ -120,20 +119,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     try {
       ampInfo('Splash', 'Buiding Splash Screen');
       return Scaffold(
-        body: Center(
-          child: AnimatedContainer(
-            color: Colors.black,
-            //    height: double.infinity,
-            //    width: double.infinity,
-            duration: Duration(seconds: 1),
-            //    child: FlareActor(
-            //      'assets/splash_screen.json',
-            //      alignment: Alignment.center,
-            //      fit: BoxFit.contain,
-            //      animation: 'anim',
-            //    ),
-          ),
-        ),
+        backgroundColor: Colors.black,
         bottomSheet: ampLinearProgressIndicator(),
       );
     } catch (e) {
