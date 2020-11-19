@@ -74,6 +74,7 @@ iosapp:
 	$(BITCODE_STRIP) $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
 	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
 	$(STRIP) $(IOS_STRIP_LIST) || true
+	rm -f $(IOS_BUILD_DIR)/Frameworks/libswift*
 
 ipa:
 	@which cp rm cd zip
