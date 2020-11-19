@@ -120,22 +120,22 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     try {
       ampInfo('Splash', 'Buiding Splash Screen');
       return Scaffold(
-        body: Center(
-          child: AnimatedContainer(
-            color: Colors.black,
-            height: double.infinity,
-            width: double.infinity,
-            duration: Duration(seconds: 1),
-            child: FlareActor(
-              'assets/splash_screen.json',
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-              animation: 'anim',
-            ),
-          ),
-        ),
-        bottomSheet: ampLinearProgressIndicator(),
-      );
+          //body: Center(
+          //  child: AnimatedContainer(
+          //    color: Colors.black,
+          //    height: double.infinity,
+          //    width: double.infinity,
+          //    duration: Duration(seconds: 1),
+          //    child: FlareActor(
+          //      'assets/splash_screen.json',
+          //      alignment: Alignment.center,
+          //      fit: BoxFit.contain,
+          //      animation: 'anim',
+          //    ),
+          //  ),
+          //),
+          //bottomSheet: ampLinearProgressIndicator(),
+          );
     } catch (e) {
       ampErr('Splash.build', errorString(e));
       return ampText(errorString(e));
