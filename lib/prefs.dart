@@ -124,8 +124,8 @@ String get wpeDomain => _getString('wpemaildomain', '');
 set wpeDomain(String s) => _prefs.setString('wpemaildomain', s);
 String get savedLangCode => _getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
-String get jsonTimetable => _getString('json_timetable', null);
-set jsonTimetable(String s) => _prefs.setString('json_timetable', s);
+String get timetable => _getString('json_timetable', null);
+set timetable(String s) => _prefs.setString('json_timetable', s);
 bool get updatePopup => _getBool('update_popup', true);
 set updatePopup(bool b) => _prefs.setBool('update_popup', b);
 

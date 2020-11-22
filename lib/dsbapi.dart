@@ -69,9 +69,7 @@ Widget dsbWidget;
 
 Future<Null> dsbUpdateWidget(
     {Function() callback,
-    bool cacheGetRequests = true,
-    bool cachePostRequests = true,
-    bool cacheJsonPlans,
+    bool useJsonCache,
     Future<String> Function(
             Uri url, Object body, String id, Map<String, String> headers)
         httpPost,
@@ -87,7 +85,7 @@ Future<Null> dsbUpdateWidget(
     Language lang}) async {
   httpPost ??= httpPostFunc;
   httpGet ??= httpGetFunc;
-  cacheJsonPlans ??= Prefs.useJsonCache;
+  useJsonCache ??= Prefs.useJsonCache;
   callback ??= () {};
   dsbLanguage ??= Prefs.dsbLanguage;
   dsbJsonCache ??= Prefs.dsbJsonCache;
@@ -100,7 +98,7 @@ Future<Null> dsbUpdateWidget(
   themeId ??= Prefs.currentThemeId;
   try {
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
-    final useJCache = cacheJsonPlans && dsbJsonCache != null;
+    final useJCache = useJsonCache && dsbJsonCache != null;
     var plans = useJCache
         ? plansFromJson(dsbJsonCache)
         : await dsbGetAllSubs(username, password, httpGet, httpPost,

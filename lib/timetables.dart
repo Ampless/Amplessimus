@@ -128,8 +128,8 @@ List<TTColumn> ttFromJson(String jsontext) {
   return table;
 }
 
-void ttSaveToPrefs(List<TTColumn> tbl) => Prefs.jsonTimetable = ttToJson(tbl);
-List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.jsonTimetable);
+void ttSaveToPrefs(List<TTColumn> tbl) => Prefs.timetable = ttToJson(tbl);
+List<TTColumn> ttLoadFromPrefs() => ttFromJson(Prefs.timetable);
 
 //if(filtered) table = ttSubTable(table, plans)
 //then makes ampLists from table

@@ -72,13 +72,11 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       ])
     ];
 
-    (() async {
+    loadPrefs.then((_) async {
       try {
-        await loadPrefs;
-
         for (final initFunc in [
           () async {
-            if (!Prefs.firstLogin) await dsbUpdateWidget();
+            if (!Prefs.firstLogin) await dsbUpdateWidget(useJsonCache: true);
           },
           () async {
             if (Prefs.wpeDomain.isNotEmpty)
@@ -106,7 +104,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         timeout.cancel();
         ampChangeScreen(Timeout(), context);
       }
-    })();
+    });
   }
 
   @override
@@ -209,7 +207,7 @@ class AmpHomePageState extends State<AmpHomePage>
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
-    final dsb = dsbUpdateWidget(cachePostRequests: false);
+    final dsb = dsbUpdateWidget(httpPost: uncachedHttpPostFunc);
     if (Prefs.wpeDomain.isNotEmpty)
       wpemailsave = await wpemails(Prefs.wpeDomain);
     await dsb;
@@ -395,15 +393,12 @@ class AmpHomePageState extends State<AmpHomePage>
     try {
       ampInfo('MyHomePage', 'Building MyHomePage...');
       scaffoldMessanger = ScaffoldMessenger.of(context);
-      if (dsbWidget == null) {
-        dsbUpdateWidget();
-        lastUpdate = DateTime.now().millisecondsSinceEpoch;
-      }
       if (lastUpdate <
           DateTime.now()
               .subtract(Duration(minutes: Prefs.timer))
               .millisecondsSinceEpoch) {
-        dsbUpdateWidget();
+        refreshKey.currentState?.show();
+        dsbUpdateWidget(callback: rebuild);
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       final containers = [
@@ -435,7 +430,7 @@ class AmpHomePageState extends State<AmpHomePage>
           body: Container(
             margin: EdgeInsets.only(left: 10, right: 10),
             color: Colors.transparent,
-            child: Prefs.jsonTimetable == null
+            child: Prefs.timetable == null
                 ? Center(
                     child: InkWell(
                       highlightColor: Colors.transparent,
@@ -477,7 +472,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     ],
                   ),
           ),
-          floatingActionButton: Prefs.jsonTimetable == null
+          floatingActionButton: Prefs.timetable == null
               ? ampNull
               : ampFab(
                   onPressed: () => ampChangeScreen(
