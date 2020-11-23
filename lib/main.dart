@@ -79,7 +79,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       );
 
       try {
-        await Future.delayed(Duration(seconds: 20));
         for (final initFunc in [
           () async {
             if (!Prefs.firstLogin) await dsbUpdateWidget(useJsonCache: true);
