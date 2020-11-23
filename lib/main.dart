@@ -64,24 +64,24 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       DeviceOrientation.landscapeRight,
     ]);
 
-    loadPrefs.then((_) {
+    loadPrefs.then((_) async {
       try {
-        ampChangeScreen(
-          Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-          context,
-        );
-
         if (Prefs.useSystemTheme)
           AmpColors.brightness =
               SchedulerBinding.instance.window.platformBrightness;
 
-        if (Prefs.firstLogin) return;
+        if (Prefs.firstLogin)
+          return ampChangeScreen(FirstLoginScreen(), context);
 
-        dsbUpdateWidget(useJsonCache: true);
-
-        wpemailUpdate();
+        final dsb = dsbUpdateWidget(useJsonCache: true);
+        final wpe = wpemailUpdate();
 
         ttColumns = ttLoadFromPrefs();
+
+        await wpe;
+        await dsb;
+
+        ampChangeScreen(AmpApp(), context);
       } catch (e) {
         ampErr('Splash.initState', errorString(e));
         ampChangeScreen(ErrorScreen(), context);
