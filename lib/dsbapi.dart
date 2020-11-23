@@ -75,7 +75,6 @@ Future<Null> dsbUpdateWidget(
         httpPost,
     Future<String> Function(Uri url) httpGet,
     String dsbLanguage,
-    String dsbJsonCache,
     String username,
     String password,
     bool oneClassOnly,
@@ -88,7 +87,6 @@ Future<Null> dsbUpdateWidget(
   useJsonCache ??= Prefs.useJsonCache;
   callback ??= () {};
   dsbLanguage ??= Prefs.dsbLanguage;
-  dsbJsonCache ??= Prefs.dsbJsonCache;
   username ??= Prefs.username;
   password ??= Prefs.password;
   lang ??= Language.current;
@@ -98,12 +96,12 @@ Future<Null> dsbUpdateWidget(
   themeId ??= Prefs.currentThemeId;
   try {
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
-    final useJCache = useJsonCache && dsbJsonCache != null;
+    final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
     var plans = useJCache
-        ? plansFromJson(dsbJsonCache)
+        ? plansFromJson(Prefs.dsbJsonCache)
         : await dsbGetAllSubs(username, password, httpGet, httpPost,
             dsbLanguage: dsbLanguage);
-    if (!useJCache) dsbJsonCache = plansToJson(plans);
+    if (!useJCache) Prefs.dsbJsonCache = plansToJson(plans);
     if (oneClassOnly)
       plans = dsbSortByLesson(dsbSearchClass(plans, grade, char));
     updateTimetableDays(plans);
