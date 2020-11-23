@@ -64,7 +64,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       DeviceOrientation.landscapeRight,
     ]);
 
-    loadPrefs.then((_) async {
+    loadPrefs.then((_) {
       try {
         ampChangeScreen(
           Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
@@ -77,15 +77,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
         if (Prefs.firstLogin) return;
 
-        for (final initFunc in [
-          () async {
-            if (!Prefs.firstLogin) await dsbUpdateWidget(useJsonCache: true);
-          },
-          () async {
-            if (Prefs.wpeDomain.isNotEmpty)
-              wpemailsave = await wpemails(Prefs.wpeDomain);
-          },
-        ]) initFunc();
+        dsbUpdateWidget(useJsonCache: true);
+
+        wpemailUpdate();
 
         ttColumns = ttLoadFromPrefs();
       } catch (e) {

@@ -1,10 +1,16 @@
 import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:html_search/html_search.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Map<String, String> wpemailsave;
+
+Future<Null> wpemailUpdate([String domain]) async {
+  domain ??= Prefs.wpeDomain;
+  if (domain.isNotEmpty) wpemailsave = await wpemails(domain);
+}
 
 Future<Map<String, String>> wpemails(String domain) async {
   try {
