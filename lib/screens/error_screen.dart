@@ -6,27 +6,27 @@ import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
-class Timeout extends StatelessWidget {
+class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-      ampInfo('Timeout', 'Building Main Page');
-      return ampMatApp(TimeoutPage());
+      ampInfo('ErrorScreen', 'Building Main Page');
+      return ampMatApp(ErrorScreenPage());
     } catch (e) {
-      ampErr('Timeout', errorString(e));
+      ampErr('ErrorScreen', errorString(e));
       return ampText(errorString(e));
     }
   }
 }
 
-class TimeoutPage extends StatefulWidget {
-  TimeoutPage({Key key}) : super(key: key);
+class ErrorScreenPage extends StatefulWidget {
+  ErrorScreenPage({Key key}) : super(key: key);
   @override
-  TimeoutPageState createState() => TimeoutPageState();
+  ErrorScreenPageState createState() => ErrorScreenPageState();
 }
 
-class TimeoutPageState extends State<TimeoutPage> {
-  TimeoutPageState() {
+class ErrorScreenPageState extends State<ErrorScreenPage> {
+  ErrorScreenPageState() {
     Timer.periodic(Duration(seconds: 2), (_) => setState(() {}));
   }
 
@@ -39,7 +39,7 @@ class TimeoutPageState extends State<TimeoutPage> {
           ampText(
             'Amplessimus did not initialize.\n'
             'Please contact ampless@chrissx.de with a screenshot/video of this page.',
-            size: 24,
+            size: 20,
           ),
           ampLogWidget,
         ]),

@@ -8,7 +8,7 @@ import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/register_timetable.dart';
-import 'package:Amplessimus/screens/timeout.dart';
+import 'package:Amplessimus/screens/error_screen.dart';
 import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
@@ -55,30 +55,28 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   void initState() {
     super.initState();
 
-    // if the app wont start within 15 secs, show some debug info
-    final timeout = Timer(
-      Duration(seconds: 15),
-      () => ampChangeScreen(Timeout(), context),
-    );
-
     final loadPrefs = Prefs.load();
 
-    final initFutures = [
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ])
-    ];
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
 
     loadPrefs.then((_) async {
-      ampChangeScreen(
-        Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-        context,
-      );
-
       try {
+        ampChangeScreen(
+          Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
+          context,
+        );
+
+        if (Prefs.useSystemTheme)
+          AmpColors.brightness =
+              SchedulerBinding.instance.window.platformBrightness;
+
+        if (Prefs.firstLogin) return;
+
         for (final initFunc in [
           () async {
             if (!Prefs.firstLogin) await dsbUpdateWidget(useJsonCache: true);
@@ -87,23 +85,12 @@ class SplashScreenPageState extends State<SplashScreenPage> {
             if (Prefs.wpeDomain.isNotEmpty)
               wpemailsave = await wpemails(Prefs.wpeDomain);
           },
-        ]) initFutures.add(initFunc());
+        ]) initFunc();
 
         ttColumns = ttLoadFromPrefs();
-
-        if (Prefs.currentThemeId < 0) Prefs.currentThemeId = 0;
-
-        if (Prefs.useSystemTheme)
-          AmpColors.brightness =
-              SchedulerBinding.instance.window.platformBrightness;
-
-        for (final future in initFutures) await future;
-
-        timeout.cancel();
       } catch (e) {
         ampErr('Splash.initState', errorString(e));
-        timeout.cancel();
-        ampChangeScreen(Timeout(), context);
+        ampChangeScreen(ErrorScreen(), context);
       }
     });
   }

@@ -285,10 +285,10 @@ FloatingActionButton ampFab({
   );
 }
 
-void ampChangeScreen(
+Future ampChangeScreen(
   Widget w,
   BuildContext context, [
-  Function(BuildContext, Route) push = Navigator.pushReplacement,
+  Future Function(BuildContext, Route) push = Navigator.pushReplacement,
 ]) =>
     push(context, MaterialPageRoute(builder: (_) => w));
 
