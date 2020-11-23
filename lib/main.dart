@@ -73,7 +73,13 @@ class SplashScreenPageState extends State<SplashScreenPage> {
     ];
 
     loadPrefs.then((_) async {
+      ampChangeScreen(
+        Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
+        context,
+      );
+
       try {
+        await Future.delayed(Duration(seconds: 20));
         for (final initFunc in [
           () async {
             if (!Prefs.firstLogin) await dsbUpdateWidget(useJsonCache: true);
@@ -95,10 +101,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         for (final future in initFutures) await future;
 
         timeout.cancel();
-        ampChangeScreen(
-          Prefs.firstLogin ? FirstLoginScreen() : AmpApp(),
-          context,
-        );
       } catch (e) {
         ampErr('Splash.initState', errorString(e));
         timeout.cancel();
