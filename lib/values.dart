@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 class AmpStrings {
   static const String appTitle = 'Amplessimus';
   static const String version = '0.0.0-1';
-  static const List<String> authors = ['chrissx'];
 }
 
 class AmpColors {
@@ -35,7 +34,7 @@ class AmpColors {
       isDarkMode ? Brightness.dark : Brightness.light;
   static set brightness(Brightness b) {
     if (Brightness.values.length > 2)
-      ampWarn('set AmpColors.brightness', '>2 Brightness states exist.');
+      ampWarn('AmpColors.brightness', 'more than 2 Brightness states exist.');
     if (b == null) return;
     Prefs.isDarkMode = b != Brightness.light;
     ampInfo('AmpColors', 'set brightness = $b');
