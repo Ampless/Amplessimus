@@ -58,14 +58,14 @@ replaceversions:
 	@which mv sed
 	mv -f pubspec.yaml pubspec.yaml.def
 	sed "s/0.0.0-1/$(VERSION)/" pubspec.yaml.def > pubspec.yaml
-	mv -f lib/values.dart lib/values.dart.def
-	sed "s/0.0.0-1/$(ACTUAL_VERSION)/" lib/values.dart.def > lib/values.dart
+	mv -f lib/stringsisabadname.dart lib/stringsisabadname.dart.def
+	sed "s/0.0.0-1/$(ACTUAL_VERSION)/" lib/stringsisabadname.dart.def > lib/stringsisabadname.dart
 
 # TODO: call this always
 rollbackversions:
 	@which mv
 	mv -f pubspec.yaml.def pubspec.yaml
-	mv -f lib/values.dart.def lib/values.dart
+	mv -f lib/stringsisabadname.dart.def lib/stringsisabadname.dart
 
 iosapp:
 	@which flutter xcrun mv strip
