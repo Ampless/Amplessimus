@@ -7,8 +7,8 @@ void ampDisableLogging() => _loggingDisabled = true;
 
 void ampClearLog() => Prefs.log = '';
 
-Widget get ampLogWidget =>
-    ampText(Prefs.log, font: ['Ubuntu Mono', 'SF Mono', 'Consolas', 'Courier']);
+Widget get ampLogWidget => ampText(Prefs.log,
+    font: ['Ubuntu Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier']);
 
 void ampLog(String lvl, dynamic ctx, Object msg) {
   final now = DateTime.now();
