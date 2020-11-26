@@ -95,40 +95,45 @@ void toggleDarkModePressed() {
   }
 }
 
-int get currentThemeId => _getInt('current_theme_id', 0);
-set currentThemeId(int i) => _prefs.setInt('current_theme_id', i);
-String get username => _getString('username_dsb', '');
-set username(String s) => _prefs.setString('username_dsb', s);
-String get password => _getString('password_dsb', '');
-set password(String s) => _prefs.setString('password_dsb', s);
+int get currentThemeId => _getInt('theme', 0);
+set currentThemeId(int i) => _prefs.setInt('theme', i);
+String get username => _getString('dsbuser', '');
+set username(String s) => _prefs.setString('dsbuser', s);
+String get password => _getString('dsbpass', '');
+set password(String s) => _prefs.setString('dsbpass', s);
+
+//TODO: get rid of this
 String get grade => _getString('grade', '5').trim().toLowerCase();
 set grade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
 String get char => _getString('char', 'a').trim().toLowerCase();
 set char(String s) => _prefs.setString('char', s.trim().toLowerCase());
-bool get oneClassOnly => _getBool('one_class_only', false);
-set oneClassOnly(bool b) => _prefs.setBool('one_class_only', b);
-bool get devOptionsEnabled => _getBool('dev_options_enabled', false);
-set devOptionsEnabled(bool b) => _prefs.setBool('dev_options_enabled', b);
-bool get firstLogin => _getBool('first_login', true);
-set firstLogin(bool b) => _prefs.setBool('first_login', b);
-bool get useJsonCache => _getBool('use_json_cache', false);
-set useJsonCache(bool b) => _prefs.setBool('use_json_cache', b);
-bool get useSystemTheme => _getBool('use_system_theme', false);
-set useSystemTheme(bool b) => _prefs.setBool('use_system_theme', b);
-String get dsbJsonCache => _getString('DSB_JSON_CACHE', null);
-set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
-String get wpeDomain => _getString('wpemaildomain', '');
-set wpeDomain(String s) => _prefs.setString('wpemaildomain', s);
+
+bool get oneClassOnly => _getBool('oneclass', false);
+set oneClassOnly(bool b) => _prefs.setBool('oneclass', b);
+bool get devOptionsEnabled => _getBool('devoptions', false);
+set devOptionsEnabled(bool b) => _prefs.setBool('devoptions', b);
+bool get firstLogin => _getBool('firstlogin', true);
+set firstLogin(bool b) => _prefs.setBool('firstlogin', b);
+bool get useJsonCache => _getBool('alwaysjsoncache', false);
+set useJsonCache(bool b) => _prefs.setBool('alwaysjsoncache', b);
+bool get useSystemTheme => _getBool('systheme', false);
+set useSystemTheme(bool b) => _prefs.setBool('systheme', b);
+String get dsbJsonCache => _getString('jsoncache', null);
+set dsbJsonCache(String s) => _prefs.setString('jsoncache', s);
+String get wpeDomain => _getString('wpedomain', '');
+set wpeDomain(String s) => _prefs.setString('wpedomain', s);
 String get savedLangCode => _getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
-bool get updatePopup => _getBool('update_popup', true);
-set updatePopup(bool b) => _prefs.setBool('update_popup', b);
+bool get updatePopup => _getBool('update', true);
+set updatePopup(bool b) => _prefs.setBool('update', b);
+bool get dsbUseLanguage => _getBool('usedsblang', false);
+set dsbUseLanguage(bool b) => _prefs.setBool('usedsblang', b);
 
-//this is only temporary; the log should be shared pref saved soon
+set isDarkMode(bool b) => _prefs.setBool('darkmode', b);
+bool get isDarkMode => _getBool('darkmode', true);
+
+//this is only "temporary"; the log should become persistant soon
 String log = '';
-
-bool get dsbUseLanguage => _getBool('dsb_use_language', false);
-set dsbUseLanguage(bool b) => _prefs.setBool('dsb_use_language', b);
 
 String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 
@@ -139,9 +144,9 @@ void timerInit(Function() f) {
   _updateUpdateTimer(timer);
 }
 
-int get timer => _getInt('update_dsb_timer', 15);
+int get timer => _getInt('timer', 15);
 set timer(int i) {
-  _prefs.setInt('update_dsb_timer', i);
+  _prefs.setInt('timer', i);
   _updateUpdateTimer(i);
 }
 
@@ -149,9 +154,6 @@ void _updateUpdateTimer(int i) {
   if (_updateTimer != null) _updateTimer.cancel();
   _updateTimer = Timer.periodic(Duration(minutes: i), (_) => _timerFunction());
 }
-
-set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);
-bool get isDarkMode => _getBool('is_dark_mode', true);
 
 Future<Null> load() async {
   ampInfo('Prefs', 'Loading SharedPreferences...');
