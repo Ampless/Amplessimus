@@ -61,7 +61,7 @@ abstract class Language {
   String get wpemailDomain;
   String get openPlanInBrowser;
   String get addWpeDomain;
-  String dsbSubtoSubtitle(DsbSubstitution sub);
+  String dsbSubtoSubtitle(Substitution sub);
   String dayToString(Day day);
   String catchDsbGetData(dynamic e);
   LinkedHashMap<String, String> get subjectLut;

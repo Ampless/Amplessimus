@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/values.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 

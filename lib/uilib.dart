@@ -1,6 +1,7 @@
+import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:flutter/material.dart';
 
 Future<Null> ampDialog({

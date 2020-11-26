@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Widget dsbRenderPlans(
-  List<DsbPlan> plans,
+  List<Plan> plans,
   bool oneClassOnly,
   String char,
   String grade,
@@ -30,7 +30,7 @@ Widget dsbRenderPlans(
       dayWidgets.add(ampLessonTile(
         subject: realSubject(sub.subject, Language.current),
         teacher: sub.orgTeacher,
-        lesson: lesson(sub.lessons),
+        lesson: sub.lesson.toString(),
         subtitle: Language.current.dsbSubtoSubtitle(sub),
         affClass: (char.isEmpty || grade.isEmpty || !oneClassOnly)
             ? sub.affectedClass
@@ -63,7 +63,7 @@ Widget dsbRenderPlans(
   return column;
 }
 
-List<DsbPlan> dsbPlans;
+List<Plan> dsbPlans;
 Widget dsbWidget;
 
 Future<Null> dsbUpdateWidget(
@@ -97,12 +97,11 @@ Future<Null> dsbUpdateWidget(
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
     final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
     var plans = useJCache
-        ? plansFromJson(Prefs.dsbJsonCache)
-        : await dsbGetAllSubs(username, password, httpGet, httpPost,
-            dsbLanguage: dsbLanguage);
-    if (!useJCache) Prefs.dsbJsonCache = plansToJson(plans);
-    if (oneClassOnly)
-      plans = dsbSortByLesson(dsbSearchClass(plans, grade, char));
+        ? Plan.plansFromJson(Prefs.dsbJsonCache)
+        : await getAllSubs(username, password, httpGet, httpPost,
+            language: dsbLanguage);
+    if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
+    if (oneClassOnly) plans = sortByLesson(searchClass(plans, grade, char));
     dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, themeId);
     dsbPlans = plans;
   } catch (e) {

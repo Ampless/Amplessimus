@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -58,7 +58,7 @@ class Czech extends Language {
   String get substitution => 'suplování';
 
   @override
-  String dsbSubtoSubtitle(DsbSubstitution sub) {
+  String dsbSubtoSubtitle(Substitution sub) {
     if (sub == null) return 'null';
     return sub.isFree ? 'volná hodina' : 'Supluje ${sub.subTeacher}';
   }

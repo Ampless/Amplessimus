@@ -1,8 +1,8 @@
+import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +140,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 final password = _passwordInputFormController.text.trim();
                 Prefs.username = username;
                 Prefs.password = password;
-                final error = await dsbCheckCredentials(
+                final error = await checkCredentials(
                   username,
                   password,
                   httpPostFunc,

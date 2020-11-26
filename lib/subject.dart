@@ -32,10 +32,3 @@ String realSubject(String subject, [Language lang]) {
 
   return s;
 }
-
-String lesson(List<int> lessons) {
-  if (lessons == null) return 'null';
-  var lesson = '';
-  for (final l in lessons) lesson += lesson.isEmpty ? l.toString() : '-$l';
-  return lesson;
-}

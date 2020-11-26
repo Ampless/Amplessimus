@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/screens/dev_options.dart';
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/first_login.dart';
@@ -8,7 +9,7 @@ import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/screens/error_screen.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:Amplessimus/wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';

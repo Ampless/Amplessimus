@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -49,12 +49,12 @@ class English extends Language {
   String get lightsUseSystem => 'Use\nsystem appearance';
 
   @override
-  String dsbSubtoSubtitle(DsbSubstitution sub) {
+  String dsbSubtoSubtitle(Substitution sub) {
     if (sub == null) return 'null';
     final notesaddon =
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
-        ? 'Free lesson${sub.lessons.length == 1 ? '' : 's'}$notesaddon'
+        ? 'Free lesson$notesaddon'
         : 'Substituted by ${sub.subTeacher}$notesaddon';
   }
 

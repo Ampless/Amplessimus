@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/values.dart';
+import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -58,12 +58,12 @@ class German extends Language {
   String get substitution => 'Vertretung';
 
   @override
-  String dsbSubtoSubtitle(DsbSubstitution sub) {
+  String dsbSubtoSubtitle(Substitution sub) {
     if (sub == null) return 'null';
     final notesaddon =
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
-        ? 'Freistunde${sub.lessons.length == 1 ? '' : 'n'}$notesaddon'
+        ? 'Freistunde$notesaddon'
         : 'Vertreten durch ${sub.subTeacher}$notesaddon';
   }
 
