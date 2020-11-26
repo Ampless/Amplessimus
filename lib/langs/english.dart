@@ -215,4 +215,7 @@ class English extends Language {
 
   @override
   String get openPlanInBrowser => 'Open plan in browser';
+
+  @override
+  String get addWpeDomain => 'Add WPEmail-Domain';
 }

@@ -216,4 +216,7 @@ class German extends Language {
 
   @override
   String get openPlanInBrowser => 'Plan im Browser öffnen';
+
+  @override
+  String get addWpeDomain => 'WPEmail-Domain hinzufügen';
 }

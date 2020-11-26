@@ -398,8 +398,8 @@ class AmpHomePageState extends State<AmpHomePage>
                 ampDivider,
                 changeSubVisibilityWidget,
                 wpemailsave == null || wpemailsave.isEmpty
-                    ? ampRaisedButton(
-                        'Add WPEmail-Domain', () => wpemailDomainPopup())
+                    ? ampRaisedButton(Language.current.addWpeDomain,
+                        () => wpemailDomainPopup())
                     : wpemailWidget(wpemailsave),
               ],
             ),

@@ -214,4 +214,8 @@ class Czech extends Language {
   @override
   // TODO: see above
   String get openPlanInBrowser => 'otevřete plán v prohlížeči';
+
+  @override
+  //TODO: see above
+  String get addWpeDomain => 'Přidat WPEmail-Domain';
 }
