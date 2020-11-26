@@ -513,6 +513,10 @@ class AmpHomePageState extends State<AmpHomePage>
                   onTap: () async {
                     Prefs.useSystemTheme = !Prefs.useSystemTheme;
                     checkBrightness();
+                    Future.delayed(
+                      Duration(microseconds: testing ? 1 : 150000),
+                      rebuild,
+                    );
                   },
                   icon: MdiIcons.brightness6,
                   text: Prefs.useSystemTheme
