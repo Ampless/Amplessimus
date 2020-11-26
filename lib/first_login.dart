@@ -173,8 +173,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   }
 }
 
-bool testing = false;
-
 final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
 Future<String> Function(Uri, Object, String, Map<String, String>,
     {Duration ttl}) httpPostFunc = http.post;

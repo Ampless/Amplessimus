@@ -6,7 +6,6 @@ import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/subject.dart';
-import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +103,6 @@ Future<Null> dsbUpdateWidget(
     if (!useJCache) Prefs.dsbJsonCache = plansToJson(plans);
     if (oneClassOnly)
       plans = dsbSortByLesson(dsbSearchClass(plans, grade, char));
-    updateTimetableDays(plans);
     dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, themeId);
     dsbPlans = plans;
   } catch (e) {

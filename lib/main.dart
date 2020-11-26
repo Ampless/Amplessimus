@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:Amplessimus/screens/dev_options.dart';
 import 'package:Amplessimus/dsbapi.dart';
@@ -7,9 +6,7 @@ import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:Amplessimus/screens/error_screen.dart';
-import 'package:Amplessimus/timetables.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/values.dart';
 import 'package:Amplessimus/wpemails.dart';
@@ -29,13 +26,11 @@ void main() {
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({
-    bool test = false,
     Future<String> Function(Uri, Object, String, Map<String, String>) httpPost,
     Future<String> Function(Uri) httpGet,
   }) {
     httpPost ??= http.post;
     httpGet ??= http.get;
-    testing = test;
     httpPostFunc = httpPost;
     httpGetFunc = httpGet;
   }
@@ -75,8 +70,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
         final dsb = dsbUpdateWidget(useJsonCache: true);
         final wpe = wpemailUpdate();
-
-        ttColumns = ttLoadFromPrefs();
 
         await wpe;
         await dsb;
@@ -151,7 +144,7 @@ class AmpHomePageState extends State<AmpHomePage>
         checkBrightness;
     super.initState();
     tabController = TabController(
-        length: 3, vsync: this, initialIndex: widget.initialIndex);
+        length: 2, vsync: this, initialIndex: widget.initialIndex);
     Prefs.timerInit(() => dsbUpdateWidget(callback: rebuild));
     (() async {
       if (!checkForUpdates || !Prefs.updatePopup) return;
@@ -406,65 +399,6 @@ class AmpHomePageState extends State<AmpHomePage>
           ),
           onRefresh: rebuildDragDown,
         ),
-        Scaffold(
-          appBar: ampAppBar(Language.current.timetable),
-          backgroundColor: Colors.transparent,
-          body: Container(
-            margin: EdgeInsets.only(left: 10, right: 10),
-            color: Colors.transparent,
-            child: Prefs.timetable == null
-                ? Center(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: AmpColors.colorForeground,
-                      borderRadius: BorderRadius.circular(32),
-                      onTap: () {
-                        ampChangeScreen(RegisterTimetableScreen(), context);
-                      },
-                      child: ampColumn(
-                        [
-                          ampIcon(MdiIcons.timetable, size: 200),
-                          ampText(
-                            Language.current.setupTimetable,
-                            size: 32,
-                            textAlign: TextAlign.center,
-                          ),
-                          ampPadding(10),
-                        ],
-                      ),
-                    ),
-                  )
-                : ListView(
-                    children: [
-                      Column(
-                        children: ttWidgets(
-                          dsbPlans,
-                          ttColumns,
-                          Prefs.filterTimetables,
-                        ),
-                      ),
-                      ampDivider,
-                      ampSwitchWithText(
-                        text: Language.current.filterTimetables,
-                        value: Prefs.filterTimetables,
-                        onChanged: (value) =>
-                            setState(() => Prefs.filterTimetables = value),
-                      ),
-                      ampPadding(24),
-                    ],
-                  ),
-          ),
-          floatingActionButton: Prefs.timetable == null
-              ? ampNull
-              : ampFab(
-                  onPressed: () => ampChangeScreen(
-                    RegisterTimetableScreen(),
-                    context,
-                  ),
-                  label: Language.current.edit,
-                  icon: Icons.edit,
-                ),
-        ),
         AnimatedContainer(
           duration: Duration(milliseconds: 150),
           color: Colors.transparent,
@@ -481,7 +415,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     AmpColors.switchMode();
                     dsbUpdateWidget();
                     Future.delayed(
-                      Duration(microseconds: testing ? 1 : 150000),
+                      Duration(microseconds: 150000),
                       rebuild,
                     );
                   },
@@ -514,7 +448,7 @@ class AmpHomePageState extends State<AmpHomePage>
                     Prefs.useSystemTheme = !Prefs.useSystemTheme;
                     checkBrightness();
                     Future.delayed(
-                      Duration(microseconds: testing ? 1 : 150000),
+                      Duration(microseconds: 150000),
                       rebuild,
                     );
                   },
@@ -580,7 +514,6 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
         bottomNavigationBar: ampTabBar(tabController, [
           ampTab(Icons.home, Language.current.start),
-          ampTab(MdiIcons.timetable, Language.current.timetable),
           ampTab(Icons.settings, Language.current.settings),
         ]),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

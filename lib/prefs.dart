@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,16 +115,12 @@ bool get useJsonCache => _getBool('use_json_cache', false);
 set useJsonCache(bool b) => _prefs.setBool('use_json_cache', b);
 bool get useSystemTheme => _getBool('use_system_theme', false);
 set useSystemTheme(bool b) => _prefs.setBool('use_system_theme', b);
-bool get filterTimetables => _getBool('filter_timetables', true);
-set filterTimetables(bool b) => _prefs.setBool('filter_timetables', b);
 String get dsbJsonCache => _getString('DSB_JSON_CACHE', null);
 set dsbJsonCache(String s) => _prefs.setString('DSB_JSON_CACHE', s);
 String get wpeDomain => _getString('wpemaildomain', '');
 set wpeDomain(String s) => _prefs.setString('wpemaildomain', s);
 String get savedLangCode => _getString('lang', Platform.localeName);
 set savedLangCode(String s) => _prefs.setString('lang', s);
-String get timetable => _getString('json_timetable', null);
-set timetable(String s) => _prefs.setString('json_timetable', s);
 bool get updatePopup => _getBool('update_popup', true);
 set updatePopup(bool b) => _prefs.setBool('update_popup', b);
 
@@ -152,9 +147,7 @@ set timer(int i) {
 
 void _updateUpdateTimer(int i) {
   if (_updateTimer != null) _updateTimer.cancel();
-  _updateTimer = testing
-      ? null
-      : Timer.periodic(Duration(minutes: i), (_) => _timerFunction());
+  _updateTimer = Timer.periodic(Duration(minutes: i), (_) => _timerFunction());
 }
 
 set isDarkMode(bool b) => _prefs.setBool('is_dark_mode', b);

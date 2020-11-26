@@ -2,7 +2,6 @@ import 'package:Amplessimus/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
-import 'package:Amplessimus/screens/register_timetable.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,7 +19,6 @@ void main() {
     ampDisableLogging();
     await tester.pumpWidget(
       SplashScreen(
-        test: true,
         httpPost: (url, body, id, headers, {getCache, setCache}) async =>
             dsbTest1Cache['GetData'],
         httpGet: (url, {getCache, setCache}) async =>
@@ -58,7 +56,6 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.save));
     await tester.pumpAndSettle();
-    assert(ttColumns.where((element) => element.lessons.isNotEmpty).isNotEmpty);
     await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();
     for (final w in <String>[
