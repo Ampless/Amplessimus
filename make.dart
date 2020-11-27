@@ -2,7 +2,7 @@ import 'dart:io';
 
 final version = '2.9.1337';
 
-system(cmd) => Process.run('sh', ['-c', cmd]);
+system(cmd) async => (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
 readfile(path) => File(path).readAsStringSync();
 writefile(path, content) => File(path).writeAsStringSync(content);
 
@@ -21,7 +21,7 @@ md5(path) => system("md5sum $path | awk '{ print \$1 }'");
 flutter(cmd) => Process.run('flutter', cmd.split(' '));
 
 sed(input, regex, replacement) {
-  return input.replaceAll(RegExp(regex), replacement);
+  return input.toString().replaceAll(RegExp(regex), replacement.toString());
 }
 
 sedit(input, output,
@@ -82,7 +82,7 @@ ci(
 
 main() async {
   try {
-    var currentCommit = (await system('git rev-parse @ | cut -c 1-7')).stdout;
+    final currentCommit = await system('git rev-parse @ | cut -c 1-7');
     final actualVersion = '$version.$currentCommit';
     await replaceversions(version, actualVersion);
     for (final d in [
@@ -103,8 +103,8 @@ main() async {
     print(e);
     if (e is Error) print(e.stackTrace);
   } finally {
-    rmd('tmp');
     mv('pubspec.yaml.def', 'pubspec.yaml');
     mv('lib/stringsisabadname.dart.def', 'lib/stringsisabadname.dart');
+    rmd('tmp');
   }
 }
