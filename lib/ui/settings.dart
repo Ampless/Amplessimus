@@ -145,6 +145,91 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final buttons = <Widget>[
+      ampBigButton(
+        onTap: () {
+          Prefs.toggleDarkModePressed();
+          Prefs.useSystemTheme = false;
+          AmpColors.switchMode();
+          dsbUpdateWidget();
+          Future.delayed(
+            Duration(milliseconds: 150),
+            () => setState(() {}),
+          );
+        },
+        icon: AmpColors.isDarkMode
+            ? MdiIcons.lightbulbOn
+            : MdiIcons.lightbulbOnOutline,
+        text: AmpColors.isDarkMode
+            ? Language.current.lightsOn
+            : Language.current.lightsOff,
+      ),
+      ampBigButton(
+        onTap: () async {
+          ampInfo('Settings', 'switching design mode');
+          Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
+          await dsbUpdateWidget();
+          setState(() {});
+          scaffoldMessanger.showSnackBar(ampSnackBar(
+            Language.current.changedAppearance,
+            Language.current.show,
+            () => setState(() => widget.parent.tabController.index = 0),
+          ));
+        },
+        icon: AmpColors.isDarkMode
+            ? MdiIcons.clipboardList
+            : MdiIcons.clipboardListOutline,
+        text: Language.current.changeAppearance,
+      ),
+      ampBigButton(
+        onTap: () async {
+          Prefs.useSystemTheme = !Prefs.useSystemTheme;
+          widget.parent.checkBrightness();
+        },
+        icon: MdiIcons.brightness6,
+        text: Prefs.useSystemTheme
+            ? Language.current.lightsNoSystem
+            : Language.current.lightsUseSystem,
+      ),
+      ampBigButton(
+        onTap: () => changeLanguageDialog(),
+        icon: MdiIcons.translate,
+        text: Language.current.changeLanguage,
+      ),
+      ampBigButton(
+        onTap: () => credentialDialog(),
+        icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
+        text: Language.current.changeLogin,
+      ),
+      ampBigButton(
+        onTap: () => selectClassDialog(),
+        icon: AmpColors.isDarkMode ? MdiIcons.school : MdiIcons.schoolOutline,
+        text: Language.current.selectClass,
+      ),
+      ampBigButton(
+        onTap: () => showAboutDialog(
+          context: context,
+          applicationName: AmpStrings.appTitle,
+          applicationVersion: AmpStrings.version,
+          applicationIcon: SvgPicture.asset('assets/logo.svg', height: 40),
+          children: [Text(Language.current.appInfo)],
+          //TODO: flame flutter people for not letting me set the
+          //background color
+        ),
+        icon: AmpColors.isDarkMode
+            ? MdiIcons.folderInformation
+            : MdiIcons.folderInformationOutline,
+        text: Language.current.settingsAppInfo,
+      ),
+    ];
+
+    if (Prefs.devOptionsEnabled)
+      buttons.add(ampBigButton(
+        onTap: () => ampChangeScreen(DevOptions(), widget.parent.context),
+        icon: MdiIcons.codeBrackets,
+        text: 'Entwickleroptionen',
+      ));
+
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: Colors.transparent,
@@ -153,95 +238,7 @@ class _SettingsState extends State<Settings> {
         backgroundColor: Colors.transparent,
         body: GridView.count(
           crossAxisCount: 2,
-          children: [
-            ampBigButton(
-              onTap: () {
-                Prefs.toggleDarkModePressed();
-                Prefs.useSystemTheme = false;
-                AmpColors.switchMode();
-                dsbUpdateWidget();
-                Future.delayed(
-                  Duration(microseconds: 150000),
-                  () => setState(() {}),
-                );
-              },
-              icon: AmpColors.isDarkMode
-                  ? MdiIcons.lightbulbOn
-                  : MdiIcons.lightbulbOnOutline,
-              text: AmpColors.isDarkMode
-                  ? Language.current.lightsOn
-                  : Language.current.lightsOff,
-            ),
-            ampBigButton(
-              onTap: () async {
-                ampInfo('AmpApp', 'switching design mode');
-                Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
-                await dsbUpdateWidget();
-                setState(() {});
-                scaffoldMessanger.showSnackBar(ampSnackBar(
-                  Language.current.changedAppearance,
-                  Language.current.show,
-                  () => setState(() => widget.parent.tabController.index = 0),
-                ));
-              },
-              icon: AmpColors.isDarkMode
-                  ? MdiIcons.clipboardList
-                  : MdiIcons.clipboardListOutline,
-              text: Language.current.changeAppearance,
-            ),
-            ampBigButton(
-              onTap: () async {
-                Prefs.useSystemTheme = !Prefs.useSystemTheme;
-                widget.parent.checkBrightness();
-              },
-              icon: MdiIcons.brightness6,
-              text: Prefs.useSystemTheme
-                  ? Language.current.lightsNoSystem
-                  : Language.current.lightsUseSystem,
-            ),
-            ampBigButton(
-              onTap: () => changeLanguageDialog(),
-              icon: MdiIcons.translate,
-              text: Language.current.changeLanguage,
-            ),
-            ampBigButton(
-              onTap: () => credentialDialog(),
-              icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
-              text: Language.current.changeLogin,
-            ),
-            ampBigButton(
-              onTap: () => selectClassDialog(),
-              icon: AmpColors.isDarkMode
-                  ? MdiIcons.school
-                  : MdiIcons.schoolOutline,
-              text: Language.current.selectClass,
-            ),
-            ampBigButton(
-              onTap: () => showAboutDialog(
-                context: context,
-                applicationName: AmpStrings.appTitle,
-                applicationVersion: AmpStrings.version,
-                applicationIcon:
-                    SvgPicture.asset('assets/logo.svg', height: 40),
-                children: [Text(Language.current.appInfo)],
-                //TODO: flame flutter people for not letting me set the
-                //background color
-              ),
-              icon: AmpColors.isDarkMode
-                  ? MdiIcons.folderInformation
-                  : MdiIcons.folderInformationOutline,
-              text: Language.current.settingsAppInfo,
-            ),
-            ampBigButton(
-              onTap: () {
-                if (Prefs.devOptionsEnabled)
-                  ampChangeScreen(DevOptions(), widget.parent.context);
-              },
-              icon: MdiIcons.codeBrackets,
-              text: 'Entwickleroptionen',
-              visible: Prefs.devOptionsEnabled,
-            ),
-          ],
+          children: buttons,
         ),
       ),
     );
