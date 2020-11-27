@@ -9,13 +9,13 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class DevOptionsScreenPage extends StatefulWidget {
-  DevOptionsScreenPage();
+class DevOptions extends StatefulWidget {
+  DevOptions();
   @override
-  State<StatefulWidget> createState() => DevOptionsScreenPageState();
+  State<StatefulWidget> createState() => DevOptionsState();
 }
 
-class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
+class DevOptionsState extends State<DevOptions>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => Scaffold(
