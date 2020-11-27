@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/ui/first_login.dart';
 import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';

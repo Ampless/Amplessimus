@@ -1,4 +1,4 @@
-import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/ui/first_login.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';

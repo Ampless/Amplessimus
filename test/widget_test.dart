@@ -1,7 +1,8 @@
-import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/ui/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/main.dart';
+import 'package:Amplessimus/ui/splash_screen.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter_test/flutter_test.dart';
 

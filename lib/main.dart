@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:Amplessimus/colors.dart' as AmpColors;
-import 'package:Amplessimus/screens/dev_options.dart';
+import 'package:Amplessimus/ui/dev_options.dart';
 import 'package:Amplessimus/dsbapi.dart';
-import 'package:Amplessimus/first_login.dart';
+import 'package:Amplessimus/ui/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/screens/error_screen.dart';
+import 'package:Amplessimus/ui/splash_screen.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:Amplessimus/wpemails.dart';
@@ -23,94 +23,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(SplashScreen());
-}
-
-class SplashScreen extends StatelessWidget {
-  SplashScreen({
-    Future<String> Function(Uri, Object, String, Map<String, String>) httpPost,
-    Future<String> Function(Uri) httpGet,
-  }) {
-    httpPost ??= http.post;
-    httpGet ??= http.get;
-    httpPostFunc = httpPost;
-    httpGetFunc = httpGet;
-  }
-
-  @override
-  Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
-}
-
-class SplashScreenPage extends StatefulWidget {
-  SplashScreenPage();
-  @override
-  State<StatefulWidget> createState() => SplashScreenPageState();
-}
-
-class SplashScreenPageState extends State<SplashScreenPage> {
-  @override
-  void initState() {
-    super.initState();
-
-    final loadPrefs = Prefs.load();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-
-    loadPrefs.then((_) async {
-      try {
-        if (Prefs.useSystemTheme)
-          AmpColors.brightness =
-              SchedulerBinding.instance.window.platformBrightness;
-
-        if (Prefs.firstLogin)
-          return ampChangeScreen(FirstLoginScreen(), context);
-
-        final dsb = dsbUpdateWidget(useJsonCache: true);
-        final wpe = wpemailUpdate();
-
-        await wpe;
-        await dsb;
-
-        ampChangeScreen(AmpApp(), context);
-      } catch (e) {
-        ampErr('Splash.initState', errorString(e));
-        ampChangeScreen(ErrorScreen(), context);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    try {
-      ampInfo('Splash', 'Buiding Splash Screen');
-      return Scaffold(
-        backgroundColor: Colors.black,
-        bottomSheet: ampLinearProgressIndicator(),
-      );
-    } catch (e) {
-      ampErr('Splash.build', errorString(e));
-      return ampText(errorString(e));
-    }
-  }
-}
-
-class AmpApp extends StatelessWidget {
-  AmpApp([this.initialIndex = 0]);
-  final int initialIndex;
-  @override
-  Widget build(BuildContext context) {
-    try {
-      ampInfo('AmpApp', 'Building Main Page');
-      return ampMatApp(AmpHomePage(initialIndex));
-    } catch (e) {
-      ampErr('AmpApp', errorString(e));
-      return ampText(errorString(e));
-    }
-  }
 }
 
 class AmpHomePage extends StatefulWidget {
@@ -495,7 +407,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 ampBigButton(
                   onTap: () {
                     if (Prefs.devOptionsEnabled)
-                      ampChangeScreen(DevOptionsScreen(), context);
+                      ampChangeScreen(DevOptionsScreenPage(), context);
                   },
                   icon: MdiIcons.codeBrackets,
                   text: 'Entwickleroptionen',

@@ -92,9 +92,9 @@ BEGIN
             VALUE "CompanyName", "Ampless" "\0"
             VALUE "FileDescription", "Amplessimus" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "amplessimus" "\0"
+            VALUE "InternalName", "Amplessimus" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2020 Ampless. All rights reserved." "\0"
-            VALUE "OriginalFilename", "amplessimus.exe" "\0"
+            VALUE "OriginalFilename", "Amplessimus.exe" "\0"
             VALUE "ProductName", "Amplessimus" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END

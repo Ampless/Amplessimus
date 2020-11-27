@@ -9,13 +9,6 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class DevOptionsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ampMatApp(DevOptionsScreenPage());
-  }
-}
-
 class DevOptionsScreenPage extends StatefulWidget {
   DevOptionsScreenPage();
   @override
@@ -100,7 +93,7 @@ class DevOptionsScreenPageState extends State<DevOptionsScreenPage>
         floatingActionButton: ampFab(
           onPressed: () {
             dsbUpdateWidget();
-            ampChangeScreen(AmpApp(2), context);
+            ampChangeScreen(AmpHomePage(2), context);
           },
           label: 'zurück',
           icon: Icons.arrow_back,

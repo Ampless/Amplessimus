@@ -8,11 +8,6 @@ import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:schttp/schttp.dart';
 
-class FirstLoginScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => ampMatApp(FirstLoginScreenPage());
-}
-
 class FirstLoginScreenPage extends StatefulWidget {
   FirstLoginScreenPage();
   @override
@@ -156,7 +151,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                 });
 
                 Prefs.firstLogin = false;
-                ampChangeScreen(AmpApp(), context);
+                ampChangeScreen(AmpHomePage(0), context);
               } catch (e) {
                 setState(() {
                   _loading = false;
