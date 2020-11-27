@@ -63,7 +63,7 @@ ipa(buildDir, output) async {
 }
 
 apk(flags, output) async {
-  flutter('build apk $flags');
+  await flutter('build apk $flags');
   mv('build/app/outputs/apk/release/app-release.apk', output);
 }
 
