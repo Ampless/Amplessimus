@@ -15,9 +15,7 @@ TEST_FLAGS = --coverage -j 100 --test-randomize-ordering-seed random
 
 IOS_BUILD_DIR = build/ios/Release-iphoneos/Runner.app
 IOS_STRIP_LIST = $(IOS_BUILD_DIR)/Runner \
-				 $(IOS_BUILD_DIR)/Frameworks/App.framework/App \
-				 $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter \
-				 $(IOS_BUILD_DIR)/Frameworks/shared_preferences.framework/shared_preferences
+				 $(IOS_BUILD_DIR)/Frameworks/*.framework/*
 MAC_BUILD_DIR = build/macos/Build/Products/Release/Amplessimus.app
 MAC_STRIP_LIST = $(MAC_BUILD_DIR)/Contents/Runner \
 				 $(MAC_BUILD_DIR)/Contents/Frameworks/App.framework/Versions/A/App \
