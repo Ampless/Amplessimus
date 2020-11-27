@@ -93,7 +93,8 @@ class DevOptionsState extends State<DevOptions>
         floatingActionButton: ampFab(
           onPressed: () {
             dsbUpdateWidget();
-            ampChangeScreen(AmpHomePage(2), context);
+            //TODO: get rid of the 1 somehow
+            ampChangeScreen(AmpHomePage(1), context);
           },
           label: 'zurück',
           icon: Icons.arrow_back,
