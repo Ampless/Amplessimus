@@ -20,9 +20,9 @@ final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 system(cmd) async {
   stderr.writeln(cmd);
   if (Platform.isWindows) {
-    (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
+    return (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
   } else {
-    (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
+    return (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
   }
 }
 
