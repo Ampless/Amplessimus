@@ -36,11 +36,6 @@ gh_upload_binary() {
         echo "[GitHub] Done uploading: $2"
 }
 
-flutter_update() {
-        flutter channel master
-        flutter upgrade
-}
-
 update_altstore() {
         cd
         [ -d ampless.chrissx.de ] || git clone https://github.com/Ampless/ampless.chrissx.de
@@ -79,19 +74,15 @@ main() {
         output_dir="/usr/local/var/www/amplessimus/$version_name"
 
         {
-                flutter_update
-
                 mkdir -p /usr/local/var/www/amplessimus
 
                 # echo "Running tests..."
                 # flutter test
 
-                echo "[AmpCI][$(date)] Running make to build $version_name."
+                echo "[AmpCI][$(date)] Running the Dart build system for $version_name."
 
                 flutter config --enable-web #--enable-macos-desktop
-                dart run make.dart
-                #make ci || { make cleanartifacts rollbackversions ; output ; exit 1 ; }
-                #make mac || { make cleanartifacts rollbackversions ; }
+                dart run make.dart ci
         } 2>&1 | tee bin/ci.log
 
         (update_altstore) &

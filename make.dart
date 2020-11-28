@@ -85,10 +85,13 @@ ci(
   await a;
 }
 
-main() async {
+main(List<String> argv) async {
+  print(argv);
   try {
     final currentCommit = await system('git rev-parse @ | cut -c 1-7');
     final actualVersion = '$version.$currentCommit';
+    await flutter('channel master');
+    await flutter('upgrade');
     await replaceversions(version, actualVersion);
     for (final d in [
       'bin',
