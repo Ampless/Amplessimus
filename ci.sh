@@ -69,8 +69,7 @@ main() {
         mkdir -p bin
 
         commitid=$(git rev-parse @)
-        raw_version="$(head -n 1 Makefile | cut -d' ' -f3)"
-        version_name="$raw_version.$(echo $commitid | cut -c 1-7)"
+        version_name="$(dart run make.dart ver).$(echo $commitid | cut -c 1-7)"
         output_dir="/usr/local/var/www/amplessimus/$version_name"
 
         {

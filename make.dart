@@ -20,8 +20,6 @@ final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 system(cmd) async {
   stderr.writeln(cmd);
   if (Platform.isWindows) {
-    //TODO/FYI: this still doesnt work
-    //(ProcessException: The system cannot find the file specified.)
     (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
   } else {
     (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
@@ -48,7 +46,7 @@ mkdirs(d) => Directory(d).createSync(recursive: true);
 
 md5(path) => system("md5sum $path | awk '{ print \$1 }'");
 
-flutter(cmd) => Process.run('flutter', cmd.split(' '));
+flutter(cmd) => system('flutter $cmd');
 
 sed(input, regex, replacement) {
   return input.toString().replaceAll(RegExp(regex), replacement.toString());
@@ -142,6 +140,10 @@ ci() async {
   await a;
 }
 
+ver() async {
+  print(version);
+}
+
 main(List<String> argv) async {
   actualVersion = '$version.${await system('git rev-parse @ | cut -c 1-7')}';
   await flutter('channel master');
@@ -162,15 +164,15 @@ main(List<String> argv) async {
         'web': web,
         'win': win,
         'mac': mac,
-        'linux': linux
+        'linux': linux,
+        'ver': ver,
       };
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
       await targets[target]();
     }
-    await ci();
   } catch (e) {
-    print(e);
-    if (e is Error) print(e.stackTrace);
+    stderr.writeln(e);
+    if (e is Error) stderr.writeln(e.stackTrace);
   } finally {
     mv('pubspec.yaml.def', 'pubspec.yaml');
     mv('lib/stringsisabadname.dart.def', 'lib/stringsisabadname.dart');
