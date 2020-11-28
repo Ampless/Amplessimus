@@ -6,8 +6,13 @@ system(cmd) async => (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
 readfile(path) => File(path).readAsStringSync();
 writefile(path, content) => File(path).writeAsStringSync(content);
 
-rm(from) => File(from).deleteSync();
-rmd(from) => Directory(from).deleteSync();
+rm(f) {
+  if (File(f).existsSync()) File(f).deleteSync();
+}
+
+rmd(d) {
+  if (Directory(d).existsSync()) Directory(d).deleteSync(recursive: true);
+}
 
 mv(from, to) => File(from).renameSync(to);
 mvd(from, to) => Directory(from).renameSync(to);
