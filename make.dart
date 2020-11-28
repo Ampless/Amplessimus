@@ -2,8 +2,26 @@ import 'dart:io';
 
 final version = '2.9.1337';
 
+var actualVersion = 'pls run main';
+
+final flags = '--release --suppress-analytics';
+final binFlags = '$flags --split-debug-info=/tmp --obfuscate';
+final iosFlags = binFlags;
+//--target-platform android-arm,android-arm64,android-x64
+final apkFlags = '$binFlags --shrink';
+final aabFlags = apkFlags;
+final winFlags = binFlags;
+final gtkFlags = binFlags;
+final macFlags = binFlags;
+final webFlags = '$flags --csp';
+
+final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
+
 system(cmd) async {
+  stderr.writeln(cmd);
   if (Platform.isWindows) {
+    //TODO/FYI: this still doesnt work
+    //(ProcessException: The system cannot find the file specified.)
     (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
   } else {
     (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
@@ -58,8 +76,8 @@ replaceversions(version, actualVersion) async {
   );
 }
 
-iosapp(flags, buildDir) async {
-  await flutter('build ios $flags');
+iosapp(buildDir) async {
+  await flutter('build ios $iosFlags');
   await system(
       'xcrun bitcode_strip $buildDir/Frameworks/Flutter.framework/Flutter -r -o tmpfltr');
   mv('tmpfltr', '$buildDir/Frameworks/Flutter.framework/Flutter');
@@ -74,49 +92,82 @@ ipa(buildDir, output) async {
   await system('cd tmp && zip -r -9 ../$output Payload');
 }
 
-apk(flags, output) async {
-  await flutter('build apk $flags');
-  mv('build/app/outputs/apk/release/app-release.apk', output);
+apk() async {
+  await flutter('build apk $apkFlags');
+  mv('build/app/outputs/apk/release/app-release.apk', 'bin/$actualVersion.apk');
 }
 
-test(flags) async {
-  await flutter('test $flags');
+aab() async {
+  await flutter('build appbundle $aabFlags');
+  mv('build/app/outputs/apk/release/app-release.aab', 'bin/$actualVersion.aab');
+}
+
+test() async {
+  await flutter('test $testFlags');
   await system('genhtml -o coverage/html coverage/lcov.info');
   await system('lcov -l coverage/lcov.info');
 }
 
-ci(
-  version,
-  actualVersion,
-  iosBuildDir,
-  iosFlags,
-  apkFlags,
-) async {
-  final a = apk(apkFlags, 'bin/$actualVersion.apk');
-  await iosapp(iosFlags, iosBuildDir);
-  await ipa(iosBuildDir, 'bin/$actualVersion.ipa');
+ios() async {
+  await iosapp('build/ios/Release-iphoneos/Runner.app');
+  await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.ipa');
+  //TODO: deb
+}
+
+android() async {
+  final a = apk();
+  await aab();
+  await a;
+}
+
+web() async {
+  flutter('config --enable-web');
+  flutter('build web $webFlags');
+  mvd('build/web', 'bin/$actualVersion.web');
+}
+
+//TODO:
+win() async {}
+
+//TODO:
+mac() async {}
+
+//TODO:
+linux() async {}
+
+ci() async {
+  final a = apk();
+  await iosapp('build/ios/Release-iphoneos/Runner.app');
+  await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.ipa');
   await a;
 }
 
 main(List<String> argv) async {
+  actualVersion = '$version.${await system('git rev-parse @ | cut -c 1-7')}';
+  await flutter('channel master');
+  await flutter('upgrade');
+  await replaceversions(version, actualVersion);
   try {
-    final currentCommit = await system('git rev-parse @ | cut -c 1-7');
-    final actualVersion = '$version.$currentCommit';
-    await flutter('channel master');
-    await flutter('upgrade');
-    await replaceversions(version, actualVersion);
     mkdirs('bin');
     mkdirs('tmp/Payload');
     mkdirs('tmp/deb/DEBIAN');
     mkdirs('tmp/deb/Applications');
     mkdirs('tmp/dmg');
-    await ci(
-      version,
-      actualVersion,
-      'build/ios/Release-iphoneos/Runner.app',
-      '--release --suppress-analytics --split-debug-info=/tmp --obfuscate',
-      '--release --suppress-analytics --split-debug-info=/tmp --obfuscate --shrink',
-    );
+    for (final target in argv) {
+      const targets = {
+        'ci': ci,
+        'ios': ios,
+        'android': android,
+        'test': test,
+        'web': web,
+        'win': win,
+        'mac': mac,
+        'linux': linux
+      };
+      if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
+      await targets[target]();
+    }
+    await ci();
   } catch (e) {
     print(e);
     if (e is Error) print(e.stackTrace);

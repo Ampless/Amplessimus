@@ -43,41 +43,26 @@ TMP_DMG_DIR = $(TMP)/dmg
 TMP_DMG     = $(TMP)/tmp.dmg
 
 
-ci: mkdirs replaceversions iosapp ipa apk cleanartifacts rollbackversions
+ci:
+	dart run make.dart ci
 
-android: mkdirs replaceversions apk aab cleanartifacts rollbackversions
-ios: mkdirs replaceversions iosapp ipa deb cleanartifacts rollbackversions
-web: mkdirs replaceversions webbuild cleanartifacts rollbackversions
-win: mkdirs replaceversions winx64 cleanartifacts rollbackversions
-mac: mkdirs replaceversions macapp macdmg cleanartifacts rollbackversions
-linux: mkdirs replaceversions linux64 cleanartifacts rollbackversions
+android:
+	dart run make.dart android
 
-replaceversions:
-	@which mv sed
-	mv -f pubspec.yaml pubspec.yaml.def
-	sed "s/0.0.0-1/$(VERSION)/" pubspec.yaml.def > pubspec.yaml
-	mv -f lib/stringsisabadname.dart lib/stringsisabadname.dart.def
-	sed "s/0.0.0-1/$(ACTUAL_VERSION)/" lib/stringsisabadname.dart.def > lib/stringsisabadname.dart
+ios:
+	dart run make.dart ios
 
-# TODO: call this always
-rollbackversions:
-	@which mv
-	mv -f pubspec.yaml.def pubspec.yaml
-	mv -f lib/stringsisabadname.dart.def lib/stringsisabadname.dart
+web:
+	dart run make.dart web
 
-iosapp:
-	@which flutter xcrun mv strip
-	flutter build ios $(IOS_FLAGS)
-	$(BITCODE_STRIP) $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter -r -o tmpfltr
-	mv -f tmpfltr $(IOS_BUILD_DIR)/Frameworks/Flutter.framework/Flutter
-	rm -f $(IOS_BUILD_DIR)/Frameworks/libswift*
-	$(STRIP) $(IOS_STRIP_LIST) || true
+win:
+	dart run make.dart win
 
-ipa:
-	@which cp rm cd zip
-	cp -rp $(IOS_BUILD_DIR) $(TMP_IPA_DIR)
-	rm -rf $(OUTPUT_IPA)
-	cd $(TMP) && zip -r -9 ../$(OUTPUT_IPA) $(IPA_DIR)
+mac:
+	dart run make.dart mac
+
+linux:
+	dart run make.dart linux
 
 # http://www.saurik.com/id/7
 # but its broken...
@@ -91,11 +76,6 @@ cydiainfo:
 	@which sh gzip du grep sed md5sum awk ls
 	VERSION=$(VERSION) BUILD_DIR=$(IOS_BUILD_DIR) DEB=$(OUTPUT_DEB) INPUT=Packages.def OUTPUT=$(OUTPUT_DIR)/Packages sh sedit.sh
 	gzip -9 -c $(OUTPUT_DIR)/Packages > $(OUTPUT_DIR)/Packages.gz
-
-apk:
-	@which flutter mv
-	flutter build apk $(APK_FLAGS)
-	mv build/app/outputs/apk/release/app-release.apk $(OUTPUT_APK)
 
 aab:
 	@which flutter mv
@@ -141,17 +121,7 @@ macdmg:
 	hdiutil create $(TMP_DMG) -ov -srcfolder $(TMP_DMG_DIR) -fs APFS -volname "Install Amplessimus"
 	hdiutil convert $(TMP_DMG) -ov -format UDBZ -o $(OUTPUT_DMG)
 
-mkdirs:
-	@which mkdir
-	mkdir -p $(OUTPUT_DIR) $(TMP_IPA_DIR) $(TMP_DEB_DIR)/DEBIAN $(TMP_DEB_DIR)/Applications $(TMP_DMG_DIR)
-
-cleanartifacts:
-	@which rm
-	rm -rf $(TMP)/*
-
 test:
-	flutter test $(TEST_FLAGS) || make test
-	genhtml -o coverage/html coverage/lcov.info
-	lcov -l coverage/lcov.info
+	dart run make.dart test
 
-.PHONY: replaceversions rollbackversions iosapp ipa deb apk aab webbuild winx64 linux64 macapp macdmg mkdirs cleanartifacts test
+.PHONY: deb aab webbuild winx64 linux64 macapp macdmg test

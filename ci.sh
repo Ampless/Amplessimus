@@ -81,7 +81,6 @@ main() {
 
                 echo "[AmpCI][$(date)] Running the Dart build system for $version_name."
 
-                flutter config --enable-web #--enable-macos-desktop
                 dart run make.dart ci
         } 2>&1 | tee bin/ci.log
 
