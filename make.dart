@@ -2,7 +2,14 @@ import 'dart:io';
 
 final version = '2.9.1337';
 
-system(cmd) async => (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
+system(cmd) async {
+  if (Platform.isWindows) {
+    (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
+  } else {
+    (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
+  }
+}
+
 readfile(path) => File(path).readAsStringSync();
 writefile(path, content) => File(path).writeAsStringSync(content);
 
@@ -72,6 +79,12 @@ apk(flags, output) async {
   mv('build/app/outputs/apk/release/app-release.apk', output);
 }
 
+test(flags) async {
+  await flutter('test $flags');
+  await system('genhtml -o coverage/html coverage/lcov.info');
+  await system('lcov -l coverage/lcov.info');
+}
+
 ci(
   version,
   actualVersion,
@@ -86,20 +99,17 @@ ci(
 }
 
 main(List<String> argv) async {
-  print(argv);
   try {
     final currentCommit = await system('git rev-parse @ | cut -c 1-7');
     final actualVersion = '$version.$currentCommit';
     await flutter('channel master');
     await flutter('upgrade');
     await replaceversions(version, actualVersion);
-    for (final d in [
-      'bin',
-      'tmp/Payload',
-      'tmp/deb/DEBIAN',
-      'tmp/deb/Applications',
-      'tmp/dmg',
-    ]) mkdirs(d);
+    mkdirs('bin');
+    mkdirs('tmp/Payload');
+    mkdirs('tmp/deb/DEBIAN');
+    mkdirs('tmp/deb/Applications');
+    mkdirs('tmp/dmg');
     await ci(
       version,
       actualVersion,
