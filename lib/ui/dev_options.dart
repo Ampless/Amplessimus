@@ -26,21 +26,19 @@ class DevOptionsState extends State<DevOptions>
             children: [
               ampDivider,
               ampSwitchWithText(
-                text: 'Entwickleroptionen aktiviert',
-                value: Prefs.devOptionsEnabled,
-                onChanged: (value) =>
-                    setState(() => Prefs.devOptionsEnabled = value),
+                'Entwickleroptionen aktiviert',
+                Prefs.devOptionsEnabled,
+                (v) => setState(() => Prefs.devOptionsEnabled = v),
               ),
               ampSwitchWithText(
-                text: 'JSON Cache benutzen',
-                value: Prefs.useJsonCache,
-                onChanged: (value) =>
-                    setState(() => Prefs.useJsonCache = value),
+                'JSON Cache benutzen',
+                Prefs.useJsonCache,
+                (v) => setState(() => Prefs.useJsonCache = v),
               ),
               ampSwitchWithText(
-                text: 'Update Notifier',
-                value: Prefs.updatePopup,
-                onChanged: (v) => setState(() => Prefs.updatePopup = v),
+                'Update Notifier',
+                Prefs.updatePopup,
+                (v) => setState(() => Prefs.updatePopup = v),
               ),
               ampDivider,
               ampListTile(

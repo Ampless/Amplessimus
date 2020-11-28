@@ -121,16 +121,21 @@ DropdownButton ampDropdownButton({
 Switch ampSwitch(bool value, Function(bool) onChanged) {
   return Switch(
     activeColor: AmpColors.colorForeground,
+    inactiveTrackColor: AmpColors.lightBackground,
+    activeTrackColor: AmpColors.lightForeground,
+    inactiveThumbColor: AmpColors.colorForeground,
+    hoverColor: Colors.transparent,
+    focusColor: Colors.transparent,
     value: value,
     onChanged: onChanged,
   );
 }
 
-ListTile ampSwitchWithText({
-  @required String text,
-  @required bool value,
-  @required Function(bool) onChanged,
-}) {
+ListTile ampSwitchWithText(
+  String text,
+  bool value,
+  Function(bool) onChanged,
+) {
   return ListTile(
     title: ampText(text),
     trailing: ampSwitch(value, onChanged),

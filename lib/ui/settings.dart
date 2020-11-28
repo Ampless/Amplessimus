@@ -76,9 +76,9 @@ class _SettingsState extends State<Settings> {
         ),
         ampSizedDivider(5),
         ampSwitchWithText(
-          text: Language.current.useForDsb,
-          value: use,
-          onChanged: (value) => setAlState(() => use = value),
+          Language.current.useForDsb,
+          use,
+          (v) => setAlState(() => use = v),
         ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
