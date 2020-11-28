@@ -72,13 +72,6 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    if (Prefs.devOptionsEnabled)
-      ampBigButton(
-        onTap: () => ampChangeScreen(DevOptions(), widget.parent.context),
-        icon: MdiIcons.codeBrackets,
-        text: 'Entwickleroptionen',
-      );
-
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       color: Colors.transparent,
@@ -128,14 +121,18 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampDivider,
-            ampDropdownButton(
-              value: Language.current,
-              itemToDropdownChild: (i) => ampText(i.name),
-              items: Language.all,
-              onChanged: (v) {
-                setState(() => Language.current = v);
-                widget.parent.rebuildDragDown();
-              },
+            ListTile(
+              //TODO: translate
+              leading: ampText('Language'),
+              trailing: ampDropdownButton(
+                value: Language.current,
+                itemToDropdownChild: (i) => ampText(i.name),
+                items: Language.all,
+                onChanged: (v) {
+                  setState(() => Language.current = v);
+                  widget.parent.rebuildDragDown();
+                },
+              ),
             ),
             ampSwitchWithText(
               Language.current.useForDsb,
@@ -147,6 +144,7 @@ class _SettingsState extends State<Settings> {
             ),
             ampDivider,
             ListTile(
+              //TODO: translate
               leading: ampText('Class'),
               trailing: ampRow(
                 [
@@ -194,6 +192,14 @@ class _SettingsState extends State<Settings> {
                 text: Language.current.settingsAppInfo,
               ),
             ),
+            Prefs.devOptionsEnabled
+                ? ampBigButton(
+                    onTap: () =>
+                        ampChangeScreen(DevOptions(), widget.parent.context),
+                    icon: MdiIcons.codeBrackets,
+                    text: 'Entwickleroptionen',
+                  )
+                : ampNull
           ],
         ),
       ),
