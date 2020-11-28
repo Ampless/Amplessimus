@@ -98,7 +98,7 @@ class _SettingsState extends State<Settings> {
                 await dsbUpdateWidget();
                 Future.delayed(
                   Duration(milliseconds: 150),
-                  () => setState(() {}),
+                  widget.parent.rebuild,
                 );
               },
             ),
@@ -119,11 +119,11 @@ class _SettingsState extends State<Settings> {
                 ampInfo('Settings', 'switching design mode');
                 Prefs.altTheme = v;
                 await dsbUpdateWidget();
-                setState(() {});
+                widget.parent.rebuild();
                 scaffoldMessanger.showSnackBar(ampSnackBar(
                   Language.current.changedAppearance,
                   Language.current.show,
-                  () => setState(() => widget.parent.tabController.index = 0),
+                  () => widget.parent.tabController.index = 0,
                 ));
               },
             ),
