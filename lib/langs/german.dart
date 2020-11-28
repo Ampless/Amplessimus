@@ -156,6 +156,7 @@ class German extends Language {
     'bwl': 'Betriebswirtschaftslehre',
     'c': 'Chemie',
     'k': 'Kunst',
+    'ka': 'Katholische Religion',
     'p': 'Physik',
     'w': 'Wirtschaft/Recht',
     'nut': 'Natur und Technik',

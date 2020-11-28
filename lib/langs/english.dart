@@ -155,6 +155,7 @@ class English extends Language {
     'bwl': 'Business Administration',
     'c': 'Chemistry',
     'k': 'Art',
+    'ka': 'Catholic Religion',
     'p': 'Physics',
     'w': 'Economics/Law',
     'nut': '"Nature and Technology"',

@@ -152,6 +152,8 @@ class Czech extends Language {
         'bwl': 'Obchodní administrativa',
         'c': 'Chemie',
         'k': 'Výtvarná výchova',
+        //TODO: see above
+        'ka': 'třída katolického náboženství',
         'p': 'Fyzika',
         'w': 'Ekonomika a právo',
         'nut': 'Příroda a technika',
