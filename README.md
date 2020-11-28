@@ -51,6 +51,9 @@ really hard to learn it. If you know, how to build Flutter apps for
 Cydia, please contact us at `ampless@chrissx.de`.
 
 ## <a name="build"></a> Building
+_This section is heavily broken, because we are right now replacing
+the oldschool Makefile with a new and better build system._
+
 Building on Windows is a mess, because Windows is a mess. Luckily
 Windows will long-term be replaced by the Unixes. So compiling for
 everything except Windows will assume you are running macOS or Linux,

@@ -95,8 +95,8 @@ void toggleDarkModePressed() {
   }
 }
 
-int get currentThemeId => _getInt('theme', 0);
-set currentThemeId(int i) => _prefs.setInt('theme', i);
+bool get altTheme => _getBool('alttheme', false);
+set altTheme(bool i) => _prefs.setBool('alttheme', i);
 String get username => _getString('dsbuser', '');
 set username(String s) => _prefs.setString('dsbuser', s);
 String get password => _getString('dsbpass', '');

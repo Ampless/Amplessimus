@@ -21,79 +21,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  Future<Null> selectClassDialog() {
-    var letter = Prefs.char;
-    var grade = Prefs.grade;
-    if (letter.isEmpty || !dsbLetters.contains(letter)) letter = dsbLetters[0];
-    if (grade.isEmpty || !dsbGrades.contains(grade)) grade = dsbGrades[0];
-    return ampDialog(
-      context: context,
-      title: Language.current.selectClass,
-      children: (alertContext, setAlState) => [
-        ampDropdownButton(
-          value: grade,
-          items: dsbGrades,
-          onChanged: (value) => setAlState(() {
-            grade = value;
-            try {
-              if (int.parse(value) > 10) letter = '';
-              // ignore: empty_catches
-            } catch (e) {}
-          }),
-        ),
-        ampPadding(10),
-        ampDropdownButton(
-          value: letter,
-          items: dsbLetters,
-          onChanged: (value) => setAlState(() => letter = value),
-        ),
-      ],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
-        context,
-        save: () async {
-          Prefs.grade = grade;
-          Prefs.char = letter;
-          unawaited(widget.parent.rebuildDragDown());
-          Navigator.pop(context);
-        },
-      ),
-      widgetBuilder: ampRow,
-    );
-  }
-
-  Future<Null> changeLanguageDialog() {
-    var lang = Language.current;
-    var use = Prefs.dsbUseLanguage;
-    return ampDialog(
-      context: context,
-      title: Language.current.changeLanguage,
-      children: (alertContext, setAlState) => [
-        ampDropdownButton(
-          value: lang,
-          itemToDropdownChild: (i) => ampText(i.name),
-          items: Language.all,
-          onChanged: (value) => setAlState(() => lang = value),
-        ),
-        ampSizedDivider(5),
-        ampSwitchWithText(
-          Language.current.useForDsb,
-          use,
-          (v) => setAlState(() => use = v),
-        ),
-      ],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
-        context,
-        save: () async {
-          Language.current = lang;
-          Prefs.dsbUseLanguage = use;
-          unawaited(widget.parent.rebuildDragDown());
-          Navigator.pop(context);
-        },
-      ),
-      widgetBuilder: ampColumn,
-    );
-  }
-
   Future<Null> credentialDialog() {
     final usernameInputFormKey = GlobalKey<FormFieldState>();
     final passwordInputFormKey = GlobalKey<FormFieldState>();
@@ -145,90 +72,12 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    final buttons = <Widget>[
-      ampBigButton(
-        onTap: () {
-          Prefs.toggleDarkModePressed();
-          Prefs.useSystemTheme = false;
-          AmpColors.switchMode();
-          dsbUpdateWidget();
-          Future.delayed(
-            Duration(milliseconds: 150),
-            () => setState(() {}),
-          );
-        },
-        icon: AmpColors.isDarkMode
-            ? MdiIcons.lightbulbOn
-            : MdiIcons.lightbulbOnOutline,
-        text: AmpColors.isDarkMode
-            ? Language.current.lightsOn
-            : Language.current.lightsOff,
-      ),
-      ampBigButton(
-        onTap: () async {
-          ampInfo('Settings', 'switching design mode');
-          Prefs.currentThemeId = (Prefs.currentThemeId + 1) % 2;
-          await dsbUpdateWidget();
-          setState(() {});
-          scaffoldMessanger.showSnackBar(ampSnackBar(
-            Language.current.changedAppearance,
-            Language.current.show,
-            () => setState(() => widget.parent.tabController.index = 0),
-          ));
-        },
-        icon: AmpColors.isDarkMode
-            ? MdiIcons.clipboardList
-            : MdiIcons.clipboardListOutline,
-        text: Language.current.changeAppearance,
-      ),
-      ampBigButton(
-        onTap: () async {
-          Prefs.useSystemTheme = !Prefs.useSystemTheme;
-          widget.parent.checkBrightness();
-        },
-        icon: MdiIcons.brightness6,
-        text: Prefs.useSystemTheme
-            ? Language.current.lightsNoSystem
-            : Language.current.lightsUseSystem,
-      ),
-      ampBigButton(
-        onTap: () => changeLanguageDialog(),
-        icon: MdiIcons.translate,
-        text: Language.current.changeLanguage,
-      ),
-      ampBigButton(
-        onTap: () => credentialDialog(),
-        icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
-        text: Language.current.changeLogin,
-      ),
-      ampBigButton(
-        onTap: () => selectClassDialog(),
-        icon: AmpColors.isDarkMode ? MdiIcons.school : MdiIcons.schoolOutline,
-        text: Language.current.selectClass,
-      ),
-      ampBigButton(
-        onTap: () => showAboutDialog(
-          context: context,
-          applicationName: AmpStrings.appTitle,
-          applicationVersion: AmpStrings.version,
-          applicationIcon: SvgPicture.asset('assets/logo.svg', height: 40),
-          children: [Text(Language.current.appInfo)],
-          //TODO: flame flutter people for not letting me set the
-          //background color
-        ),
-        icon: AmpColors.isDarkMode
-            ? MdiIcons.folderInformation
-            : MdiIcons.folderInformationOutline,
-        text: Language.current.settingsAppInfo,
-      ),
-    ];
-
     if (Prefs.devOptionsEnabled)
-      buttons.add(ampBigButton(
+      ampBigButton(
         onTap: () => ampChangeScreen(DevOptions(), widget.parent.context),
         icon: MdiIcons.codeBrackets,
         text: 'Entwickleroptionen',
-      ));
+      );
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
@@ -236,9 +85,116 @@ class _SettingsState extends State<Settings> {
       child: Scaffold(
         appBar: ampAppBar(Language.current.settings),
         backgroundColor: Colors.transparent,
-        body: GridView.count(
-          crossAxisCount: 2,
-          children: buttons,
+        body: ampColumn(
+          [
+            ampSwitchWithText(
+              //TODO: translate
+              'Dark Mode',
+              AmpColors.isDarkMode,
+              (v) async {
+                Prefs.toggleDarkModePressed();
+                Prefs.useSystemTheme = false;
+                AmpColors.isDarkMode = v;
+                await dsbUpdateWidget();
+                Future.delayed(
+                  Duration(milliseconds: 150),
+                  () => setState(() {}),
+                );
+              },
+            ),
+            ampSwitchWithText(
+              //TODO: see above
+              'Lights use system?',
+              Prefs.useSystemTheme,
+              (v) {
+                Prefs.useSystemTheme = v;
+                widget.parent.checkBrightness();
+              },
+            ),
+            ampSwitchWithText(
+              //TODO: see above
+              'Alternative appearance',
+              Prefs.altTheme,
+              (v) async {
+                ampInfo('Settings', 'switching design mode');
+                Prefs.altTheme = v;
+                await dsbUpdateWidget();
+                setState(() {});
+                scaffoldMessanger.showSnackBar(ampSnackBar(
+                  Language.current.changedAppearance,
+                  Language.current.show,
+                  () => setState(() => widget.parent.tabController.index = 0),
+                ));
+              },
+            ),
+            ampDivider,
+            ampDropdownButton(
+              value: Language.current,
+              itemToDropdownChild: (i) => ampText(i.name),
+              items: Language.all,
+              onChanged: (v) {
+                setState(() => Language.current = v);
+                widget.parent.rebuildDragDown();
+              },
+            ),
+            ampSwitchWithText(
+              Language.current.useForDsb,
+              Prefs.dsbUseLanguage,
+              (v) {
+                setState(() => Prefs.dsbUseLanguage = v);
+                widget.parent.rebuildDragDown();
+              },
+            ),
+            ampDivider,
+            ListTile(
+              leading: ampText('Class'),
+              trailing: ampRow(
+                [
+                  ampDropdownButton(
+                    value: Prefs.grade,
+                    items: dsbGrades,
+                    onChanged: (value) => setState(() {
+                      Prefs.grade = value;
+                      try {
+                        if (int.parse(value) > 10) Prefs.char = '';
+                        // ignore: empty_catches
+                      } catch (e) {}
+                    }),
+                  ),
+                  ampPadding(10),
+                  ampDropdownButton(
+                    value: Prefs.char,
+                    items: dsbLetters,
+                    onChanged: (value) => setState(() => Prefs.char = value),
+                  ),
+                ],
+              ),
+            ),
+            ampDivider,
+            ListTile(
+              leading: ampBigButton(
+                onTap: () => credentialDialog(),
+                icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
+                text: Language.current.changeLogin,
+              ),
+              trailing: ampBigButton(
+                onTap: () => showAboutDialog(
+                  context: context,
+                  applicationName: AmpStrings.appTitle,
+                  applicationVersion: AmpStrings.version,
+                  applicationIcon:
+                      SvgPicture.asset('assets/logo.svg', height: 40),
+                  children: [Text(Language.current.appInfo)],
+                  //TODO: flame flutter people for not letting me set the
+                  //background color
+                ),
+                icon: AmpColors.isDarkMode
+                    ? MdiIcons.folderInformation
+                    : MdiIcons.folderInformationOutline,
+                text: Language.current.settingsAppInfo,
+              ),
+            ),
+          ],
         ),
       ),
     );

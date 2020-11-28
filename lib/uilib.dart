@@ -298,26 +298,23 @@ Future ampChangeScreen(
 ]) =>
     push(context, MaterialPageRoute(builder: (_) => w));
 
-Widget ampList(List<Widget> children, [int themeId]) {
-  themeId ??= Prefs.currentThemeId;
-  switch (themeId) {
-    case 0:
-      return Card(
-        elevation: 0,
-        color: AmpColors.lightBackground,
-        child: ampColumn(children),
-      );
-    case 1:
-      return Container(
-        margin: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: AmpColors.colorForeground),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: ampColumn(children),
-      );
-    default:
-      return ampList(children, 0);
+Widget ampList(List<Widget> children, [bool altTheme]) {
+  altTheme ??= Prefs.altTheme;
+  if (!altTheme) {
+    return Card(
+      elevation: 0,
+      color: AmpColors.lightBackground,
+      child: ampColumn(children),
+    );
+  } else {
+    return Container(
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: AmpColors.colorForeground),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ampColumn(children),
+    );
   }
 }
 

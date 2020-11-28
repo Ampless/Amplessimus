@@ -16,7 +16,7 @@ Widget dsbRenderPlans(
   bool oneClassOnly,
   String char,
   String grade,
-  int themeId,
+  bool altTheme,
 ) {
   ampInfo('DSB', 'Rendering plans: $plans');
   final widgets = <Widget>[];
@@ -55,7 +55,7 @@ Widget dsbRenderPlans(
         ),
       ]),
     ));
-    widgets.add(ampList(dayWidgets, themeId));
+    widgets.add(ampList(dayWidgets, altTheme));
   }
   widgets.add(ampPadding(12));
   final column = ampColumn(widgets);
@@ -79,7 +79,7 @@ Future<Null> dsbUpdateWidget(
     bool oneClassOnly,
     String grade,
     String char,
-    int themeId,
+    bool altTheme,
     Language lang}) async {
   httpPost ??= httpPostFunc;
   httpGet ??= httpGetFunc;
@@ -92,7 +92,7 @@ Future<Null> dsbUpdateWidget(
   oneClassOnly ??= Prefs.oneClassOnly;
   grade ??= Prefs.grade;
   char ??= Prefs.char;
-  themeId ??= Prefs.currentThemeId;
+  altTheme ??= Prefs.altTheme;
   try {
     if (username.isEmpty || password.isEmpty) throw lang.noLogin;
     final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
@@ -102,13 +102,13 @@ Future<Null> dsbUpdateWidget(
             language: dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (oneClassOnly) plans = sortByLesson(searchClass(plans, grade, char));
-    dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, themeId);
+    dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, altTheme);
     dsbPlans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-        child: ampList([ampListTile(errorString(e))], themeId),
+        child: ampList([ampListTile(errorString(e))], altTheme),
         padding: EdgeInsets.only(top: 15),
       ),
     );
