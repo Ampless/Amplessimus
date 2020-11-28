@@ -9,14 +9,14 @@ gh_create_release() {
         RAW="$(curl -X POST '-#' -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 --data "{
-                         \"tag_name\": \"$2\",
-                         \"target_commitish\": \"$1\",
-                         \"name\": \"$2\",
-                         \"body\": \"This is an automatic release by the ci.\\n\\n###### Changelog\\n\\n\\n###### Known Problems\\n\\n\",
-                         \"draft\": false,
-                         \"prerelease\": true
-                        }" \
-               https://api.github.com/repos/Ampless/Amplessimus/releases)"
+                        \"tag_name\": \"$2\",
+                        \"target_commitish\": \"$1\",
+                        \"name\": \"$2\",
+                        \"body\": \"This is an automatic release by the ci.\\n\\n###### Changelog\\n\\n\\n###### Known Problems\\n\\n\",
+                        \"draft\": false,
+                        \"prerelease\": true
+                }" \
+                https://api.github.com/repos/Ampless/Amplessimus/releases)"
         UPLOAD_URL=$(echo "$RAW" | grep '"upload_url":' | head -n 1 | cut -d: -f2- | sed 's/^.*"\(.*\)".*$/\1/' | sed 's/{?name,label}//')
         echo "[GitHub] Created release: $UPLOAD_URL" >&2
         echo "$UPLOAD_URL"
@@ -31,7 +31,7 @@ gh_upload_binary() {
         curl -X POST -'#' -u "$(cat /etc/ampci.creds)" \
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Content-Type: application/octet-stream" \
-                --data-binary "@$2" "$(echo "$1" | sed "s/$/?name=$2/")"
+                --data-binary @$2 "$(echo "$1" | sed "s/$/?name=$2/")"
         echo
         echo "[GitHub] Done uploading: $2"
 }
