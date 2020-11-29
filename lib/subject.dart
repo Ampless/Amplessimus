@@ -10,6 +10,33 @@ bool _numAt(String s, int i) {
   return cu >= _zero && cu <= _nine;
 }
 
+//TODO: reverse the key<->value order and make a bit more agressive
+const fullAbbreviations = {
+  'spo': 'sport',
+  'e': 'englisch',
+  'ev': 'evangelisch',
+  'd': 'deutsch',
+  'i': 'informatik',
+  'g': 'geschichte',
+  'geo': 'geografie',
+  'l': 'latein',
+  'it': 'italienisch',
+  'f': 'französisch',
+  'so': 'sozialkunde',
+  'sk': 'sozialkunde',
+  'm': 'mathematik',
+  'mu': 'musik',
+  'b': 'biologie',
+  'bwl': 'bwl',
+  'c': 'chemie',
+  'k': 'kunst',
+  'ka': 'katholisch',
+  'p': 'physik',
+  'w': 'wirtschaft',
+  'nut': 'nut',
+  'spr': 'sprechstunde',
+};
+
 String realSubject(String subject, [Language lang]) {
   lang ??= Language.current;
   if (subject == null) return null;
@@ -28,7 +55,13 @@ String realSubject(String subject, [Language lang]) {
   final sub = subject.toLowerCase();
   var s = subject;
   final lut = lang.subjectLut;
-  for (final key in lut.keys) if (sub.startsWith(key)) s = lut[key];
+  for (final key in lut.keys) {
+    if (sub.startsWith(key) &&
+        fullAbbreviations[key].length <= sub.length &&
+        fullAbbreviations[key].startsWith(sub)) {
+      s = lut[key];
+    }
+  }
 
   return s;
 }

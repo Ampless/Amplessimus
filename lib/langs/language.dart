@@ -61,6 +61,7 @@ abstract class Language {
   String catchDsbGetData(dynamic e);
   LinkedHashMap<String, String> get subjectLut;
 
+  //why tf doesnt this break?!
   static Language _current = fromCode(Prefs.savedLangCode);
   static Language get current => _current;
   static set current(Language l) {
