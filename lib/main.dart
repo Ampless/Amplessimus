@@ -165,7 +165,7 @@ class AmpHomePageState extends State<AmpHomePage>
         lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       final containers = [
-        //TODO: make ptr work on the whole page (Expanded?)
+        //ptr doesnt seem to always work everywhere (might have to consider Expanded)
         RefreshIndicator(
           key: refreshKey,
           child: Scaffold(

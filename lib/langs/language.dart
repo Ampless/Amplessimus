@@ -13,10 +13,8 @@ abstract class Language {
   //
   //these are all of the translations hardcoded into the language classes
   //
-  String get lightsOn;
-  String get lightsOff;
+  String get darkMode;
   String get lightsUseSystem;
-  String get lightsNoSystem;
   String get changeAppearance;
   String get changeLanguage;
   String get changeLogin;
@@ -30,8 +28,6 @@ abstract class Language {
   String get appInfo;
   String get start;
   String get settings;
-  String get dsbListErrorTitle;
-  String get dsbListErrorSubtitle;
   String get noLogin;
   String get allClasses;
   String get empty;
@@ -39,7 +35,6 @@ abstract class Language {
   String get widgetValidatorInvalid;
   String get done;
   String get timetable;
-  String get darkMode;
   String get setupTimetable;
   String get setupTimetableTitle;
   String get noSubs;

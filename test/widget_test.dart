@@ -64,13 +64,9 @@ void main() {
       await tester.tap(find.text(w));
       await tester.pumpAndSettle();
     }
-    for (var i = 0; i < 5; i++) {
-      await tester.tap(find.text(Language.current.lightsOn));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(Language.current.lightsOff));
+    for (var i = 0; i < 10; i++) {
+      await tester.tap(find.text(Language.current.darkMode));
       await tester.pumpAndSettle();
     }
-    await tester.tap(find.text('Entwickleroptionen'));
-    await tester.pumpAndSettle();
   });
 }

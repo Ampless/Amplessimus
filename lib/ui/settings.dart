@@ -81,8 +81,7 @@ class _SettingsState extends State<Settings> {
         body: ListView(
           children: [
             ampSwitchWithText(
-              //TODO: translate
-              'Dark Mode',
+              Language.current.darkMode,
               AmpColors.isDarkMode,
               (v) async {
                 Prefs.toggleDarkModePressed();
@@ -96,8 +95,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampSwitchWithText(
-              //TODO: see above
-              'Lights use system?',
+              Language.current.lightsUseSystem,
               Prefs.useSystemTheme,
               (v) {
                 Prefs.useSystemTheme = v;
@@ -123,7 +121,7 @@ class _SettingsState extends State<Settings> {
             ampDivider,
             ListTile(
               //TODO: translate
-              leading: ampText('Language'),
+              leading: ampText(Language.current.changeLanguage),
               trailing: ampDropdownButton(
                 value: Language.current,
                 itemToDropdownChild: (i) => ampText(i.name),
@@ -145,7 +143,7 @@ class _SettingsState extends State<Settings> {
             ampDivider,
             ListTile(
               //TODO: translate
-              leading: ampText('Class'),
+              leading: ampText(Language.current.selectClass),
               trailing: ampRow(
                 [
                   ampDropdownButton(

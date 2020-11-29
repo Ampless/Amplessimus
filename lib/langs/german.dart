@@ -34,19 +34,10 @@ class German extends Language {
   String get changeLoginPopup => 'DSBMobile Daten';
 
   @override
-  String get lightsOff => 'Licht aus';
-
-  @override
-  String get lightsOn => 'Licht an';
-
-  @override
   String get selectClass => 'Klasse auswählen';
 
   @override
-  String get lightsNoSystem => 'System-Aussehen\nnicht verwenden';
-
-  @override
-  String get lightsUseSystem => 'System-Aussehen\nverwenden';
+  String get lightsUseSystem => 'System-Design verwenden';
 
   @override
   String get filterTimetables => 'Stundenplan filtern';
@@ -71,13 +62,6 @@ class German extends Language {
   String catchDsbGetData(dynamic e) {
     return 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
   }
-
-  @override
-  String get dsbListErrorSubtitle =>
-      'Bitte an Ampless melden (https://ampless.chrissx.de/amplessimus)';
-
-  @override
-  String get dsbListErrorTitle => 'Amplessimus-Fehler';
 
   @override
   String get noLogin => 'Keine Login-Daten eingetragen.';

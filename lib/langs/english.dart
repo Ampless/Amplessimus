@@ -34,19 +34,10 @@ class English extends Language {
   String get changeLoginPopup => 'DSBMobile Login';
 
   @override
-  String get lightsOff => 'Lights off';
-
-  @override
-  String get lightsOn => 'Lights on';
-
-  @override
   String get selectClass => 'Select class';
 
   @override
-  String get lightsNoSystem => 'Don\'t use\nsystem appearance';
-
-  @override
-  String get lightsUseSystem => 'Use\nsystem appearance';
+  String get lightsUseSystem => 'Use system design';
 
   @override
   String dsbSubtoSubtitle(Substitution sub) {
@@ -61,13 +52,6 @@ class English extends Language {
   @override
   String catchDsbGetData(dynamic e) =>
       'Please check your internet connection. (Error: $e)';
-
-  @override
-  String get dsbListErrorSubtitle =>
-      'Please report to Ampless (https://ampless.chrissx.de/amplessimus)';
-
-  @override
-  String get dsbListErrorTitle => 'Amplessimus Error';
 
   @override
   String get noLogin => 'No login data entered.';

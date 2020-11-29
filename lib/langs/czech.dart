@@ -34,16 +34,7 @@ class Czech extends Language {
   String get changeLoginPopup => 'Údaje k DSBMobile';
 
   @override
-  String get lightsOff => 'zhasnout';
-
-  @override
-  String get lightsOn => 'rozsvítit';
-
-  @override
   String get selectClass => 'zvolit třídu';
-
-  @override
-  String get lightsNoSystem => 'Nepoužívat vzhled systému';
 
   @override
   String get lightsUseSystem => 'použít vzhled systému';
@@ -65,13 +56,6 @@ class Czech extends Language {
 
   @override
   String catchDsbGetData(e) => 'Ověřte zda jste připojeni k síti. (Fehler: $e)';
-
-  @override
-  String get dsbListErrorSubtitle =>
-      'prosím přihlašte se na ampless (ampless.chrissx.de)';
-
-  @override
-  String get dsbListErrorTitle => 'chyba amplessimu';
 
   @override
   String get noLogin => 'nebyly zadány žádné přihlašovací údaje.';
