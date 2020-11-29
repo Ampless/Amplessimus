@@ -197,8 +197,8 @@ class AmpHomePageState extends State<AmpHomePage>
           children: containers,
         ),
         bottomNavigationBar: ampTabBar(tabController, [
-          ampTab(Icons.home, Language.current.start),
-          ampTab(Icons.settings, Language.current.settings),
+          ampTab(Icons.home_outlined, Language.current.start),
+          ampTab(Icons.settings_outlined, Language.current.settings),
         ]),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ));

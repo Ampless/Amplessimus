@@ -95,8 +95,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                           setState(() => _passwordHidden = !_passwordHidden);
                         },
                         icon: _passwordHidden
-                            ? ampIcon(Icons.visibility)
-                            : ampIcon(Icons.visibility_off),
+                            ? ampIcon(Icons.visibility_outlined)
+                            : ampIcon(Icons.visibility_off_outlined),
                       ),
                       controller: _passwordInputFormController,
                       key: passwordInputFormKey,
@@ -160,7 +160,7 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
               }
             },
             label: Language.current.save,
-            icon: Icons.save,
+            icon: Icons.save_outlined,
           ),
         ),
       ),

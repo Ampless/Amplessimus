@@ -42,14 +42,14 @@ Widget dsbRenderPlans(
       title: Row(children: [
         ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
         IconButton(
-          icon: ampIcon(Icons.info),
+          icon: ampIcon(Icons.info_outline),
           tooltip: plan.date.split(' ').first,
           onPressed: () {
             scaffoldMessanger.showSnackBar(ampSnackBar(plan.date));
           },
         ),
         IconButton(
-          icon: ampIcon(Icons.open_in_new),
+          icon: ampIcon(Icons.open_in_new_outlined),
           tooltip: Language.current.openPlanInBrowser,
           onPressed: () => launch(plan.url),
         ),

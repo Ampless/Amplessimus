@@ -9,7 +9,7 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+//import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pedantic/pedantic.dart';
 
 class Settings extends StatefulWidget {
@@ -46,8 +46,8 @@ class _SettingsState extends State<Settings> {
           suffixIcon: IconButton(
             onPressed: () => setAlState(() => passwordHidden = !passwordHidden),
             icon: passwordHidden
-                ? ampIcon(Icons.visibility)
-                : ampIcon(Icons.visibility_off),
+                ? ampIcon(Icons.visibility_outlined)
+                : ampIcon(Icons.visibility_off_outlined),
           ),
           controller: passwordInputFormController,
           key: passwordInputFormKey,
@@ -171,8 +171,7 @@ class _SettingsState extends State<Settings> {
               children: [
                 ampBigButton(
                   onTap: () => credentialDialog(),
-                  icon:
-                      AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
+                  icon: Icons.vpn_key_outlined,
                   text: Language.current.changeLogin,
                 ),
                 ampBigButton(
@@ -186,9 +185,7 @@ class _SettingsState extends State<Settings> {
                     //TODO: flame flutter people for not letting me set the
                     //background color
                   ),
-                  icon: AmpColors.isDarkMode
-                      ? MdiIcons.folderInformation
-                      : MdiIcons.folderInformationOutline,
+                  icon: Icons.info_outline,
                   text: Language.current.settingsAppInfo,
                 ),
               ],
