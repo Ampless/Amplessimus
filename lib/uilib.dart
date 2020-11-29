@@ -164,22 +164,19 @@ Widget ampBigButton({
   return visible
       ? Card(
           elevation: 0,
-          shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(32.0))),
           color: Colors.transparent,
           child: InkWell(
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            customBorder: RoundedRectangleBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(32.0))),
             onTap: onTap,
             child: ampColumn(
               [
-                ampPadding(18),
+                ampPadding(8),
                 ampIcon(icon, size: 50),
                 ampPadding(8),
                 ampText(text, textAlign: TextAlign.center),
+                ampPadding(8),
               ],
             ),
           ),

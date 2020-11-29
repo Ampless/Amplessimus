@@ -90,6 +90,9 @@ ipa(buildDir, output) async {
   await system('cd tmp && zip -r -9 ../$output Payload');
 }
 
+//TODO:
+deb() async {}
+
 apk() async {
   await flutter('build apk $apkFlags');
   mv('build/app/outputs/apk/release/app-release.apk', 'bin/$actualVersion.apk');
@@ -109,7 +112,7 @@ test() async {
 ios() async {
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.ipa');
-  //TODO: deb
+  await deb();
 }
 
 android() async {

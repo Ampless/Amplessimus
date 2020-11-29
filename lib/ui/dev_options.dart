@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/main.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
@@ -18,86 +16,73 @@ class DevOptions extends StatefulWidget {
 class DevOptionsState extends State<DevOptions>
     with SingleTickerProviderStateMixin {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: ampAppBar('Entwickleroptionen'),
-        backgroundColor: Colors.transparent,
-        body: ampPageBase(
-          ListView(
-            children: [
-              ampDivider,
-              ampSwitchWithText(
-                'Entwickleroptionen aktiviert',
-                Prefs.devOptionsEnabled,
-                (v) => setState(() => Prefs.devOptionsEnabled = v),
-              ),
-              ampSwitchWithText(
-                'JSON Cache benutzen',
-                Prefs.useJsonCache,
-                (v) => setState(() => Prefs.useJsonCache = v),
-              ),
-              ampSwitchWithText(
-                'Update Notifier',
-                Prefs.updatePopup,
-                (v) => setState(() => Prefs.updatePopup = v),
-              ),
-              ampDivider,
-              ampListTile(
-                'Refreshtimer (Minuten)',
-                trailing: '${Prefs.timer}',
-                onTap: () => showInputTimerDialog(context),
-              ),
-              ampDivider,
-              ampPadding(5),
-              ampRaisedButton('Print Cache', Prefs.listCache),
-              ampRaisedButton('Clear Cache', Prefs.clearCache),
-              ampRaisedButton(
-                'Set Cache to Kekw',
-                () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"25.9.2020 Freitag\",\"subs\":['
-                    '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
-                    '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
-                    '{\"day\":0,\"date\":\"28.9.2020 Montag\",\"subs\":['
-                    '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                    '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-                    '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Albl\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-                    '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Fikrle\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-                    '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
-                    '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
-              ),
-              ampRaisedButton(
-                  'Set Cache to Input', () => showCacheDialog(context)),
-              ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
-              ampRaisedButton(
-                'App-Daten löschen',
-                () {
-                  ampDialog(
-                    title: 'App-Daten löschen',
-                    context: context,
-                    widgetBuilder: ampRow,
-                    children: (_, __) => [ampText('Sicher?')],
-                    actions: (context) => ampDialogButtonsSaveAndCancel(
-                      context,
-                      save: () async {
-                        await Prefs.clear();
-                        exit(0);
-                      },
-                    ),
-                  );
+  Widget build(BuildContext context) {
+    if (!Prefs.devOptionsEnabled) return ampNull;
+    return ampColumn(
+      [
+        ampDivider,
+        ampSwitchWithText(
+          'Entwickleroptionen aktiviert',
+          Prefs.devOptionsEnabled,
+          (v) => setState(() => Prefs.devOptionsEnabled = v),
+        ),
+        ampSwitchWithText(
+          'JSON Cache benutzen',
+          Prefs.useJsonCache,
+          (v) => setState(() => Prefs.useJsonCache = v),
+        ),
+        ampSwitchWithText(
+          'Update Notifier',
+          Prefs.updatePopup,
+          (v) => setState(() => Prefs.updatePopup = v),
+        ),
+        ampDivider,
+        ampListTile(
+          'Refreshtimer (Minuten)',
+          trailing: '${Prefs.timer}',
+          onTap: () => showInputTimerDialog(context),
+        ),
+        ampDivider,
+        ampPadding(5),
+        ampRaisedButton('Print Cache', Prefs.listCache),
+        ampRaisedButton('Clear Cache', Prefs.clearCache),
+        ampRaisedButton(
+          'Set Cache to Kekw',
+          () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"25.9.2020 Freitag\",\"subs\":['
+              '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
+              '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
+              '{\"day\":0,\"date\":\"28.9.2020 Montag\",\"subs\":['
+              '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
+              '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
+              '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Albl\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+              '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Fikrle\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
+              '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
+              '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
+        ),
+        ampRaisedButton('Set Cache to Input', () => showCacheDialog(context)),
+        ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
+        ampRaisedButton(
+          'App-Daten löschen',
+          () {
+            ampDialog(
+              title: 'App-Daten löschen',
+              context: context,
+              widgetBuilder: ampRow,
+              children: (_, __) => [ampText('Sicher?')],
+              actions: (context) => ampDialogButtonsSaveAndCancel(
+                context,
+                save: () async {
+                  await Prefs.clear();
+                  exit(0);
                 },
               ),
-              ampLogWidget,
-            ],
-          ),
-        ),
-        floatingActionButton: ampFab(
-          onPressed: () {
-            dsbUpdateWidget();
-            //TODO: get rid of the 1 somehow
-            ampChangeScreen(AmpHomePage(1), context);
+            );
           },
-          label: 'zurück',
-          icon: Icons.arrow_back,
         ),
-      );
+        ampLogWidget,
+      ],
+    );
+  }
 
   void showCacheDialog(BuildContext context) {
     final inputFormKey = GlobalKey<FormFieldState>();

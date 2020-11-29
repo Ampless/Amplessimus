@@ -78,8 +78,8 @@ class _SettingsState extends State<Settings> {
       child: Scaffold(
         appBar: ampAppBar(Language.current.settings),
         backgroundColor: Colors.transparent,
-        body: ampColumn(
-          [
+        body: ListView(
+          children: [
             ampSwitchWithText(
               //TODO: translate
               'Dark Mode',
@@ -159,7 +159,7 @@ class _SettingsState extends State<Settings> {
                       } catch (e) {}
                     }),
                   ),
-                  ampPadding(10),
+                  ampPadding(8),
                   ampDropdownButton(
                     value: Prefs.char,
                     items: dsbLetters,
@@ -169,38 +169,36 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ampDivider,
-            ListTile(
-              leading: ampBigButton(
-                onTap: () => credentialDialog(),
-                icon: AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
-                text: Language.current.changeLogin,
-              ),
-              trailing: ampBigButton(
-                onTap: () => showAboutDialog(
-                  context: context,
-                  applicationName: AmpStrings.appTitle,
-                  applicationVersion: AmpStrings.version,
-                  applicationIcon:
-                      SvgPicture.asset('assets/logo.svg', height: 40),
-                  children: [Text(Language.current.appInfo)],
-                  //TODO: flame flutter people for not letting me set the
-                  //background color
+            Row(
+              children: [
+                ampBigButton(
+                  onTap: () => credentialDialog(),
+                  icon:
+                      AmpColors.isDarkMode ? MdiIcons.key : MdiIcons.keyOutline,
+                  text: Language.current.changeLogin,
                 ),
-                icon: AmpColors.isDarkMode
-                    ? MdiIcons.folderInformation
-                    : MdiIcons.folderInformationOutline,
-                text: Language.current.settingsAppInfo,
-              ),
+                ampBigButton(
+                  onTap: () => showAboutDialog(
+                    context: context,
+                    applicationName: AmpStrings.appTitle,
+                    applicationVersion: AmpStrings.version,
+                    applicationIcon:
+                        SvgPicture.asset('assets/logo.svg', height: 40),
+                    children: [Text(Language.current.appInfo)],
+                    //TODO: flame flutter people for not letting me set the
+                    //background color
+                  ),
+                  icon: AmpColors.isDarkMode
+                      ? MdiIcons.folderInformation
+                      : MdiIcons.folderInformationOutline,
+                  text: Language.current.settingsAppInfo,
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
             ),
-            Prefs.devOptionsEnabled
-                ? ampBigButton(
-                    onTap: () =>
-                        ampChangeScreen(DevOptions(), widget.parent.context),
-                    icon: MdiIcons.codeBrackets,
-                    text: 'Entwickleroptionen',
-                  )
-                : ampNull
+            DevOptions(),
           ],
+          scrollDirection: Axis.vertical,
         ),
       ),
     );
