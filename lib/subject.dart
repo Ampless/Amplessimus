@@ -10,32 +10,40 @@ bool _numAt(String s, int i) {
   return cu >= _zero && cu <= _nine;
 }
 
-//TODO: reverse the key<->value order and make a bit more agressive
+//TODO: make a bit more agressive
 const fullAbbreviations = {
-  'spo': 'sport',
-  'e': 'englisch',
-  'ev': 'evangelisch',
-  'd': 'deutsch',
-  'i': 'informatik',
-  'g': 'geschichte',
-  'geo': 'geografie',
-  'l': 'latein',
-  'it': 'italienisch',
-  'f': 'französisch',
-  'so': 'sozialkunde',
-  'sk': 'sozialkunde',
-  'm': 'mathematik',
-  'mu': 'musik',
-  'b': 'biologie',
+  'sport': 'spo',
+  'englisch': 'e',
+  'evangelisch': 'ev',
+  'deutsch': 'd',
+  'informatik': 'i',
+  'geschichte': 'g',
+  'geografie': 'geo',
+  'latein': 'l',
+  'italienisch': 'it',
+  'französisch': 'f',
+  'sozialkunde': 'so',
+  'mathematik': 'm',
+  'musik': 'mu',
+  'biologie': 'b',
   'bwl': 'bwl',
-  'c': 'chemie',
-  'k': 'kunst',
-  'ka': 'katholisch',
-  'p': 'physik',
-  'w': 'wirtschaft',
+  'chemie': 'c',
+  'kunst': 'k',
+  'katholisch': 'ka',
+  'physik': 'p',
+  'wirtschaft': 'w',
   'nut': 'nut',
-  'spr': 'sprechstunde',
+  'sprechstunde': 'spr',
 };
+
+bool abbreviationValid(String abbr, String sub) {
+  fullAbbreviations.forEach((key, value) {
+    if (value == abbr) {
+      return key.length >= sub.length && key.startsWith(sub);
+    }
+  });
+  return true;
+}
 
 String realSubject(String subject, [Language lang]) {
   lang ??= Language.current;
@@ -56,9 +64,7 @@ String realSubject(String subject, [Language lang]) {
   var s = subject;
   final lut = lang.subjectLut;
   for (final key in lut.keys) {
-    if (sub.startsWith(key) &&
-        fullAbbreviations[key].length >= sub.length &&
-        fullAbbreviations[key].startsWith(sub)) {
+    if (sub.startsWith(key) && abbreviationValid(key, sub)) {
       s = lut[key];
     }
   }
