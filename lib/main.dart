@@ -9,7 +9,7 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/ui/settings.dart';
 import 'package:Amplessimus/ui/splash_screen.dart';
 import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
+import 'package:Amplessimus/appinfo.dart';
 import 'package:Amplessimus/wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class AmpHomePageState extends State<AmpHomePage>
       checkForUpdates = false;
       final update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
-        AmpStrings.version,
+        appVersion,
         uncachedHttpGetFunc,
       );
       if (update != null) {
@@ -169,7 +169,7 @@ class AmpHomePageState extends State<AmpHomePage>
         RefreshIndicator(
           key: refreshKey,
           child: Scaffold(
-            appBar: ampAppBar(AmpStrings.appTitle),
+            appBar: ampAppBar(appTitle),
             backgroundColor: Colors.transparent,
             body: ListView(
               scrollDirection: Axis.vertical,

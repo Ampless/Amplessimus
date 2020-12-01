@@ -65,11 +65,11 @@ sedit(input, output,
 
 replaceversions(version, actualVersion) async {
   mv('pubspec.yaml', 'pubspec.yaml.def');
-  mv('lib/stringsisabadname.dart', 'lib/stringsisabadname.dart.def');
+  mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
   sedit('pubspec.yaml.def', 'pubspec.yaml', version: version);
   sedit(
-    'lib/stringsisabadname.dart.def',
-    'lib/stringsisabadname.dart',
+    'lib/appinfo.dart.def',
+    'lib/appinfo.dart',
     version: actualVersion,
   );
 }
@@ -178,7 +178,7 @@ main(List<String> argv) async {
     if (e is Error) stderr.writeln(e.stackTrace);
   } finally {
     mv('pubspec.yaml.def', 'pubspec.yaml');
-    mv('lib/stringsisabadname.dart.def', 'lib/stringsisabadname.dart');
+    mv('lib/appinfo.dart.def', 'lib/appinfo.dart');
     rmd('tmp');
   }
 }

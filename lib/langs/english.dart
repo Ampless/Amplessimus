@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
+import 'package:Amplessimus/appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:Amplessimus/langs/language.dart';
 
@@ -193,7 +193,7 @@ class English extends Language {
   String get update => 'Update';
 
   @override
-  String get plsUpdate => 'A new ${AmpStrings.appTitle} version is available.';
+  String get plsUpdate => 'A new $appTitle version is available.';
 
   @override
   String get wpemailDomain => 'WPEmail-Domain';

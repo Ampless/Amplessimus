@@ -7,7 +7,7 @@ import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/colors.dart' as AmpColors;
-import 'package:Amplessimus/stringsisabadname.dart' as AmpStrings;
+import 'package:Amplessimus/appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pedantic/pedantic.dart';
@@ -177,8 +177,8 @@ class _SettingsState extends State<Settings> {
                 ampBigButton(
                   onTap: () => showAboutDialog(
                     context: context,
-                    applicationName: AmpStrings.appTitle,
-                    applicationVersion: AmpStrings.version,
+                    applicationName: appTitle,
+                    applicationVersion: appVersion,
                     applicationIcon:
                         SvgPicture.asset('assets/logo.svg', height: 40),
                     children: [Text(Language.current.appInfo)],
