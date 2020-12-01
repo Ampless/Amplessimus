@@ -57,7 +57,7 @@ String realSubject(String subject, [Language lang]) {
   final lut = lang.subjectLut;
   for (final key in lut.keys) {
     if (sub.startsWith(key) &&
-        fullAbbreviations[key].length <= sub.length &&
+        fullAbbreviations[key].length >= sub.length &&
         fullAbbreviations[key].startsWith(sub)) {
       s = lut[key];
     }

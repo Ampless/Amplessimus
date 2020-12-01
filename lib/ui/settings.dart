@@ -104,7 +104,7 @@ class _SettingsState extends State<Settings> {
             ),
             ampSwitchWithText(
               //TODO: see above
-              'Alternative appearance',
+              Language.current.changeAppearance,
               Prefs.altTheme,
               (v) async {
                 ampInfo('Settings', 'switching design mode');
