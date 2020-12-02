@@ -17,10 +17,8 @@ class SplashScreen extends StatelessWidget {
     Future<String> Function(Uri, Object, String, Map<String, String>) httpPost,
     Future<String> Function(Uri) httpGet,
   }) {
-    httpPost ??= http.post;
-    httpGet ??= http.get;
-    httpPostFunc = httpPost;
-    httpGetFunc = httpGet;
+    if (httpPost != null) httpPostFunc = httpPost;
+    if (httpGet != null) httpGetFunc = httpGet;
   }
 
   @override

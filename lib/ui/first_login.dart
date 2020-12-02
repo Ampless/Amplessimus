@@ -168,13 +168,12 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
   }
 }
 
-final http = ScHttpClient(Prefs.getCache, Prefs.setCache);
-Future<String> Function(Uri, Object, String, Map<String, String>,
-    {Duration ttl}) httpPostFunc = http.post;
-Future<String> Function(Uri, {Duration ttl}) httpGetFunc = http.get;
+final _http = ScHttpClient(Prefs.getCache, Prefs.setCache);
+final _uncachedHttp = ScHttpClient();
 
-final uncachedHttp = ScHttpClient();
 Future<String> Function(Uri, Object, String, Map<String, String>,
-    {Duration ttl}) uncachedHttpPostFunc = uncachedHttp.post;
+    {Duration ttl}) httpPostFunc = _uncachedHttp.post;
+Future<String> Function(Uri, {Duration ttl}) httpGetFunc = _http.get;
+
 Future<String> Function(Uri, {Duration ttl}) uncachedHttpGetFunc =
-    uncachedHttp.get;
+    _uncachedHttp.get;

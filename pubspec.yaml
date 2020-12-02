@@ -1,5 +1,5 @@
 name: Amplessimus
-description: An alternative to the 'Amplissimus' app.
+description: A good way of looking at Untis substitution plans using DSBMobile.
 
 # Don't publish to pub.
 publish_to: 'none'

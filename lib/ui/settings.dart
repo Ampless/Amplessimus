@@ -121,7 +121,7 @@ class _SettingsState extends State<Settings> {
             ampDivider,
             ListTile(
               //TODO: translate
-              leading: ampText(Language.current.changeLanguage),
+              title: ampText(Language.current.changeLanguage),
               trailing: ampDropdownButton(
                 value: Language.current,
                 itemToDropdownChild: (i) => ampText(i.name),
@@ -143,7 +143,7 @@ class _SettingsState extends State<Settings> {
             ampDivider,
             ListTile(
               //TODO: translate
-              leading: ampText(Language.current.selectClass),
+              title: ampText(Language.current.selectClass),
               trailing: ampRow(
                 [
                   ampDropdownButton(
