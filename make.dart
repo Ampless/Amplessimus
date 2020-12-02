@@ -47,6 +47,8 @@ mkdirs(d) => Directory(d).createSync(recursive: true);
 md5(path) => system("md5sum $path | awk '{ print \$1 }'");
 
 flutter(cmd) => system('flutter $cmd');
+hdiutil(cmd) => system('hdiutil $cmd');
+strip(files) => system('strip -u -r $files');
 
 sed(input, regex, replacement) {
   return input.toString().replaceAll(RegExp(regex), replacement.toString());
@@ -66,8 +68,8 @@ sedit(input, output,
 replaceversions(version, actualVersion) async {
   mv('pubspec.yaml', 'pubspec.yaml.def');
   mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
-  sedit('pubspec.yaml.def', 'pubspec.yaml', version: version);
-  sedit(
+  await sedit('pubspec.yaml.def', 'pubspec.yaml', version: version);
+  await sedit(
     'lib/appinfo.dart.def',
     'lib/appinfo.dart',
     version: actualVersion,
@@ -80,8 +82,7 @@ iosapp(buildDir) async {
       'xcrun bitcode_strip $buildDir/Frameworks/Flutter.framework/Flutter -r -o tmpfltr');
   mv('tmpfltr', '$buildDir/Frameworks/Flutter.framework/Flutter');
   await system('rm -f $buildDir/Frameworks/libswift*');
-  await system(
-      'strip -u -r $buildDir/Runner $buildDir/Frameworks/*.framework/*');
+  await strip('$buildDir/Runner $buildDir/Frameworks/*.framework/*');
 }
 
 ipa(buildDir, output) async {
@@ -90,8 +91,21 @@ ipa(buildDir, output) async {
   await system('cd tmp && zip -r -9 ../$output Payload');
 }
 
-//TODO:
-deb() async {}
+// http://www.saurik.com/id/7
+// but its broken...
+deb(buildDir, output) async {
+  await system('cp -rp $buildDir tmp/deb/Applications/');
+  await sedit('control.def', 'tmp/deb/DEBIAN/control',
+      buildDir: buildDir, version: version);
+  await system('COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= '
+      'dpkg-deb -Sextreme -z9 --build tmp/deb $output');
+}
+
+cydiainfo(buildDir, output, debFile) async {
+  await sedit('Packages.def', '$output/Packages',
+      buildDir: buildDir, version: version, deb: debFile);
+  await system('gzip -9 -c $output/Packages > $output/Packages.gz');
+}
 
 apk() async {
   await flutter('build apk $apkFlags');
@@ -112,7 +126,7 @@ test() async {
 ios() async {
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.ipa');
-  await deb();
+  await deb('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.deb');
 }
 
 android() async {
@@ -122,19 +136,41 @@ android() async {
 }
 
 web() async {
-  flutter('config --enable-web');
-  flutter('build web $webFlags');
+  await flutter('config --enable-web');
+  await flutter('build web $webFlags');
   mvd('build/web', 'bin/$actualVersion.web');
 }
 
-//TODO:
-win() async {}
+win() async {
+  await flutter('config --enable-windows-desktop');
+  await flutter('build windows $winFlags');
+  mvd('build/windows/runner/Release', 'bin/$actualVersion.win');
+}
 
-//TODO:
-mac() async {}
+mac() async {
+  await flutter('config --enable-macos-desktop');
+  await flutter('build macos $macFlags');
+  const build = 'build/macos/Build/Products/Release/Amplessimus.app';
+  const contents = '$build/Contents';
+  await strip('$contents/Contents/Runner '
+      '$contents/Contents/Frameworks/App.framework/Versions/A/App '
+      '$contents/Contents/Frameworks/FlutterMacOS.framework/Versions/A/FlutterMacOS '
+      '$contents/Contents/Frameworks/shared_preferences_macos.framework/Versions/A/shared_preferences_macos '
+      '$contents/Contents/Frameworks/*.dylib');
 
-//TODO:
-linux() async {}
+  await system('cp -rf $build tmp/dmg');
+  await system('ln -s /Applications $build/Applications');
+  await system(
+      'hdiutil create tmp/tmp.dmg -ov -srcfolder tmp/dmg -fs APFS -volname "Install Amplessimus"');
+  await system(
+      'hdiutil convert tmp/tmp.dmg -ov -format UDBZ -o bin/$actualVersion.dmg');
+}
+
+linux() async {
+  await flutter('config --enable-linux-desktop');
+  await flutter('build linux $gtkFlags');
+  mvd('build/linux/release/bundle', 'bin/$actualVersion.linux');
+}
 
 ci() async {
   final a = apk();
