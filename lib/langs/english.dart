@@ -25,7 +25,7 @@ class English extends Language {
   String get settingsAppInfo => 'App Information';
 
   @override
-  String get changeAppearance => 'Change appearance';
+  String get alternativeAppearance => 'Alternative appearance';
 
   @override
   String get changeLogin => 'Login data';

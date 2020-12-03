@@ -103,8 +103,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampSwitchWithText(
-              //TODO: see above
-              Language.current.changeAppearance,
+              Language.current.alternativeAppearance,
               Prefs.altTheme,
               (v) async {
                 ampInfo('Settings', 'switching design mode');
@@ -120,7 +119,7 @@ class _SettingsState extends State<Settings> {
             ),
             ampDivider,
             ListTile(
-              //TODO: translate
+              //TODO: might want to change that label
               title: ampText(Language.current.changeLanguage),
               trailing: ampDropdownButton(
                 value: Language.current,
@@ -142,7 +141,7 @@ class _SettingsState extends State<Settings> {
             ),
             ampDivider,
             ListTile(
-              //TODO: translate
+              //TODO: see above
               title: ampText(Language.current.selectClass),
               trailing: ampRow(
                 [

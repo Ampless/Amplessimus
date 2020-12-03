@@ -25,7 +25,7 @@ class Czech extends Language {
   String get settingsAppInfo => 'Informace o aplikaci';
 
   @override
-  String get changeAppearance => 'Změnit vzhled aplikace';
+  String get alternativeAppearance => 'Alternativní vzhled';
 
   @override
   String get changeLogin => 'Přihlašovací údaje';

@@ -58,15 +58,5 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(Language.current.settings));
     await tester.pumpAndSettle();
-    for (final w in <String>[
-      Language.current.changeAppearance,
-    ]) {
-      await tester.tap(find.text(w));
-      await tester.pumpAndSettle();
-    }
-    for (var i = 0; i < 10; i++) {
-      await tester.tap(find.text(Language.current.darkMode));
-      await tester.pumpAndSettle();
-    }
   });
 }

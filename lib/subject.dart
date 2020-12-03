@@ -1,4 +1,5 @@
 import 'package:Amplessimus/langs/language.dart';
+import 'package:Amplessimus/logging.dart';
 
 final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
 final _letters = RegExp('[a-zA-Z]');
@@ -37,8 +38,12 @@ const fullAbbreviations = {
 };
 
 bool abbreviationValid(String abbr, String sub) {
+  ampInfo('abbrValid', 'Trying to parse $sub to $abbr...');
   fullAbbreviations.forEach((key, value) {
     if (value == abbr) {
+      ampInfo('abbrValid', '$abbr = $value');
+      ampInfo(
+          'abbrValid', '${key.length >= sub.length} ${key.startsWith(sub)}');
       return key.length >= sub.length && key.startsWith(sub);
     }
   });

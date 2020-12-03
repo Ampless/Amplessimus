@@ -25,7 +25,7 @@ class German extends Language {
   String get settingsAppInfo => 'App-Informationen';
 
   @override
-  String get changeAppearance => 'Aussehen ändern';
+  String get alternativeAppearance => 'Alternatives Aussehen';
 
   @override
   String get changeLogin => 'Login-Daten';
