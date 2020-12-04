@@ -13,41 +13,41 @@ bool _numAt(String s, int i) {
 
 //TODO: make a bit more agressive
 const fullAbbreviations = {
-  'sport': 'spo',
-  'englisch': 'e',
-  'evangelisch': 'ev',
-  'deutsch': 'd',
-  'informatik': 'i',
-  'geschichte': 'g',
-  'geografie': 'geo',
-  'latein': 'l',
-  'italienisch': 'it',
-  'französisch': 'f',
-  'sozialkunde': 'so',
-  'mathematik': 'm',
-  'musik': 'mu',
-  'biologie': 'b',
+  'spo': 'sport',
+  'e': 'englisch',
+  'ev': 'evangelisch',
+  'd': 'deutsch',
+  'i': 'informatik',
+  'g': 'geschichte',
+  'geo': 'geografie',
+  'l': 'latein',
+  'it': 'italienisch',
+  'f': 'französisch',
+  'so': 'sozialkunde',
+  'sk': 'sozialkunde',
+  'm': 'mathematik',
+  'mu': 'musik',
+  'b': 'biologie',
   'bwl': 'bwl',
-  'chemie': 'c',
-  'kunst': 'k',
-  'katholisch': 'ka',
-  'physik': 'p',
-  'wirtschaft': 'w',
+  'c': 'chemie',
+  'k': 'kunst',
+  'ka': 'katholisch',
+  'p': 'physik',
+  'w': 'wirtschaft',
   'nut': 'nut',
-  'sprechstunde': 'spr',
+  'spr': 'sprechstunde',
 };
 
 bool abbreviationValid(String abbr, String sub) {
+  if (!sub.startsWith(abbr)) return false;
+  if (!fullAbbreviations.containsKey(abbr)) {
+    ampInfo('abbrValid', 'abbr $abbr unknown');
+    return true;
+  }
   ampInfo('abbrValid', 'Trying to parse $sub to $abbr...');
-  fullAbbreviations.forEach((key, value) {
-    if (value == abbr) {
-      ampInfo('abbrValid', '$abbr = $value');
-      ampInfo(
-          'abbrValid', '${key.length >= sub.length} ${key.startsWith(sub)}');
-      return key.length >= sub.length && key.startsWith(sub);
-    }
-  });
-  return true;
+  final fa = fullAbbreviations[abbr];
+  ampInfo('abbrValid', '${fa.length >= sub.length} ${fa.startsWith(sub)}');
+  return fa.length >= sub.length && fa.startsWith(sub);
 }
 
 String realSubject(String subject, [Language lang]) {
@@ -69,7 +69,7 @@ String realSubject(String subject, [Language lang]) {
   var s = subject;
   final lut = lang.subjectLut;
   for (final key in lut.keys) {
-    if (sub.startsWith(key) && abbreviationValid(key, sub)) {
+    if (abbreviationValid(key, sub)) {
       s = lut[key];
     }
   }
