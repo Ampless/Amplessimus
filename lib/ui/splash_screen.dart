@@ -1,16 +1,16 @@
-import 'package:Amplessimus/dsbapi.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/main.dart';
-import 'package:Amplessimus/ui/error_screen.dart';
-import 'package:Amplessimus/ui/first_login.dart';
-import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/wpemails.dart';
+import '../dsbapi.dart';
+import '../logging.dart';
+import '../main.dart';
+import 'error_screen.dart';
+import 'first_login.dart';
+import '../uilib.dart';
+import '../wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/colors.dart' as AmpColors;
+import '../prefs.dart' as Prefs;
+import '../colors.dart' as AmpColors;
 
 class SplashScreen extends StatelessWidget {
   @override

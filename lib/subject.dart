@@ -1,4 +1,4 @@
-import 'package:Amplessimus/langs/language.dart';
+import 'langs/language.dart';
 
 final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
 final _letters = RegExp('[a-zA-Z]');

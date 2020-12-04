@@ -1,6 +1,6 @@
-import 'package:Amplessimus/ui/first_login.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/uilib.dart';
+import 'ui/first_login.dart';
+import 'prefs.dart' as Prefs;
+import 'uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:html_search/html_search.dart';
 

@@ -1,8 +1,8 @@
-import 'package:Amplessimus/dsbapi.dart';
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/main.dart';
-import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
+import '../dsbapi.dart';
+import '../langs/language.dart';
+import '../main.dart';
+import '../uilib.dart';
+import '../prefs.dart' as Prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:schttp/schttp.dart';

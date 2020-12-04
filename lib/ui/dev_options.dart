@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/uilib.dart';
+import '../langs/language.dart';
+import '../logging.dart';
+import '../prefs.dart' as Prefs;
+import '../uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

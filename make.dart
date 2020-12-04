@@ -109,12 +109,13 @@ cydiainfo(buildDir, output, debFile) async {
 
 apk() async {
   await flutter('build apk $apkFlags');
-  mv('build/app/outputs/apk/release/app-release.apk', 'bin/$actualVersion.apk');
+  mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$actualVersion.apk');
 }
 
 aab() async {
   await flutter('build appbundle $aabFlags');
-  mv('build/app/outputs/apk/release/app-release.aab', 'bin/$actualVersion.aab');
+  mv('build/app/outputs/bundle/release/app-release.aab',
+      'bin/$actualVersion.aab');
 }
 
 test() async {
@@ -183,8 +184,14 @@ ver() async {
   print(version);
 }
 
+clean() async {
+  rmd('tmp');
+  rmd('build');
+  rmd('bin');
+}
+
 main(List<String> argv) async {
-  actualVersion = '$version.${await system('git rev-parse @ | cut -c 1-7')}';
+  actualVersion = '$version.${await system('git rev-list @ --count')}';
   await flutter('channel master');
   await flutter('upgrade');
   await replaceversions(version, actualVersion);
@@ -205,6 +212,7 @@ main(List<String> argv) async {
         'mac': mac,
         'linux': linux,
         'ver': ver,
+        'clean': clean,
       };
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
       await targets[target]();

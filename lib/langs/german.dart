@@ -1,8 +1,8 @@
 import 'dart:collection';
 
-import 'package:Amplessimus/appinfo.dart';
+import '../appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:Amplessimus/langs/language.dart';
+import 'language.dart';
 
 class German extends Language {
   @override

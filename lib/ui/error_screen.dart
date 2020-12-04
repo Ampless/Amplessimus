@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/uilib.dart';
+import '../logging.dart';
+import '../uilib.dart';
 import 'package:flutter/material.dart';
 
 class ErrorScreenPage extends StatefulWidget {

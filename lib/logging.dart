@@ -1,5 +1,5 @@
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/uilib.dart';
+import 'prefs.dart' as Prefs;
+import 'uilib.dart';
 import 'package:flutter/material.dart';
 
 bool _loggingDisabled = false;

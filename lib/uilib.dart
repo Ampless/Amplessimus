@@ -1,7 +1,7 @@
-import 'package:Amplessimus/colors.dart' as AmpColors;
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/appinfo.dart' as AmpStrings;
+import 'colors.dart' as AmpColors;
+import 'langs/language.dart';
+import 'prefs.dart' as Prefs;
+import 'appinfo.dart' as AmpStrings;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

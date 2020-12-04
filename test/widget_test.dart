@@ -1,6 +1,6 @@
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/ui/splash_screen.dart';
+import '../lib/langs/language.dart';
+import '../lib/logging.dart';
+import '../lib/ui/splash_screen.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter_test/flutter_test.dart';
 

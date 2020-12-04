@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:Amplessimus/ui/first_login.dart';
-import 'package:Amplessimus/main.dart';
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/subject.dart';
-import 'package:Amplessimus/uilib.dart';
+import 'ui/first_login.dart';
+import 'main.dart';
+import 'langs/language.dart';
+import 'logging.dart';
+import 'prefs.dart' as Prefs;
+import 'subject.dart';
+import 'uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 

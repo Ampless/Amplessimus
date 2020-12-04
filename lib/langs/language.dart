@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:Amplessimus/langs/english.dart';
-import 'package:Amplessimus/langs/german.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
+import 'english.dart';
+import 'german.dart';
+import '../prefs.dart' as Prefs;
 
 abstract class Language {
   String get code;

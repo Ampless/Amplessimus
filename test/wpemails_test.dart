@@ -1,4 +1,4 @@
-import 'package:Amplessimus/wpemails.dart';
+import '../lib/wpemails.dart';
 
 import 'testlib.dart';
 

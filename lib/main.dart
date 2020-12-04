@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:Amplessimus/colors.dart' as AmpColors;
-import 'package:Amplessimus/dsbapi.dart';
-import 'package:Amplessimus/ui/first_login.dart';
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/ui/settings.dart';
-import 'package:Amplessimus/ui/splash_screen.dart';
-import 'package:Amplessimus/uilib.dart';
-import 'package:Amplessimus/appinfo.dart';
-import 'package:Amplessimus/wpemails.dart';
+import 'colors.dart' as AmpColors;
+import 'dsbapi.dart';
+import 'ui/first_login.dart';
+import 'langs/language.dart';
+import 'logging.dart';
+import 'prefs.dart' as Prefs;
+import 'ui/settings.dart';
+import 'ui/splash_screen.dart';
+import 'uilib.dart';
+import 'appinfo.dart';
+import 'wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

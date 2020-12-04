@@ -1,5 +1,5 @@
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
+import '../lib/logging.dart';
+import '../lib/prefs.dart' as Prefs;
 import 'package:flutter_test/flutter_test.dart';
 
 typedef testCase = Future<Null> Function();

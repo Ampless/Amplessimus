@@ -1,13 +1,13 @@
-import 'package:Amplessimus/dsbapi.dart';
-import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
-import 'package:Amplessimus/main.dart';
-import 'package:Amplessimus/ui/dev_options.dart';
-import 'package:Amplessimus/uilib.dart';
+import '../dsbapi.dart';
+import '../langs/language.dart';
+import '../logging.dart';
+import '../main.dart';
+import 'dev_options.dart';
+import '../uilib.dart';
 import 'package:flutter/material.dart';
-import 'package:Amplessimus/prefs.dart' as Prefs;
-import 'package:Amplessimus/colors.dart' as AmpColors;
-import 'package:Amplessimus/appinfo.dart';
+import '../prefs.dart' as Prefs;
+import '../colors.dart' as AmpColors;
+import '../appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pedantic/pedantic.dart';
 
