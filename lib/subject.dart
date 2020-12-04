@@ -14,6 +14,7 @@ const fullAbbreviations = {
   'spo': 'sport',
   'e': 'englisch',
   'ev': 'evangelisch',
+  'et': 'ethik',
   'd': 'deutsch',
   'i': 'informatik',
   'g': 'geschichte',

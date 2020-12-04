@@ -125,6 +125,7 @@ class German extends Language {
     'spo': 'Sport',
     'e': 'Englisch',
     'ev': 'Evangelische Religion',
+    'et': 'Ethik',
     'd': 'Deutsch',
     'i': 'Informatik',
     'g': 'Geschichte',

@@ -124,6 +124,7 @@ class English extends Language {
     'spo': 'Physical Education / Sports',
     'e': 'English',
     'ev': 'Protestant Religion',
+    'et': 'Ethics',
     'd': 'German',
     'i': 'Computer Science',
     'g': 'History',
