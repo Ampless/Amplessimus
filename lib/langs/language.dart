@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:Amplessimus/langs/czech.dart';
 import 'package:Amplessimus/langs/english.dart';
 import 'package:Amplessimus/langs/german.dart';
 import 'package:Amplessimus/prefs.dart' as Prefs;
@@ -69,7 +68,7 @@ abstract class Language {
     _current = l;
   }
 
-  static final List<Language> _langs = [English(), German(), Czech()];
+  static final List<Language> _langs = [English(), German()];
   static List<Language> get all => _langs;
 
   static Language fromCode(String code) {
