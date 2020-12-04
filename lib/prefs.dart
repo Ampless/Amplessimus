@@ -128,6 +128,8 @@ bool get updatePopup => _getBool('update', true);
 set updatePopup(bool b) => _prefs.setBool('update', b);
 bool get dsbUseLanguage => _getBool('usedsblang', false);
 set dsbUseLanguage(bool b) => _prefs.setBool('usedsblang', b);
+bool get parseSubjects => _getBool('parsesubs', true);
+set parseSubjects(bool b) => _prefs.setBool('parsesubs', b);
 
 set isDarkMode(bool b) => _prefs.setBool('darkmode', b);
 bool get isDarkMode => _getBool('darkmode', true);

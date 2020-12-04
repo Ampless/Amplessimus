@@ -165,16 +165,23 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
             ),
+            ampSwitchWithText(
+              'TODO: parse subjects',
+              Prefs.parseSubjects,
+              (v) => Prefs.parseSubjects = v,
+            ),
             ampDivider,
             Row(
               children: [
                 ampBigButton(
-                  onTap: () => credentialDialog(),
-                  icon: Icons.vpn_key_outlined,
-                  text: Language.current.changeLogin,
+                  Language.current.changeLogin,
+                  Icons.vpn_key_outlined,
+                  () => credentialDialog(),
                 ),
                 ampBigButton(
-                  onTap: () => showAboutDialog(
+                  Language.current.settingsAppInfo,
+                  Icons.info_outline,
+                  () => showAboutDialog(
                     context: context,
                     applicationName: appTitle,
                     applicationVersion: appVersion,
@@ -184,8 +191,6 @@ class _SettingsState extends State<Settings> {
                     //TODO: flame flutter people for not letting me set the
                     //background color
                   ),
-                  icon: Icons.info_outline,
-                  text: Language.current.settingsAppInfo,
                 ),
               ],
               mainAxisAlignment: MainAxisAlignment.spaceAround,

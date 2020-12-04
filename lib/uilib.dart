@@ -155,10 +155,10 @@ List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
   ];
 }
 
-Widget ampBigButton({
-  @required void Function() onTap,
-  @required IconData icon,
-  @required String text,
+Widget ampBigButton(
+  String text,
+  IconData icon,
+  void Function() onTap, {
   bool visible = true,
 }) {
   return visible
