@@ -205,4 +205,7 @@ class German extends Language {
 
   @override
   String get addWpeDomain => 'WPEmail-Domain hinzufügen';
+
+  @override
+  String get parseSubjects => 'Fächer parsen';
 }

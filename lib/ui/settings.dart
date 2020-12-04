@@ -110,7 +110,6 @@ class _SettingsState extends State<Settings> {
             ),
             ampDivider,
             ListTile(
-              //TODO: might want to change that label
               title: ampText(Language.current.changeLanguage),
               trailing: ampDropdownButton(
                 value: Language.current,
@@ -132,7 +131,6 @@ class _SettingsState extends State<Settings> {
             ),
             ampDivider,
             ListTile(
-              //TODO: see above
               title: ampText(Language.current.selectClass),
               trailing: ampRow(
                 [
@@ -157,7 +155,7 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ampSwitchWithText(
-              'TODO: parse subjects',
+              Language.current.parseSubjects,
               Prefs.parseSubjects,
               (v) => setState(() => Prefs.parseSubjects = v),
             ),

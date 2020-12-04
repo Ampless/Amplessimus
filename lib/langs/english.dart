@@ -205,4 +205,7 @@ class English extends Language {
 
   @override
   String get addWpeDomain => 'Add WPEmail-Domain';
+
+  @override
+  String get parseSubjects => 'Parse subjects';
 }

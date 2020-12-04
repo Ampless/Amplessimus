@@ -102,7 +102,7 @@ set username(String s) => _prefs.setString('dsbuser', s);
 String get password => _getString('dsbpass', '');
 set password(String s) => _prefs.setString('dsbpass', s);
 
-//TODO: get rid of this (lol this should just be a class that is then parsed well)
+//TODO: find a way to do this better
 String get grade => _getString('grade', '5').trim().toLowerCase();
 set grade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
 String get char => _getString('char', 'a').trim().toLowerCase();

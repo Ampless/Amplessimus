@@ -54,23 +54,20 @@ Cydia, please contact us at `ampless@chrissx.de`.
 _This section is heavily broken, because we are right now replacing
 the oldschool Makefile with a new and better build system._
 
-Building on Windows is a mess, because Windows is a mess. Luckily
-Windows will long-term be replaced by the Unixes. So compiling for
-everything except Windows will assume you are running macOS or Linux,
-as the instructions for Windows are a lot more complicated. However,
-for all build targets a recent version of
+Compiling for everything except Windows will assume you are running
+macOS or Linux, but nowadays Windows should work, too. However, for
+all build targets a recent version of
 [Flutter](https://flutter.dev/docs/get-started/install) is required.
-Additionally you currently need `make` for these build instructions
-(except for Windows). In the Output sections `$VERSION` means
-"the full name of the version you are building". All of the outputs
-are placed in the `bin/` folder, which is created automatically.
+In the Output sections `$VERSION` means "the full name of the version
+you are building". All of the outputs are placed in the `bin/` folder,
+which is created automatically.
 
 ### Android
 #### Prepare
 * The [Android SDK](https://developer.android.com/studio)
 #### Compile
 ```
-make android
+dart run make.dart android
 ```
 #### Output
 * `$VERSION.aab` an application bundle
@@ -78,7 +75,7 @@ make android
 
 ### Linux
 #### Prepare
-* Linux (maybe some other Unixes, too)
+* Linux (maybe some other Unixes work, too)
 * Clang
 * CMake
 * GTK3 headers
@@ -89,7 +86,7 @@ make android
 `clang cmake libgtk-3-dev ninja-build pkg-config`)
 #### Compile
 ```
-make linux
+dart run make.dart linux
 ```
 #### Output
 * `$VERSION.linux/` a folder containing the Amplessimus binary and all deps
@@ -100,7 +97,7 @@ make linux
 * Xcode
 #### Compile
 ```
-make ios
+dart run make.dart ios
 ```
 #### Output
 * `$VERSION.deb` a cydia package (probably broken)
@@ -117,7 +114,7 @@ flutter create .
 * macOS
 * Xcode
 ```
-make mac
+dart run make.dart mac
 ```
 #### Output
 * `$VERSION.dmg` an installer image for macOS 10.13+
@@ -125,7 +122,7 @@ make mac
 ### Web
 #### Compile
 ```
-make web
+dart run make.dart web
 ```
 #### Output
 * `$VERSION.web/` a folder containing your `/var/www/html/*` basically
@@ -137,15 +134,9 @@ problem, but it also makes web Amplessimus impossible right now)
 #### Prepare
 * Windows
 * Visual Studio
-#### Compile if make would work
+#### Compile
 ```
-make.exe win
+dart run make.dart win
 ```
-#### Compile without make (buggy)
-```
-make_win.bat
-```
-#### Output (make)
+#### Output
 * `$VERSION.win/`
-#### Output (without make)
-* `amplessimus.win/`
