@@ -22,35 +22,27 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Future<Null> credentialDialog() {
-    final usernameInputFormKey = GlobalKey<FormFieldState>();
-    final passwordInputFormKey = GlobalKey<FormFieldState>();
-    final usernameInputFormController =
-        TextEditingController(text: Prefs.username);
-    final passwordInputFormController =
-        TextEditingController(text: Prefs.password);
+    final usernameFormField = AmpFormField(Prefs.username);
+    final passwordFormField = AmpFormField(Prefs.password);
     var passwordHidden = true;
     return ampDialog(
       context: context,
       title: Language.current.changeLoginPopup,
       children: (context, setAlState) => [
         ampPadding(2),
-        ampFormField(
-          controller: usernameInputFormController,
-          key: usernameInputFormKey,
+        usernameFormField.formField(
           labelText: Language.current.username,
           keyboardType: TextInputType.visiblePassword,
           autofillHints: [AutofillHints.username],
         ),
         ampPadding(6),
-        ampFormField(
+        passwordFormField.formField(
           suffixIcon: IconButton(
             onPressed: () => setAlState(() => passwordHidden = !passwordHidden),
             icon: passwordHidden
                 ? ampIcon(Icons.visibility_outlined)
                 : ampIcon(Icons.visibility_off_outlined),
           ),
-          controller: passwordInputFormController,
-          key: passwordInputFormKey,
           labelText: Language.current.password,
           keyboardType: TextInputType.visiblePassword,
           obscureText: passwordHidden,
@@ -60,8 +52,8 @@ class _SettingsState extends State<Settings> {
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () async {
-          Prefs.username = usernameInputFormController.text.trim();
-          Prefs.password = passwordInputFormController.text.trim();
+          Prefs.username = usernameFormField.text.trim();
+          Prefs.password = passwordFormField.text.trim();
           unawaited(widget.parent.rebuildDragDown());
           Navigator.pop(context);
         },
@@ -168,7 +160,7 @@ class _SettingsState extends State<Settings> {
             ampSwitchWithText(
               'TODO: parse subjects',
               Prefs.parseSubjects,
-              (v) => Prefs.parseSubjects = v,
+              (v) => setState(() => Prefs.parseSubjects = v),
             ),
             ampDivider,
             Row(

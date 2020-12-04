@@ -100,17 +100,13 @@ class AmpHomePageState extends State<AmpHomePage>
   }
 
   Future<Null> wpemailDomainPopup() {
-    final domainInputFormKey = GlobalKey<FormFieldState>();
-    final domainInputFormController =
-        TextEditingController(text: Prefs.wpeDomain);
+    final domainFormField = AmpFormField(Prefs.wpeDomain);
     return ampDialog(
       context: context,
       title: Language.current.wpemailDomain,
       children: (context, setAlState) => [
         ampPadding(2),
-        ampFormField(
-          controller: domainInputFormController,
-          key: domainInputFormKey,
+        domainFormField.formField(
           labelText: Language.current.wpemailDomain,
           keyboardType: TextInputType.url,
         ),
@@ -118,7 +114,7 @@ class AmpHomePageState extends State<AmpHomePage>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () async {
-          Prefs.wpeDomain = domainInputFormController.text.trim();
+          Prefs.wpeDomain = domainFormField.text.trim();
           unawaited(rebuildDragDown());
           Navigator.pop(context);
         },

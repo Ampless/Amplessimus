@@ -51,46 +51,6 @@ Row ampRow(List<Widget> children) => Row(
 
 Tab ampTab(IconData icon, String text) => Tab(icon: Icon(icon), text: text);
 
-TextFormField ampFormField({
-  @required TextEditingController controller,
-  @required Key key,
-  String Function(String) validator,
-  TextInputType keyboardType = TextInputType.text,
-  String labelText = '',
-  bool obscureText = false,
-  List<String> autofillHints = const [],
-  Widget suffixIcon,
-}) {
-  suffixIcon ??= ampNull;
-  return TextFormField(
-    obscureText: obscureText,
-    style: AmpColors.textStyleForeground,
-    keyboardAppearance: AmpColors.brightness,
-    controller: controller,
-    key: key,
-    validator: validator,
-    keyboardType: keyboardType,
-    decoration: InputDecoration(
-      suffixIcon: suffixIcon,
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      labelStyle: AmpColors.textStyleForeground,
-      labelText: labelText,
-      fillColor: AmpColors.colorForeground,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: AmpColors.colorForeground),
-      ),
-    ),
-  );
-}
-
 FlatButton ampDialogButton(String text, Function() onPressed) {
   return FlatButton(
     textColor: AmpColors.colorForeground,
@@ -359,3 +319,52 @@ TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
       labelColor: AmpColors.colorForeground,
       tabs: tabs,
     );
+
+class AmpFormField {
+  final key = GlobalKey<FormFieldState>();
+  final TextEditingController controller;
+
+  AmpFormField(Object initialValue)
+      : controller = TextEditingController(text: initialValue.toString());
+
+  TextFormField formField({
+    String Function(String) validator,
+    TextInputType keyboardType = TextInputType.text,
+    String labelText = '',
+    bool obscureText = false,
+    List<String> autofillHints = const [],
+    Widget suffixIcon,
+  }) {
+    suffixIcon ??= ampNull;
+    return TextFormField(
+      obscureText: obscureText,
+      style: AmpColors.textStyleForeground,
+      keyboardAppearance: AmpColors.brightness,
+      controller: controller,
+      key: key,
+      validator: validator,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        suffixIcon: suffixIcon,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        labelStyle: AmpColors.textStyleForeground,
+        labelText: labelText,
+        fillColor: AmpColors.colorForeground,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AmpColors.colorForeground),
+        ),
+      ),
+    );
+  }
+
+  bool Function() get validate => key.currentState.validate;
+  String get text => controller.text;
+}

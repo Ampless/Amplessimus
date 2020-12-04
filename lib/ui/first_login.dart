@@ -8,26 +8,21 @@ import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:schttp/schttp.dart';
 
-class FirstLoginScreenPage extends StatefulWidget {
-  FirstLoginScreenPage();
+class FirstLogin extends StatefulWidget {
+  FirstLogin();
   @override
-  State<StatefulWidget> createState() => FirstLoginScreenPageState();
+  State<StatefulWidget> createState() => FirstLoginState();
 }
 
-class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
+class FirstLoginState extends State<FirstLogin>
     with SingleTickerProviderStateMixin {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _loading = false;
   String _error = '';
   String _gradeDropDownValue = Prefs.grade;
   String _letterDropDownValue = Prefs.char;
   bool _passwordHidden = true;
-  final _usernameInputFormController =
-      TextEditingController(text: Prefs.username);
-  final _passwordInputFormController =
-      TextEditingController(text: Prefs.password);
-  static final usernameInputFormKey = GlobalKey<FormFieldState>();
-  static final passwordInputFormKey = GlobalKey<FormFieldState>();
+  final _usernameFormField = AmpFormField(Prefs.username);
+  final _passwordFormField = AmpFormField(Prefs.password);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +33,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
         duration: Duration(milliseconds: 150),
         color: AmpColors.colorBackground,
         child: Scaffold(
-          key: _scaffoldKey,
           backgroundColor: Colors.transparent,
           appBar: ampAppBar(Language.current.changeLoginPopup),
           body: Center(
@@ -81,15 +75,13 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                     ]),
                     ampSizedDivider(20),
                     ampPadding(4),
-                    ampFormField(
-                      controller: _usernameInputFormController,
-                      key: usernameInputFormKey,
+                    _usernameFormField.formField(
                       labelText: Language.current.username,
                       keyboardType: TextInputType.visiblePassword,
                       autofillHints: [AutofillHints.username],
                     ),
                     ampPadding(6),
-                    ampFormField(
+                    _passwordFormField.formField(
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() => _passwordHidden = !_passwordHidden);
@@ -98,8 +90,6 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
                             ? ampIcon(Icons.visibility_outlined)
                             : ampIcon(Icons.visibility_off_outlined),
                       ),
-                      controller: _passwordInputFormController,
-                      key: passwordInputFormKey,
                       labelText: Language.current.password,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: _passwordHidden,
@@ -131,8 +121,8 @@ class FirstLoginScreenPageState extends State<FirstLoginScreenPage>
             onPressed: () async {
               setState(() => _loading = true);
               try {
-                final username = _usernameInputFormController.text.trim();
-                final password = _passwordInputFormController.text.trim();
+                final username = _usernameFormField.text.trim();
+                final password = _passwordFormField.text.trim();
                 Prefs.username = username;
                 Prefs.password = password;
                 final error = await checkCredentials(

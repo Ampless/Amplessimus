@@ -40,7 +40,7 @@ class DevOptionsState extends State<DevOptions>
         ampListTile(
           'Refreshtimer (Minuten)',
           trailing: '${Prefs.timer}',
-          onTap: () => showInputTimerDialog(context),
+          onTap: () => _inputTimerDialog(context),
         ),
         ampDivider,
         ampPadding(5),
@@ -48,18 +48,18 @@ class DevOptionsState extends State<DevOptions>
         ampRaisedButton('Clear Cache', Prefs.clearCache),
         ampRaisedButton(
           'Set Cache to Kekw',
-          () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"25.9.2020 Freitag\",\"subs\":['
-              '{\"affectedClass\":\"5c\",\"hours\":[3],\"teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"isFree\":false},'
-              '{\"affectedClass\":\"9b\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"isFree\":true}]},'
-              '{\"day\":0,\"date\":\"28.9.2020 Montag\",\"subs\":['
-              '{\"affectedClass\":\"5cd\",\"hours\":[2],\"teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-              '{\"affectedClass\":\"6b\",\"hours\":[5],\"teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"isFree\":false},'
-              '{\"affectedClass\":\"6c\",\"hours\":[3],\"teacher\":\"Albl\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-              '{\"affectedClass\":\"6c\",\"hours\":[4],\"teacher\":\"Fikrle\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":false},'
-              '{\"affectedClass\":\"6c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"isFree\":true},'
-              '{\"affectedClass\":\"9c\",\"hours\":[6],\"teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"isFree\":true}]}]',
+          () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"4.12.2020 Freitag\",\"subs\":['
+              '{\"class\":\"5c\",\"lesson\":3,\"sub_teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"free\":false},'
+              '{\"class\":\"9b\",\"lesson\":6,\"sub_teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"free\":true}]},'
+              '{\"day\":0,\"date\":\"7.12.2020 Montag\",\"subs\":['
+              '{\"class\":\"5cd\",\"lesson\":2,\"sub_teacher\":\"Wolf\",\"subject\":\"Kath\",\"notes\":\"\",\"free\":false},'
+              '{\"class\":\"6b\",\"lesson\":5,\"sub_teacher\":\"Gnan\",\"subject\":\"Kath\",\"notes\":\"\",\"free\":false},'
+              '{\"class\":\"6c\",\"lesson\":3,\"sub_teacher\":\"Albl\",\"subject\":\"E\",\"notes\":\"\",\"free\":false},'
+              '{\"class\":\"6c\",\"lesson\":4,\"sub_teacher\":\"Fikrle\",\"subject\":\"E\",\"notes\":\"\",\"free\":false},'
+              '{\"class\":\"6c\",\"lesson\":6,\"sub_teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"free\":true},'
+              '{\"class\":\"9c\",\"lesson\":6,\"sub_teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"free\":true}]}]',
         ),
-        ampRaisedButton('Set Cache to Input', () => showCacheDialog(context)),
+        ampRaisedButton('Set Cache to Input', () => _cacheDialog(context)),
         ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
         ampRaisedButton(
           'App-Daten löschen',
@@ -84,24 +84,18 @@ class DevOptionsState extends State<DevOptions>
     );
   }
 
-  void showCacheDialog(BuildContext context) {
-    final inputFormKey = GlobalKey<FormFieldState>();
-    final inputFormController =
-        TextEditingController(text: Prefs.dsbJsonCache.toString());
+  void _cacheDialog(BuildContext context) {
+    final cacheFormField = AmpFormField(Prefs.dsbJsonCache);
     ampDialog(
       context: context,
       title: 'Cache',
-      children: (context, setAlState) => [
-        ampFormField(
-          controller: inputFormController,
-          key: inputFormKey,
-          keyboardType: TextInputType.multiline,
-        ),
+      children: (_, __) => [
+        cacheFormField.formField(keyboardType: TextInputType.multiline),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () {
-          Prefs.dsbJsonCache = inputFormController.text.trim();
+          Prefs.dsbJsonCache = cacheFormField.text.trim();
           Navigator.pop(context);
         },
       ),
@@ -109,17 +103,13 @@ class DevOptionsState extends State<DevOptions>
     );
   }
 
-  void showInputTimerDialog(BuildContext context) {
-    final timerInputFormKey = GlobalKey<FormFieldState>();
-    final timerInputFormController =
-        TextEditingController(text: Prefs.timer.toString());
+  void _inputTimerDialog(BuildContext context) {
+    final timerFormField = AmpFormField(Prefs.timer);
     ampDialog(
       context: context,
       title: 'Timer (Minuten)',
       children: (context, setAlState) => [
-        ampFormField(
-          controller: timerInputFormController,
-          key: timerInputFormKey,
+        timerFormField.formField(
           keyboardType: TextInputType.number,
           validator: (value) => num.tryParse(value) == null
               ? Language.current.widgetValidatorInvalid
@@ -129,10 +119,9 @@ class DevOptionsState extends State<DevOptions>
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () {
-          if (!timerInputFormKey.currentState.validate()) return;
+          if (!timerFormField.validate()) return;
           try {
-            setState(() =>
-                Prefs.timer = int.parse(timerInputFormController.text.trim()));
+            setState(() => Prefs.timer = int.parse(timerFormField.text.trim()));
           } catch (e) {
             return;
           }
