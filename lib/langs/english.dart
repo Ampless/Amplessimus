@@ -142,6 +142,7 @@ class English extends Language {
     'k': 'Art',
     'ka': 'Catholic Religion',
     'p': 'Physics',
+    'ps': 'Psychology',
     'w': 'Economics/Law',
     'nut': '"Nature and Technology"',
     'spr': 'Consultation Hour',

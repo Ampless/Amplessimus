@@ -143,6 +143,7 @@ class German extends Language {
     'k': 'Kunst',
     'ka': 'Katholische Religion',
     'p': 'Physik',
+    'ps': 'Psychologie',
     'w': 'Wirtschaft/Recht',
     'nut': 'Natur und Technik',
     'spr': 'Sprechstunde',

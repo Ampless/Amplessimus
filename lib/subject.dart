@@ -32,6 +32,7 @@ const fullAbbreviations = {
   'k': 'kunst',
   'ka': 'katholisch',
   'p': 'physik',
+  'ps': 'psychologie',
   'w': 'wirtschaft',
   'nut': 'nut',
   'spr': 'sprechstunde',
