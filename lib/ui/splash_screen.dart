@@ -13,14 +13,6 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/colors.dart' as AmpColors;
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({
-    Future<String> Function(Uri, Object, String, Map<String, String>) httpPost,
-    Future<String> Function(Uri) httpGet,
-  }) {
-    if (httpPost != null) httpPostFunc = httpPost;
-    if (httpGet != null) httpGetFunc = httpGet;
-  }
-
   @override
   Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
 }

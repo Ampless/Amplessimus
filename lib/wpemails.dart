@@ -3,7 +3,6 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:html_search/html_search.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 Map<String, String> wpemailsave;
 
@@ -18,7 +17,8 @@ Future<Map<String, String>> wpemails(String domain) async {
     final result = <String, String>{};
 
     var html = htmlParse(
-      await httpGetFunc(Uri.parse('https://$domain/schulfamilie/lehrkraefte/')),
+      await cachedHttpGet(
+          Uri.parse('https://$domain/schulfamilie/lehrkraefte/')),
     );
     html = htmlSearchByClass(html, 'entry-content').children;
     html = htmlSearchAllByPredicate(
@@ -50,9 +50,7 @@ Widget wpemailWidget(Map<String, String> emails) {
     w.add(ampListTile(
       e.key,
       subtitle: e.value,
-      onTap: () => canLaunch('mailto:${e.value}').then((value) {
-        if (value) launch('mailto:${e.value}');
-      }),
+      onTap: () => ampOpenUrl('mailto:${e.value}'),
     ));
   return ampList(w);
 }

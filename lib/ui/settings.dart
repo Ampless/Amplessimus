@@ -9,7 +9,6 @@ import 'package:Amplessimus/prefs.dart' as Prefs;
 import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pedantic/pedantic.dart';
 
 class Settings extends StatefulWidget {

@@ -17,7 +17,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:update/update.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -40,11 +39,9 @@ class AmpHomePageState extends State<AmpHomePage>
   TabController tabController;
 
   void checkBrightness() {
-    if (Prefs.useSystemTheme) {
-      AmpColors.brightness =
-          SchedulerBinding.instance.window.platformBrightness;
-      Future.delayed(Duration(milliseconds: 150), rebuild);
-    }
+    if (!Prefs.useSystemTheme) return;
+    AmpColors.brightness = SchedulerBinding.instance.window.platformBrightness;
+    Future.delayed(Duration(milliseconds: 150), rebuild);
   }
 
   @override
@@ -63,7 +60,7 @@ class AmpHomePageState extends State<AmpHomePage>
       final update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
         appVersion,
-        uncachedHttpGetFunc,
+        uncachedHttp.get,
       );
       if (update != null) {
         ampInfo('UN', 'Found an update, displaying the dialog.');
@@ -72,7 +69,8 @@ class AmpHomePageState extends State<AmpHomePage>
           children: (_, __) => [ampText(Language.current.plsUpdate)],
           actions: (alCtx) => [
             ampDialogButton(Language.current.dismiss, Navigator.of(alCtx).pop),
-            ampDialogButton(Language.current.open, () => launch(update.url)),
+            ampDialogButton(
+                Language.current.open, () => ampOpenUrl(update.url)),
           ],
           context: context,
           widgetBuilder: ampRow,

@@ -1,4 +1,3 @@
-import 'package:Amplessimus/colors.dart' as AmpColors;
 import 'package:Amplessimus/dsbapi.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/main.dart';
@@ -29,10 +28,8 @@ class FirstLoginState extends State<FirstLogin>
     if (Prefs.char.isEmpty) _letterDropDownValue = dsbLetters.first;
     if (Prefs.grade.isEmpty) _gradeDropDownValue = dsbGrades.first;
     return Scaffold(
-      body: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        color: AmpColors.colorBackground,
-        child: Scaffold(
+      body: ampPageBase(
+        Scaffold(
           backgroundColor: Colors.transparent,
           appBar: ampAppBar(Language.current.changeLoginPopup),
           body: Center(
@@ -128,7 +125,7 @@ class FirstLoginState extends State<FirstLogin>
                 final error = await checkCredentials(
                   username,
                   password,
-                  httpPostFunc,
+                  uncachedHttp.post,
                 );
                 if (error != null)
                   throw Language.current.catchDsbGetData(error);
@@ -158,12 +155,5 @@ class FirstLoginState extends State<FirstLogin>
   }
 }
 
-final _http = ScHttpClient(Prefs.getCache, Prefs.setCache);
-final _uncachedHttp = ScHttpClient();
-
-Future<String> Function(Uri, Object, String, Map<String, String>,
-    {Duration ttl}) httpPostFunc = _uncachedHttp.post;
-Future<String> Function(Uri, {Duration ttl}) httpGetFunc = _http.get;
-
-Future<String> Function(Uri, {Duration ttl}) uncachedHttpGetFunc =
-    _uncachedHttp.get;
+final cachedHttpGet = ScHttpClient(Prefs.getCache, Prefs.setCache).get;
+final uncachedHttp = ScHttpClient();

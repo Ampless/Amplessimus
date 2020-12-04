@@ -9,7 +9,6 @@ import 'package:Amplessimus/subject.dart';
 import 'package:Amplessimus/uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 Widget dsbRenderPlans(
   List<Plan> plans,
@@ -51,7 +50,7 @@ Widget dsbRenderPlans(
         IconButton(
           icon: ampIcon(Icons.open_in_new_outlined),
           tooltip: Language.current.openPlanInBrowser,
-          onPressed: () => launch(plan.url),
+          onPressed: () => ampOpenUrl(plan.url),
         ),
       ]),
     ));
@@ -66,40 +65,26 @@ Widget dsbRenderPlans(
 List<Plan> dsbPlans;
 Widget dsbWidget;
 
-Future<Null> dsbUpdateWidget(
-    {Function() callback,
-    bool useJsonCache,
-    Future<String> Function(
-            Uri url, Object body, String id, Map<String, String> headers)
-        httpPost,
-    Future<String> Function(Uri url) httpGet,
-    String dsbLanguage,
-    String username,
-    String password,
-    bool oneClassOnly,
-    String grade,
-    String char,
-    bool altTheme,
-    Language lang}) async {
-  httpPost ??= httpPostFunc;
-  httpGet ??= httpGetFunc;
+Future<Null> dsbUpdateWidget({
+  Function() callback,
+  bool useJsonCache,
+  bool altTheme,
+}) async {
   useJsonCache ??= Prefs.useJsonCache;
-  callback ??= () {};
-  dsbLanguage ??= Prefs.dsbLanguage;
-  username ??= Prefs.username;
-  password ??= Prefs.password;
-  lang ??= Language.current;
-  oneClassOnly ??= Prefs.oneClassOnly;
-  grade ??= Prefs.grade;
-  char ??= Prefs.char;
   altTheme ??= Prefs.altTheme;
+  callback ??= () {};
+  final username = Prefs.username;
+  final password = Prefs.password;
+  final oneClassOnly = Prefs.oneClassOnly;
+  final grade = Prefs.grade;
+  final char = Prefs.char;
   try {
-    if (username.isEmpty || password.isEmpty) throw lang.noLogin;
+    if (username.isEmpty || password.isEmpty) throw Language.current.noLogin;
     final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
     var plans = useJCache
         ? Plan.plansFromJson(Prefs.dsbJsonCache)
-        : await getAllSubs(username, password, httpGet, httpPost,
-            language: dsbLanguage);
+        : await getAllSubs(username, password, cachedHttpGet, uncachedHttp.post,
+            language: Prefs.dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (oneClassOnly) plans = sortByLesson(searchClass(plans, grade, char));
     dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, altTheme);
@@ -108,7 +93,7 @@ Future<Null> dsbUpdateWidget(
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = SizedBox(
       child: Container(
-        child: ampList([ampListTile(errorString(e))], altTheme),
+        child: ampList([ampErrorText(e)], altTheme),
         padding: EdgeInsets.only(top: 15),
       ),
     );

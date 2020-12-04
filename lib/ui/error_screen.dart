@@ -20,12 +20,11 @@ class ErrorScreenPageState extends State<ErrorScreenPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AmpColors.colorBackground,
+        backgroundColor: Colors.black,
         body: Column(children: [
-          ampText(
+          ampErrorText(
             'Amplessimus did not initialize.\n'
             'Please contact ampless@chrissx.de with a screenshot/video of this page.',
-            size: 20,
           ),
           ampLogWidget,
         ]),

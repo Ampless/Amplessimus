@@ -1,4 +1,3 @@
-import 'package:Amplessimus/ui/first_login.dart';
 import 'package:Amplessimus/langs/language.dart';
 import 'package:Amplessimus/logging.dart';
 import 'package:Amplessimus/ui/splash_screen.dart';
@@ -18,14 +17,7 @@ void main() {
   return;
   testWidgets('The one and only UI test', (tester) async {
     ampDisableLogging();
-    await tester.pumpWidget(
-      SplashScreen(
-        httpPost: (url, body, id, headers, {getCache, setCache}) async =>
-            dsbTest1Cache['GetData'],
-        httpGet: (url, {getCache, setCache}) async =>
-            dsbTest1Cache['44a7def4-aaa3-4177-959d-e2921176cde9.htm'],
-      ),
-    );
+    await tester.pumpWidget(SplashScreen());
     await tester.pumpAndSettle();
     await tester.tap(find.text('5'));
     await tester.pumpAndSettle();
