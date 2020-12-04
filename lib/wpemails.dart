@@ -47,9 +47,12 @@ Future<Map<String, String>> wpemails(String domain) async {
 Widget wpemailWidget(Map<String, String> emails) {
   final w = <Widget>[];
   for (final e in emails.entries)
-    w.add(ampListTile(e.key, subtitle: e.value, onTap: () async {
-      if (await canLaunch('mailto:${e.value}'))
-        await launch('mailto:${e.value}');
-    }));
-  return ampColumn(w);
+    w.add(ampListTile(
+      e.key,
+      subtitle: e.value,
+      onTap: () => canLaunch('mailto:${e.value}').then((value) {
+        if (value) launch('mailto:${e.value}');
+      }),
+    ));
+  return ampList(w);
 }

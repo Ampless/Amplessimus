@@ -293,13 +293,13 @@ ListTile ampListTile(
 ListTile ampLessonTile({
   @required String subject,
   @required String lesson,
-  @required String teacher,
+  @required String orgTeacher,
   @required String subtitle,
   @required String affClass,
 }) =>
     ListTile(
       title: ampText(
-        teacher == null ? '$subject' : '$subject ($teacher)',
+        orgTeacher == null ? '$subject' : '$subject ($orgTeacher)',
         size: 18,
       ),
       leading: ampText(lesson, weight: FontWeight.bold, size: 34),
