@@ -1,7 +1,6 @@
 import 'colors.dart' as AmpColors;
 import 'langs/language.dart';
 import 'prefs.dart' as Prefs;
-import 'appinfo.dart' as AmpStrings;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -178,10 +177,8 @@ Text ampText(
   );
 }
 
-Icon ampIcon(IconData data, {double size, Color color}) {
-  color ??= AmpColors.colorForeground;
-  return Icon(data, color: color, size: size);
-}
+Icon ampIcon(IconData data, {double size}) =>
+    Icon(data, color: AmpColors.colorForeground, size: size);
 
 AppBar ampAppBar(String text) {
   return AppBar(
@@ -189,24 +186,6 @@ AppBar ampAppBar(String text) {
     backgroundColor: Colors.transparent,
     title: ampText(text, size: 36, weight: FontWeight.bold),
     centerTitle: false,
-  );
-}
-
-class _AmpBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(context, child, axisDirection) => child;
-}
-
-WillPopScope ampMatApp(Widget home) {
-  return WillPopScope(
-    child: MaterialApp(
-      builder: (context, child) =>
-          ScrollConfiguration(behavior: _AmpBehavior(), child: child),
-      title: AmpStrings.appTitle,
-      home: home,
-      debugShowCheckedModeBanner: false,
-    ),
-    onWillPop: () async => true,
   );
 }
 

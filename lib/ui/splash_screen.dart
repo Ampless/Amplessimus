@@ -1,3 +1,4 @@
+import '../appinfo.dart';
 import '../dsbapi.dart';
 import '../logging.dart';
 import 'error_screen.dart';
@@ -12,9 +13,23 @@ import '../prefs.dart' as Prefs;
 import '../colors.dart' as AmpColors;
 import 'home_page.dart';
 
+class _AmpBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(context, child, axisDirection) => child;
+}
+
 class SplashScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => ampMatApp(SplashScreenPage());
+  Widget build(BuildContext context) => WillPopScope(
+        child: MaterialApp(
+          builder: (context, child) =>
+              ScrollConfiguration(behavior: _AmpBehavior(), child: child),
+          title: appTitle,
+          home: SplashScreenPage(),
+          debugShowCheckedModeBanner: false,
+        ),
+        onWillPop: () async => true,
+      );
 }
 
 class SplashScreenPage extends StatefulWidget {
