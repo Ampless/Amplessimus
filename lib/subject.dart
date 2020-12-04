@@ -1,5 +1,4 @@
 import 'package:Amplessimus/langs/language.dart';
-import 'package:Amplessimus/logging.dart';
 
 final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
 final _letters = RegExp('[a-zA-Z]');
@@ -11,7 +10,6 @@ bool _numAt(String s, int i) {
   return cu >= _zero && cu <= _nine;
 }
 
-//TODO: make a bit more agressive
 const fullAbbreviations = {
   'spo': 'sport',
   'e': 'englisch',
@@ -24,7 +22,7 @@ const fullAbbreviations = {
   'it': 'italienisch',
   'f': 'französisch',
   'so': 'sozialkunde',
-  'sk': 'sozialkunde',
+  'sk': 'skunde',
   'm': 'mathematik',
   'mu': 'musik',
   'b': 'biologie',
@@ -40,18 +38,12 @@ const fullAbbreviations = {
 
 bool abbreviationValid(String abbr, String sub) {
   if (!sub.startsWith(abbr)) return false;
-  if (!fullAbbreviations.containsKey(abbr)) {
-    ampInfo('abbrValid', 'abbr $abbr unknown');
-    return true;
-  }
-  ampInfo('abbrValid', 'Trying to parse $sub to $abbr...');
+  if (!fullAbbreviations.containsKey(abbr)) return true;
   final fa = fullAbbreviations[abbr];
-  ampInfo('abbrValid', '${fa.length >= sub.length} ${fa.startsWith(sub)}');
   return fa.length >= sub.length && fa.startsWith(sub);
 }
 
-String realSubject(String subject, [Language lang]) {
-  lang ??= Language.current;
+String realSubject(String subject) {
   if (subject == null) return null;
 
   //this code might break, but it hasnt as of nov 2020
@@ -62,12 +54,12 @@ String realSubject(String subject, [Language lang]) {
     final lnum = subject.substring(subject.lastIndexOf(_numbers));
     var fnum = '';
     if (firstLetter > 0) fnum = ' (${subject.substring(0, firstLetter)})';
-    return '${realSubject(shortSubject, lang)} $lnum$fnum';
+    return '${realSubject(shortSubject)} $lnum$fnum';
   }
 
   final sub = subject.toLowerCase();
   var s = subject;
-  final lut = lang.subjectLut;
+  final lut = Language.current.subjectLut;
   for (final key in lut.keys) {
     if (abbreviationValid(key, sub)) {
       s = lut[key];
