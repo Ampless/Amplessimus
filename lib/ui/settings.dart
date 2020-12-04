@@ -86,7 +86,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampSwitchWithText(
-              Language.current.lightsUseSystem,
+              Language.current.useSystemTheme,
               Prefs.useSystemTheme,
               (v) {
                 Prefs.useSystemTheme = v;
@@ -109,9 +109,9 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampDivider,
-            ListTile(
-              title: ampText(Language.current.changeLanguage),
-              trailing: ampDropdownButton(
+            ampWidgetWithText(
+              Language.current.changeLanguage,
+              ampDropdownButton(
                 value: Language.current,
                 itemToDropdownChild: (i) => ampText(i.name),
                 items: Language.all,
@@ -130,9 +130,9 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampDivider,
-            ListTile(
-              title: ampText(Language.current.selectClass),
-              trailing: ampRow(
+            ampWidgetWithText(
+              Language.current.selectClass,
+              ampRow(
                 [
                   ampDropdownButton(
                     value: Prefs.grade,

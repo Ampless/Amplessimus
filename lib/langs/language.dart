@@ -13,7 +13,7 @@ abstract class Language {
   //these are all of the translations hardcoded into the language classes
   //
   String get darkMode;
-  String get lightsUseSystem;
+  String get useSystemTheme;
   String get alternativeAppearance;
   String get changeLanguage;
   String get parseSubjects;

@@ -37,7 +37,7 @@ class English extends Language {
   String get selectClass => 'Select class';
 
   @override
-  String get lightsUseSystem => 'Use system design';
+  String get useSystemTheme => 'Use system design';
 
   @override
   String dsbSubtoSubtitle(Substitution sub) {

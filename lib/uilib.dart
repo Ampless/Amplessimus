@@ -93,16 +93,11 @@ Switch ampSwitch(bool value, Function(bool) onChanged) {
   );
 }
 
-ListTile ampSwitchWithText(
-  String text,
-  bool value,
-  Function(bool) onChanged,
-) {
-  return ListTile(
-    title: ampText(text),
-    trailing: ampSwitch(value, onChanged),
-  );
-}
+ListTile ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
+    ampWidgetWithText(text, ampSwitch(value, onChanged));
+
+ListTile ampWidgetWithText(String text, Widget w) =>
+    ListTile(title: ampText(text), trailing: w);
 
 Divider ampSizedDivider(double size) =>
     Divider(color: AmpColors.colorForeground, height: size);

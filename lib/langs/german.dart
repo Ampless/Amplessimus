@@ -37,7 +37,7 @@ class German extends Language {
   String get selectClass => 'Klasse auswählen';
 
   @override
-  String get lightsUseSystem => 'System-Design verwenden';
+  String get useSystemTheme => 'System-Design verwenden';
 
   @override
   String get filterTimetables => 'Stundenplan filtern';
