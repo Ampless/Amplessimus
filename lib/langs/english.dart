@@ -50,7 +50,7 @@ class English extends Language {
   }
 
   @override
-  String catchDsbGetData(dynamic e) =>
+  String dsbError(String e) =>
       'Please check your internet connection. (Error: $e)';
 
   @override

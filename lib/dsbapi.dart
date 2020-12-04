@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'ui/first_login.dart';
-import 'main.dart';
 import 'langs/language.dart';
 import 'logging.dart';
 import 'prefs.dart' as Prefs;
 import 'subject.dart';
+import 'ui/home_page.dart';
 import 'uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +83,7 @@ Future<Null> dsbUpdateWidget({
     final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
     var plans = useJCache
         ? Plan.plansFromJson(Prefs.dsbJsonCache)
-        : await getAllSubs(username, password, cachedHttpGet, uncachedHttp.post,
+        : await getAllSubs(username, password, cachedHttpGet, http.post,
             language: Prefs.dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (oneClassOnly) plans = sortByLesson(searchClass(plans, grade, char));

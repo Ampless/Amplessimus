@@ -1,6 +1,5 @@
 import '../dsbapi.dart';
 import '../logging.dart';
-import '../main.dart';
 import 'error_screen.dart';
 import 'first_login.dart';
 import '../uilib.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import '../prefs.dart' as Prefs;
 import '../colors.dart' as AmpColors;
+import 'home_page.dart';
 
 class SplashScreen extends StatelessWidget {
   @override

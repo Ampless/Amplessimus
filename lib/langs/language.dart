@@ -58,7 +58,7 @@ abstract class Language {
   String get addWpeDomain;
   String dsbSubtoSubtitle(Substitution sub);
   String dayToString(Day day);
-  String catchDsbGetData(dynamic e);
+  String dsbError(String e);
   LinkedHashMap<String, String> get subjectLut;
 
   //why tf doesnt this break?!

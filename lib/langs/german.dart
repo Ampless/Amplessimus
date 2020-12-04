@@ -59,9 +59,8 @@ class German extends Language {
   }
 
   @override
-  String catchDsbGetData(dynamic e) {
-    return 'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
-  }
+  String dsbError(String e) =>
+      'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
 
   @override
   String get noLogin => 'Keine Login-Daten eingetragen.';
