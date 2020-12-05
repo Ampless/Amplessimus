@@ -2,6 +2,7 @@ import '../dsbapi.dart';
 import '../langs/language.dart';
 import '../uilib.dart';
 import '../prefs.dart' as Prefs;
+import '../appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:schttp/schttp.dart';
@@ -31,81 +32,80 @@ class FirstLoginState extends State<FirstLogin>
     return ampPageBase(
       Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: ampAppBar(Language.current.changeLoginPopup),
-        body: Center(
-          heightFactor: 1,
-          child: Container(
-            margin: EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ampText(Language.current.selectClass, size: 20),
-                  ampRow([
-                    ampDropdownButton(
-                      value: _gradeDropDownValue,
-                      items: dsbGrades,
-                      onChanged: (value) {
-                        setState(() {
-                          _gradeDropDownValue = value;
-                          Prefs.grade = value;
-                          try {
-                            if (int.parse(value) > 10)
-                              _letterDropDownValue = Prefs.char = '';
-                            // ignore: empty_catches
-                          } catch (e) {}
-                        });
-                      },
-                    ),
-                    ampPadding(10),
-                    ampDropdownButton(
-                      value: _letterDropDownValue,
-                      items: dsbLetters,
-                      onChanged: (value) {
-                        setState(() {
-                          _letterDropDownValue = value;
-                          Prefs.char = value;
-                        });
-                      },
-                    ),
-                  ]),
-                  ampSizedDivider(20),
-                  ampPadding(4),
-                  _usernameFormField.formField(
-                    labelText: Language.current.username,
-                    keyboardType: TextInputType.visiblePassword,
-                    autofillHints: [AutofillHints.username],
-                  ),
-                  ampPadding(6),
-                  _passwordFormField.formField(
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() => _passwordHidden = !_passwordHidden);
-                      },
-                      icon: _passwordHidden
-                          ? ampIcon(Icons.visibility_outlined)
-                          : ampIcon(Icons.visibility_off_outlined),
-                    ),
-                    labelText: Language.current.password,
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: _passwordHidden,
-                    autofillHints: [AutofillHints.password],
-                  ),
-                  ampSizedDivider(20),
-                  ampPadding(4),
-                  ampText(Language.current.changeLanguage, size: 20),
-                  ampDropdownButton(
-                    value: Language.current,
-                    itemToDropdownChild: (i) => ampText(i.name),
-                    items: Language.all,
-                    onChanged: (v) => setState(() => Language.current = v),
-                  ),
-                  ampSizedDivider(5),
-                  ampErrorText(_error),
-                ],
+        appBar: ampAppBar(appTitle),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: ListView(
+            children: [
+              ampSubtitle(Language.current.changeLoginPopup),
+              ampPadding(6),
+              _usernameFormField.formField(
+                labelText: Language.current.username,
+                keyboardType: TextInputType.visiblePassword,
+                autofillHints: [AutofillHints.username],
               ),
-            ),
+              ampPadding(6),
+              _passwordFormField.formField(
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() => _passwordHidden = !_passwordHidden);
+                  },
+                  icon: _passwordHidden
+                      ? ampIcon(Icons.visibility_outlined)
+                      : ampIcon(Icons.visibility_off_outlined),
+                ),
+                labelText: Language.current.password,
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: _passwordHidden,
+                autofillHints: [AutofillHints.password],
+              ),
+              ampPadding(4),
+              ampDivider,
+              ampPadding(4),
+              ampSubtitle(Language.current.changeLanguage),
+              ampDropdownButton(
+                value: Language.current,
+                itemToDropdownChild: (i) => ampText(i.name),
+                items: Language.all,
+                onChanged: (v) => setState(() => Language.current = v),
+              ),
+              ampPadding(4),
+              ampDivider,
+              ampPadding(4),
+              ampSubtitle(Language.current.selectClass),
+              ampRow([
+                ampDropdownButton(
+                  value: _gradeDropDownValue,
+                  items: dsbGrades,
+                  onChanged: (value) {
+                    setState(() {
+                      _gradeDropDownValue = value;
+                      Prefs.grade = value;
+                      try {
+                        if (int.parse(value) > 10)
+                          _letterDropDownValue = Prefs.char = '';
+                        // ignore: empty_catches
+                      } catch (e) {}
+                    });
+                  },
+                ),
+                ampPadding(10),
+                ampDropdownButton(
+                  value: _letterDropDownValue,
+                  items: dsbLetters,
+                  onChanged: (value) {
+                    setState(() {
+                      _letterDropDownValue = value;
+                      Prefs.char = value;
+                    });
+                  },
+                ),
+              ]),
+              ampPadding(4),
+              ampDivider,
+              ampPadding(4),
+              ampErrorText(_error),
+            ],
           ),
         ),
         bottomSheet: ampLinearProgressIndicator(_loading),

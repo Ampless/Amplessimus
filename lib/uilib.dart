@@ -177,6 +177,8 @@ Text ampText(
   );
 }
 
+Text ampSubtitle(String s) => ampText(s, size: 16, weight: FontWeight.w600);
+
 Icon ampIcon(IconData data, {double size}) =>
     Icon(data, color: AmpColors.colorForeground, size: size);
 

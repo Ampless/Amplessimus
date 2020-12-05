@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'first_login.dart';
 import '../langs/language.dart';
 import '../logging.dart';
 import '../prefs.dart' as Prefs;
@@ -61,6 +62,8 @@ class DevOptionsState extends State<DevOptions>
         ),
         ampRaisedButton('Set Cache to Input', () => _cacheDialog(context)),
         ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
+        ampRaisedButton(
+            'först lockin', () => ampChangeScreen(FirstLogin(), context)),
         ampRaisedButton(
           'App-Daten löschen',
           () {
