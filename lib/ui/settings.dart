@@ -158,7 +158,10 @@ class _SettingsState extends State<Settings> {
             ampSwitchWithText(
               Language.current.parseSubjects,
               Prefs.parseSubjects,
-              (v) => setState(() => Prefs.parseSubjects = v),
+              (v) {
+                setState(() => Prefs.parseSubjects = v);
+                widget.parent.rebuildDragDown();
+              },
             ),
             ampDivider,
             Row(
