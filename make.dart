@@ -1,6 +1,6 @@
 import 'dart:io';
 
-final version = '2.9.1337';
+final version = '2.99.133713374269161';
 
 var actualVersion = 'pls run main';
 

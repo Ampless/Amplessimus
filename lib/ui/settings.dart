@@ -62,6 +62,45 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  Widget get changeSubVisibilityWidget => Stack(
+        children: [
+          ListTile(
+            leading: ampText(Language.current.allClasses),
+            trailing: ampRow(
+              [
+                ampDropdownButton(
+                  value: Prefs.grade,
+                  items: dsbGrades,
+                  onChanged: (value) => setState(() {
+                    Prefs.grade = value;
+                    try {
+                      if (int.parse(value) > 10) Prefs.char = '';
+                      // ignore: empty_catches
+                    } catch (e) {}
+                  }),
+                ),
+                ampPadding(8),
+                ampDropdownButton(
+                  value: Prefs.char,
+                  items: dsbLetters,
+                  onChanged: (value) => setState(() => Prefs.char = value),
+                ),
+              ],
+            ),
+          ),
+          Center(
+            child: ampSwitch(
+              Prefs.oneClassOnly,
+              (value) {
+                setState(() => Prefs.oneClassOnly = value);
+                dsbUpdateWidget(
+                    callback: widget.parent.rebuild, useJsonCache: true);
+              },
+            ),
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -131,30 +170,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             ampDivider,
-            ampWidgetWithText(
-              Language.current.selectClass,
-              ampRow(
-                [
-                  ampDropdownButton(
-                    value: Prefs.grade,
-                    items: dsbGrades,
-                    onChanged: (value) => setState(() {
-                      Prefs.grade = value;
-                      try {
-                        if (int.parse(value) > 10) Prefs.char = '';
-                        // ignore: empty_catches
-                      } catch (e) {}
-                    }),
-                  ),
-                  ampPadding(8),
-                  ampDropdownButton(
-                    value: Prefs.char,
-                    items: dsbLetters,
-                    onChanged: (value) => setState(() => Prefs.char = value),
-                  ),
-                ],
-              ),
-            ),
+            changeSubVisibilityWidget,
             ampSwitchWithText(
               Language.current.parseSubjects,
               Prefs.parseSubjects,

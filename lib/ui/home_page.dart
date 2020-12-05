@@ -113,25 +113,6 @@ class AmpHomePageState extends State<AmpHomePage>
     );
   }
 
-  Widget get changeSubVisibilityWidget => Stack(
-        children: [
-          ampListTile(
-            null,
-            leading: Language.current.allClasses,
-            trailing: '${Prefs.grade}${Prefs.char}',
-          ),
-          Center(
-            child: ampSwitch(
-              Prefs.oneClassOnly,
-              (value) {
-                Prefs.oneClassOnly = value;
-                dsbUpdateWidget(callback: rebuild, useJsonCache: true);
-              },
-            ),
-          ),
-        ],
-      );
-
   int lastUpdate = 0;
   @override
   Widget build(BuildContext context) {
@@ -157,7 +138,6 @@ class AmpHomePageState extends State<AmpHomePage>
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
-                changeSubVisibilityWidget,
                 dsbWidget,
                 ampDivider,
                 wpemailsave == null || wpemailsave.isEmpty
