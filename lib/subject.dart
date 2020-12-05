@@ -22,6 +22,7 @@ const fullAbbreviations = {
   'l': 'latein',
   'it': 'italienisch',
   'f': 'französisch',
+  'frz': 'frz',
   'so': 'sozialkunde',
   'sk': 'skunde',
   'm': 'mathematik',

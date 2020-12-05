@@ -132,6 +132,7 @@ class English extends Language {
     'l': 'Latin',
     'it': 'Italian',
     'f': 'French',
+    'frz': 'French',
     'so': 'Social Studies / Politics',
     'sk': 'Social Studies / Politics',
     'm': 'Maths',

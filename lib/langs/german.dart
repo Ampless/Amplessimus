@@ -132,6 +132,7 @@ class German extends Language {
     'l': 'Latein',
     'it': 'Italienisch',
     'f': 'Französisch',
+    'frz': 'Französisch',
     'so': 'Sozialkunde',
     'sk': 'Sozialkunde',
     'm': 'Mathematik',
