@@ -157,9 +157,9 @@ class AmpHomePageState extends State<AmpHomePage>
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
+                changeSubVisibilityWidget,
                 dsbWidget,
                 ampDivider,
-                changeSubVisibilityWidget,
                 wpemailsave == null || wpemailsave.isEmpty
                     ? ampRaisedButton(Language.current.addWpeDomain,
                         () => wpemailDomainPopup())
