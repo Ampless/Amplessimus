@@ -103,10 +103,8 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      color: Colors.transparent,
-      child: Scaffold(
+    return ampPageBase(
+      Scaffold(
         appBar: ampAppBar(Language.current.settings),
         backgroundColor: Colors.transparent,
         body: ListView(

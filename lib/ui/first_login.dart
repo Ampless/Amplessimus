@@ -62,45 +62,49 @@ class FirstLoginState extends State<FirstLogin>
               ampPadding(4),
               ampDivider,
               ampPadding(4),
-              ampSubtitle(Language.current.changeLanguage),
-              ampDropdownButton(
-                value: Language.current,
-                itemToDropdownChild: (i) => ampText(i.name),
-                items: Language.all,
-                onChanged: (v) => setState(() => Language.current = v),
+              ampWidgetWithText(
+                Language.current.changeLanguage,
+                ampDropdownButton(
+                  value: Language.current,
+                  itemToDropdownChild: (i) => ampText(i.name),
+                  items: Language.all,
+                  onChanged: (v) => setState(() => Language.current = v),
+                ),
               ),
               ampPadding(4),
               ampDivider,
               ampPadding(4),
-              ampSubtitle(Language.current.selectClass),
-              ampRow([
-                ampDropdownButton(
-                  value: _gradeDropDownValue,
-                  items: dsbGrades,
-                  onChanged: (value) {
-                    setState(() {
-                      _gradeDropDownValue = value;
-                      Prefs.grade = value;
-                      try {
-                        if (int.parse(value) > 10)
-                          _letterDropDownValue = Prefs.char = '';
-                        // ignore: empty_catches
-                      } catch (e) {}
-                    });
-                  },
+              ampWidgetWithText(
+                Language.current.selectClass,
+                ampRow(
+                  [
+                    ampDropdownButton(
+                      value: _gradeDropDownValue,
+                      items: dsbGrades,
+                      onChanged: (value) {
+                        setState(() {
+                          _gradeDropDownValue = value;
+                          Prefs.grade = value;
+                          try {
+                            if (int.parse(value) > 10)
+                              _letterDropDownValue = Prefs.char = '';
+                            // ignore: empty_catches
+                          } catch (e) {}
+                        });
+                      },
+                    ),
+                    ampPadding(10),
+                    ampDropdownButton(
+                      value: _letterDropDownValue,
+                      items: dsbLetters,
+                      onChanged: (v) => setState(() {
+                        _letterDropDownValue = v;
+                        Prefs.char = v;
+                      }),
+                    ),
+                  ],
                 ),
-                ampPadding(10),
-                ampDropdownButton(
-                  value: _letterDropDownValue,
-                  items: dsbLetters,
-                  onChanged: (value) {
-                    setState(() {
-                      _letterDropDownValue = value;
-                      Prefs.char = value;
-                    });
-                  },
-                ),
-              ]),
+              ),
               ampPadding(4),
               ampDivider,
               ampPadding(4),
