@@ -69,7 +69,7 @@ main() {
         mkdir -p bin
 
         commitid=$(git rev-parse @)
-        version_name="$(dart run make.dart ver).$(git rev-list @ --count)"
+        version_name="$(dart run make.dart ver)"
         output_dir="/usr/local/var/www/amplessimus/$version_name"
 
         {
