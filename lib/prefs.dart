@@ -8,10 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences _prefs;
 
-dynamic _get(String key, dynamic dflt, Function(String) f) {
+T _get<T>(String key, T dflt, Function(String) f) {
   if (_prefs == null) {
-    ampWarn('PrefCache', 'Getting $key before initialization is done.');
-    return dflt;
+    ampErr('PrefCache', 'Getting $key before initialization is done.');
+    throw 'u tried to get $key ($dflt) before init was done wtf is wrong with u';
   }
 
   return _prefs.containsKey(key) ? f(key) : dflt;
