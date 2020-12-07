@@ -39,6 +39,7 @@ class AmpHomePageState extends State<AmpHomePage>
   @override
   void initState() {
     ampInfo('AmpHomePageState', 'initState()');
+    checkBrightness();
     SchedulerBinding.instance.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();

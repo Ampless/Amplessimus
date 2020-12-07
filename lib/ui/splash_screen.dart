@@ -7,10 +7,8 @@ import '../uilib.dart';
 import '../wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import '../prefs.dart' as Prefs;
-import '../colors.dart' as AmpColors;
 import 'home_page.dart';
 
 class _AmpBehavior extends ScrollBehavior {
@@ -55,10 +53,6 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
     loadPrefs.then((_) async {
       try {
-        if (Prefs.useSystemTheme)
-          AmpColors.brightness =
-              SchedulerBinding.instance.window.platformBrightness;
-
         if (Prefs.firstLogin) return setState(() => _currentPage = 1);
 
         final dsb = dsbUpdateWidget(useJsonCache: true);
