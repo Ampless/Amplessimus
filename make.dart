@@ -1,8 +1,8 @@
 import 'dart:io';
 
-final version = '2.99.133713374269161';
+final majorMinorVersion = '2.999';
 
-var actualVersion = 'pls run main';
+var version = 'pls run main';
 
 final flags = '--release --suppress-analytics';
 final binFlags = '$flags --split-debug-info=/tmp --obfuscate';
@@ -54,8 +54,7 @@ sed(input, regex, replacement) {
   return input.toString().replaceAll(RegExp(regex), replacement.toString());
 }
 
-sedit(input, output,
-    {deb = '/dev/null', buildDir = '/dev/null', version = '0.0.0-1'}) async {
+sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
   var s = readfile(input);
   s = sed(s, '0.0.0-1', version);
   s = sed(s, '\$ISIZE', Directory(buildDir).statSync().size);
@@ -65,15 +64,11 @@ sedit(input, output,
   writefile(output, s);
 }
 
-replaceversions(version, actualVersion) async {
+replaceversions() async {
   mv('pubspec.yaml', 'pubspec.yaml.def');
   mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
-  await sedit('pubspec.yaml.def', 'pubspec.yaml', version: version);
-  await sedit(
-    'lib/appinfo.dart.def',
-    'lib/appinfo.dart',
-    version: actualVersion,
-  );
+  await sedit('pubspec.yaml.def', 'pubspec.yaml');
+  await sedit('lib/appinfo.dart.def', 'lib/appinfo.dart');
 }
 
 iosapp(buildDir) async {
@@ -95,27 +90,25 @@ ipa(buildDir, output) async {
 // but its broken...
 deb(buildDir, output) async {
   await system('cp -rp $buildDir tmp/deb/Applications/');
-  await sedit('control.def', 'tmp/deb/DEBIAN/control',
-      buildDir: buildDir, version: version);
+  await sedit('control.def', 'tmp/deb/DEBIAN/control', buildDir: buildDir);
   await system('COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= '
       'dpkg-deb -Sextreme -z9 --build tmp/deb $output');
 }
 
 cydiainfo(buildDir, output, debFile) async {
   await sedit('Packages.def', '$output/Packages',
-      buildDir: buildDir, version: version, deb: debFile);
+      buildDir: buildDir, deb: debFile);
   await system('gzip -9 -c $output/Packages > $output/Packages.gz');
 }
 
 apk() async {
   await flutter('build apk $apkFlags');
-  mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$actualVersion.apk');
+  mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$version.apk');
 }
 
 aab() async {
   await flutter('build appbundle $aabFlags');
-  mv('build/app/outputs/bundle/release/app-release.aab',
-      'bin/$actualVersion.aab');
+  mv('build/app/outputs/bundle/release/app-release.aab', 'bin/$version.aab');
 }
 
 test() async {
@@ -126,8 +119,8 @@ test() async {
 
 ios() async {
   await iosapp('build/ios/Release-iphoneos/Runner.app');
-  await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.ipa');
-  await deb('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.deb');
+  await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
+  await deb('build/ios/Release-iphoneos/Runner.app', 'bin/$version.deb');
 }
 
 android() async {
@@ -139,13 +132,13 @@ android() async {
 web() async {
   await flutter('config --enable-web');
   await flutter('build web $webFlags');
-  mvd('build/web', 'bin/$actualVersion.web');
+  mvd('build/web', 'bin/$version.web');
 }
 
 win() async {
   await flutter('config --enable-windows-desktop');
   await flutter('build windows $winFlags');
-  mvd('build/windows/runner/Release', 'bin/$actualVersion.win');
+  mvd('build/windows/runner/Release', 'bin/$version.win');
 }
 
 mac() async {
@@ -164,19 +157,19 @@ mac() async {
   await system(
       'hdiutil create tmp/tmp.dmg -ov -srcfolder tmp/dmg -fs APFS -volname "Install Amplessimus"');
   await system(
-      'hdiutil convert tmp/tmp.dmg -ov -format UDBZ -o bin/$actualVersion.dmg');
+      'hdiutil convert tmp/tmp.dmg -ov -format UDBZ -o bin/$version.dmg');
 }
 
 linux() async {
   await flutter('config --enable-linux-desktop');
   await flutter('build linux $gtkFlags');
-  mvd('build/linux/release/bundle', 'bin/$actualVersion.linux');
+  mvd('build/linux/release/bundle', 'bin/$version.linux');
 }
 
 ci() async {
   final a = apk();
   await iosapp('build/ios/Release-iphoneos/Runner.app');
-  await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$actualVersion.ipa');
+  await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
   await a;
 }
 
@@ -191,10 +184,10 @@ clean() async {
 }
 
 main(List<String> argv) async {
-  actualVersion = '$version.${await system('git rev-list @ --count')}';
+  version = '$majorMinorVersion.${await system('git rev-list @ --count')}';
   await flutter('channel master');
   await flutter('upgrade');
-  await replaceversions(version, actualVersion);
+  await replaceversions();
   try {
     mkdirs('bin');
     mkdirs('tmp/Payload');
