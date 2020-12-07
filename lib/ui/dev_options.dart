@@ -88,12 +88,13 @@ class DevOptionsState extends State<DevOptions>
   }
 
   void _cacheDialog(BuildContext context) {
-    final cacheFormField = AmpFormField(Prefs.dsbJsonCache);
+    final cacheFormField =
+        AmpFormField(Prefs.dsbJsonCache, keyboardType: TextInputType.multiline);
     ampDialog(
       context: context,
       title: 'Cache',
       children: (_, __) => [
-        cacheFormField.formField(keyboardType: TextInputType.multiline),
+        cacheFormField.flutter(),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
@@ -107,18 +108,17 @@ class DevOptionsState extends State<DevOptions>
   }
 
   void _inputTimerDialog(BuildContext context) {
-    final timerFormField = AmpFormField(Prefs.timer);
+    final timerFormField = AmpFormField(
+      Prefs.timer,
+      keyboardType: TextInputType.number,
+      validator: (value) => num.tryParse(value) == null
+          ? Language.current.widgetValidatorInvalid
+          : null,
+    );
     ampDialog(
       context: context,
       title: 'Timer (Minuten)',
-      children: (context, setAlState) => [
-        timerFormField.formField(
-          keyboardType: TextInputType.number,
-          validator: (value) => num.tryParse(value) == null
-              ? Language.current.widgetValidatorInvalid
-              : null,
-        ),
-      ],
+      children: (context, setAlState) => [timerFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () {

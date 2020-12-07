@@ -22,31 +22,34 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Future<Null> credentialDialog() {
-    final usernameFormField = AmpFormField(Prefs.username);
-    final passwordFormField = AmpFormField(Prefs.password);
+    final usernameFormField = AmpFormField(
+      Prefs.username,
+      labelText: Language.current.username,
+      keyboardType: TextInputType.visiblePassword,
+      autofillHints: [AutofillHints.username],
+    );
+    final passwordFormField = AmpFormField(
+      Prefs.password,
+      labelText: Language.current.password,
+      keyboardType: TextInputType.visiblePassword,
+      autofillHints: [AutofillHints.password],
+    );
     var passwordHidden = true;
     return ampDialog(
       context: context,
       title: Language.current.changeLoginPopup,
       children: (context, setAlState) => [
         ampPadding(2),
-        usernameFormField.formField(
-          labelText: Language.current.username,
-          keyboardType: TextInputType.visiblePassword,
-          autofillHints: [AutofillHints.username],
-        ),
+        usernameFormField.flutter(),
         ampPadding(6),
-        passwordFormField.formField(
+        passwordFormField.flutter(
           suffixIcon: IconButton(
             onPressed: () => setAlState(() => passwordHidden = !passwordHidden),
             icon: passwordHidden
                 ? ampIcon(Icons.visibility_outlined)
                 : ampIcon(Icons.visibility_off_outlined),
           ),
-          labelText: Language.current.password,
-          keyboardType: TextInputType.visiblePassword,
           obscureText: passwordHidden,
-          autofillHints: [AutofillHints.password],
         )
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(

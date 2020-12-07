@@ -22,8 +22,18 @@ class FirstLoginState extends State<FirstLogin>
   String _gradeDropDownValue = Prefs.grade;
   String _letterDropDownValue = Prefs.char;
   bool _passwordHidden = true;
-  final _usernameFormField = AmpFormField(Prefs.username);
-  final _passwordFormField = AmpFormField(Prefs.password);
+  final _usernameFormField = AmpFormField(
+    Prefs.username,
+    labelText: Language.current.username,
+    keyboardType: TextInputType.visiblePassword,
+    autofillHints: [AutofillHints.username],
+  );
+  final _passwordFormField = AmpFormField(
+    Prefs.password,
+    labelText: Language.current.password,
+    keyboardType: TextInputType.visiblePassword,
+    autofillHints: [AutofillHints.password],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +48,8 @@ class FirstLoginState extends State<FirstLogin>
           child: ListView(
             children: [
               ampSubtitle(Language.current.changeLoginPopup),
-              ampPadding(6),
-              _usernameFormField.formField(
-                labelText: Language.current.username,
-                keyboardType: TextInputType.visiblePassword,
-                autofillHints: [AutofillHints.username],
-              ),
-              ampPadding(6),
-              _passwordFormField.formField(
+              _usernameFormField.flutter(),
+              _passwordFormField.flutter(
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() => _passwordHidden = !_passwordHidden);
@@ -54,10 +58,7 @@ class FirstLoginState extends State<FirstLogin>
                       ? ampIcon(Icons.visibility_outlined)
                       : ampIcon(Icons.visibility_off_outlined),
                 ),
-                labelText: Language.current.password,
-                keyboardType: TextInputType.visiblePassword,
                 obscureText: _passwordHidden,
-                autofillHints: [AutofillHints.password],
               ),
               ampPadding(4),
               ampDivider,

@@ -83,24 +83,21 @@ class AmpHomePageState extends State<AmpHomePage>
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
     final dsb = dsbUpdateWidget();
-    if (Prefs.wpeDomain.isNotEmpty)
-      wpemailsave = await wpemails(Prefs.wpeDomain);
+    wpemailUpdate();
     await dsb;
     rebuild();
   }
 
   Future<Null> wpemailDomainPopup() {
-    final domainFormField = AmpFormField(Prefs.wpeDomain);
+    final domainFormField = AmpFormField(
+      Prefs.wpeDomain,
+      labelText: Language.current.wpemailDomain,
+      keyboardType: TextInputType.url,
+    );
     return ampDialog(
       context: context,
       title: Language.current.wpemailDomain,
-      children: (context, setAlState) => [
-        ampPadding(2),
-        domainFormField.formField(
-          labelText: Language.current.wpemailDomain,
-          keyboardType: TextInputType.url,
-        ),
-      ],
+      children: (context, setAlState) => [domainFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () async {
@@ -143,7 +140,7 @@ class AmpHomePageState extends State<AmpHomePage>
                 wpemailsave == null || wpemailsave.isEmpty
                     ? ampRaisedButton(Language.current.addWpeDomain,
                         () => wpemailDomainPopup())
-                    : wpemailWidget(wpemailsave),
+                    : wpemailWidget(),
               ],
             ),
           ),

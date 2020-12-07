@@ -44,7 +44,8 @@ Future<Map<String, String>> wpemails(String domain) async {
   }
 }
 
-Widget wpemailWidget(Map<String, String> emails) {
+Widget wpemailWidget([Map<String, String> emails]) {
+  emails ??= wpemailsave;
   final w = <Widget>[];
   for (final e in emails.entries)
     w.add(ampListTile(

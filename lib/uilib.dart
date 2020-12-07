@@ -12,21 +12,22 @@ Future<Null> ampDialog({
   @required BuildContext context,
   @required Widget Function(List<Widget>) widgetBuilder,
   bool barrierDismissible = true,
-}) =>
-    showDialog(
-      context: context,
-      barrierDismissible: barrierDismissible,
-      builder: (context) => AlertDialog(
-        title: ampText(title),
-        backgroundColor: AmpColors.colorBackground,
-        content: StatefulBuilder(
-          builder: (alertContext, setAlState) => widgetBuilder(
-            children(alertContext, setAlState),
-          ),
+}) {
+  return showDialog(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    builder: (context) => AlertDialog(
+      title: ampText(title),
+      backgroundColor: AmpColors.colorBackground,
+      content: StatefulBuilder(
+        builder: (alertContext, setAlState) => widgetBuilder(
+          children(alertContext, setAlState),
         ),
-        actions: actions(context),
       ),
-    );
+      actions: actions(context),
+    ),
+  );
+}
 
 Widget ampLinearProgressIndicator([bool loading = true]) {
   return !loading
@@ -308,45 +309,58 @@ Text ampErrorText(dynamic e) => ampText(errorString(e),
 class AmpFormField {
   final key = GlobalKey<FormFieldState>();
   final TextEditingController controller;
+  final List<String> autofillHints;
+  final TextInputType keyboardType;
+  final String Function(String) validator;
+  final String labelText;
 
-  AmpFormField(Object initialValue)
-      : controller = TextEditingController(text: initialValue.toString());
+  AmpFormField(
+    Object initialValue, {
+    this.autofillHints = const [],
+    this.keyboardType = TextInputType.text,
+    this.validator,
+    this.labelText = '',
+  }) : controller = TextEditingController(text: initialValue.toString());
 
-  TextFormField formField({
-    String Function(String) validator,
-    TextInputType keyboardType = TextInputType.text,
-    String labelText = '',
-    bool obscureText = false,
-    List<String> autofillHints = const [],
+  Widget flutter({
     Widget suffixIcon,
+    bool obscureText = false,
   }) {
     suffixIcon ??= ampNull;
-    return TextFormField(
-      obscureText: obscureText,
-      style: AmpColors.textStyleForeground,
-      keyboardAppearance: AmpColors.brightness,
-      controller: controller,
-      key: key,
-      validator: validator,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        suffixIcon: suffixIcon,
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AmpColors.colorForeground, width: 1.0),
-          borderRadius: BorderRadius.circular(10),
+    return ampColumn(
+      [
+        ampPadding(3),
+        TextFormField(
+          obscureText: obscureText,
+          style: AmpColors.textStyleForeground,
+          keyboardAppearance: AmpColors.brightness,
+          controller: controller,
+          key: key,
+          validator: validator,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            suffixIcon: suffixIcon,
+            enabledBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: AmpColors.colorForeground, width: 1.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: AmpColors.colorForeground, width: 2.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            labelStyle: AmpColors.textStyleForeground,
+            labelText: labelText,
+            fillColor: AmpColors.colorForeground,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: AmpColors.colorForeground),
+            ),
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AmpColors.colorForeground, width: 2.0),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        labelStyle: AmpColors.textStyleForeground,
-        labelText: labelText,
-        fillColor: AmpColors.colorForeground,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: AmpColors.colorForeground),
-        ),
-      ),
+        ampPadding(3),
+      ],
     );
   }
 
