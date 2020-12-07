@@ -69,35 +69,31 @@ Widget dsbWidget;
 Future<Null> dsbUpdateWidget({
   Function() callback,
   bool useJsonCache,
-  bool altTheme,
 }) async {
   useJsonCache ??= Prefs.useJsonCache;
-  altTheme ??= Prefs.altTheme;
   callback ??= () {};
-  final username = Prefs.username;
-  final password = Prefs.password;
-  final oneClassOnly = Prefs.oneClassOnly;
-  final grade = Prefs.grade;
-  final char = Prefs.char;
   try {
-    if (username.isEmpty || password.isEmpty) throw Language.current.noLogin;
     final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
     var plans = useJCache
         ? Plan.plansFromJson(Prefs.dsbJsonCache)
-        : await getAllSubs(username, password, cachedHttpGet, http.post,
+        : await getAllSubs(
+            Prefs.username, Prefs.password, cachedHttpGet, http.post,
             language: Prefs.dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
-    if (oneClassOnly) plans = sortByLesson(searchClass(plans, grade, char));
-    dsbWidget = _renderPlans(plans, oneClassOnly, char, grade, altTheme);
+    if (Prefs.oneClassOnly) {
+      plans = sortByLesson(searchClass(plans, Prefs.grade, Prefs.char));
+    }
+    dsbWidget = _renderPlans(
+      plans,
+      Prefs.oneClassOnly,
+      Prefs.char,
+      Prefs.grade,
+      Prefs.altTheme,
+    );
     dsbPlans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
-    dsbWidget = SizedBox(
-      child: Container(
-        child: ampList([ampErrorText(e)], altTheme),
-        padding: EdgeInsets.only(top: 15),
-      ),
-    );
+    dsbWidget = ampList([ampPadding(15), ampErrorText(e)], Prefs.altTheme);
   }
   callback();
 }
