@@ -14,10 +14,11 @@ testCase expectTestCase(
       try {
         res = await tfunc();
       } catch (e) {
-        if (!error)
+        if (!error) {
           rethrow;
-        else
+        } else {
           return;
+        }
       }
       if (error) throw '[ETC($tfunc, $expct)] No error.';
       expect(res, expct);

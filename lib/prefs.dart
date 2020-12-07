@@ -137,9 +137,6 @@ set dsbUseLanguage(bool b) => _prefs.setBool('usedsblang', b);
 bool get parseSubjects => _getBool('parsesubs', true);
 set parseSubjects(bool b) => _prefs.setBool('parsesubs', b);
 
-//this is only "temporary"; the log should become persistant soon
-String log = '';
-
 String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 
 Timer _updateTimer;

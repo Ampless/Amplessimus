@@ -1,14 +1,13 @@
-// ignore: library_prefixes
-import 'prefs.dart' as Prefs;
 import 'uilib.dart';
 import 'package:flutter/material.dart';
 
 bool _loggingDisabled = false;
 void ampDisableLogging() => _loggingDisabled = true;
 
-void ampClearLog() => Prefs.log = '';
+String _log = '';
+void ampClearLog() => _log = '';
 
-Widget get ampLogWidget => ampText(Prefs.log,
+Widget get ampLogWidget => ampText(_log,
     font: ['Ubuntu Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier']);
 
 void ampLog(String lvl, dynamic ctx, Object msg) {
@@ -33,7 +32,7 @@ void ampLog(String lvl, dynamic ctx, Object msg) {
 
 void ampRawLog(Object msg) {
   if (_loggingDisabled) return;
-  Prefs.log += '$msg\n';
+  _log += '$msg\n';
   print(msg);
 }
 
