@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+
 import 'logging.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,8 +42,9 @@ String getCache(String url) {
     return null;
   }
   final ttl = _getInt('CACHE_TTL_$hash', 0);
-  if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch)
+  if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) {
     return _getString('CACHE_VAL_$hash', null);
+  }
   _prefs.setString('CACHE_VAL_$hash', null);
   ampInfo('Prefs', 'HTTP Cache TTL reached: $url');
   return null;
@@ -70,12 +73,13 @@ void clearCache() {
 
 void listCache() {
   ampRawLog('{');
-  for (final hash in _getStringList('CACHE_URLS', []))
+  for (final hash in _getStringList('CACHE_URLS', [])) {
     ampRawLog(jsonEncode({
       'hash': hash,
       'len': _getString('CACHE_VAL_$hash', '').length,
       'ttl': _getInt('CACHE_TTL_$hash', -1),
     }));
+  }
   ampRawLog('}');
 }
 
@@ -83,8 +87,10 @@ int _toggleDarkModePressed = 0;
 int _lastToggleDarkModePress = 0;
 
 void toggleDarkModePressed() {
-  if (DateTime.now().millisecondsSinceEpoch > _lastToggleDarkModePress + 10000)
+  if (DateTime.now().millisecondsSinceEpoch >
+      _lastToggleDarkModePress + 10000) {
     _toggleDarkModePressed = 0;
+  }
 
   _toggleDarkModePressed++;
   _lastToggleDarkModePress = DateTime.now().millisecondsSinceEpoch;
@@ -131,9 +137,6 @@ set dsbUseLanguage(bool b) => _prefs.setBool('usedsblang', b);
 bool get parseSubjects => _getBool('parsesubs', true);
 set parseSubjects(bool b) => _prefs.setBool('parsesubs', b);
 
-set isDarkMode(bool b) => _prefs.setBool('darkmode', b);
-bool get isDarkMode => _getBool('darkmode', true);
-
 //this is only "temporary"; the log should become persistant soon
 String log = '';
 
@@ -170,3 +173,39 @@ Future<bool> clear() async {
 }
 
 bool get isInitialized => _prefs != null;
+
+//COLORS
+
+const Color _blankBlack = Color.fromRGBO(0, 0, 0, 1);
+const Color _blankWhite = Color.fromRGBO(255, 255, 255, 1);
+const Color _greyBlack = Color.fromRGBO(75, 75, 75, 1);
+const Color _lightWhite = Color.fromRGBO(25, 25, 25, 1);
+const Color _greyWhite = Color.fromRGBO(200, 200, 200, 1);
+const Color _lightBlack = Color.fromRGBO(220, 220, 220, 1);
+
+Color get blankGrey => isDarkMode ? _greyBlack : _greyWhite;
+Color get lightBackground => isDarkMode ? _lightWhite : _lightBlack;
+Color get lightForeground => isDarkMode ? _greyWhite : _greyBlack;
+Color get colorBackground => isDarkMode ? _blankBlack : _blankWhite;
+Color get colorForeground => isDarkMode ? _blankWhite : _blankBlack;
+
+TextStyle get textStyleForeground => TextStyle(color: colorForeground);
+
+Brightness get brightness => isDarkMode ? Brightness.dark : Brightness.light;
+set brightness(Brightness b) {
+  if (Brightness.values.length > 2) {
+    ampWarn('AmpColors.brightness', 'more than 2 Brightness states exist.');
+  }
+  if (b == null) return;
+  isDarkMode = b != Brightness.light;
+  ampInfo('AmpColors', 'set brightness = $b');
+}
+
+bool get isDarkMode => isInitialized ? _getBool('darkmode', true) : true;
+set isDarkMode(bool b) {
+  if (b == null) return;
+  _prefs.setBool('darkmode', b);
+  ampInfo('AmpColors', 'set isDarkMode = $isDarkMode');
+}
+
+void switchMode() => isDarkMode = !isDarkMode;

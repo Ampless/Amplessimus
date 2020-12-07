@@ -3,6 +3,7 @@ import 'dart:async';
 import 'ui/first_login.dart';
 import 'langs/language.dart';
 import 'logging.dart';
+// ignore: library_prefixes
 import 'prefs.dart' as Prefs;
 import 'subject.dart';
 import 'ui/home_page.dart';
@@ -10,7 +11,7 @@ import 'uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
-Widget dsbRenderPlans(
+Widget _renderPlans(
   List<Plan> plans,
   bool oneClassOnly,
   String char,
@@ -87,7 +88,7 @@ Future<Null> dsbUpdateWidget({
             language: Prefs.dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (oneClassOnly) plans = sortByLesson(searchClass(plans, grade, char));
-    dsbWidget = dsbRenderPlans(plans, oneClassOnly, char, grade, altTheme);
+    dsbWidget = _renderPlans(plans, oneClassOnly, char, grade, altTheme);
     dsbPlans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));

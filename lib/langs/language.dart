@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'english.dart';
 import 'german.dart';
+// ignore: library_prefixes
 import '../prefs.dart' as Prefs;
 
 abstract class Language {
@@ -74,7 +75,9 @@ abstract class Language {
 
   static Language fromCode(String code) {
     if (code == null) return _langs[0];
-    for (final lang in _langs) if (strcontain(code, lang.code)) return lang;
+    for (final lang in _langs) {
+      if (strcontain(code, lang.code)) return lang;
+    }
     return _langs[0];
   }
 

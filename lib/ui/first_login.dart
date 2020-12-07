@@ -75,8 +75,9 @@ class FirstLoginState extends State<FirstLogin>
                           _gradeDropDownValue = value;
                           Prefs.grade = value;
                           try {
-                            if (int.parse(value) > 10)
+                            if (int.parse(value) > 10) {
                               _letterDropDownValue = Prefs.char = '';
+                            }
                             // ignore: empty_catches
                           } catch (e) {}
                         });
@@ -121,7 +122,7 @@ class FirstLoginState extends State<FirstLogin>
               });
 
               Prefs.firstLogin = false;
-              ampChangeScreen(AmpHomePage(0), context);
+              return ampChangeScreen(AmpHomePage(0), context);
             } catch (e) {
               setState(() {
                 _loading = false;

@@ -8,6 +8,7 @@ import '../wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// ignore: library_prefixes
 import '../prefs.dart' as Prefs;
 import 'home_page.dart';
 
@@ -64,7 +65,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         setState(() => _currentPage = 0);
       } catch (e) {
         ampErr('Splash.initState', errorString(e));
-        ampChangeScreen(ErrorScreenPage(), context);
+        return ampChangeScreen(ErrorScreenPage(), context);
       }
     });
   }

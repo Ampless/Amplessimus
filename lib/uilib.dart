@@ -1,5 +1,5 @@
-import 'colors.dart' as AmpColors;
 import 'langs/language.dart';
+// ignore: library_prefixes
 import 'prefs.dart' as Prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ Future<Null> ampDialog({
     barrierDismissible: barrierDismissible,
     builder: (context) => AlertDialog(
       title: ampText(title),
-      backgroundColor: AmpColors.colorBackground,
+      backgroundColor: Prefs.colorBackground,
       content: StatefulBuilder(
         builder: (alertContext, setAlState) => widgetBuilder(
           children(alertContext, setAlState),
@@ -33,8 +33,8 @@ Widget ampLinearProgressIndicator([bool loading = true]) {
   return !loading
       ? ampNull
       : LinearProgressIndicator(
-          backgroundColor: AmpColors.colorBackground,
-          valueColor: AlwaysStoppedAnimation<Color>(AmpColors.colorForeground),
+          backgroundColor: Prefs.colorBackground,
+          valueColor: AlwaysStoppedAnimation<Color>(Prefs.colorForeground),
           semanticsLabel: 'Loading (accessibility is being...worked on)',
         );
 }
@@ -55,7 +55,7 @@ Tab ampTab(IconData icon, String text) => Tab(icon: Icon(icon), text: text);
 
 FlatButton ampDialogButton(String text, Function() onPressed) {
   return FlatButton(
-    textColor: AmpColors.colorForeground,
+    textColor: Prefs.colorForeground,
     onPressed: onPressed,
     child: ampText(text),
   );
@@ -68,10 +68,10 @@ DropdownButton ampDropdownButton({
   Widget Function(dynamic) itemToDropdownChild = ampText,
 }) {
   return DropdownButton(
-    underline: Container(height: 2, color: AmpColors.colorForeground),
-    dropdownColor: AmpColors.lightBackground,
-    focusColor: AmpColors.colorBackground,
-    style: AmpColors.textStyleForeground,
+    underline: Container(height: 2, color: Prefs.colorForeground),
+    dropdownColor: Prefs.lightBackground,
+    focusColor: Prefs.colorBackground,
+    style: Prefs.textStyleForeground,
     value: value,
     items: items
         .map((e) => DropdownMenuItem(child: itemToDropdownChild(e), value: e))
@@ -82,10 +82,10 @@ DropdownButton ampDropdownButton({
 
 Switch ampSwitch(bool value, Function(bool) onChanged) {
   return Switch(
-    activeColor: AmpColors.colorForeground,
-    inactiveTrackColor: AmpColors.lightBackground,
-    activeTrackColor: AmpColors.lightForeground,
-    inactiveThumbColor: AmpColors.colorForeground,
+    activeColor: Prefs.colorForeground,
+    inactiveTrackColor: Prefs.lightBackground,
+    activeTrackColor: Prefs.lightForeground,
+    inactiveThumbColor: Prefs.colorForeground,
     hoverColor: Colors.transparent,
     focusColor: Colors.transparent,
     value: value,
@@ -100,7 +100,7 @@ ListTile ampWidgetWithText(String text, Widget w) =>
     ListTile(leading: ampText(text), trailing: w);
 
 Divider ampSizedDivider(double size) =>
-    Divider(color: AmpColors.colorForeground, height: size);
+    Divider(color: Prefs.colorForeground, height: size);
 
 Divider get ampDivider => ampSizedDivider(0);
 
@@ -143,8 +143,8 @@ Widget ampBigButton(
 
 RaisedButton ampRaisedButton(String text, void Function() onPressed) {
   return RaisedButton(
-    color: AmpColors.lightBackground,
-    splashColor: AmpColors.lightForeground,
+    color: Prefs.lightBackground,
+    splashColor: Prefs.lightForeground,
     child: ampText(text),
     onPressed: onPressed,
   );
@@ -162,7 +162,7 @@ Text ampText(
   List<String> font,
 }) {
   toString ??= (o) => o.toString();
-  color ??= AmpColors.colorForeground;
+  color ??= Prefs.colorForeground;
   font ??= [];
   final style = TextStyle(
     fontSize: size,
@@ -181,7 +181,7 @@ Text ampText(
 Text ampSubtitle(String s) => ampText(s, size: 16, weight: FontWeight.w600);
 
 Icon ampIcon(IconData data, {double size}) =>
-    Icon(data, color: AmpColors.colorForeground, size: size);
+    Icon(data, color: Prefs.colorForeground, size: size);
 
 AppBar ampAppBar(String text) {
   return AppBar(
@@ -198,14 +198,14 @@ SnackBar ampSnackBar(
   Function() action,
 ]) =>
     SnackBar(
-      backgroundColor: AmpColors.colorBackground,
+      backgroundColor: Prefs.colorBackground,
       content: ampText(content),
       action: label != null ? ampSnackBarAction(label, action) : null,
     );
 
 SnackBarAction ampSnackBarAction(String label, Function() onPressed) =>
     SnackBarAction(
-      textColor: AmpColors.lightForeground,
+      textColor: Prefs.lightForeground,
       label: label,
       onPressed: onPressed,
     );
@@ -219,9 +219,9 @@ FloatingActionButton ampFab({
     elevation: 0,
     onPressed: onPressed,
     highlightElevation: 0,
-    backgroundColor: AmpColors.colorBackground,
+    backgroundColor: Prefs.colorBackground,
     focusColor: Colors.transparent,
-    splashColor: AmpColors.colorForeground,
+    splashColor: Prefs.colorForeground,
     label: ampText(label),
     icon: ampIcon(icon),
   );
@@ -239,14 +239,14 @@ Widget ampList(List<Widget> children, [bool altTheme]) {
   if (!altTheme) {
     return Card(
       elevation: 0,
-      color: AmpColors.lightBackground,
+      color: Prefs.lightBackground,
       child: ampColumn(children),
     );
   } else {
     return Container(
       margin: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: AmpColors.colorForeground),
+        border: Border.all(color: Prefs.colorForeground),
         borderRadius: BorderRadius.circular(8),
       ),
       child: ampColumn(children),
@@ -288,14 +288,14 @@ ListTile ampLessonTile({
 
 Widget ampPageBase(Widget child) => AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      color: AmpColors.colorBackground,
+      color: Prefs.colorBackground,
       child: SafeArea(child: child),
     );
 
 TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
       controller: controller,
-      indicatorColor: AmpColors.colorForeground,
-      labelColor: AmpColors.colorForeground,
+      indicatorColor: Prefs.colorForeground,
+      labelColor: Prefs.colorForeground,
       tabs: tabs,
     );
 
@@ -332,8 +332,8 @@ class AmpFormField {
         ampPadding(3),
         TextFormField(
           obscureText: obscureText,
-          style: AmpColors.textStyleForeground,
-          keyboardAppearance: AmpColors.brightness,
+          style: Prefs.textStyleForeground,
+          keyboardAppearance: Prefs.brightness,
           controller: controller,
           key: key,
           validator: validator,
@@ -341,21 +341,19 @@ class AmpFormField {
           decoration: InputDecoration(
             suffixIcon: suffixIcon,
             enabledBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: AmpColors.colorForeground, width: 1.0),
+              borderSide: BorderSide(color: Prefs.colorForeground, width: 1.0),
               borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: AmpColors.colorForeground, width: 2.0),
+              borderSide: BorderSide(color: Prefs.colorForeground, width: 2.0),
               borderRadius: BorderRadius.circular(10),
             ),
-            labelStyle: AmpColors.textStyleForeground,
+            labelStyle: Prefs.textStyleForeground,
             labelText: labelText,
-            fillColor: AmpColors.colorForeground,
+            fillColor: Prefs.colorForeground,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: AmpColors.colorForeground),
+              borderSide: BorderSide(color: Prefs.colorForeground),
             ),
           ),
         ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'first_login.dart';
 import '../langs/language.dart';
 import '../logging.dart';
+// ignore: library_prefixes
 import '../prefs.dart' as Prefs;
 import '../uilib.dart';
 import 'package:flutter/material.dart';

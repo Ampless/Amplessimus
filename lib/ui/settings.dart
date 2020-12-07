@@ -4,8 +4,8 @@ import '../logging.dart';
 import 'dev_options.dart';
 import '../uilib.dart';
 import 'package:flutter/material.dart';
+// ignore: library_prefixes
 import '../prefs.dart' as Prefs;
-import '../colors.dart' as AmpColors;
 import '../appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pedantic/pedantic.dart';
@@ -104,11 +104,11 @@ class _SettingsState extends State<Settings> {
           children: [
             ampSwitchWithText(
               Language.current.darkMode,
-              AmpColors.isDarkMode,
+              Prefs.isDarkMode,
               (v) async {
                 Prefs.toggleDarkModePressed();
                 Prefs.useSystemTheme = false;
-                AmpColors.isDarkMode = v;
+                Prefs.isDarkMode = v;
                 await dsbUpdateWidget();
                 Future.delayed(
                   Duration(milliseconds: 150),

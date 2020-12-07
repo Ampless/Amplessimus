@@ -7,7 +7,6 @@ import '../appinfo.dart';
 import '../dsbapi.dart';
 import '../logging.dart';
 import '../prefs.dart' as Prefs;
-import '../colors.dart' as AmpColors;
 import '../uilib.dart';
 import '../wpemails.dart';
 import '../langs/language.dart';
@@ -32,7 +31,7 @@ class AmpHomePageState extends State<AmpHomePage>
 
   void checkBrightness() {
     if (!Prefs.useSystemTheme) return;
-    AmpColors.brightness = SchedulerBinding.instance.window.platformBrightness;
+    Prefs.brightness = SchedulerBinding.instance.window.platformBrightness;
     Future.delayed(Duration(milliseconds: 150), rebuild);
   }
 
