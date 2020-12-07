@@ -21,19 +21,9 @@ class FirstLoginState extends State<FirstLogin>
   String _error = '';
   String _gradeDropDownValue = Prefs.grade;
   String _letterDropDownValue = Prefs.char;
-  bool _passwordHidden = true;
-  final _usernameFormField = AmpFormField(
-    Prefs.username,
-    labelText: Language.current.username,
-    keyboardType: TextInputType.visiblePassword,
-    autofillHints: [AutofillHints.username],
-  );
-  final _passwordFormField = AmpFormField(
-    Prefs.password,
-    labelText: Language.current.password,
-    keyboardType: TextInputType.visiblePassword,
-    autofillHints: [AutofillHints.password],
-  );
+  bool _hidePwd = true;
+  final _usernameFormField = AmpFormField.username;
+  final _passwordFormField = AmpFormField.password;
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +41,12 @@ class FirstLoginState extends State<FirstLogin>
               _usernameFormField.flutter(),
               _passwordFormField.flutter(
                 suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() => _passwordHidden = !_passwordHidden);
-                  },
-                  icon: _passwordHidden
+                  onPressed: () => setState(() => _hidePwd = !_hidePwd),
+                  icon: _hidePwd
                       ? ampIcon(Icons.visibility_outlined)
                       : ampIcon(Icons.visibility_off_outlined),
                 ),
-                obscureText: _passwordHidden,
+                obscureText: _hidePwd,
               ),
               ampPadding(4),
               ampDivider,

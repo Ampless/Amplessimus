@@ -366,4 +366,18 @@ class AmpFormField {
 
   bool Function() get validate => key.currentState.validate;
   String get text => controller.text;
+
+  static AmpFormField get username => AmpFormField(
+        Prefs.username,
+        labelText: Language.current.username,
+        keyboardType: TextInputType.visiblePassword,
+        autofillHints: [AutofillHints.username],
+      );
+
+  static AmpFormField get password => AmpFormField(
+        Prefs.password,
+        labelText: Language.current.password,
+        keyboardType: TextInputType.visiblePassword,
+        autofillHints: [AutofillHints.password],
+      );
 }

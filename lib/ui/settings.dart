@@ -22,18 +22,8 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Future<Null> credentialDialog() {
-    final usernameFormField = AmpFormField(
-      Prefs.username,
-      labelText: Language.current.username,
-      keyboardType: TextInputType.visiblePassword,
-      autofillHints: [AutofillHints.username],
-    );
-    final passwordFormField = AmpFormField(
-      Prefs.password,
-      labelText: Language.current.password,
-      keyboardType: TextInputType.visiblePassword,
-      autofillHints: [AutofillHints.password],
-    );
+    final usernameFormField = AmpFormField.username;
+    final passwordFormField = AmpFormField.password;
     var passwordHidden = true;
     return ampDialog(
       context: context,
