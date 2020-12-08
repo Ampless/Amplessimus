@@ -97,7 +97,7 @@ ListTile ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
     ampWidgetWithText(text, ampSwitch(value, onChanged));
 
 ListTile ampWidgetWithText(String text, Widget w) =>
-    ListTile(leading: ampText(text), trailing: w);
+    ListTile(title: ampText(text), trailing: w);
 
 Divider ampSizedDivider(double size) =>
     Divider(color: Prefs.colorForeground, height: size);
@@ -115,31 +115,27 @@ List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
 Widget ampBigButton(
   String text,
   IconData icon,
-  void Function() onTap, {
-  bool visible = true,
-}) {
-  return visible
-      ? Card(
-          elevation: 0,
-          color: Colors.transparent,
-          child: InkWell(
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: onTap,
-            child: ampColumn(
-              [
-                ampPadding(8),
-                ampIcon(icon, size: 50),
-                ampPadding(8),
-                ampText(text, textAlign: TextAlign.center),
-                ampPadding(8),
-              ],
-            ),
-          ),
-        )
-      : ampNull;
-}
+  void Function() onTap,
+) =>
+    Card(
+      elevation: 0,
+      color: Colors.transparent,
+      child: InkWell(
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: onTap,
+        child: ampColumn(
+          [
+            ampPadding(8),
+            ampIcon(icon, size: 50),
+            ampPadding(8),
+            ampText(text, textAlign: TextAlign.center),
+            ampPadding(8),
+          ],
+        ),
+      ),
+    );
 
 RaisedButton ampRaisedButton(String text, void Function() onPressed) {
   return RaisedButton(

@@ -58,7 +58,7 @@ class _SettingsState extends State<Settings> {
   Widget get changeSubVisibilityWidget => Stack(
         children: [
           ListTile(
-            leading: ampText(Language.current.allClasses),
+            title: ampText(Language.current.allClasses),
             trailing: ampRow(
               [
                 ampDropdownButton(
