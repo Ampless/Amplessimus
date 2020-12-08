@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<Null> ampDialog({
-  @required String title,
+  String title,
   @required List<Widget> Function(BuildContext, StateSetter) children,
   @required List<Widget> Function(BuildContext) actions,
   @required BuildContext context,
@@ -17,7 +17,7 @@ Future<Null> ampDialog({
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (context) => AlertDialog(
-      title: ampText(title),
+      title: title != null ? ampText(title) : null,
       backgroundColor: Prefs.colorBackground,
       content: StatefulBuilder(
         builder: (alertContext, setAlState) => widgetBuilder(

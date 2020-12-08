@@ -63,7 +63,6 @@ class _SettingsState extends State<Settings> {
     );
     return ampDialog(
       context: context,
-      title: Language.current.wpemailDomain,
       children: (context, setAlState) => [domainFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
