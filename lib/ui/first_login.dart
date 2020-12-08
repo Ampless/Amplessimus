@@ -41,8 +41,9 @@ class FirstLoginState extends State<FirstLogin>
                 suffixIcon: IconButton(
                   onPressed: () => setState(() => _hidePwd = !_hidePwd),
                   icon: _hidePwd
-                      ? ampIcon(Icons.visibility_outlined)
-                      : ampIcon(Icons.visibility_off_outlined),
+                      ? ampIcon(Icons.visibility, Icons.visibility_outlined)
+                      : ampIcon(
+                          Icons.visibility_off, Icons.visibility_off_outlined),
                 ),
                 obscureText: _hidePwd,
               ),
@@ -125,7 +126,8 @@ class FirstLoginState extends State<FirstLogin>
             }
           },
           label: Language.current.save,
-          icon: Icons.save_outlined,
+          iconDefault: Icons.save,
+          iconOutlined: Icons.save_outlined,
         ),
       ),
     );

@@ -36,8 +36,8 @@ class _SettingsState extends State<Settings> {
           suffixIcon: IconButton(
             onPressed: () => setAlState(() => passwordHidden = !passwordHidden),
             icon: passwordHidden
-                ? ampIcon(Icons.visibility_outlined)
-                : ampIcon(Icons.visibility_off_outlined),
+                ? ampIcon(Icons.visibility, Icons.visibility_outlined)
+                : ampIcon(Icons.visibility_off, Icons.visibility_off_outlined),
           ),
           obscureText: passwordHidden,
         )
@@ -197,16 +197,19 @@ class _SettingsState extends State<Settings> {
             children: [
               ampBigButton(
                 Language.current.changeLogin,
+                Icons.vpn_key,
                 Icons.vpn_key_outlined,
                 () => credentialDialog(),
               ),
               ampBigButton(
                 Language.current.wpemailDomain,
                 Icons.cloud,
+                Icons.cloud_outlined,
                 () => wpemailDomainPopup(),
               ),
               ampBigButton(
                 Language.current.settingsAppInfo,
+                Icons.info,
                 Icons.info_outline,
                 () => showAboutDialog(
                   context: context,

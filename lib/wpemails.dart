@@ -46,14 +46,12 @@ Future<Map<String, String>> wpemails(String domain) async {
 
 Widget wpemailWidget() {
   final w = <Widget>[];
-  var i = 0;
   for (final e in wpemailsave.entries) {
     w.add(ListTile(
       title: ampText(e.key),
       subtitle: ampText(e.value),
       onTap: () => ampOpenUrl('mailto:${e.value}'),
     ));
-    //if (++i < wpemailsave.entries.length) w.add(ampDivider);
   }
   return ampList(w);
 }

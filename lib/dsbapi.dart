@@ -19,7 +19,6 @@ Widget _renderPlans(List<Plan> plans) {
     if (plan.subs.isEmpty) {
       dayWidgets.add(ListTile(title: ampText(Language.current.noSubs)));
     }
-    var i = 0;
     for (final sub in plan.subs) {
       dayWidgets.add(ampLessonTile(
         subject: Prefs.parseSubjects ? realSubject(sub.subject) : sub.subject,
@@ -32,19 +31,18 @@ Widget _renderPlans(List<Plan> plans) {
             ? sub.affectedClass
             : '',
       ));
-      //if (++i < plan.subs.length) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
       title: ampRow([
         ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
         IconButton(
-          icon: ampIcon(Icons.info_outline),
+          icon: ampIcon(Icons.info, Icons.info_outline),
           tooltip: plan.date.split(' ').first,
           onPressed: () =>
               scaffoldMessanger.showSnackBar(ampSnackBar(plan.date)),
         ),
         IconButton(
-          icon: ampIcon(Icons.open_in_new_outlined),
+          icon: ampIcon(Icons.open_in_new, Icons.open_in_new_outlined),
           tooltip: Language.current.openPlanInBrowser,
           onPressed: () => ampOpenUrl(plan.url),
         ),

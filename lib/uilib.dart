@@ -51,7 +51,8 @@ Row ampRow(List<Widget> children) => Row(
       children: children,
     );
 
-Tab ampTab(IconData icon, String text) => Tab(icon: Icon(icon), text: text);
+Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
+    Tab(icon: Icon(Prefs.altTheme ? iconOutlined : iconDefault), text: text);
 
 FlatButton ampDialogButton(String text, Function() onPressed) {
   return FlatButton(
@@ -114,7 +115,8 @@ List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
 
 Widget ampBigButton(
   String text,
-  IconData icon,
+  IconData iconDefault,
+  IconData iconOutlined,
   void Function() onTap,
 ) =>
     Card(
@@ -128,7 +130,7 @@ Widget ampBigButton(
         child: ampColumn(
           [
             ampPadding(8),
-            ampIcon(icon, size: 50),
+            ampIcon(iconDefault, iconOutlined, size: 50),
             ampPadding(8),
             ampText(text, textAlign: TextAlign.center),
             ampPadding(8),
@@ -176,8 +178,12 @@ Text ampText(
 
 Text ampSubtitle(String s) => ampText(s, size: 16, weight: FontWeight.w600);
 
-Icon ampIcon(IconData data, {double size}) =>
-    Icon(data, color: Prefs.colorForeground, size: size);
+Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
+    Icon(
+      Prefs.altTheme ? dataOutlined : dataDefault,
+      color: Prefs.colorForeground,
+      size: size,
+    );
 
 AppBar ampAppBar(String text) {
   return AppBar(
@@ -208,7 +214,8 @@ SnackBarAction ampSnackBarAction(String label, Function() onPressed) =>
 
 FloatingActionButton ampFab({
   @required String label,
-  @required IconData icon,
+  @required IconData iconDefault,
+  @required IconData iconOutlined,
   @required void Function() onPressed,
 }) {
   return FloatingActionButton.extended(
@@ -219,7 +226,7 @@ FloatingActionButton ampFab({
     focusColor: Colors.transparent,
     splashColor: Prefs.colorForeground,
     label: ampText(label),
-    icon: ampIcon(icon),
+    icon: ampIcon(iconDefault, iconOutlined),
   );
 }
 
