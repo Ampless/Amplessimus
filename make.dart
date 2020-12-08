@@ -17,7 +17,7 @@ final webFlags = '$flags --csp';
 
 final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
-Future system(cmd) async {
+Future<String> system(cmd) async {
   stderr.writeln(cmd);
   if (Platform.isWindows) {
     return (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
@@ -26,25 +26,27 @@ Future system(cmd) async {
   }
 }
 
-readfile(path) => File(path).readAsStringSync();
-writefile(path, content) => File(path).writeAsStringSync(content);
+Future<String> readfile(path) async => File(path).readAsString();
+Future writefile(path, content) async => File(path).writeAsString(content);
 
-rm(f) {
-  if (File(f).existsSync()) File(f).deleteSync();
+Future rm(f) async {
+  if (await File(f).exists()) {
+    await File(f).delete();
+  }
 }
 
-rmd(d) {
-  if (Directory(d).existsSync()) Directory(d).deleteSync(recursive: true);
+Future rmd(d) async {
+  if (await Directory(d).exists()) {
+    await Directory(d).delete(recursive: true);
+  }
 }
 
-mv(from, to) => File(from).renameSync(to);
-mvd(from, to) => Directory(from).renameSync(to);
+Future mv(from, to) => File(from).rename(to);
+Future mvd(from, to) => Directory(from).rename(to);
 
-cp(from, to) => File(from).copySync(to);
+Future mkdirs(d) => Directory(d).create(recursive: true);
 
-mkdirs(d) => Directory(d).createSync(recursive: true);
-
-Future md5(path) => system("md5sum $path | awk '{ print \$1 }'");
+Future md5(path) => system("md5sum '$path' | cut -d' ' -f1");
 
 Future flutter(cmd) => system('flutter $cmd');
 Future hdiutil(cmd) => system('hdiutil $cmd');
@@ -55,18 +57,18 @@ String sed(input, String regex, replacement) {
 }
 
 Future sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
-  var s = readfile(input);
+  var s = await readfile(input);
   s = sed(s, '0.0.0-1', version);
-  s = sed(s, '\$ISIZE', Directory(buildDir).statSync().size);
-  s = sed(s, '\$SIZE', File(deb).statSync().size);
+  s = sed(s, '\$ISIZE', (await Directory(buildDir).stat()).size);
+  s = sed(s, '\$SIZE', (await File(deb).stat()).size);
   s = sed(s, '\$MD5', await md5(deb));
   s = sed(s, '\$ARCH', 'iphoneos-arm');
-  writefile(output, s);
+  await writefile(output, s);
 }
 
 Future replaceversions() async {
-  mv('pubspec.yaml', 'pubspec.yaml.def');
-  mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
+  await mv('pubspec.yaml', 'pubspec.yaml.def');
+  await mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
   await sedit('pubspec.yaml.def', 'pubspec.yaml');
   await sedit('lib/appinfo.dart.def', 'lib/appinfo.dart');
 }
@@ -75,14 +77,14 @@ Future iosapp(buildDir) async {
   await flutter('build ios $iosFlags');
   await system(
       'xcrun bitcode_strip $buildDir/Frameworks/Flutter.framework/Flutter -r -o tmpfltr');
-  mv('tmpfltr', '$buildDir/Frameworks/Flutter.framework/Flutter');
+  await mv('tmpfltr', '$buildDir/Frameworks/Flutter.framework/Flutter');
   await system('rm -f $buildDir/Frameworks/libswift*');
   await strip('$buildDir/Runner $buildDir/Frameworks/*.framework/*');
 }
 
 Future ipa(buildDir, output) async {
   await system('cp -rp $buildDir tmp/Payload');
-  rm(output);
+  await rm(output);
   await system('cd tmp && zip -r -9 ../$output Payload');
 }
 
@@ -103,12 +105,13 @@ Future cydiainfo(buildDir, output, debFile) async {
 
 Future apk() async {
   await flutter('build apk $apkFlags');
-  mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$version.apk');
+  await mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$version.apk');
 }
 
 Future aab() async {
   await flutter('build appbundle $aabFlags');
-  mv('build/app/outputs/bundle/release/app-release.aab', 'bin/$version.aab');
+  await mv(
+      'build/app/outputs/bundle/release/app-release.aab', 'bin/$version.aab');
 }
 
 Future test() async {
@@ -132,13 +135,13 @@ Future android() async {
 Future web() async {
   await flutter('config --enable-web');
   await flutter('build web $webFlags');
-  mvd('build/web', 'bin/$version.web');
+  await mvd('build/web', 'bin/$version.web');
 }
 
 Future win() async {
   await flutter('config --enable-windows-desktop');
   await flutter('build windows $winFlags');
-  mvd('build/windows/runner/Release', 'bin/$version.win');
+  await mvd('build/windows/runner/Release', 'bin/$version.win');
 }
 
 Future mac() async {
@@ -163,7 +166,7 @@ Future mac() async {
 Future linux() async {
   await flutter('config --enable-linux-desktop');
   await flutter('build linux $gtkFlags');
-  mvd('build/linux/release/bundle', 'bin/$version.linux');
+  await mvd('build/linux/release/bundle', 'bin/$version.linux');
 }
 
 Future ci() async {
@@ -178,9 +181,9 @@ Future ver() async {
 }
 
 Future clean() async {
-  rmd('tmp');
-  rmd('build');
-  rmd('bin');
+  await rmd('tmp');
+  await rmd('build');
+  await rmd('bin');
 }
 
 Future main(List<String> argv) async {
@@ -189,11 +192,11 @@ Future main(List<String> argv) async {
   await flutter('upgrade');
   await replaceversions();
   try {
-    mkdirs('bin');
-    mkdirs('tmp/Payload');
-    mkdirs('tmp/deb/DEBIAN');
-    mkdirs('tmp/deb/Applications');
-    mkdirs('tmp/dmg');
+    await mkdirs('bin');
+    await mkdirs('tmp/Payload');
+    await mkdirs('tmp/deb/DEBIAN');
+    await mkdirs('tmp/deb/Applications');
+    await mkdirs('tmp/dmg');
     for (final target in argv) {
       const targets = {
         'ci': ci,
@@ -214,8 +217,8 @@ Future main(List<String> argv) async {
     stderr.writeln(e);
     if (e is Error) stderr.writeln(e.stackTrace);
   } finally {
-    mv('pubspec.yaml.def', 'pubspec.yaml');
-    mv('lib/appinfo.dart.def', 'lib/appinfo.dart');
-    rmd('tmp');
+    await mv('pubspec.yaml.def', 'pubspec.yaml');
+    await mv('lib/appinfo.dart.def', 'lib/appinfo.dart');
+    await rmd('tmp');
   }
 }
