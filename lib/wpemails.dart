@@ -4,7 +4,7 @@ import 'uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:html_search/html_search.dart';
 
-Map<String, String> wpemailsave;
+Map<String, String> wpemailsave = {};
 
 Future<Null> wpemailUpdate() async {
   if (Prefs.wpeDomain.isNotEmpty) {
@@ -40,18 +40,20 @@ Future<Map<String, String>> wpemails(String domain) async {
 
     return result;
   } catch (e) {
-    return null;
+    return {};
   }
 }
 
 Widget wpemailWidget() {
   final w = <Widget>[];
+  var i = 0;
   for (final e in wpemailsave.entries) {
     w.add(ListTile(
       title: ampText(e.key),
       subtitle: ampText(e.value),
       onTap: () => ampOpenUrl('mailto:${e.value}'),
     ));
+    //if (++i < wpemailsave.entries.length) w.add(ampDivider);
   }
   return ampList(w);
 }

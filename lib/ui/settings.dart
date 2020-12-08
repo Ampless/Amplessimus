@@ -55,6 +55,28 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  Future<Null> wpemailDomainPopup() {
+    final domainFormField = AmpFormField(
+      Prefs.wpeDomain,
+      labelText: Language.current.wpemailDomain,
+      keyboardType: TextInputType.url,
+    );
+    return ampDialog(
+      context: context,
+      title: Language.current.wpemailDomain,
+      children: (context, setAlState) => [domainFormField.flutter()],
+      actions: (context) => ampDialogButtonsSaveAndCancel(
+        context,
+        save: () async {
+          Prefs.wpeDomain = domainFormField.text.trim();
+          unawaited(widget.parent.rebuildDragDown());
+          Navigator.pop(context);
+        },
+      ),
+      widgetBuilder: ampColumn,
+    );
+  }
+
   Widget get changeSubVisibilityWidget => Stack(
         children: [
           ListTile(
@@ -178,6 +200,11 @@ class _SettingsState extends State<Settings> {
                 Language.current.changeLogin,
                 Icons.vpn_key_outlined,
                 () => credentialDialog(),
+              ),
+              ampBigButton(
+                Language.current.wpemailDomain,
+                Icons.cloud,
+                () => wpemailDomainPopup(),
               ),
               ampBigButton(
                 Language.current.settingsAppInfo,

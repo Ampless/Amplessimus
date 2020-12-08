@@ -32,7 +32,7 @@ Widget _renderPlans(List<Plan> plans) {
             ? sub.affectedClass
             : '',
       ));
-      if (++i < plan.subs.length) dayWidgets.add(ampDivider);
+      //if (++i < plan.subs.length) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
       title: ampRow([
