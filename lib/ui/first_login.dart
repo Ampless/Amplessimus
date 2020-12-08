@@ -19,16 +19,14 @@ class FirstLoginState extends State<FirstLogin>
     with SingleTickerProviderStateMixin {
   bool _loading = false;
   String _error = '';
-  String _gradeDropDownValue = Prefs.grade;
-  String _letterDropDownValue = Prefs.char;
   bool _hidePwd = true;
   final _usernameFormField = AmpFormField.username;
   final _passwordFormField = AmpFormField.password;
 
   @override
   Widget build(BuildContext context) {
-    if (Prefs.char.isEmpty) _letterDropDownValue = dsbLetters.first;
-    if (Prefs.grade.isEmpty) _gradeDropDownValue = dsbGrades.first;
+    if (Prefs.char.isEmpty) Prefs.char = dsbLetters.first;
+    if (Prefs.grade.isEmpty) Prefs.grade = dsbGrades.first;
     return ampPageBase(
       Scaffold(
         backgroundColor: Colors.transparent,
@@ -68,15 +66,14 @@ class FirstLoginState extends State<FirstLogin>
                 ampRow(
                   [
                     ampDropdownButton(
-                      value: _gradeDropDownValue,
+                      value: Prefs.grade,
                       items: dsbGrades,
                       onChanged: (value) {
                         setState(() {
-                          _gradeDropDownValue = value;
                           Prefs.grade = value;
                           try {
                             if (int.parse(value) > 10) {
-                              _letterDropDownValue = Prefs.char = '';
+                              Prefs.char = '';
                             }
                             // ignore: empty_catches
                           } catch (e) {}
@@ -85,12 +82,9 @@ class FirstLoginState extends State<FirstLogin>
                     ),
                     ampPadding(10),
                     ampDropdownButton(
-                      value: _letterDropDownValue,
+                      value: Prefs.char,
                       items: dsbLetters,
-                      onChanged: (v) => setState(() {
-                        _letterDropDownValue = v;
-                        Prefs.char = v;
-                      }),
+                      onChanged: (v) => setState(() => Prefs.char = v),
                     ),
                   ],
                 ),
