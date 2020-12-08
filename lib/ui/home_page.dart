@@ -134,7 +134,7 @@ class AmpHomePageState extends State<AmpHomePage>
             children: [
               ampAppBar(appTitle),
               dsbWidget,
-              ampDivider,
+              ampSizedDivider(20),
               wpemailsave == null || wpemailsave.isEmpty
                   ? ampRaisedButton(
                       Language.current.addWpeDomain, () => wpemailDomainPopup())
