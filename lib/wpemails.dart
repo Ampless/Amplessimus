@@ -6,9 +6,10 @@ import 'package:html_search/html_search.dart';
 
 Map<String, String> wpemailsave;
 
-Future<Null> wpemailUpdate([String domain]) async {
-  domain ??= Prefs.wpeDomain;
-  if (domain.isNotEmpty) wpemailsave = await wpemails(domain);
+Future<Null> wpemailUpdate() async {
+  if (Prefs.wpeDomain.isNotEmpty) {
+    wpemailsave = await wpemails(Prefs.wpeDomain);
+  }
 }
 
 Future<Map<String, String>> wpemails(String domain) async {
@@ -16,10 +17,9 @@ Future<Map<String, String>> wpemails(String domain) async {
     if (domain == null) return null;
     final result = <String, String>{};
 
-    var html = htmlParse(
-      await cachedHttpGet(
-          Uri.parse('https://$domain/schulfamilie/lehrkraefte/')),
-    );
+    var html = htmlParse(await cachedHttpGet(
+      Uri.parse('https://$domain/schulfamilie/lehrkraefte/'),
+    ));
     html = htmlSearchByClass(html, 'entry-content').children;
     html = htmlSearchAllByPredicate(
         html,
@@ -44,14 +44,14 @@ Future<Map<String, String>> wpemails(String domain) async {
   }
 }
 
-Widget wpemailWidget([Map<String, String> emails]) {
-  emails ??= wpemailsave;
+Widget wpemailWidget() {
   final w = <Widget>[];
-  for (final e in emails.entries)
-    w.add(ampListTile(
-      e.key,
-      subtitle: e.value,
+  for (final e in wpemailsave.entries) {
+    w.add(ListTile(
+      title: ampText(e.key),
+      subtitle: ampText(e.value),
       onTap: () => ampOpenUrl('mailto:${e.value}'),
     ));
+  }
   return ampList(w);
 }

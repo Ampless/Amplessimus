@@ -234,9 +234,8 @@ Future ampChangeScreen(
 ]) =>
     push(context, MaterialPageRoute(builder: (_) => w));
 
-Widget ampList(List<Widget> children, [bool altTheme]) {
-  altTheme ??= Prefs.altTheme;
-  if (!altTheme) {
+Widget ampList(List<Widget> children) {
+  if (!Prefs.altTheme) {
     return Card(
       elevation: 0,
       color: Prefs.lightBackground,
@@ -253,21 +252,6 @@ Widget ampList(List<Widget> children, [bool altTheme]) {
     );
   }
 }
-
-ListTile ampListTile(
-  String title, {
-  String subtitle,
-  String leading,
-  String trailing,
-  Function() onTap,
-}) =>
-    ListTile(
-      title: title == null ? null : ampText(title),
-      subtitle: subtitle == null ? null : ampText(subtitle),
-      leading: leading == null ? null : ampText(leading),
-      trailing: trailing == null ? null : ampText(trailing),
-      onTap: onTap,
-    );
 
 ListTile ampLessonTile({
   @required String subject,

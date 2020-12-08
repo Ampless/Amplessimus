@@ -16,14 +16,13 @@ Widget _renderPlans(
   bool oneClassOnly,
   String char,
   String grade,
-  bool altTheme,
 ) {
   ampInfo('DSB', 'Rendering plans: $plans');
   final widgets = <Widget>[];
   for (final plan in plans) {
     final dayWidgets = <Widget>[];
     if (plan.subs.isEmpty) {
-      dayWidgets.add(ampListTile(Language.current.noSubs));
+      dayWidgets.add(ListTile(title: ampText(Language.current.noSubs)));
     }
     var i = 0;
     for (final sub in plan.subs) {
@@ -39,7 +38,7 @@ Widget _renderPlans(
       if (++i < plan.subs.length) dayWidgets.add(ampDivider);
     }
     widgets.add(ListTile(
-      title: Row(children: [
+      title: ampRow([
         ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
         IconButton(
           icon: ampIcon(Icons.info_outline),
@@ -55,7 +54,7 @@ Widget _renderPlans(
         ),
       ]),
     ));
-    widgets.add(ampList(dayWidgets, altTheme));
+    widgets.add(ampList(dayWidgets));
   }
   widgets.add(ampPadding(12));
   final column = ampColumn(widgets);
@@ -88,12 +87,11 @@ Future<Null> dsbUpdateWidget({
       Prefs.oneClassOnly,
       Prefs.char,
       Prefs.grade,
-      Prefs.altTheme,
     );
     dsbPlans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
-    dsbWidget = ampList([ampPadding(15), ampErrorText(e)], Prefs.altTheme);
+    dsbWidget = ampList([ampPadding(15), ampErrorText(e)]);
   }
   callback();
 }

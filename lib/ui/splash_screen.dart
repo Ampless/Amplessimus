@@ -73,8 +73,9 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     try {
-      if (_currentPage != -1)
+      if (_currentPage != -1) {
         return _currentPage == 0 ? AmpHomePage(0) : FirstLogin();
+      }
       return Scaffold(
         backgroundColor: Colors.black,
         bottomSheet: ampLinearProgressIndicator(),

@@ -17,7 +17,7 @@ final webFlags = '$flags --csp';
 
 final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
-system(cmd) async {
+Future system(cmd) async {
   stderr.writeln(cmd);
   if (Platform.isWindows) {
     return (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
@@ -44,17 +44,17 @@ cp(from, to) => File(from).copySync(to);
 
 mkdirs(d) => Directory(d).createSync(recursive: true);
 
-md5(path) => system("md5sum $path | awk '{ print \$1 }'");
+Future md5(path) => system("md5sum $path | awk '{ print \$1 }'");
 
-flutter(cmd) => system('flutter $cmd');
-hdiutil(cmd) => system('hdiutil $cmd');
-strip(files) => system('strip -u -r $files');
+Future flutter(cmd) => system('flutter $cmd');
+Future hdiutil(cmd) => system('hdiutil $cmd');
+Future strip(files) => system('strip -u -r $files');
 
-sed(input, regex, replacement) {
+String sed(input, String regex, replacement) {
   return input.toString().replaceAll(RegExp(regex), replacement.toString());
 }
 
-sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
+Future sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
   var s = readfile(input);
   s = sed(s, '0.0.0-1', version);
   s = sed(s, '\$ISIZE', Directory(buildDir).statSync().size);
@@ -64,14 +64,14 @@ sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
   writefile(output, s);
 }
 
-replaceversions() async {
+Future replaceversions() async {
   mv('pubspec.yaml', 'pubspec.yaml.def');
   mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
   await sedit('pubspec.yaml.def', 'pubspec.yaml');
   await sedit('lib/appinfo.dart.def', 'lib/appinfo.dart');
 }
 
-iosapp(buildDir) async {
+Future iosapp(buildDir) async {
   await flutter('build ios $iosFlags');
   await system(
       'xcrun bitcode_strip $buildDir/Frameworks/Flutter.framework/Flutter -r -o tmpfltr');
@@ -80,7 +80,7 @@ iosapp(buildDir) async {
   await strip('$buildDir/Runner $buildDir/Frameworks/*.framework/*');
 }
 
-ipa(buildDir, output) async {
+Future ipa(buildDir, output) async {
   await system('cp -rp $buildDir tmp/Payload');
   rm(output);
   await system('cd tmp && zip -r -9 ../$output Payload');
@@ -88,60 +88,60 @@ ipa(buildDir, output) async {
 
 // http://www.saurik.com/id/7
 // but its broken...
-deb(buildDir, output) async {
+Future deb(buildDir, output) async {
   await system('cp -rp $buildDir tmp/deb/Applications/');
   await sedit('control.def', 'tmp/deb/DEBIAN/control', buildDir: buildDir);
   await system('COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= '
       'dpkg-deb -Sextreme -z9 --build tmp/deb $output');
 }
 
-cydiainfo(buildDir, output, debFile) async {
+Future cydiainfo(buildDir, output, debFile) async {
   await sedit('Packages.def', '$output/Packages',
       buildDir: buildDir, deb: debFile);
   await system('gzip -9 -c $output/Packages > $output/Packages.gz');
 }
 
-apk() async {
+Future apk() async {
   await flutter('build apk $apkFlags');
   mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$version.apk');
 }
 
-aab() async {
+Future aab() async {
   await flutter('build appbundle $aabFlags');
   mv('build/app/outputs/bundle/release/app-release.aab', 'bin/$version.aab');
 }
 
-test() async {
+Future test() async {
   await flutter('test $testFlags');
   await system('genhtml -o coverage/html coverage/lcov.info');
   await system('lcov -l coverage/lcov.info');
 }
 
-ios() async {
+Future ios() async {
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
   await deb('build/ios/Release-iphoneos/Runner.app', 'bin/$version.deb');
 }
 
-android() async {
+Future android() async {
   final a = apk();
   await aab();
   await a;
 }
 
-web() async {
+Future web() async {
   await flutter('config --enable-web');
   await flutter('build web $webFlags');
   mvd('build/web', 'bin/$version.web');
 }
 
-win() async {
+Future win() async {
   await flutter('config --enable-windows-desktop');
   await flutter('build windows $winFlags');
   mvd('build/windows/runner/Release', 'bin/$version.win');
 }
 
-mac() async {
+Future mac() async {
   await flutter('config --enable-macos-desktop');
   await flutter('build macos $macFlags');
   const build = 'build/macos/Build/Products/Release/Amplessimus.app';
@@ -160,30 +160,30 @@ mac() async {
       'hdiutil convert tmp/tmp.dmg -ov -format UDBZ -o bin/$version.dmg');
 }
 
-linux() async {
+Future linux() async {
   await flutter('config --enable-linux-desktop');
   await flutter('build linux $gtkFlags');
   mvd('build/linux/release/bundle', 'bin/$version.linux');
 }
 
-ci() async {
+Future ci() async {
   final a = apk();
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
   await a;
 }
 
-ver() async {
+Future ver() async {
   print(version);
 }
 
-clean() async {
+Future clean() async {
   rmd('tmp');
   rmd('build');
   rmd('bin');
 }
 
-main(List<String> argv) async {
+Future main(List<String> argv) async {
   version = '$majorMinorVersion.${await system('git rev-list @ --count')}';
   await flutter('channel master');
   await flutter('upgrade');

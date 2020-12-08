@@ -39,9 +39,9 @@ class DevOptionsState extends State<DevOptions>
           (v) => setState(() => Prefs.updatePopup = v),
         ),
         ampDivider,
-        ampListTile(
-          'Refreshtimer (Minuten)',
-          trailing: '${Prefs.timer}',
+        ListTile(
+          title: ampText('Refreshtimer (Minuten)'),
+          trailing: ampText('${Prefs.timer}'),
           onTap: () => _inputTimerDialog(context),
         ),
         ampDivider,

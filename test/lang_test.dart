@@ -4,7 +4,9 @@ import '../lib/langs/language.dart';
 import 'testlib.dart';
 
 testCase languageTestCase(void Function(Language) func) => () async {
-      for (final lang in Language.all) func(lang);
+      for (final lang in Language.all) {
+        func(lang);
+      }
     };
 
 testCase languageCodeTestCase(String code) => () async {
@@ -13,7 +15,9 @@ testCase languageCodeTestCase(String code) => () async {
 
 List<testCase> languageTestCases = [
   languageTestCase((lang) {
-    for (final day in Day.values) lang.dayToString(day);
+    for (final day in Day.values) {
+      lang.dayToString(day);
+    }
   }),
   languageTestCase((lang) {
     lang.dayToString(null);
