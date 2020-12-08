@@ -264,11 +264,15 @@ ListTile ampLessonTile({
   @required String affClass,
 }) =>
     ListTile(
+      //somehow this improved/"fixed" the spacing, idk how
+      horizontalTitleGap: 4,
       title: ampText(
-        orgTeacher == null ? '$subject' : '$subject ($orgTeacher)',
+        orgTeacher == null || orgTeacher.isEmpty
+            ? subject
+            : '$subject ($orgTeacher)',
         size: 18,
       ),
-      leading: ampText(lesson, weight: FontWeight.bold, size: 34),
+      leading: ampText(lesson, weight: FontWeight.bold, size: 36),
       subtitle: ampText(subtitle, size: 16),
       trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
     );
