@@ -20,7 +20,7 @@ testCase expectTestCase(
           return;
         }
       }
-      if (error) throw '[ETC($tfunc, $expct)] No error.';
+      if (error) throw '[expectTestCase($tfunc, $expct)] No error.';
       expect(res, expct);
     };
 

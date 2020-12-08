@@ -128,21 +128,18 @@ class AmpHomePageState extends State<AmpHomePage>
         //ptr doesnt seem to always work everywhere (might have to consider Expanded)
         RefreshIndicator(
           key: refreshKey,
-          child: Scaffold(
-            appBar: ampAppBar(appTitle),
-            backgroundColor: Colors.transparent,
-            body: ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: [
-                dsbWidget,
-                ampDivider,
-                wpemailsave == null || wpemailsave.isEmpty
-                    ? ampRaisedButton(Language.current.addWpeDomain,
-                        () => wpemailDomainPopup())
-                    : wpemailWidget(),
-              ],
-            ),
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            children: [
+              ampAppBar(appTitle),
+              dsbWidget,
+              ampDivider,
+              wpemailsave == null || wpemailsave.isEmpty
+                  ? ampRaisedButton(
+                      Language.current.addWpeDomain, () => wpemailDomainPopup())
+                  : wpemailWidget(),
+            ],
           ),
           onRefresh: rebuildDragDown,
         ),

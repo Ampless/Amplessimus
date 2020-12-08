@@ -100,108 +100,105 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return ampPageBase(
-      Scaffold(
-        appBar: ampAppBar(Language.current.settings),
-        backgroundColor: Colors.transparent,
-        body: ListView(
-          children: [
-            ampSwitchWithText(
-              Language.current.darkMode,
-              Prefs.isDarkMode,
-              (v) async {
-                Prefs.toggleDarkModePressed();
-                Prefs.useSystemTheme = false;
-                Prefs.isDarkMode = v;
-                await dsbUpdateWidget();
-                Future.delayed(
-                  Duration(milliseconds: 150),
-                  widget.parent.rebuild,
-                );
+      ListView(
+        children: [
+          ampAppBar(Language.current.settings),
+          ampSwitchWithText(
+            Language.current.darkMode,
+            Prefs.isDarkMode,
+            (v) async {
+              Prefs.toggleDarkModePressed();
+              Prefs.useSystemTheme = false;
+              Prefs.isDarkMode = v;
+              await dsbUpdateWidget();
+              Future.delayed(
+                Duration(milliseconds: 150),
+                widget.parent.rebuild,
+              );
+            },
+          ),
+          ampSwitchWithText(
+            Language.current.useSystemTheme,
+            Prefs.useSystemTheme,
+            (v) {
+              Prefs.useSystemTheme = v;
+              widget.parent.checkBrightness();
+            },
+          ),
+          ampSwitchWithText(
+            Language.current.alternativeAppearance,
+            Prefs.altTheme,
+            (v) async {
+              ampInfo('Settings', 'switching design mode');
+              Prefs.altTheme = v;
+              await dsbUpdateWidget();
+              widget.parent.rebuild();
+              scaffoldMessanger.showSnackBar(ampSnackBar(
+                Language.current.changedAppearance,
+                Language.current.show,
+                () => widget.parent.tabController.index = 0,
+              ));
+            },
+          ),
+          ampDivider,
+          ampWidgetWithText(
+            Language.current.changeLanguage,
+            ampDropdownButton(
+              value: Language.current,
+              itemToDropdownChild: (i) => ampText(i.name),
+              items: Language.all,
+              onChanged: (v) {
+                setState(() => Language.current = v);
+                widget.parent.rebuildDragDown();
               },
             ),
-            ampSwitchWithText(
-              Language.current.useSystemTheme,
-              Prefs.useSystemTheme,
-              (v) {
-                Prefs.useSystemTheme = v;
-                widget.parent.checkBrightness();
-              },
-            ),
-            ampSwitchWithText(
-              Language.current.alternativeAppearance,
-              Prefs.altTheme,
-              (v) async {
-                ampInfo('Settings', 'switching design mode');
-                Prefs.altTheme = v;
-                await dsbUpdateWidget();
-                widget.parent.rebuild();
-                scaffoldMessanger.showSnackBar(ampSnackBar(
-                  Language.current.changedAppearance,
-                  Language.current.show,
-                  () => widget.parent.tabController.index = 0,
-                ));
-              },
-            ),
-            ampDivider,
-            ampWidgetWithText(
-              Language.current.changeLanguage,
-              ampDropdownButton(
-                value: Language.current,
-                itemToDropdownChild: (i) => ampText(i.name),
-                items: Language.all,
-                onChanged: (v) {
-                  setState(() => Language.current = v);
-                  widget.parent.rebuildDragDown();
-                },
+          ),
+          ampSwitchWithText(
+            Language.current.useForDsb,
+            Prefs.dsbUseLanguage,
+            (v) {
+              setState(() => Prefs.dsbUseLanguage = v);
+              widget.parent.rebuildDragDown();
+            },
+          ),
+          ampDivider,
+          changeSubVisibilityWidget,
+          ampSwitchWithText(
+            Language.current.parseSubjects,
+            Prefs.parseSubjects,
+            (v) {
+              setState(() => Prefs.parseSubjects = v);
+              widget.parent.rebuildDragDown();
+            },
+          ),
+          ampDivider,
+          Row(
+            children: [
+              ampBigButton(
+                Language.current.changeLogin,
+                Icons.vpn_key_outlined,
+                () => credentialDialog(),
               ),
-            ),
-            ampSwitchWithText(
-              Language.current.useForDsb,
-              Prefs.dsbUseLanguage,
-              (v) {
-                setState(() => Prefs.dsbUseLanguage = v);
-                widget.parent.rebuildDragDown();
-              },
-            ),
-            ampDivider,
-            changeSubVisibilityWidget,
-            ampSwitchWithText(
-              Language.current.parseSubjects,
-              Prefs.parseSubjects,
-              (v) {
-                setState(() => Prefs.parseSubjects = v);
-                widget.parent.rebuildDragDown();
-              },
-            ),
-            ampDivider,
-            Row(
-              children: [
-                ampBigButton(
-                  Language.current.changeLogin,
-                  Icons.vpn_key_outlined,
-                  () => credentialDialog(),
+              ampBigButton(
+                Language.current.settingsAppInfo,
+                Icons.info_outline,
+                () => showAboutDialog(
+                  context: context,
+                  applicationName: appTitle,
+                  applicationVersion: appVersion,
+                  applicationIcon:
+                      SvgPicture.asset('assets/logo.svg', height: 40),
+                  children: [Text(Language.current.appInfo)],
+                  //TODO: flame flutter people for not letting me set the
+                  //background color
                 ),
-                ampBigButton(
-                  Language.current.settingsAppInfo,
-                  Icons.info_outline,
-                  () => showAboutDialog(
-                    context: context,
-                    applicationName: appTitle,
-                    applicationVersion: appVersion,
-                    applicationIcon:
-                        SvgPicture.asset('assets/logo.svg', height: 40),
-                    children: [Text(Language.current.appInfo)],
-                    //TODO: flame flutter people for not letting me set the
-                    //background color
-                  ),
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-            ),
-            DevOptions(),
-          ],
-          scrollDirection: Axis.vertical,
-        ),
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          ),
+          DevOptions(),
+        ],
+        scrollDirection: Axis.vertical,
       ),
     );
   }
