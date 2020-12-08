@@ -14,8 +14,6 @@ import 'package:flutter/material.dart';
 Widget _renderPlans(
   List<Plan> plans,
   bool oneClassOnly,
-  String char,
-  String grade,
 ) {
   ampInfo('DSB', 'Rendering plans: $plans');
   final widgets = <Widget>[];
@@ -31,7 +29,9 @@ Widget _renderPlans(
         orgTeacher: sub.orgTeacher,
         lesson: sub.lesson.toString(),
         subtitle: Language.current.dsbSubtoSubtitle(sub),
-        affClass: (char.isEmpty || grade.isEmpty || !oneClassOnly)
+        affClass: (Prefs.classGrade.isEmpty ||
+                Prefs.classLetter.isEmpty ||
+                !oneClassOnly)
             ? sub.affectedClass
             : '',
       ));
@@ -80,14 +80,13 @@ Future<Null> dsbUpdateWidget({
             language: Prefs.dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (Prefs.oneClassOnly) {
-      plans = sortByLesson(searchClass(plans, Prefs.grade, Prefs.char));
+      plans = sortByLesson(searchClass(
+        plans,
+        Prefs.classGrade,
+        Prefs.classLetter,
+      ));
     }
-    dsbWidget = _renderPlans(
-      plans,
-      Prefs.oneClassOnly,
-      Prefs.char,
-      Prefs.grade,
-    );
+    dsbWidget = _renderPlans(plans, Prefs.oneClassOnly);
     dsbPlans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));

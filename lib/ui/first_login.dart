@@ -25,8 +25,8 @@ class FirstLoginState extends State<FirstLogin>
 
   @override
   Widget build(BuildContext context) {
-    if (Prefs.char.isEmpty) Prefs.char = dsbLetters.first;
-    if (Prefs.grade.isEmpty) Prefs.grade = dsbGrades.first;
+    if (Prefs.classLetter.isEmpty) Prefs.classLetter = dsbLetters.first;
+    if (Prefs.classGrade.isEmpty) Prefs.classGrade = dsbGrades.first;
     return ampPageBase(
       Scaffold(
         backgroundColor: Colors.transparent,
@@ -66,14 +66,14 @@ class FirstLoginState extends State<FirstLogin>
                 ampRow(
                   [
                     ampDropdownButton(
-                      value: Prefs.grade,
+                      value: Prefs.classGrade,
                       items: dsbGrades,
                       onChanged: (value) {
                         setState(() {
-                          Prefs.grade = value;
+                          Prefs.classGrade = value;
                           try {
                             if (int.parse(value) > 10) {
-                              Prefs.char = '';
+                              Prefs.classLetter = '';
                             }
                             // ignore: empty_catches
                           } catch (e) {}
@@ -82,9 +82,9 @@ class FirstLoginState extends State<FirstLogin>
                     ),
                     ampPadding(10),
                     ampDropdownButton(
-                      value: Prefs.char,
+                      value: Prefs.classLetter,
                       items: dsbLetters,
-                      onChanged: (v) => setState(() => Prefs.char = v),
+                      onChanged: (v) => setState(() => Prefs.classLetter = v),
                     ),
                   ],
                 ),

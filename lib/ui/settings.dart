@@ -62,21 +62,24 @@ class _SettingsState extends State<Settings> {
             trailing: ampRow(
               [
                 ampDropdownButton(
-                  value: Prefs.grade,
+                  value: Prefs.classGrade,
                   items: dsbGrades,
                   onChanged: (value) => setState(() {
-                    Prefs.grade = value;
+                    Prefs.classGrade = value;
                     try {
-                      if (int.parse(value) > 10) Prefs.char = '';
+                      if (int.parse(value) > 10) {
+                        Prefs.classLetter = '';
+                      }
                       // ignore: empty_catches
                     } catch (e) {}
                   }),
                 ),
                 ampPadding(8),
                 ampDropdownButton(
-                  value: Prefs.char,
+                  value: Prefs.classLetter,
                   items: dsbLetters,
-                  onChanged: (value) => setState(() => Prefs.char = value),
+                  onChanged: (value) =>
+                      setState(() => Prefs.classLetter = value),
                 ),
               ],
             ),

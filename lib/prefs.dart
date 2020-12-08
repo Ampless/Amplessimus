@@ -25,14 +25,15 @@ bool _getBool(String k, bool d) => _get(k, d, _prefs.getBool);
 List<String> _getStringList(String k, List<String> d) =>
     _get(k, d, _prefs.getStringList);
 
-//this is just a checksum basically so md5 is fine (collisions are next to impossible)
-//but because it is only 128 bits, it saves 128 bits compared to sha256,
-//which translates to 384 bits / 48 bytes saved per cached url
+//this is just a checksum basically so sha1 is fine (collisions are next to impossible)
+//but because it is only 160 bits, it saves 96 bits compared to sha256,
+//which translates to 288 bits / 36 bytes saved per cached url
 //(and also it saves quite a bit of cpu)
 //still there is one consideration: if a school wanted to break this app, they
-//would just have to create collisions. we will switch to something better, once
-//we notice something like that happening.
-String _hashCache(String s) => md5.convert(utf8.encode(s)).toString();
+//would just have to create collisions. (sha1 makes this a bit harder than md5
+//does) we will switch to something better, once we notice something like that
+//happening.
+String _hashCache(String s) => sha1.convert(utf8.encode(s)).toString();
 
 String getCache(String url) {
   final hash = _hashCache(url);
@@ -60,6 +61,7 @@ void setCache(String url, String html, Duration ttl) {
       'CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
 }
 
+//TODO: garbage collect regularly
 void clearCache() {
   final cachedHashes = _getStringList('CACHE_URLS', []);
   if (cachedHashes.isEmpty) return;
@@ -95,7 +97,7 @@ void toggleDarkModePressed() {
   _toggleDarkModePressed++;
   _lastToggleDarkModePress = DateTime.now().millisecondsSinceEpoch;
 
-  if (_toggleDarkModePressed >= 10) {
+  if (_toggleDarkModePressed > 7) {
     devOptionsEnabled = !devOptionsEnabled;
     _toggleDarkModePressed = 0;
   }
@@ -109,10 +111,10 @@ String get password => _getString('dsbpass', '');
 set password(String s) => _prefs.setString('dsbpass', s);
 
 //TODO: find a better way to do
-String get grade => _getString('grade', '5').trim().toLowerCase();
-set grade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
-String get char => _getString('char', 'a').trim().toLowerCase();
-set char(String s) => _prefs.setString('char', s.trim().toLowerCase());
+String get classGrade => _getString('grade', '5').trim().toLowerCase();
+set classGrade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
+String get classLetter => _getString('char', 'a').trim().toLowerCase();
+set classLetter(String s) => _prefs.setString('char', s.trim().toLowerCase());
 
 bool get oneClassOnly => _getBool('oneclass', false);
 set oneClassOnly(bool b) => _prefs.setBool('oneclass', b);
