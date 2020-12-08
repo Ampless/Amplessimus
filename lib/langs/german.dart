@@ -84,9 +84,6 @@ class German extends Language {
   String get allClasses => 'Alle Klassen';
 
   @override
-  String get widgetValidatorFieldEmpty => 'Feld ist leer!';
-
-  @override
   String get widgetValidatorInvalid => 'Ungültige Eingabe!';
 
   @override
@@ -202,9 +199,6 @@ class German extends Language {
 
   @override
   String get openPlanInBrowser => 'Plan im Browser öffnen';
-
-  @override
-  String get addWpeDomain => 'WPEmail-Domain hinzufügen';
 
   @override
   String get parseSubjects => 'Fächer parsen';

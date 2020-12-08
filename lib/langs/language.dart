@@ -32,7 +32,6 @@ abstract class Language {
   String get noLogin;
   String get allClasses;
   String get empty;
-  String get widgetValidatorFieldEmpty;
   String get widgetValidatorInvalid;
   String get done;
   String get timetable;
@@ -56,7 +55,6 @@ abstract class Language {
   String get plsUpdate;
   String get wpemailDomain;
   String get openPlanInBrowser;
-  String get addWpeDomain;
   String dsbSubtoSubtitle(Substitution sub);
   String dayToString(Day day);
   String dsbError(String e);

@@ -75,9 +75,6 @@ class English extends Language {
   String get allClasses => 'All classes';
 
   @override
-  String get widgetValidatorFieldEmpty => 'Field is empty!';
-
-  @override
   String get widgetValidatorInvalid => 'Invalid input!';
 
   @override
@@ -203,9 +200,6 @@ class English extends Language {
 
   @override
   String get openPlanInBrowser => 'Open plan in browser';
-
-  @override
-  String get addWpeDomain => 'Add WPEmail-Domain';
 
   @override
   String get parseSubjects => 'Parse subjects';
