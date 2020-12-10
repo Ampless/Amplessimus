@@ -15,7 +15,7 @@ abstract class Language {
   //
   String get darkMode;
   String get useSystemTheme;
-  String get alternativeAppearance;
+  String get highContrastMode;
   String get changeLanguage;
   String get parseSubjects;
   String get changeLogin;

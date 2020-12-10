@@ -147,7 +147,7 @@ class _SettingsState extends State<Settings> {
             },
           ),
           ampSwitchWithText(
-            Language.current.alternativeAppearance,
+            Language.current.highContrastMode,
             Prefs.altTheme,
             (v) async {
               ampInfo('Settings', 'switching design mode');
