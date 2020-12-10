@@ -1,15 +1,5 @@
 import 'langs/language.dart';
 
-final _zero = '0'.codeUnitAt(0), _nine = '9'.codeUnitAt(0);
-final _letters = RegExp('[a-zA-Z]');
-final _numbers = RegExp('[0-9]');
-
-bool _numAt(String s, int i) {
-  if (s == null || s.length <= i || i < 0) return false;
-  final cu = s.codeUnitAt(i);
-  return cu >= _zero && cu <= _nine;
-}
-
 const fullAbbreviations = {
   'spo': 'sport',
   'e': 'englisch',
@@ -49,15 +39,13 @@ bool abbreviationValid(String abbr, String sub) {
 String realSubject(String subject) {
   if (subject == null) return null;
 
-  //this code might break, but it hasnt as of nov 2020
-  if (_numAt(subject, 0) || _numAt(subject, subject.length - 1)) {
-    final firstLetter = subject.indexOf(_letters);
-    final shortSubject =
-        subject.substring(firstLetter, subject.lastIndexOf(_letters) + 1);
-    final lnum = subject.substring(subject.lastIndexOf(_numbers));
-    var fnum = '';
-    if (firstLetter > 0) fnum = ' (${subject.substring(0, firstLetter)})';
-    return '${realSubject(shortSubject)} $lnum$fnum';
+  if (RegExp('[a-zA-Z]').allMatches(subject).length < subject.length) {
+    final letters = RegExp('[a-zA-Z]+').allMatches(subject);
+    final start = letters.first.start;
+    final end = letters.last.end;
+    return subject.substring(0, start) +
+        realSubject(subject.substring(start, end)) +
+        subject.substring(end);
   }
 
   final sub = subject.toLowerCase();
