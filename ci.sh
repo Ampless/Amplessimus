@@ -75,8 +75,8 @@ main() {
         {
                 mkdir -p /usr/local/var/www/amplessimus
 
-                # echo "Running tests..."
-                # flutter test
+                echo "Running tests..."
+                flutter test
 
                 echo "[AmpCI][$(date)] Running the Dart build system for $version_name."
 
