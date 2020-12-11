@@ -76,10 +76,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       if (_currentPage != -1) {
         return _currentPage == 0 ? AmpHomePage(0) : FirstLogin();
       }
-      return Scaffold(
-        backgroundColor: Colors.black,
-        bottomSheet: ampLinearProgressIndicator(),
-      );
+      return ampNull;
     } catch (e) {
       ampErr('Splash.build', errorString(e));
       return ampText(errorString(e));

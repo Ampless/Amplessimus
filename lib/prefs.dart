@@ -171,8 +171,6 @@ Future<bool> clear() async {
   return success;
 }
 
-bool get isInitialized => _prefs != null;
-
 //COLORS
 
 const Color _blankBlack = Color.fromRGBO(0, 0, 0, 1);
@@ -200,7 +198,7 @@ set brightness(Brightness b) {
   ampInfo('AmpColors', 'set brightness = $b');
 }
 
-bool get isDarkMode => isInitialized ? _getBool('darkmode', true) : true;
+bool get isDarkMode => _getBool('darkmode', true);
 set isDarkMode(bool b) {
   if (b == null) return;
   _prefs.setBool('darkmode', b);
