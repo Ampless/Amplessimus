@@ -72,11 +72,14 @@ Future<Null> dsbUpdateWidget({
             language: Prefs.dsbLanguage);
     if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (Prefs.oneClassOnly) {
-      plans = sortByLesson(searchClass(
+      plans = searchClass(
         plans,
         Prefs.classGrade,
         Prefs.classLetter,
-      ));
+      );
+    }
+    for (final plan in plans) {
+      plan.subs.sort();
     }
     dsbWidget = _renderPlans(plans);
     dsbPlans = plans;

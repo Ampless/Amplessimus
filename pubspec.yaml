@@ -24,7 +24,7 @@ dependencies:
   pull_to_refresh: ^1.6.2
   crypto: ^2.1.5
   url_launcher: ^5.7.10
-  dsbuntis: ^1.0.0
+  dsbuntis: ^1.1.2
   schttp: ^0.2.8
   update: ^0.1.0
   html_search: ^0.0.3
