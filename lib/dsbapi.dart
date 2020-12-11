@@ -40,11 +40,13 @@ Widget _renderPlans(List<Plan> plans) {
           tooltip: plan.date.split(' ').first,
           onPressed: () =>
               scaffoldMessanger.showSnackBar(ampSnackBar(plan.date)),
+          padding: EdgeInsets.all(4),
         ),
         IconButton(
           icon: ampIcon(Icons.open_in_new, Icons.open_in_new_outlined),
           tooltip: Language.current.openPlanInBrowser,
           onPressed: () => ampOpenUrl(plan.url),
+          padding: EdgeInsets.all(4),
         ),
       ]),
     ));
@@ -64,19 +66,14 @@ Future<Null> dsbUpdateWidget({
   useJsonCache ??= Prefs.useJsonCache;
   callback ??= () {};
   try {
-    final useJCache = useJsonCache && Prefs.dsbJsonCache != null;
-    var plans = useJCache
+    var plans = useJsonCache && Prefs.dsbJsonCache != null
         ? Plan.plansFromJson(Prefs.dsbJsonCache)
         : await getAllSubs(
             Prefs.username, Prefs.password, cachedHttpGet, http.post,
             language: Prefs.dsbLanguage);
-    if (!useJCache) Prefs.dsbJsonCache = Plan.plansToJson(plans);
+    Prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (Prefs.oneClassOnly) {
-      plans = searchClass(
-        plans,
-        Prefs.classGrade,
-        Prefs.classLetter,
-      );
+      plans = searchClass(plans, Prefs.classGrade, Prefs.classLetter);
     }
     for (final plan in plans) {
       plan.subs.sort();
