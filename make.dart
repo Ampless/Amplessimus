@@ -186,10 +186,16 @@ Future clean() async {
   await rmd('bin');
 }
 
-Future main(List<String> argv) async {
-  version = '$majorMinorVersion.${await system('git rev-list @ --count')}';
+Future upgrade() async {
+  await flutter('config --no-analytics');
   await flutter('channel master');
   await flutter('upgrade');
+  await flutter('config --no-analytics');
+}
+
+Future main(List<String> argv) async {
+  version = '$majorMinorVersion.${await system('git rev-list @ --count')}';
+  await upgrade();
   await replaceversions();
   try {
     await mkdirs('bin');
@@ -209,6 +215,7 @@ Future main(List<String> argv) async {
         'linux': linux,
         'ver': ver,
         'clean': clean,
+        'upgrade': upgrade,
       };
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
       await targets[target]();
