@@ -36,7 +36,7 @@ bool abbreviationValid(String abbr, String sub) {
   return fa.length >= sub.length && fa.startsWith(sub);
 }
 
-String realSubject(String subject) {
+String parseSubject(String subject) {
   if (subject == null) return null;
 
   if (RegExp('[a-zA-Z]').allMatches(subject).length < subject.length) {
@@ -44,7 +44,7 @@ String realSubject(String subject) {
     final start = letters.first.start;
     final end = letters.last.end;
     return subject.substring(0, start) +
-        realSubject(subject.substring(start, end)) +
+        parseSubject(subject.substring(start, end)) +
         subject.substring(end);
   }
 

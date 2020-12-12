@@ -88,21 +88,21 @@ class AmpHomePageState extends State<AmpHomePage>
     rebuild();
   }
 
-  int lastUpdate = 0;
+  int _lastUpdate = 0;
   @override
   Widget build(BuildContext context) {
     try {
       ampInfo('AmpHomePageState', 'Building HomePage...');
       scaffoldMessanger = ScaffoldMessenger.of(context);
-      if (lastUpdate <
+      if (_lastUpdate <
           DateTime.now()
               .subtract(Duration(minutes: Prefs.timer))
               .millisecondsSinceEpoch) {
         refreshKey.currentState?.show();
         dsbUpdateWidget(callback: rebuild);
-        lastUpdate = DateTime.now().millisecondsSinceEpoch;
+        _lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
-      final containers = [
+      final tabs = [
         //ptr doesnt seem to always work everywhere (might have to consider Expanded)
         RefreshIndicator(
           key: refreshKey,
@@ -125,7 +125,7 @@ class AmpHomePageState extends State<AmpHomePage>
         body: TabBarView(
           controller: tabController,
           physics: ClampingScrollPhysics(),
-          children: containers,
+          children: tabs,
         ),
         bottomNavigationBar: ampTabBar(tabController, [
           ampTab(Icons.home, Icons.home_outlined, Language.current.start),

@@ -8,7 +8,7 @@ import 'testlib.dart';
 
 testCase subParseTestCase(Language lang, String raw, String out) => () async {
       Language.current = lang;
-      expect(realSubject(raw), out);
+      expect(parseSubject(raw), out);
     };
 
 List<testCase> languageTestCases = [

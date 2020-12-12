@@ -185,6 +185,13 @@ Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
       size: size,
     );
 
+IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
+      onPressed: setHidden,
+      icon: hidden
+          ? ampIcon(Icons.visibility_off, Icons.visibility_off_outlined)
+          : ampIcon(Icons.visibility, Icons.visibility_outlined),
+    );
+
 AppBar ampAppBar(String text) {
   return AppBar(
     elevation: 0,

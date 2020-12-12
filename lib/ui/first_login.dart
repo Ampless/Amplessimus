@@ -19,7 +19,7 @@ class FirstLoginState extends State<FirstLogin>
     with SingleTickerProviderStateMixin {
   bool _loading = false;
   String _error = '';
-  bool _hidePwd = true;
+  bool _hide = true;
   final _usernameFormField = AmpFormField.username;
   final _passwordFormField = AmpFormField.password;
 
@@ -38,14 +38,9 @@ class FirstLoginState extends State<FirstLogin>
               ampSubtitle(Language.current.changeLoginPopup),
               _usernameFormField.flutter(),
               _passwordFormField.flutter(
-                suffixIcon: IconButton(
-                  onPressed: () => setState(() => _hidePwd = !_hidePwd),
-                  icon: _hidePwd
-                      ? ampIcon(Icons.visibility, Icons.visibility_outlined)
-                      : ampIcon(
-                          Icons.visibility_off, Icons.visibility_off_outlined),
-                ),
-                obscureText: _hidePwd,
+                suffixIcon:
+                    ampHidePwdBtn(_hide, () => setState(() => _hide = !_hide)),
+                obscureText: _hide,
               ),
               ampPadding(4),
               ampDivider,

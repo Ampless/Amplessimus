@@ -24,7 +24,7 @@ class _SettingsState extends State<Settings> {
   Future<Null> credentialDialog() {
     final usernameFormField = AmpFormField.username;
     final passwordFormField = AmpFormField.password;
-    var passwordHidden = true;
+    var hide = true;
     return ampDialog(
       context: context,
       title: Language.current.changeLoginPopup,
@@ -33,13 +33,8 @@ class _SettingsState extends State<Settings> {
         usernameFormField.flutter(),
         ampPadding(6),
         passwordFormField.flutter(
-          suffixIcon: IconButton(
-            onPressed: () => setAlState(() => passwordHidden = !passwordHidden),
-            icon: passwordHidden
-                ? ampIcon(Icons.visibility, Icons.visibility_outlined)
-                : ampIcon(Icons.visibility_off, Icons.visibility_off_outlined),
-          ),
-          obscureText: passwordHidden,
+          suffixIcon: ampHidePwdBtn(hide, () => setAlState(() => hide = !hide)),
+          obscureText: hide,
         )
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(

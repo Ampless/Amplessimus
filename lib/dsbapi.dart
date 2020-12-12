@@ -21,7 +21,7 @@ Widget _renderPlans(List<Plan> plans) {
     }
     for (final sub in plan.subs) {
       dayWidgets.add(ampLessonTile(
-        subject: Prefs.parseSubjects ? realSubject(sub.subject) : sub.subject,
+        subject: Prefs.parseSubjects ? parseSubject(sub.subject) : sub.subject,
         orgTeacher: sub.orgTeacher,
         lesson: sub.lesson.toString(),
         subtitle: Language.current.dsbSubtoSubtitle(sub),
@@ -40,13 +40,13 @@ Widget _renderPlans(List<Plan> plans) {
           tooltip: plan.date.split(' ').first,
           onPressed: () =>
               scaffoldMessanger.showSnackBar(ampSnackBar(plan.date)),
-          padding: EdgeInsets.all(4),
+          padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
         ),
         IconButton(
           icon: ampIcon(Icons.open_in_new, Icons.open_in_new_outlined),
           tooltip: Language.current.openPlanInBrowser,
           onPressed: () => ampOpenUrl(plan.url),
-          padding: EdgeInsets.all(4),
+          padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
         ),
       ]),
     ));

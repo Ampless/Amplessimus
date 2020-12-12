@@ -22,7 +22,7 @@ class ErrorScreenPageState extends State<ErrorScreenPage> {
         backgroundColor: Colors.black,
         body: Column(children: [
           ampErrorText(
-            'Amplessimus did not initialize.\n'
+            'Amplessimus did not initialize correctly.\n'
             'Please contact ampless@chrissx.de with a screenshot/video of this page.',
           ),
           ampLogWidget,
