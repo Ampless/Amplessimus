@@ -38,7 +38,8 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class SplashScreenPageState extends State<SplashScreenPage> {
-  int _currentPage = -1;
+  bool _loading = true;
+
   @override
   void initState() {
     super.initState();
@@ -54,15 +55,12 @@ class SplashScreenPageState extends State<SplashScreenPage> {
 
     loadPrefs.then((_) async {
       try {
-        if (Prefs.firstLogin) setState(() => _currentPage = 1);
-
-        final dsb = dsbUpdateWidget(true);
-        final wpe = wpemailUpdate();
-
-        await wpe;
-        await dsb;
-
-        setState(() => _currentPage = 0);
+        if (!Prefs.firstLogin) {
+          final dsb = dsbUpdateWidget(true);
+          await wpemailUpdate();
+          await dsb;
+        }
+        setState(() => _loading = false);
       } catch (e) {
         ampErr('Splash.initState', errorString(e));
         return ampChangeScreen(ErrorScreenPage(), context);
@@ -73,10 +71,10 @@ class SplashScreenPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     try {
-      if (_currentPage != -1) {
-        return _currentPage == 0 ? AmpHomePage(0) : FirstLogin();
+      if (_loading) {
+        return ampNull;
       }
-      return ampNull;
+      return Prefs.firstLogin ? FirstLogin() : AmpHomePage(0);
     } catch (e) {
       ampErr('Splash.build', errorString(e));
       return ampText(errorString(e));
