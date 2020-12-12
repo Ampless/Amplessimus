@@ -1,7 +1,7 @@
 import '../dsbapi.dart';
 import '../langs/language.dart';
 import '../uilib.dart';
-import '../prefs.dart' as Prefs;
+import '../prefs.dart' as prefs;
 import '../appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +25,8 @@ class FirstLoginState extends State<FirstLogin>
 
   @override
   Widget build(BuildContext context) {
-    if (Prefs.classLetter.isEmpty) Prefs.classLetter = dsbLetters.first;
-    if (Prefs.classGrade.isEmpty) Prefs.classGrade = dsbGrades.first;
+    if (prefs.classLetter.isEmpty) prefs.classLetter = dsbLetters.first;
+    if (prefs.classGrade.isEmpty) prefs.classGrade = dsbGrades.first;
     return ampPageBase(
       Scaffold(
         backgroundColor: Colors.transparent,
@@ -62,14 +62,14 @@ class FirstLoginState extends State<FirstLogin>
                 ampRow(
                   [
                     ampDropdownButton(
-                      value: Prefs.classGrade,
+                      value: prefs.classGrade,
                       items: dsbGrades,
                       onChanged: (value) {
                         setState(() {
-                          Prefs.classGrade = value;
+                          prefs.classGrade = value;
                           try {
                             if (int.parse(value) > 10) {
-                              Prefs.classLetter = '';
+                              prefs.classLetter = '';
                             }
                             // ignore: empty_catches
                           } catch (e) {}
@@ -78,9 +78,9 @@ class FirstLoginState extends State<FirstLogin>
                     ),
                     ampPadding(10),
                     ampDropdownButton(
-                      value: Prefs.classLetter,
+                      value: prefs.classLetter,
                       items: dsbLetters,
-                      onChanged: (v) => setState(() => Prefs.classLetter = v),
+                      onChanged: (v) => setState(() => prefs.classLetter = v),
                     ),
                   ],
                 ),
@@ -99,8 +99,8 @@ class FirstLoginState extends State<FirstLogin>
             try {
               final user = _usernameFormField.text.trim();
               final pass = _passwordFormField.text.trim();
-              Prefs.username = user;
-              Prefs.password = pass;
+              prefs.username = user;
+              prefs.password = pass;
               final error = await checkCredentials(user, pass, http.post);
               if (error != null) throw Language.current.dsbError(error);
 
@@ -111,7 +111,7 @@ class FirstLoginState extends State<FirstLogin>
                 _error = '';
               });
 
-              Prefs.firstLogin = false;
+              prefs.firstLogin = false;
               return ampChangeScreen(AmpHomePage(0), context);
             } catch (e) {
               setState(() {
@@ -129,5 +129,5 @@ class FirstLoginState extends State<FirstLogin>
   }
 }
 
-final cachedHttpGet = ScHttpClient(Prefs.getCache, Prefs.setCache).get;
+final cachedHttpGet = ScHttpClient(prefs.getCache, prefs.setCache).get;
 final http = ScHttpClient();

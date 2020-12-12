@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lib/langs/language.dart';
-import '../lib/langs/german.dart';
-import '../lib/subject.dart';
+import 'package:amplessimus/langs/language.dart';
+import 'package:amplessimus/langs/german.dart';
+import 'package:amplessimus/subject.dart';
 
 import 'testlib.dart';
 

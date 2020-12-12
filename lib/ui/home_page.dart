@@ -6,7 +6,7 @@ import 'package:update/update.dart';
 import '../appinfo.dart';
 import '../dsbapi.dart';
 import '../logging.dart';
-import '../prefs.dart' as Prefs;
+import '../prefs.dart' as prefs;
 import '../uilib.dart';
 import '../wpemails.dart';
 import '../langs/language.dart';
@@ -30,8 +30,8 @@ class AmpHomePageState extends State<AmpHomePage>
   TabController tabController;
 
   void checkBrightness() {
-    if (!Prefs.useSystemTheme) return;
-    Prefs.brightness = SchedulerBinding.instance.window.platformBrightness;
+    if (!prefs.useSystemTheme) return;
+    prefs.brightness = SchedulerBinding.instance.window.platformBrightness;
     Future.delayed(Duration(milliseconds: 150), rebuild);
   }
 
@@ -44,9 +44,9 @@ class AmpHomePageState extends State<AmpHomePage>
     super.initState();
     tabController = TabController(
         length: 2, vsync: this, initialIndex: widget.initialIndex);
-    Prefs.timerInit(() => dsbUpdateWidget(callback: rebuild));
+    prefs.timerInit(() => dsbUpdateWidget(callback: rebuild));
     (() async {
-      if (!checkForUpdates || !Prefs.updatePopup) return;
+      if (!checkForUpdates || !prefs.updatePopup) return;
       ampInfo('UN', 'Searching for updates...');
       checkForUpdates = false;
       final update = await UpdateInfo.getFromGitHub(
@@ -96,7 +96,7 @@ class AmpHomePageState extends State<AmpHomePage>
       scaffoldMessanger = ScaffoldMessenger.of(context);
       if (_lastUpdate <
           DateTime.now()
-              .subtract(Duration(minutes: Prefs.timer))
+              .subtract(Duration(minutes: prefs.timer))
               .millisecondsSinceEpoch) {
         refreshKey.currentState?.show();
         dsbUpdateWidget(callback: rebuild);

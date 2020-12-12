@@ -1,5 +1,5 @@
 import 'ui/first_login.dart';
-import 'prefs.dart' as Prefs;
+import 'prefs.dart' as prefs;
 import 'uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:html_search/html_search.dart';
@@ -7,8 +7,8 @@ import 'package:html_search/html_search.dart';
 Map<String, String> wpemailsave = {};
 
 Future<Null> wpemailUpdate() async {
-  if (Prefs.wpeDomain.isNotEmpty) {
-    wpemailsave = await wpemails(Prefs.wpeDomain);
+  if (prefs.wpeDomain.isNotEmpty) {
+    wpemailsave = await wpemails(prefs.wpeDomain);
   }
 }
 

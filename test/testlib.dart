@@ -1,5 +1,5 @@
-import '../lib/logging.dart';
-import '../lib/prefs.dart' as Prefs;
+import 'package:amplessimus/logging.dart';
+import 'package:amplessimus/prefs.dart' as prefs;
 import 'package:flutter_test/flutter_test.dart';
 
 typedef testCase = Future<Null> Function();
@@ -26,7 +26,7 @@ testCase expectTestCase(
 
 Future<Null> testInit() async {
   ampDisableLogging();
-  await Prefs.load();
+  await prefs.load();
 }
 
 void tests(List<testCase> testCases, String groupName) {
