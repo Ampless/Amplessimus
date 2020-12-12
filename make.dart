@@ -1,8 +1,8 @@
 import 'dart:io';
 
-final majorMinorVersion = '2.999';
+final majorMinorVersion = '3.0';
 
-var version = 'pls run main';
+var version;
 
 final flags = '--release --suppress-analytics';
 final binFlags = '$flags --split-debug-info=/tmp --obfuscate';
@@ -194,7 +194,8 @@ Future upgrade() async {
 }
 
 Future main(List<String> argv) async {
-  version = '$majorMinorVersion.${await system('git rev-list @ --count')}';
+  final commits = await system('echo \$((\$(git rev-list @ --count) - 1148))');
+  version = '$majorMinorVersion.$commits';
   await upgrade();
   await replaceversions();
   try {
