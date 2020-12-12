@@ -113,6 +113,15 @@ set password(String s) => _prefs.setString('dsbpass', s);
 //TODO: find a better way to do
 String get classGrade => _getString('grade', '5').trim().toLowerCase();
 set classGrade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
+void Function() setClassGrade(dynamic v) => () {
+      classGrade = v;
+      try {
+        if (int.parse(v) > 10) {
+          classLetter = '';
+        }
+        // ignore: empty_catches
+      } catch (e) {}
+    };
 String get classLetter => _getString('char', 'a').trim().toLowerCase();
 set classLetter(String s) => _prefs.setString('char', s.trim().toLowerCase());
 

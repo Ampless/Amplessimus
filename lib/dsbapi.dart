@@ -59,12 +59,8 @@ Widget _renderPlans(List<Plan> plans) {
 List<Plan> dsbPlans;
 Widget dsbWidget;
 
-Future<Null> dsbUpdateWidget({
-  Function() callback,
-  bool useJsonCache,
-}) async {
+Future<Null> dsbUpdateWidget([bool useJsonCache]) async {
   useJsonCache ??= Prefs.useJsonCache;
-  callback ??= () {};
   try {
     var plans = useJsonCache && Prefs.dsbJsonCache != null
         ? Plan.plansFromJson(Prefs.dsbJsonCache)
@@ -84,7 +80,6 @@ Future<Null> dsbUpdateWidget({
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
     dsbWidget = ampList([ampErrorText(e)]);
   }
-  callback();
 }
 
 //this is a really bad place to put this and

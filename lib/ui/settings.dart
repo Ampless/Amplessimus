@@ -80,22 +80,13 @@ class _SettingsState extends State<Settings> {
                 ampDropdownButton(
                   value: Prefs.classGrade,
                   items: dsbGrades,
-                  onChanged: (value) => setState(() {
-                    Prefs.classGrade = value;
-                    try {
-                      if (int.parse(value) > 10) {
-                        Prefs.classLetter = '';
-                      }
-                      // ignore: empty_catches
-                    } catch (e) {}
-                  }),
+                  onChanged: Prefs.setClassGrade,
                 ),
                 ampPadding(8),
                 ampDropdownButton(
                   value: Prefs.classLetter,
                   items: dsbLetters,
-                  onChanged: (value) =>
-                      setState(() => Prefs.classLetter = value),
+                  onChanged: (v) => setState(() => Prefs.classLetter = v),
                 ),
               ],
             ),
@@ -105,8 +96,7 @@ class _SettingsState extends State<Settings> {
               Prefs.oneClassOnly,
               (value) {
                 setState(() => Prefs.oneClassOnly = value);
-                dsbUpdateWidget(
-                    callback: widget.parent.rebuild, useJsonCache: true);
+                widget.parent.rebuildDragDown();
               },
             ),
           ),
@@ -124,8 +114,10 @@ class _SettingsState extends State<Settings> {
             Prefs.isDarkMode,
             (v) async {
               Prefs.toggleDarkModePressed();
-              Prefs.useSystemTheme = false;
-              Prefs.isDarkMode = v;
+              setState(() {
+                Prefs.useSystemTheme = false;
+                Prefs.isDarkMode = v;
+              });
               await dsbUpdateWidget();
               Future.delayed(
                 Duration(milliseconds: 150),
@@ -146,14 +138,9 @@ class _SettingsState extends State<Settings> {
             Prefs.altTheme,
             (v) async {
               ampInfo('Settings', 'switching design mode');
-              Prefs.altTheme = v;
-              await dsbUpdateWidget();
+              setState(() => Prefs.altTheme = v);
+              await dsbUpdateWidget(true);
               widget.parent.rebuild();
-              scaffoldMessanger.showSnackBar(ampSnackBar(
-                Language.current.changedAppearance,
-                Language.current.show,
-                () => widget.parent.tabController.index = 0,
-              ));
             },
           ),
           ampDivider,

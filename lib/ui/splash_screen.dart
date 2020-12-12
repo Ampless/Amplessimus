@@ -56,7 +56,7 @@ class SplashScreenPageState extends State<SplashScreenPage> {
       try {
         if (Prefs.firstLogin) setState(() => _currentPage = 1);
 
-        final dsb = dsbUpdateWidget(useJsonCache: true);
+        final dsb = dsbUpdateWidget(true);
         final wpe = wpemailUpdate();
 
         await wpe;

@@ -44,7 +44,7 @@ class AmpHomePageState extends State<AmpHomePage>
     super.initState();
     tabController = TabController(
         length: 2, vsync: this, initialIndex: widget.initialIndex);
-    prefs.timerInit(() => dsbUpdateWidget(callback: rebuild));
+    prefs.timerInit(() => rebuildDragDown());
     (() async {
       if (!checkForUpdates || !prefs.updatePopup) return;
       ampInfo('UN', 'Searching for updates...');
@@ -98,8 +98,7 @@ class AmpHomePageState extends State<AmpHomePage>
           DateTime.now()
               .subtract(Duration(minutes: prefs.timer))
               .millisecondsSinceEpoch) {
-        refreshKey.currentState?.show();
-        dsbUpdateWidget(callback: rebuild);
+        rebuildDragDown();
         _lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       final tabs = [
@@ -107,8 +106,6 @@ class AmpHomePageState extends State<AmpHomePage>
         RefreshIndicator(
           key: refreshKey,
           child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
             children: [
               ampAppBar(appTitle),
               dsbWidget,
