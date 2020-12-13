@@ -29,8 +29,8 @@ Future<String> system(cmd) async {
   } else {
     p = await Process.run('sh', ['-c', cmd]);
   }
-  print(p.stderr);
-  print(p.stdout);
+  stderr.writeln(p.stderr);
+  stderr.writeln(p.stdout);
   return p.stdout.trimRight();
 }
 
