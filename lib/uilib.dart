@@ -301,8 +301,12 @@ Future<Null> ampOpenUrl(String url) => canLaunch(url).then((value) {
       if (value) launch(url);
     });
 
-Text ampErrorText(dynamic e) => ampText(errorString(e),
-    color: Colors.red, weight: FontWeight.bold, size: 20);
+Widget ampErrorText(dynamic e) => ampColumn([
+      ampPadding(8),
+      ampText(errorString(e),
+          color: Colors.red, weight: FontWeight.bold, size: 20),
+      ampPadding(8),
+    ]);
 
 class AmpFormField {
   final key = GlobalKey<FormFieldState>();
