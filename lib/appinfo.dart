@@ -1,2 +1,3 @@
 const String appTitle = 'Amplessimus';
-const String appVersion = '0.0.0-1';
+String get appVersion =>
+    String.fromEnvironment('versionlel', defaultValue: '0.0.0-1');

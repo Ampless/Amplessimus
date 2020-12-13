@@ -4,16 +4,16 @@ final majorMinorVersion = '3.0';
 
 var version;
 
-final flags = '--release --suppress-analytics';
-final binFlags = '$flags --split-debug-info=/tmp --obfuscate';
-final iosFlags = binFlags;
+get flags => '--release --suppress-analytics --dart-define=versionlel=$version';
+get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
+get iosFlags => binFlags;
 //--target-platform android-arm,android-arm64,android-x64
-final apkFlags = '$binFlags --shrink';
-final aabFlags = apkFlags;
-final winFlags = binFlags;
-final gtkFlags = binFlags;
-final macFlags = binFlags;
-final webFlags = '$flags --csp';
+get apkFlags => '$binFlags --shrink';
+get aabFlags => apkFlags;
+get winFlags => binFlags;
+get gtkFlags => binFlags;
+get macFlags => binFlags;
+get webFlags => '$flags --csp';
 
 final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
@@ -68,9 +68,7 @@ Future sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
 
 Future replaceversions() async {
   await mv('pubspec.yaml', 'pubspec.yaml.def');
-  await mv('lib/appinfo.dart', 'lib/appinfo.dart.def');
   await sedit('pubspec.yaml.def', 'pubspec.yaml');
-  await sedit('lib/appinfo.dart.def', 'lib/appinfo.dart');
 }
 
 Future iosapp(buildDir) async {
@@ -83,7 +81,7 @@ Future iosapp(buildDir) async {
 }
 
 Future ipa(buildDir, output) async {
-  await flutter('build ipa $iosFlags');
+  print(await flutter('build ipa $iosFlags'));
   print(await system('ls -R'));
   //await system('cp -rp $buildDir tmp/Payload');
   //await rm(output);
@@ -228,7 +226,6 @@ Future main(List<String> argv) async {
     if (e is Error) stderr.writeln(e.stackTrace);
   } finally {
     await mv('pubspec.yaml.def', 'pubspec.yaml');
-    await mv('lib/appinfo.dart.def', 'lib/appinfo.dart');
     await rmd('tmp');
   }
 }
