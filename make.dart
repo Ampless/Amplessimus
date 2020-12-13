@@ -4,16 +4,20 @@ final majorMinorVersion = '3.0';
 
 var version;
 
-get flags => '--release --suppress-analytics --dart-define=versionlel=$version';
-get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
-get iosFlags => binFlags;
+String get flags => '--release '
+    '--suppress-analytics '
+    '--dart-define=versionlel=$version'
+    '--build-name=$version'
+    '--build-number $version';
+String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
+String get iosFlags => binFlags;
 //--target-platform android-arm,android-arm64,android-x64
-get apkFlags => '$binFlags --shrink';
-get aabFlags => apkFlags;
-get winFlags => binFlags;
-get gtkFlags => binFlags;
-get macFlags => binFlags;
-get webFlags => '$flags --csp';
+String get apkFlags => '$binFlags --shrink';
+String get aabFlags => apkFlags;
+String get winFlags => binFlags;
+String get gtkFlags => binFlags;
+String get macFlags => binFlags;
+String get webFlags => '$flags --csp';
 
 final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
@@ -56,7 +60,7 @@ String sed(input, String regex, replacement) {
   return input.toString().replaceAll(RegExp(regex), replacement.toString());
 }
 
-Future sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
+Future sedit(input, output, buildDir, {deb = '/dev/null'}) async {
   var s = await readfile(input);
   s = sed(s, '0.0.0-1', version);
   s = sed(s, '\$ISIZE', (await Directory(buildDir).stat()).size);
@@ -64,11 +68,6 @@ Future sedit(input, output, {deb = '/dev/null', buildDir = '/dev/null'}) async {
   s = sed(s, '\$MD5', await md5(deb));
   s = sed(s, '\$ARCH', 'iphoneos-arm');
   await writefile(output, s);
-}
-
-Future replaceversions() async {
-  await mv('pubspec.yaml', 'pubspec.yaml.def');
-  await sedit('pubspec.yaml.def', 'pubspec.yaml');
 }
 
 Future iosapp(buildDir) async {
@@ -81,25 +80,23 @@ Future iosapp(buildDir) async {
 }
 
 Future ipa(buildDir, output) async {
-  print(await flutter('build ipa $iosFlags'));
-  print(await system('ls -R'));
-  //await system('cp -rp $buildDir tmp/Payload');
-  //await rm(output);
-  //await system('cd tmp && zip -r -9 ../$output Payload');
+  //await flutter('build ipa $iosFlags');
+  await system('cp -rp $buildDir tmp/Payload');
+  await rm(output);
+  await system('cd tmp && zip -r -9 ../$output Payload');
 }
 
 // http://www.saurik.com/id/7
 // but its broken...
 Future deb(buildDir, output) async {
   await system('cp -rp $buildDir tmp/deb/Applications/');
-  await sedit('control.def', 'tmp/deb/DEBIAN/control', buildDir: buildDir);
+  await sedit('control.def', 'tmp/deb/DEBIAN/control', buildDir);
   await system('COPYFILE_DISABLE= COPY_EXTENDED_ATTRIBUTES_DISABLE= '
       'dpkg-deb -Sextreme -z9 --build tmp/deb $output');
 }
 
 Future cydiainfo(buildDir, output, debFile) async {
-  await sedit('Packages.def', '$output/Packages',
-      buildDir: buildDir, deb: debFile);
+  await sedit('Packages.def', '$output/Packages', buildDir, deb: debFile);
   await system('gzip -9 -c $output/Packages > $output/Packages.gz');
 }
 
@@ -171,7 +168,7 @@ Future linux() async {
 
 Future ci() async {
   final a = apk();
-  //await iosapp('build/ios/Release-iphoneos/Runner.app');
+  await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
   await a;
 }
@@ -197,7 +194,6 @@ Future main(List<String> argv) async {
   final commits = await system('echo \$((\$(git rev-list @ --count) - 1148))');
   version = '$majorMinorVersion.$commits';
   await upgrade();
-  await replaceversions();
   try {
     await mkdirs('bin');
     await mkdirs('tmp/Payload');
@@ -225,7 +221,6 @@ Future main(List<String> argv) async {
     stderr.writeln(e);
     if (e is Error) stderr.writeln(e.stackTrace);
   } finally {
-    await mv('pubspec.yaml.def', 'pubspec.yaml');
     await rmd('tmp');
   }
 }
