@@ -3,12 +3,13 @@ import 'dart:io';
 final majorMinorVersion = '3.0';
 
 var version;
+var commitNumber;
 
 String get flags => '--release '
     '--suppress-analytics '
     '--dart-define=versionlel=$version '
     '--build-name=$version '
-    '--build-number $version';
+    '--build-number $commitNumber';
 String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
 String get iosFlags => binFlags;
 //--target-platform android-arm,android-arm64,android-x64
@@ -193,8 +194,8 @@ Future upgrade() async {
 }
 
 Future main(List<String> argv) async {
-  final commits = await system('echo \$((\$(git rev-list @ --count) - 1148))');
-  version = '$majorMinorVersion.$commits';
+  commitNumber = await system('echo \$((\$(git rev-list @ --count) - 1148))');
+  version = '$majorMinorVersion.$commitNumber';
   await upgrade();
   try {
     await mkdirs('bin');
