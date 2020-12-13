@@ -171,7 +171,7 @@ Future linux() async {
 
 Future ci() async {
   final a = apk();
-  await iosapp('build/ios/Release-iphoneos/Runner.app');
+  //await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
   await a;
 }
