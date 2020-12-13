@@ -23,11 +23,15 @@ final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
 Future<String> system(cmd) async {
   stderr.writeln(cmd);
+  var p;
   if (Platform.isWindows) {
-    return (await Process.run('cmd', ['/c', cmd])).stdout.trimRight();
+    p = await Process.run('cmd', ['/c', cmd]);
   } else {
-    return (await Process.run('sh', ['-c', cmd])).stdout.trimRight();
+    p = await Process.run('sh', ['-c', cmd]);
   }
+  print(p.stderr);
+  print(p.stdout);
+  return p.stdout.trimRight();
 }
 
 Future<String> readfile(path) async => File(path).readAsString();
