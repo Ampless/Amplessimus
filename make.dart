@@ -6,8 +6,8 @@ var version;
 
 String get flags => '--release '
     '--suppress-analytics '
-    '--dart-define=versionlel=$version'
-    '--build-name=$version'
+    '--dart-define=versionlel=$version '
+    '--build-name=$version '
     '--build-number $version';
 String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
 String get iosFlags => binFlags;
@@ -29,8 +29,8 @@ Future<String> system(cmd) async {
   } else {
     p = await Process.run('sh', ['-c', cmd]);
   }
-  stderr.writeln(p.stderr);
-  stderr.writeln(p.stdout);
+  stderr.write(p.stderr);
+  stderr.write(p.stdout);
   return p.stdout.trimRight();
 }
 
@@ -128,9 +128,8 @@ Future ios() async {
 }
 
 Future android() async {
-  final a = apk();
+  await apk();
   await aab();
-  await a;
 }
 
 Future web() async {
@@ -171,10 +170,9 @@ Future linux() async {
 }
 
 Future ci() async {
-  final a = apk();
+  await apk();
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app', 'bin/$version.ipa');
-  await a;
 }
 
 Future ver() async {
