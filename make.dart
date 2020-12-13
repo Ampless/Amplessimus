@@ -225,5 +225,6 @@ Future main(List<String> argv) async {
     if (e is Error) stderr.writeln(e.stackTrace);
   } finally {
     await rmd('tmp');
+    await rmd('build');
   }
 }
