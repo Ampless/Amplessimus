@@ -83,9 +83,11 @@ Future iosapp(buildDir) async {
 }
 
 Future ipa(buildDir, output) async {
-  await system('cp -rp $buildDir tmp/Payload');
-  await rm(output);
-  await system('cd tmp && zip -r -9 ../$output Payload');
+  await flutter('build ipa $iosFlags');
+  print(await system('ls -R'));
+  //await system('cp -rp $buildDir tmp/Payload');
+  //await rm(output);
+  //await system('cd tmp && zip -r -9 ../$output Payload');
 }
 
 // http://www.saurik.com/id/7
