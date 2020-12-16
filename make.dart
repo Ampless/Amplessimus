@@ -166,16 +166,25 @@ Future upgrade() async {
   await flutter('config --no-analytics');
 }
 
-Future main(List<String> argv) async {
+Future init() async {
   commitNumber = await system('echo \$((\$(git rev-list @ --count) - 1148))');
   version = '$majorMinorVersion.$commitNumber';
   await upgrade();
+  await mkdirs('bin');
+  await mkdirs('tmp/Payload');
+  await mkdirs('tmp/deb/DEBIAN');
+  await mkdirs('tmp/deb/Applications');
+  await mkdirs('tmp/dmg');
+}
+
+Future cleanup() async {
+  await rmd('tmp');
+  await rmd('build');
+}
+
+Future main(List<String> argv) async {
   try {
-    await mkdirs('bin');
-    await mkdirs('tmp/Payload');
-    await mkdirs('tmp/deb/DEBIAN');
-    await mkdirs('tmp/deb/Applications');
-    await mkdirs('tmp/dmg');
+    await init();
     for (final target in argv) {
       const targets = {
         'ci': ci,
@@ -197,6 +206,5 @@ Future main(List<String> argv) async {
     stderr.writeln(e);
     if (e is Error) stderr.writeln(e.stackTrace);
   }
-  await rmd('tmp');
-  await rmd('build');
+  await cleanup();
 }

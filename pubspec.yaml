@@ -36,6 +36,8 @@ dev_dependencies:
     sdk: flutter
   pedantic: ^1.9.2
   github: ^7.0.3
+  path: ^1.7.0
+  mime: ^0.9.7
 
 flutter_icons:
   #ios: true
