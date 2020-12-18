@@ -102,18 +102,19 @@ class AmpHomePageState extends State<AmpHomePage>
         _lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       final tabs = [
-        //ptr doesnt seem to always work everywhere (might have to consider Expanded)
-        RefreshIndicator(
-          key: refreshKey,
-          child: ListView(
-            children: [
-              ampAppBar(appTitle),
-              dsbWidget,
-              wpemailsave.isNotEmpty ? ampSizedDivider(20) : ampNull,
-              wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
-            ],
+        Scaffold(
+          body: RefreshIndicator(
+            key: refreshKey,
+            child: ListView(
+              children: [
+                ampAppBar(appTitle),
+                dsbWidget,
+                wpemailsave.isNotEmpty ? ampSizedDivider(20) : ampNull,
+                wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
+              ],
+            ),
+            onRefresh: rebuildDragDown,
           ),
-          onRefresh: rebuildDragDown,
         ),
         Settings(this),
       ];
