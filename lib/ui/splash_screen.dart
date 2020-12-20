@@ -7,55 +7,30 @@ import '../uilib.dart';
 import '../wpemails.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-// ignore: library_prefixes
-import '../prefs.dart' as Prefs;
+import '../prefs.dart' as prefs;
 import 'home_page.dart';
 
-class _AmpBehavior extends ScrollBehavior {
+class _Behavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(context, child, axisDirection) => child;
 }
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  SplashScreen();
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        child: MaterialApp(
-          builder: (context, child) =>
-              ScrollConfiguration(behavior: _AmpBehavior(), child: child),
-          title: appTitle,
-          home: SplashScreenPage(),
-          debugShowCheckedModeBanner: false,
-        ),
-        onWillPop: () async => true,
-      );
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
-class SplashScreenPage extends StatefulWidget {
-  SplashScreenPage();
-  @override
-  State<StatefulWidget> createState() => SplashScreenPageState();
-}
-
-class SplashScreenPageState extends State<SplashScreenPage> {
+class SplashScreenState extends State<SplashScreen> {
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
 
-    final loadPrefs = Prefs.load();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-
-    loadPrefs.then((_) async {
+    prefs.load().then((_) async {
       try {
-        if (!Prefs.firstLogin) {
+        if (!prefs.firstLogin) {
           final dsb = dsbUpdateWidget(true);
           await wpemailUpdate();
           await dsb;
@@ -63,18 +38,30 @@ class SplashScreenPageState extends State<SplashScreenPage> {
         setState(() => _loading = false);
       } catch (e) {
         ampErr('Splash.initState', errorString(e));
-        return ampChangeScreen(ErrorScreenPage(), context);
+        await ampChangeScreen(ErrorScreenPage(), context);
       }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => MaterialApp(
+        builder: (_, child) =>
+            ScrollConfiguration(behavior: _Behavior(), child: child),
+        title: appTitle,
+        home: _build,
+        debugShowCheckedModeBanner: false,
+        theme: _loading ? null : prefs.themeData,
+      );
+
+  Widget get _build {
     try {
       if (_loading) {
         return ampNull;
+      } else if (prefs.firstLogin) {
+        return FirstLogin(this);
+      } else {
+        return AmpHomePage(this, 0);
       }
-      return Prefs.firstLogin ? FirstLogin() : AmpHomePage(0);
     } catch (e) {
       ampErr('Splash.build', errorString(e));
       return ampText(errorString(e));

@@ -17,10 +17,10 @@ class Settings extends StatefulWidget {
   Settings(this.parent);
 
   @override
-  State<StatefulWidget> createState() => _SettingsState();
+  State<StatefulWidget> createState() => SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class SettingsState extends State<Settings> {
   Future<Null> credentialDialog() {
     final usernameFormField = AmpFormField.username;
     final passwordFormField = AmpFormField.password;
@@ -123,6 +123,10 @@ class _SettingsState extends State<Settings> {
                 Duration(milliseconds: 150),
                 widget.parent.rebuild,
               );
+              Future.delayed(
+                Duration(milliseconds: 150),
+                () => widget.parent.widget.parent.setState(() {}),
+              );
             },
           ),
           ampSwitchWithText(
@@ -200,14 +204,12 @@ class _SettingsState extends State<Settings> {
                   applicationIcon:
                       SvgPicture.asset('assets/logo.svg', height: 40),
                   children: [Text(Language.current.appInfo)],
-                  //TODO: flame flutter people for not letting me set the
-                  //background color
                 ),
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceAround,
           ),
-          DevOptions(),
+          DevOptions(this),
         ],
         scrollDirection: Axis.vertical,
       ),

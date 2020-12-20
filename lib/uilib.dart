@@ -18,7 +18,6 @@ Future<Null> ampDialog({
     barrierDismissible: barrierDismissible,
     builder: (context) => AlertDialog(
       title: title != null ? ampText(title) : null,
-      backgroundColor: Prefs.colorBackground,
       content: StatefulBuilder(
         builder: (alertContext, setAlState) => widgetBuilder(
           children(alertContext, setAlState),
@@ -33,8 +32,6 @@ Widget ampLinearProgressIndicator([bool loading = true]) {
   return !loading
       ? ampNull
       : LinearProgressIndicator(
-          backgroundColor: Prefs.colorBackground,
-          valueColor: AlwaysStoppedAnimation<Color>(Prefs.colorForeground),
           semanticsLabel: 'Loading (accessibility is being...worked on)',
         );
 }
@@ -56,7 +53,6 @@ Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
 
 FlatButton ampDialogButton(String text, Function() onPressed) {
   return FlatButton(
-    textColor: Prefs.colorForeground,
     onPressed: onPressed,
     child: ampText(text),
   );
@@ -69,10 +65,7 @@ DropdownButton ampDropdownButton({
   Widget Function(dynamic) itemToDropdownChild = ampText,
 }) {
   return DropdownButton(
-    underline: Container(height: 2, color: Prefs.colorForeground),
-    dropdownColor: Prefs.lightBackground,
-    focusColor: Prefs.colorBackground,
-    style: Prefs.textStyleForeground,
+    underline: Container(height: 2),
     value: value,
     items: items
         .map((e) => DropdownMenuItem(child: itemToDropdownChild(e), value: e))
@@ -83,12 +76,6 @@ DropdownButton ampDropdownButton({
 
 Switch ampSwitch(bool value, Function(bool) onChanged) {
   return Switch(
-    activeColor: Prefs.colorForeground,
-    inactiveTrackColor: Prefs.lightBackground,
-    activeTrackColor: Prefs.lightForeground,
-    inactiveThumbColor: Prefs.colorForeground,
-    hoverColor: Colors.transparent,
-    focusColor: Colors.transparent,
     value: value,
     onChanged: onChanged,
   );
@@ -100,8 +87,7 @@ ListTile ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
 ListTile ampWidgetWithText(String text, Widget w) =>
     ListTile(title: ampText(text), trailing: w);
 
-Divider ampSizedDivider(double size) =>
-    Divider(color: Prefs.colorForeground, height: size);
+Divider ampSizedDivider(double size) => Divider(height: size);
 
 Divider get ampDivider => ampSizedDivider(0);
 
@@ -123,9 +109,6 @@ Widget ampBigButton(
       elevation: 0,
       color: Colors.transparent,
       child: InkWell(
-        hoverColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
         onTap: onTap,
         child: ampColumn(
           [
@@ -141,8 +124,6 @@ Widget ampBigButton(
 
 RaisedButton ampRaisedButton(String text, void Function() onPressed) {
   return RaisedButton(
-    color: Prefs.lightBackground,
-    splashColor: Prefs.lightForeground,
     child: ampText(text),
     onPressed: onPressed,
   );
@@ -160,7 +141,6 @@ Text ampText(
   List<String> font,
 }) {
   toString ??= (o) => o.toString();
-  color ??= Prefs.colorForeground;
   font ??= [];
   final style = TextStyle(
     fontSize: size,
@@ -181,7 +161,6 @@ Text ampSubtitle(String s) => ampText(s, size: 16, weight: FontWeight.w600);
 Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
     Icon(
       Prefs.altTheme ? dataOutlined : dataDefault,
-      color: Prefs.colorForeground,
       size: size,
     );
 
@@ -207,14 +186,12 @@ SnackBar ampSnackBar(
   Function() action,
 ]) =>
     SnackBar(
-      backgroundColor: Prefs.colorBackground,
       content: ampText(content),
       action: label != null ? ampSnackBarAction(label, action) : null,
     );
 
 SnackBarAction ampSnackBarAction(String label, Function() onPressed) =>
     SnackBarAction(
-      textColor: Prefs.lightForeground,
       label: label,
       onPressed: onPressed,
     );
@@ -229,9 +206,6 @@ FloatingActionButton ampFab({
     elevation: 0,
     onPressed: onPressed,
     highlightElevation: 0,
-    backgroundColor: Prefs.colorBackground,
-    focusColor: Colors.transparent,
-    splashColor: Prefs.colorForeground,
     label: ampText(label),
     icon: ampIcon(iconDefault, iconOutlined),
   );
@@ -248,14 +222,13 @@ Widget ampList(List<Widget> children) {
   if (!Prefs.altTheme) {
     return Card(
       elevation: 0,
-      color: Prefs.lightBackground,
       child: ampColumn(children),
     );
   } else {
     return Container(
       margin: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: Prefs.colorForeground),
+        border: Border.all(),
         borderRadius: BorderRadius.circular(8),
       ),
       child: ampColumn(children),
@@ -286,14 +259,11 @@ ListTile ampLessonTile({
 
 Widget ampPageBase(Widget child) => AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      color: Prefs.colorBackground,
       child: SafeArea(child: child),
     );
 
 TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
       controller: controller,
-      indicatorColor: Prefs.colorForeground,
-      labelColor: Prefs.colorForeground,
       tabs: tabs,
     );
 
@@ -334,7 +304,6 @@ class AmpFormField {
         ampPadding(3),
         TextFormField(
           obscureText: obscureText,
-          style: Prefs.textStyleForeground,
           keyboardAppearance: Prefs.brightness,
           controller: controller,
           key: key,
@@ -343,19 +312,17 @@ class AmpFormField {
           decoration: InputDecoration(
             suffixIcon: suffixIcon,
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Prefs.colorForeground, width: 1.0),
+              borderSide: BorderSide(width: 1.0),
               borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Prefs.colorForeground, width: 2.0),
+              borderSide: BorderSide(width: 2.0),
               borderRadius: BorderRadius.circular(10),
             ),
-            labelStyle: Prefs.textStyleForeground,
             labelText: labelText,
-            fillColor: Prefs.colorForeground,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Prefs.colorForeground),
+              borderSide: BorderSide(),
             ),
           ),
         ),

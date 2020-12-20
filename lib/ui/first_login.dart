@@ -1,3 +1,5 @@
+import 'package:amplessimus/ui/splash_screen.dart';
+
 import '../dsbapi.dart';
 import '../langs/language.dart';
 import '../uilib.dart';
@@ -10,7 +12,8 @@ import 'package:schttp/schttp.dart';
 import 'home_page.dart';
 
 class FirstLogin extends StatefulWidget {
-  FirstLogin();
+  FirstLogin(this.parent);
+  final SplashScreenState parent;
   @override
   State<StatefulWidget> createState() => FirstLoginState();
 }
@@ -29,12 +32,11 @@ class FirstLoginState extends State<FirstLogin>
     if (prefs.classGrade.isEmpty) prefs.classGrade = dsbGrades.first;
     return ampPageBase(
       Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: ampAppBar(appTitle),
         body: Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children: [
+              ampAppBar(appTitle),
               ampSubtitle(Language.current.changeLoginPopup),
               _usernameFormField.flutter(),
               _passwordFormField.flutter(
@@ -102,7 +104,7 @@ class FirstLoginState extends State<FirstLogin>
               });
 
               prefs.firstLogin = false;
-              return ampChangeScreen(AmpHomePage(0), context);
+              return ampChangeScreen(AmpHomePage(widget.parent, 0), context);
             } catch (e) {
               setState(() {
                 _loading = false;

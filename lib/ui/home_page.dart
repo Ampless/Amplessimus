@@ -1,3 +1,4 @@
+import 'package:amplessimus/ui/splash_screen.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,7 +15,8 @@ import 'first_login.dart';
 import 'settings.dart';
 
 class AmpHomePage extends StatefulWidget {
-  AmpHomePage(this.initialIndex, {Key key}) : super(key: key);
+  AmpHomePage(this.parent, this.initialIndex, {Key key}) : super(key: key);
+  final SplashScreenState parent;
   final int initialIndex;
   @override
   AmpHomePageState createState() => AmpHomePageState();
@@ -103,7 +105,6 @@ class AmpHomePageState extends State<AmpHomePage>
       }
       final tabs = [
         Scaffold(
-          backgroundColor: Colors.transparent,
           body: RefreshIndicator(
             key: refreshKey,
             child: ListView(
@@ -120,7 +121,6 @@ class AmpHomePageState extends State<AmpHomePage>
         Settings(this),
       ];
       return ampPageBase(Scaffold(
-        backgroundColor: Colors.transparent,
         body: TabBarView(
           controller: tabController,
           physics: ClampingScrollPhysics(),

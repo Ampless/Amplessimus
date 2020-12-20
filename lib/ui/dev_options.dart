@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:amplessimus/ui/settings.dart';
+
 import 'first_login.dart';
 import '../langs/language.dart';
 import '../logging.dart';
@@ -10,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DevOptions extends StatefulWidget {
-  DevOptions();
+  DevOptions(this.parent);
+  final SettingsState parent;
   @override
   State<StatefulWidget> createState() => DevOptionsState();
 }
@@ -64,7 +67,10 @@ class DevOptionsState extends State<DevOptions>
         ampRaisedButton('Set Cache to Input', () => _cacheDialog(context)),
         ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
         ampRaisedButton(
-            'först lockin', () => ampChangeScreen(FirstLogin(), context)),
+            'först lockin',
+            () => ampChangeScreen(
+                FirstLogin(widget.parent.widget.parent.widget.parent),
+                context)),
         ampRaisedButton(
           'App-Daten löschen',
           () {
