@@ -81,6 +81,8 @@ main() {
         (update_altstore) &
 
         output
+
+        wait
 }
 
 main
