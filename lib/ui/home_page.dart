@@ -103,6 +103,7 @@ class AmpHomePageState extends State<AmpHomePage>
       }
       final tabs = [
         Scaffold(
+          backgroundColor: Colors.transparent,
           body: RefreshIndicator(
             key: refreshKey,
             child: ListView(
