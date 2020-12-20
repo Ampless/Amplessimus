@@ -51,7 +51,7 @@ class AmpHomePageState extends State<AmpHomePage>
       checkForUpdates = false;
       final update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
-        appVersion,
+        await appVersion,
         http.get,
       );
       if (update != null) {

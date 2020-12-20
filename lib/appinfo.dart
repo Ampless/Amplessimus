@@ -1,3 +1,5 @@
+import 'package:package_info/package_info.dart';
+
 const String appTitle = 'Amplessimus';
-String get appVersion =>
-    String.fromEnvironment('versionlel', defaultValue: '0.0.0-1');
+Future<String> get appVersion async =>
+    (await PackageInfo.fromPlatform()).version;

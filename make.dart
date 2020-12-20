@@ -7,7 +7,6 @@ var commitNumber;
 
 String get flags => '--release '
     '--suppress-analytics '
-    '--dart-define=versionlel=$version '
     '--build-name=$version '
     '--build-number $commitNumber';
 String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
