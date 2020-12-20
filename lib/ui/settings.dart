@@ -80,7 +80,7 @@ class _SettingsState extends State<Settings> {
                 ampDropdownButton(
                   value: Prefs.classGrade,
                   items: dsbGrades,
-                  onChanged: Prefs.setClassGrade,
+                  onChanged: (v) => setState(Prefs.setClassGrade(v)),
                 ),
                 ampPadding(8),
                 ampDropdownButton(

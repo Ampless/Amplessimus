@@ -64,7 +64,7 @@ class FirstLoginState extends State<FirstLogin>
                     ampDropdownButton(
                       value: prefs.classGrade,
                       items: dsbGrades,
-                      onChanged: prefs.setClassGrade,
+                      onChanged: (v) => setState(prefs.setClassGrade(v)),
                     ),
                     ampPadding(10),
                     ampDropdownButton(
