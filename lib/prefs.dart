@@ -103,8 +103,8 @@ void toggleDarkModePressed() {
   }
 }
 
-bool get altTheme => _getBool('alttheme', false);
-set altTheme(bool i) => _prefs.setBool('alttheme', i);
+bool get highContrast => _getBool('alttheme', false);
+set highContrast(bool i) => _prefs.setBool('alttheme', i);
 String get username => _getString('dsbuser', '');
 set username(String s) => _prefs.setString('dsbuser', s);
 String get password => _getString('dsbpass', '');
@@ -182,7 +182,6 @@ Future<bool> clear() async {
 
 //COLORS
 
-Brightness get brightness => isDarkMode ? Brightness.dark : Brightness.light;
 set brightness(Brightness b) {
   if (Brightness.values.length > 2) {
     ampWarn('AmpColors.brightness', 'more than 2 Brightness states exist.');
@@ -199,12 +198,16 @@ set isDarkMode(bool b) {
   ampInfo('AmpColors', 'set isDarkMode = $isDarkMode');
 }
 
-void switchMode() => isDarkMode = !isDarkMode;
-
 ThemeData get themeData {
   if (isDarkMode) {
-    return ThemeData.from(colorScheme: ColorScheme.highContrastDark());
+    return ThemeData.from(
+      colorScheme: ColorScheme.highContrastDark(
+        background: Colors.black,
+      ),
+    );
   } else {
-    return ThemeData.from(colorScheme: ColorScheme.highContrastLight());
+    return ThemeData.from(
+      colorScheme: ColorScheme.highContrastLight(),
+    );
   }
 }
