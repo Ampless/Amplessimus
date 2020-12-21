@@ -120,7 +120,8 @@ class AmpHomePageState extends State<AmpHomePage>
         ),
         Settings(this),
       ];
-      return ampPageBase(Scaffold(
+      return SafeArea(
+          child: Scaffold(
         body: TabBarView(
           controller: tabController,
           physics: ClampingScrollPhysics(),

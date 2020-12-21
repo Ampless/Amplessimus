@@ -105,8 +105,8 @@ class SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return ampPageBase(
-      ListView(
+    return SafeArea(
+      child: ListView(
         children: [
           ampAppBar(Language.current.settings),
           ampSwitchWithText(

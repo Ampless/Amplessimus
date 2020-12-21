@@ -30,8 +30,8 @@ class FirstLoginState extends State<FirstLogin>
   Widget build(BuildContext context) {
     if (prefs.classLetter.isEmpty) prefs.classLetter = dsbLetters.first;
     if (prefs.classGrade.isEmpty) prefs.classGrade = dsbGrades.first;
-    return ampPageBase(
-      Scaffold(
+    return SafeArea(
+      child: Scaffold(
         body: Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(

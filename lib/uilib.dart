@@ -171,12 +171,10 @@ IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
           : ampIcon(Icons.visibility, Icons.visibility_outlined),
     );
 
-AppBar ampAppBar(String text) {
-  return AppBar(
-    elevation: 0,
-    backgroundColor: Colors.transparent,
-    title: ampText(text, size: 36, weight: FontWeight.bold),
-    centerTitle: false,
+Padding ampAppBar(String text) {
+  return Padding(
+    padding: EdgeInsets.all(16),
+    child: ampText(text, size: 36, weight: FontWeight.bold),
   );
 }
 
@@ -255,11 +253,6 @@ ListTile ampLessonTile({
       leading: ampText(lesson, weight: FontWeight.bold, size: 36),
       subtitle: ampText(subtitle, size: 16),
       trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
-    );
-
-Widget ampPageBase(Widget child) => AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      child: SafeArea(child: child),
     );
 
 TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(

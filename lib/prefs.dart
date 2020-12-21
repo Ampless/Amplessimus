@@ -201,4 +201,10 @@ set isDarkMode(bool b) {
 
 void switchMode() => isDarkMode = !isDarkMode;
 
-ThemeData get themeData => isDarkMode ? ThemeData.dark() : ThemeData.light();
+ThemeData get themeData {
+  if (isDarkMode) {
+    return ThemeData.from(colorScheme: ColorScheme.highContrastDark());
+  } else {
+    return ThemeData.from(colorScheme: ColorScheme.highContrastLight());
+  }
+}
