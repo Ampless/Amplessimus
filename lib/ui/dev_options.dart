@@ -25,7 +25,7 @@ class DevOptionsState extends State<DevOptions>
     if (!Prefs.devOptionsEnabled) return ampNull;
     return ampColumn(
       [
-        ampDivider,
+        Divider(),
         ampSwitchWithText(
           'Entwickleroptionen aktiviert',
           Prefs.devOptionsEnabled,
@@ -41,13 +41,13 @@ class DevOptionsState extends State<DevOptions>
           Prefs.updatePopup,
           (v) => setState(() => Prefs.updatePopup = v),
         ),
-        ampDivider,
+        Divider(),
         ListTile(
           title: ampText('Refreshtimer (Minuten)'),
           trailing: ampText('${Prefs.timer}'),
           onTap: () => _inputTimerDialog(context),
         ),
-        ampDivider,
+        Divider(),
         ampPadding(5),
         ampRaisedButton('Print Cache', Prefs.listCache),
         ampRaisedButton('Clear Cache', Prefs.clearCache),

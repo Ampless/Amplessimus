@@ -139,15 +139,15 @@ class SettingsState extends State<Settings> {
           ),
           ampSwitchWithText(
             Language.current.highContrastMode,
-            Prefs.altTheme,
+            Prefs.highContrast,
             (v) async {
               ampInfo('Settings', 'switching design mode');
-              setState(() => Prefs.altTheme = v);
+              setState(() => Prefs.highContrast = v);
               await dsbUpdateWidget(true);
               widget.parent.rebuild();
             },
           ),
-          ampDivider,
+          Divider(),
           ampWidgetWithText(
             Language.current.changeLanguage,
             ampDropdownButton(
@@ -168,7 +168,7 @@ class SettingsState extends State<Settings> {
               widget.parent.rebuildDragDown();
             },
           ),
-          ampDivider,
+          Divider(),
           changeSubVisibilityWidget,
           ampSwitchWithText(
             Language.current.parseSubjects,
@@ -178,7 +178,7 @@ class SettingsState extends State<Settings> {
               widget.parent.rebuildDragDown();
             },
           ),
-          ampDivider,
+          Divider(),
           Row(
             children: [
               ampBigButton(

@@ -1,6 +1,5 @@
 import 'langs/language.dart';
-// ignore: library_prefixes
-import 'prefs.dart' as Prefs;
+import 'prefs.dart' as prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,35 +27,19 @@ Future<Null> ampDialog({
   );
 }
 
-Widget ampLinearProgressIndicator([bool loading = true]) {
-  return !loading
-      ? ampNull
-      : LinearProgressIndicator(
-          semanticsLabel: 'Loading (accessibility is being...worked on)',
-        );
-}
-
 final ampNull = Container(width: 0, height: 0);
 
-Column ampColumn(List<Widget> children) => Column(
-      mainAxisSize: MainAxisSize.min,
-      children: children,
-    );
+Column ampColumn(List<Widget> children) =>
+    Column(mainAxisSize: MainAxisSize.min, children: children);
 
-Row ampRow(List<Widget> children) => Row(
-      mainAxisSize: MainAxisSize.min,
-      children: children,
-    );
+Row ampRow(List<Widget> children) =>
+    Row(mainAxisSize: MainAxisSize.min, children: children);
 
-Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
-    Tab(icon: Icon(Prefs.altTheme ? iconOutlined : iconDefault), text: text);
+Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) => Tab(
+    icon: Icon(prefs.highContrast ? iconOutlined : iconDefault), text: text);
 
-FlatButton ampDialogButton(String text, Function() onPressed) {
-  return FlatButton(
-    onPressed: onPressed,
-    child: ampText(text),
-  );
-}
+FlatButton ampDialogButton(String text, Function() onPressed) =>
+    FlatButton(onPressed: onPressed, child: ampText(text));
 
 DropdownButton ampDropdownButton({
   @required dynamic value,
@@ -65,7 +48,6 @@ DropdownButton ampDropdownButton({
   Widget Function(dynamic) itemToDropdownChild = ampText,
 }) {
   return DropdownButton(
-    underline: Container(height: 2),
     value: value,
     items: items
         .map((e) => DropdownMenuItem(child: itemToDropdownChild(e), value: e))
@@ -74,22 +56,14 @@ DropdownButton ampDropdownButton({
   );
 }
 
-Switch ampSwitch(bool value, Function(bool) onChanged) {
-  return Switch(
-    value: value,
-    onChanged: onChanged,
-  );
-}
+Switch ampSwitch(bool value, Function(bool) onChanged) =>
+    Switch(value: value, onChanged: onChanged);
 
 ListTile ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
     ampWidgetWithText(text, ampSwitch(value, onChanged));
 
 ListTile ampWidgetWithText(String text, Widget w) =>
     ListTile(title: ampText(text), trailing: w);
-
-Divider ampSizedDivider(double size) => Divider(height: size);
-
-Divider get ampDivider => ampSizedDivider(0);
 
 List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
     {@required Function() save}) {
@@ -115,29 +89,25 @@ Widget ampBigButton(
             ampPadding(8),
             ampIcon(iconDefault, iconOutlined, size: 50),
             ampPadding(8),
-            ampText(text, textAlign: TextAlign.center),
+            Text(text, textAlign: TextAlign.center),
             ampPadding(8),
           ],
         ),
       ),
     );
 
-RaisedButton ampRaisedButton(String text, void Function() onPressed) {
-  return RaisedButton(
-    child: ampText(text),
-    onPressed: onPressed,
-  );
-}
+RaisedButton ampRaisedButton(String text, void Function() onPressed) =>
+    RaisedButton(child: Text(text), onPressed: onPressed);
 
 Padding ampPadding(double value) => Padding(padding: EdgeInsets.all(value));
 
-Text ampText(
-  dynamic text, {
+Text ampText<T>(
+  T text, {
   double size,
-  TextAlign textAlign,
+  TextAlign align,
   FontWeight weight,
   Color color,
-  String Function(dynamic) toString,
+  String Function(T) toString,
   List<String> font,
 }) {
   toString ??= (o) => o.toString();
@@ -149,20 +119,13 @@ Text ampText(
     fontFamily: font.isNotEmpty ? font.first : null,
     fontFamilyFallback: font,
   );
-  return Text(
-    toString(text),
-    style: style,
-    textAlign: textAlign,
-  );
+  return Text(toString(text), style: style, textAlign: align);
 }
 
 Text ampSubtitle(String s) => ampText(s, size: 16, weight: FontWeight.w600);
 
 Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
-    Icon(
-      Prefs.altTheme ? dataOutlined : dataDefault,
-      size: size,
-    );
+    Icon(prefs.highContrast ? dataOutlined : dataDefault, size: size);
 
 IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
       onPressed: setHidden,
@@ -181,17 +144,11 @@ Padding ampAppBar(String text) {
 SnackBar ampSnackBar(
   String content, [
   String label,
-  Function() action,
+  Function() f,
 ]) =>
     SnackBar(
-      content: ampText(content),
-      action: label != null ? ampSnackBarAction(label, action) : null,
-    );
-
-SnackBarAction ampSnackBarAction(String label, Function() onPressed) =>
-    SnackBarAction(
-      label: label,
-      onPressed: onPressed,
+      content: Text(content),
+      action: label != null ? SnackBarAction(label: label, onPressed: f) : null,
     );
 
 FloatingActionButton ampFab({
@@ -204,7 +161,7 @@ FloatingActionButton ampFab({
     elevation: 0,
     onPressed: onPressed,
     highlightElevation: 0,
-    label: ampText(label),
+    label: Text(label),
     icon: ampIcon(iconDefault, iconOutlined),
   );
 }
@@ -217,11 +174,8 @@ Future ampChangeScreen(
     push(context, MaterialPageRoute(builder: (_) => w));
 
 Widget ampList(List<Widget> children) {
-  if (!Prefs.altTheme) {
-    return Card(
-      elevation: 0,
-      child: ampColumn(children),
-    );
+  if (!prefs.highContrast) {
+    return Card(elevation: 0, child: ampColumn(children));
   } else {
     return Container(
       margin: EdgeInsets.all(8),
@@ -255,10 +209,8 @@ ListTile ampLessonTile({
       trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
     );
 
-TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
-      controller: controller,
-      tabs: tabs,
-    );
+TabBar ampTabBar(TabController controller, List<Tab> tabs) =>
+    TabBar(controller: controller, tabs: tabs);
 
 Future<Null> ampOpenUrl(String url) => canLaunch(url).then((value) {
       if (value) launch(url);
@@ -297,7 +249,6 @@ class AmpFormField {
         ampPadding(3),
         TextFormField(
           obscureText: obscureText,
-          keyboardAppearance: Prefs.brightness,
           controller: controller,
           key: key,
           validator: validator,
@@ -328,14 +279,14 @@ class AmpFormField {
   String get text => controller.text;
 
   static AmpFormField get username => AmpFormField(
-        Prefs.username,
+        prefs.username,
         labelText: Language.current.username,
         keyboardType: TextInputType.visiblePassword,
         autofillHints: [AutofillHints.username],
       );
 
   static AmpFormField get password => AmpFormField(
-        Prefs.password,
+        prefs.password,
         labelText: Language.current.password,
         keyboardType: TextInputType.visiblePassword,
         autofillHints: [AutofillHints.password],

@@ -104,19 +104,17 @@ class AmpHomePageState extends State<AmpHomePage>
         _lastUpdate = DateTime.now().millisecondsSinceEpoch;
       }
       final tabs = [
-        Scaffold(
-          body: RefreshIndicator(
-            key: refreshKey,
-            child: ListView(
-              children: [
-                ampAppBar(appTitle),
-                dsbWidget,
-                wpemailsave.isNotEmpty ? ampSizedDivider(20) : ampNull,
-                wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
-              ],
-            ),
-            onRefresh: rebuildDragDown,
+        RefreshIndicator(
+          key: refreshKey,
+          child: ListView(
+            children: [
+              ampAppBar(appTitle),
+              dsbWidget,
+              wpemailsave.isNotEmpty ? Divider(height: 20) : ampNull,
+              wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
+            ],
           ),
+          onRefresh: rebuildDragDown,
         ),
         Settings(this),
       ];

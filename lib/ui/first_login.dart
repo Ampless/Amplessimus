@@ -45,7 +45,7 @@ class FirstLoginState extends State<FirstLogin>
                 obscureText: _hide,
               ),
               ampPadding(4),
-              ampDivider,
+              Divider(),
               ampPadding(4),
               ampWidgetWithText(
                 Language.current.changeLanguage,
@@ -57,7 +57,7 @@ class FirstLoginState extends State<FirstLogin>
                 ),
               ),
               ampPadding(4),
-              ampDivider,
+              Divider(),
               ampPadding(4),
               ampWidgetWithText(
                 Language.current.selectClass,
@@ -78,13 +78,15 @@ class FirstLoginState extends State<FirstLogin>
                 ),
               ),
               ampPadding(4),
-              ampDivider,
+              Divider(),
               ampPadding(4),
               ampErrorText(_error),
             ],
           ),
         ),
-        bottomSheet: ampLinearProgressIndicator(_loading),
+        bottomSheet: _loading
+            ? LinearProgressIndicator(semanticsLabel: 'Loading')
+            : ampNull,
         floatingActionButton: ampFab(
           onPressed: () async {
             setState(() => _loading = true);
