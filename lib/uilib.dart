@@ -16,7 +16,7 @@ Future<Null> ampDialog({
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (context) => AlertDialog(
-      title: title != null ? ampText(title) : null,
+      title: title != null ? Text(title) : null,
       content: StatefulBuilder(
         builder: (alertContext, setAlState) => widgetBuilder(
           children(alertContext, setAlState),
@@ -35,11 +35,11 @@ Column ampColumn(List<Widget> children) =>
 Row ampRow(List<Widget> children) =>
     Row(mainAxisSize: MainAxisSize.min, children: children);
 
-Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) => Tab(
-    icon: Icon(prefs.highContrast ? iconOutlined : iconDefault), text: text);
+Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
+    Tab(icon: ampIcon(iconDefault, iconOutlined), text: text);
 
 FlatButton ampDialogButton(String text, Function() onPressed) =>
-    FlatButton(onPressed: onPressed, child: ampText(text));
+    FlatButton(onPressed: onPressed, child: Text(text));
 
 DropdownButton ampDropdownButton({
   @required dynamic value,
@@ -63,7 +63,7 @@ ListTile ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
     ampWidgetWithText(text, ampSwitch(value, onChanged));
 
 ListTile ampWidgetWithText(String text, Widget w) =>
-    ListTile(title: ampText(text), trailing: w);
+    ListTile(title: Text(text), trailing: w);
 
 List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
     {@required Function() save}) {
@@ -86,11 +86,9 @@ Widget ampBigButton(
         onTap: onTap,
         child: ampColumn(
           [
-            ampPadding(8),
             ampIcon(iconDefault, iconOutlined, size: 50),
-            ampPadding(8),
+            ampPadding(4),
             Text(text, textAlign: TextAlign.center),
-            ampPadding(8),
           ],
         ),
       ),
@@ -246,7 +244,7 @@ class AmpFormField {
     suffixIcon ??= ampNull;
     return ampColumn(
       [
-        ampPadding(3),
+        ampPadding(2),
         TextFormField(
           obscureText: obscureText,
           controller: controller,
@@ -270,7 +268,7 @@ class AmpFormField {
             ),
           ),
         ),
-        ampPadding(3),
+        ampPadding(2),
       ],
     );
   }
