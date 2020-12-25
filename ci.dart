@@ -7,22 +7,17 @@ import 'package:path/path.dart';
 import 'make.dart' as make;
 
 Future<String> system(cmd) async {
-  stderr.writeln(cmd);
-  var p;
-  if (Platform.isWindows) {
-    p = await Process.run('cmd', ['/c', cmd]);
-  } else {
-    p = await Process.run('sh', ['-c', cmd]);
-  }
-  stderr.write(p.stderr);
-  stderr.write(p.stdout);
+  print(cmd);
+  final p = Platform.isWindows
+      ? await Process.run('cmd', ['/c', cmd])
+      : await Process.run('sh', ['-c', cmd]);
+
+  print(p.stderr);
+  print(p.stdout);
   return p.stdout.trimRight();
 }
 
-Future githubRelease(
-  String commit,
-  String dir
-) async {
+Future githubRelease(String commit, String dir) async {
   final github = GitHub(
     auth: Authentication.withToken(
       (await File('/etc/ampci.token').readAsLines()).first,
@@ -60,7 +55,19 @@ Future updateAltstore() async {
       'git clone https://github.com/Ampless/ampless.chrissx.de ~/ampless.chrissx.de',
     );
   }
-  //TODO: actually do it
+  await system('cd ~/ampless.chrissx.de/altstore ; git pull');
+  var versionDate = await system('date -u +%FT%T');
+  versionDate += '+00:00';
+  final versionDescription = await system("date '+%d.%m.%y %H:%M'");
+  await system('cd ~/ampless.chrissx.de/altstore;'
+      'sed -E \'s/^ *"version": ".*",\$/      "version": "${make.version}",/\' alpha.json |'
+      'sed -E \'s/^ *"versionDate": ".*",\$/      "versionDate": "$versionDate",/\' |'
+      'sed -E \'s/^ *"versionDescription": ".*",\$/      "versionDescription": "$versionDescription",/\' |'
+      'sed -E \'s/^ *"downloadURL": ".*",\$/      "downloadURL": "https:\\/\\/github.com\\/Ampless\\/Amplessimus\\/releases\\/download\\/${make.version}\\/${make.version}.ipa",/\' > temp.json;'
+      'mv temp.json alpha.json;'
+      'git add alpha.json;'
+      'git commit -m "automatic ci update to amplessimus ios alpha ${make.version}";'
+      'git push');
 }
 
 Future main() async {
@@ -82,7 +89,8 @@ Future main() async {
   await make.ci();
   await make.cleanup();
 
-//TODO: mv -f bin $outputDir
+//TODO: reimplement in dart
+  await system('mv -f bin $outputDir');
 
   final altstore = updateAltstore();
   await githubRelease(commit, outputDir);
