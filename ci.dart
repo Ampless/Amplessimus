@@ -38,12 +38,15 @@ Future githubRelease(String commit, String dir) async {
   //TODO: return this and use it for altstore
   await github.repositories.uploadReleaseAssets(
     release,
-    await (await Directory(dir).list().asyncMap((event) async => event is File
+    await Directory(dir)
+        .list()
+        .asyncMap((event) async => event is File
             ? CreateReleaseAsset(
                 name: basename(event.path),
                 contentType: lookupMimeType(event.path),
                 assetData: await event.readAsBytes())
-            : null))
+            : null)
+        .where((event) => event != null)
         .toList(),
   );
   print('Done uploading.');
