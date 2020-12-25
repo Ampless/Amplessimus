@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:github/github.dart';
-import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 
 import 'make.dart' as make;
@@ -43,7 +42,7 @@ Future githubRelease(String commit, String dir) async {
         .where((event) => event is File)
         .asyncMap((event) async => CreateReleaseAsset(
             name: basename(event.path),
-            contentType: lookupMimeType(event.path),
+            contentType: 'application/octet-stream',
             assetData: await (event as File).readAsBytes()))
         .where((event) => event != null)
         .toList(),
