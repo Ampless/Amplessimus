@@ -23,12 +23,9 @@ final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
 Future<String> system(cmd) async {
   stderr.writeln(cmd);
-  var p;
-  if (Platform.isWindows) {
-    p = await Process.run('cmd', ['/c', cmd]);
-  } else {
-    p = await Process.run('sh', ['-c', cmd]);
-  }
+  final p = Platform.isWindows
+      ? await Process.run('cmd', ['/c', cmd])
+      : await Process.run('sh', ['-c', cmd]);
   stderr.write(p.stderr);
   stderr.write(p.stdout);
   return p.stdout.trimRight();
@@ -158,17 +155,9 @@ Future clean() async {
   await rmd('bin');
 }
 
-Future upgrade() async {
-  await flutter('config --no-analytics');
-  await flutter('channel master');
-  await flutter('upgrade');
-  await flutter('config --no-analytics');
-}
-
 Future init() async {
   commitNumber = await system('echo \$((\$(git rev-list @ --count) - 1148))');
   version = '$majorMinorVersion.$commitNumber';
-  await upgrade();
   await mkdirs('bin');
   await mkdirs('tmp/Payload');
   await mkdirs('tmp/deb/DEBIAN');
@@ -183,6 +172,10 @@ Future cleanup() async {
 
 Future main(List<String> argv) async {
   try {
+    await flutter('config --no-analytics');
+    await flutter('channel master');
+    await flutter('upgrade');
+    await flutter('config --no-analytics');
     await init();
     for (final target in argv) {
       const targets = {
@@ -196,7 +189,6 @@ Future main(List<String> argv) async {
         'linux': linux,
         'ver': ver,
         'clean': clean,
-        'upgrade': upgrade,
       };
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
       await targets[target]();
