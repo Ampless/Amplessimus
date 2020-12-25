@@ -18,6 +18,7 @@ Future<String> system(cmd) async {
 }
 
 Future githubRelease(String commit, String dir) async {
+  print('Creating release...');
   final github = GitHub(
     auth: Authentication.withToken(
       (await File('/etc/ampci.token').readAsLines()).first,
@@ -33,19 +34,17 @@ Future githubRelease(String commit, String dir) async {
       isPrerelease: true,
     ),
   );
-  print('Created release.');
   print('Uploading assets...');
-  //TODO: return this and use it for altstore
+  //TODO: return url to ipa and use it for altstore
   await github.repositories.uploadReleaseAssets(
     release,
     await Directory(dir)
         .list()
-        .asyncMap((event) async => event is File
-            ? CreateReleaseAsset(
-                name: basename(event.path),
-                contentType: lookupMimeType(event.path),
-                assetData: await event.readAsBytes())
-            : null)
+        .where((event) => event is File)
+        .asyncMap((event) async => CreateReleaseAsset(
+            name: basename(event.path),
+            contentType: lookupMimeType(event.path),
+            assetData: await (event as File).readAsBytes()))
         .where((event) => event != null)
         .toList(),
   );
@@ -84,7 +83,6 @@ Future main() async {
   await make.init();
 
   final outputDir = '/usr/local/var/www/amplessimus/${make.version}';
-  await Directory(outputDir).create(recursive: true);
 
   final date = await system('date');
   print('[AmpCI][$date] Running the Dart build system for ${make.version}.');
