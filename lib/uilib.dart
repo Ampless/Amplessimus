@@ -41,12 +41,13 @@ Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
 FlatButton ampDialogButton(String text, Function() onPressed) =>
     FlatButton(onPressed: onPressed, child: Text(text));
 
-DropdownButton ampDropdownButton({
-  @required dynamic value,
-  @required List<dynamic> items,
-  @required void Function(dynamic) onChanged,
-  Widget Function(dynamic) itemToDropdownChild = ampText,
+DropdownButton ampDropdownButton<T>({
+  @required T value,
+  @required List<T> items,
+  @required void Function(T) onChanged,
+  Widget Function(T) itemToDropdownChild,
 }) {
+  itemToDropdownChild ??= ampText;
   return DropdownButton(
     value: value,
     items: items
@@ -207,8 +208,13 @@ ListTile ampLessonTile({
       trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
     );
 
-TabBar ampTabBar(TabController controller, List<Tab> tabs) =>
-    TabBar(controller: controller, tabs: tabs);
+TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
+      controller: controller,
+      tabs: tabs,
+      indicatorColor: prefs.themeData.accentColor,
+      labelColor: prefs.themeData.colorScheme.onSurface,
+      unselectedLabelColor: prefs.themeData.unselectedWidgetColor,
+    );
 
 Future<Null> ampOpenUrl(String url) => canLaunch(url).then((value) {
       if (value) launch(url);
