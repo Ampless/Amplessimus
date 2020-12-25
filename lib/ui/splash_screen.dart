@@ -48,23 +48,12 @@ class SplashScreenState extends State<SplashScreen> {
         builder: (_, child) =>
             ScrollConfiguration(behavior: _Behavior(), child: child),
         title: appTitle,
-        home: _build,
         debugShowCheckedModeBanner: false,
         theme: _loading ? null : prefs.themeData,
+        home: _loading
+            ? ampNull
+            : prefs.firstLogin
+                ? FirstLogin(this)
+                : AmpHomePage(this, 0),
       );
-
-  Widget get _build {
-    try {
-      if (_loading) {
-        return ampNull;
-      } else if (prefs.firstLogin) {
-        return FirstLogin(this);
-      } else {
-        return AmpHomePage(this, 0);
-      }
-    } catch (e) {
-      ampErr('Splash.build', errorString(e));
-      return ampText(errorString(e));
-    }
-  }
 }
