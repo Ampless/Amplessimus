@@ -52,9 +52,9 @@ abstract class Language {
   String get dismiss;
   String get open;
   String get update;
-  String get plsUpdate;
   String get wpemailDomain;
   String get openPlanInBrowser;
+  String plsUpdate(String oldVersion, String newVersion);
   String dsbSubtoSubtitle(Substitution sub);
   String dayToString(Day day);
   String dsbError(String e);

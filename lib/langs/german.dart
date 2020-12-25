@@ -192,7 +192,8 @@ class German extends Language {
   String get update => 'Update';
 
   @override
-  String get plsUpdate => 'Eine neue $appTitle-Version ist verfügbar.';
+  String plsUpdate(String oldVersion, String newVersion) =>
+      'Ein $appTitle-Update ist verfügbar: $oldVersion → $newVersion';
 
   @override
   String get wpemailDomain => 'WPEmail-Domain';

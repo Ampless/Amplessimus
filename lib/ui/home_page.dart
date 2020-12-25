@@ -58,9 +58,11 @@ class AmpHomePageState extends State<AmpHomePage>
       );
       if (update != null) {
         ampInfo('UN', 'Found an update, displaying the dialog.');
+        final old = await appVersion;
         await ampDialog(
           title: Language.current.update,
-          children: (_, __) => [ampText(Language.current.plsUpdate)],
+          children: (_, __) =>
+              [ampText(Language.current.plsUpdate(old, update.version))],
           actions: (alCtx) => [
             ampDialogButton(Language.current.dismiss, Navigator.of(alCtx).pop),
             ampDialogButton(
