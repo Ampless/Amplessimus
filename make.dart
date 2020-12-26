@@ -1,6 +1,6 @@
 import 'dart:io';
 
-final majorMinorVersion = '3.1';
+final majorMinorVersion = '3.2';
 
 var version;
 var commitNumber;
