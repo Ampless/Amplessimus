@@ -34,7 +34,7 @@ class FirstLoginState extends State<FirstLogin>
             children: [
               ampTitle(appTitle),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ampColumn([
                   AutofillGroup(
                     child: ampColumn([
