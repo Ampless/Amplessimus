@@ -33,9 +33,9 @@ class FirstLoginState extends State<FirstLogin>
           child: ListView(
             children: [
               ampTitle(appTitle),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: ampColumn([
+              ampPadding(
+                10,
+                ampColumn([
                   AutofillGroup(
                     child: ampColumn([
                       _usernameFormField.flutter(),
@@ -46,9 +46,7 @@ class FirstLoginState extends State<FirstLogin>
                       ),
                     ]),
                   ),
-                  ampPadding(4),
                   Divider(),
-                  ampPadding(4),
                   ampWidgetWithText(
                     Language.current.changeLanguage,
                     ampDropdownButton(
@@ -58,9 +56,7 @@ class FirstLoginState extends State<FirstLogin>
                       onChanged: (v) => setState(() => Language.current = v),
                     ),
                   ),
-                  ampPadding(4),
                   Divider(),
-                  ampPadding(4),
                   ampWidgetWithText(
                     Language.current.selectClass,
                     ampRow(
@@ -70,7 +66,7 @@ class FirstLoginState extends State<FirstLogin>
                           items: dsbGrades,
                           onChanged: (v) => setState(prefs.setClassGrade(v)),
                         ),
-                        ampPadding(10),
+                        ampPadding(8),
                         ampDropdownButton(
                           value: prefs.classLetter,
                           items: dsbLetters,
@@ -80,9 +76,7 @@ class FirstLoginState extends State<FirstLogin>
                       ],
                     ),
                   ),
-                  ampPadding(4),
                   Divider(),
-                  ampPadding(4),
                   ampErrorText(_error),
                 ]),
               )

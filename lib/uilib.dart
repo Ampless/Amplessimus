@@ -98,7 +98,10 @@ Widget ampBigButton(
 RaisedButton ampRaisedButton(String text, void Function() onPressed) =>
     RaisedButton(child: Text(text), onPressed: onPressed);
 
-Padding ampPadding(double value) => Padding(padding: EdgeInsets.all(value));
+Padding ampPadding(double value, [Widget child]) => Padding(
+      padding: EdgeInsets.all(value),
+      child: child,
+    );
 
 Text ampText<T>(
   T text, {
@@ -121,10 +124,8 @@ Text ampText<T>(
   return Text(toString(text), style: style, textAlign: align);
 }
 
-Widget ampTitle(String text) => Padding(
-      padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
-      child: ampText(text, size: 36, weight: FontWeight.bold),
-    );
+Widget ampTitle(String text) =>
+    ampPadding(16, ampText(text, size: 36, weight: FontWeight.bold));
 
 Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
     Icon(prefs.highContrast ? dataOutlined : dataDefault, size: size);
@@ -216,12 +217,14 @@ Future<Null> ampOpenUrl(String url) => canLaunch(url).then((value) {
       if (value) launch(url);
     });
 
-Widget ampErrorText(dynamic e) => ampColumn([
-      ampPadding(8),
-      ampText(errorString(e),
-          color: Colors.red, weight: FontWeight.bold, size: 20),
-      ampPadding(8),
-    ]);
+Widget ampErrorText(dynamic e) => ampPadding(
+    8,
+    ampText(
+      errorString(e),
+      color: Colors.red,
+      weight: FontWeight.bold,
+      size: 20,
+    ));
 
 class AmpFormField {
   final key = GlobalKey<FormFieldState>();
@@ -246,32 +249,33 @@ class AmpFormField {
     suffixIcon ??= ampNull;
     return ampColumn(
       [
-        ampPadding(2),
-        TextFormField(
-          obscureText: obscureText,
-          controller: controller,
-          key: key,
-          validator: validator,
-          keyboardType: keyboardType,
-          autofillHints: autofillHints,
-          decoration: InputDecoration(
-            suffixIcon: suffixIcon,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            labelText: labelText,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(),
+        ampPadding(
+          2,
+          TextFormField(
+            obscureText: obscureText,
+            controller: controller,
+            key: key,
+            validator: validator,
+            keyboardType: keyboardType,
+            autofillHints: autofillHints,
+            decoration: InputDecoration(
+              suffixIcon: suffixIcon,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelText: labelText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(),
+              ),
             ),
           ),
         ),
-        ampPadding(2),
       ],
     );
   }
