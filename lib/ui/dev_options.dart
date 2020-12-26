@@ -67,10 +67,7 @@ class DevOptionsState extends State<DevOptions>
         ampRaisedButton('Set Cache to Input', () => _cacheDialog(context)),
         ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
         ampRaisedButton(
-            'först lockin',
-            () => ampChangeScreen(
-                FirstLogin(widget.parent.widget.parent.widget.parent),
-                context)),
+            'först lockin', () => ampChangeScreen(FirstLogin(), context)),
         ampRaisedButton(
           'App-Daten löschen',
           () {

@@ -1,5 +1,3 @@
-import 'package:amplessimus/ui/splash_screen.dart';
-
 import '../dsbapi.dart';
 import '../langs/language.dart';
 import '../uilib.dart';
@@ -12,8 +10,7 @@ import 'package:schttp/schttp.dart';
 import 'home_page.dart';
 
 class FirstLogin extends StatefulWidget {
-  FirstLogin(this.parent);
-  final SplashScreenState parent;
+  FirstLogin();
   @override
   State<StatefulWidget> createState() => FirstLoginState();
 }
@@ -106,7 +103,7 @@ class FirstLoginState extends State<FirstLogin>
               });
 
               prefs.firstLogin = false;
-              return ampChangeScreen(AmpHomePage(widget.parent, 0), context);
+              return ampChangeScreen(AmpHomePage(0), context);
             } catch (e) {
               setState(() {
                 _loading = false;

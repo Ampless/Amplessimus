@@ -1,3 +1,5 @@
+import 'package:amplessimus/main.dart';
+
 import '../dsbapi.dart';
 import '../langs/language.dart';
 import '../logging.dart';
@@ -125,7 +127,7 @@ class SettingsState extends State<Settings> {
               );
               Future.delayed(
                 Duration(milliseconds: 150),
-                () => widget.parent.widget.parent.setState(() {}),
+                () => rebuildWholeApp(),
               );
             },
           ),
