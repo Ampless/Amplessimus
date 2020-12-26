@@ -35,11 +35,15 @@ class FirstLoginState extends State<FirstLogin>
             children: [
               ampAppBar(appTitle),
               ampSubtitle(Language.current.changeLoginPopup),
-              _usernameFormField.flutter(),
-              _passwordFormField.flutter(
-                suffixIcon:
-                    ampHidePwdBtn(_hide, () => setState(() => _hide = !_hide)),
-                obscureText: _hide,
+              AutofillGroup(
+                child: ampColumn([
+                  _usernameFormField.flutter(),
+                  _passwordFormField.flutter(
+                    suffixIcon: ampHidePwdBtn(
+                        _hide, () => setState(() => _hide = !_hide)),
+                    obscureText: _hide,
+                  ),
+                ]),
               ),
               ampPadding(4),
               Divider(),

@@ -31,13 +31,16 @@ class SettingsState extends State<Settings> {
       context: context,
       title: Language.current.changeLoginPopup,
       children: (context, setAlState) => [
-        ampPadding(2),
-        usernameFormField.flutter(),
-        ampPadding(6),
-        passwordFormField.flutter(
-          suffixIcon: ampHidePwdBtn(hide, () => setAlState(() => hide = !hide)),
-          obscureText: hide,
-        )
+        AutofillGroup(
+          child: ampColumn([
+            usernameFormField.flutter(),
+            passwordFormField.flutter(
+              suffixIcon:
+                  ampHidePwdBtn(hide, () => setAlState(() => hide = !hide)),
+              obscureText: hide,
+            )
+          ]),
+        ),
       ],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,

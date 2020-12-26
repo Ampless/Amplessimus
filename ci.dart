@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'make.dart' as make;
 
 Future githubRelease(String commit, String dir) async {
-  print('Creating release... (version: ${make.version}, commit: ${commit})');
+  print('Creating release...');
   final github = GitHub(
     auth: Authentication.withToken(
       (await File('/etc/ampci.token').readAsLines()).first,
