@@ -30,58 +30,62 @@ class FirstLoginState extends State<FirstLogin>
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children: [
-              ampAppBar(appTitle),
-              ampSubtitle(Language.current.changeLoginPopup),
-              AutofillGroup(
+              ampTitle(appTitle),
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: ampColumn([
-                  _usernameFormField.flutter(),
-                  _passwordFormField.flutter(
-                    suffixIcon: ampHidePwdBtn(
-                        _hide, () => setState(() => _hide = !_hide)),
-                    obscureText: _hide,
+                  AutofillGroup(
+                    child: ampColumn([
+                      _usernameFormField.flutter(),
+                      _passwordFormField.flutter(
+                        suffixIcon: ampHidePwdBtn(
+                            _hide, () => setState(() => _hide = !_hide)),
+                        obscureText: _hide,
+                      ),
+                    ]),
                   ),
+                  ampPadding(4),
+                  Divider(),
+                  ampPadding(4),
+                  ampWidgetWithText(
+                    Language.current.changeLanguage,
+                    ampDropdownButton(
+                      value: Language.current,
+                      itemToDropdownChild: (i) => ampText(i.name),
+                      items: Language.all,
+                      onChanged: (v) => setState(() => Language.current = v),
+                    ),
+                  ),
+                  ampPadding(4),
+                  Divider(),
+                  ampPadding(4),
+                  ampWidgetWithText(
+                    Language.current.selectClass,
+                    ampRow(
+                      [
+                        ampDropdownButton(
+                          value: prefs.classGrade,
+                          items: dsbGrades,
+                          onChanged: (v) => setState(prefs.setClassGrade(v)),
+                        ),
+                        ampPadding(10),
+                        ampDropdownButton(
+                          value: prefs.classLetter,
+                          items: dsbLetters,
+                          onChanged: (v) =>
+                              setState(() => prefs.classLetter = v),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ampPadding(4),
+                  Divider(),
+                  ampPadding(4),
+                  ampErrorText(_error),
                 ]),
-              ),
-              ampPadding(4),
-              Divider(),
-              ampPadding(4),
-              ampWidgetWithText(
-                Language.current.changeLanguage,
-                ampDropdownButton(
-                  value: Language.current,
-                  itemToDropdownChild: (i) => ampText(i.name),
-                  items: Language.all,
-                  onChanged: (v) => setState(() => Language.current = v),
-                ),
-              ),
-              ampPadding(4),
-              Divider(),
-              ampPadding(4),
-              ampWidgetWithText(
-                Language.current.selectClass,
-                ampRow(
-                  [
-                    ampDropdownButton(
-                      value: prefs.classGrade,
-                      items: dsbGrades,
-                      onChanged: (v) => setState(prefs.setClassGrade(v)),
-                    ),
-                    ampPadding(10),
-                    ampDropdownButton(
-                      value: prefs.classLetter,
-                      items: dsbLetters,
-                      onChanged: (v) => setState(() => prefs.classLetter = v),
-                    ),
-                  ],
-                ),
-              ),
-              ampPadding(4),
-              Divider(),
-              ampPadding(4),
-              ampErrorText(_error),
+              )
             ],
           ),
         ),

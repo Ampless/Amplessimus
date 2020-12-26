@@ -121,7 +121,10 @@ Text ampText<T>(
   return Text(toString(text), style: style, textAlign: align);
 }
 
-Text ampSubtitle(String s) => ampText(s, size: 16, weight: FontWeight.w600);
+Widget ampTitle(String text) => Padding(
+      padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
+      child: ampText(text, size: 36, weight: FontWeight.bold),
+    );
 
 Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
     Icon(prefs.highContrast ? dataOutlined : dataDefault, size: size);
@@ -132,13 +135,6 @@ IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
           ? ampIcon(Icons.visibility_off, Icons.visibility_off_outlined)
           : ampIcon(Icons.visibility, Icons.visibility_outlined),
     );
-
-Padding ampAppBar(String text) {
-  return Padding(
-    padding: EdgeInsets.all(16),
-    child: ampText(text, size: 36, weight: FontWeight.bold),
-  );
-}
 
 SnackBar ampSnackBar(
   String content, [
@@ -257,6 +253,7 @@ class AmpFormField {
           key: key,
           validator: validator,
           keyboardType: keyboardType,
+          autofillHints: autofillHints,
           decoration: InputDecoration(
             suffixIcon: suffixIcon,
             enabledBorder: OutlineInputBorder(

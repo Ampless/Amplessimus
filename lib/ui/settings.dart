@@ -113,7 +113,7 @@ class SettingsState extends State<Settings> {
     return SafeArea(
       child: ListView(
         children: [
-          ampAppBar(Language.current.settings),
+          ampTitle(Language.current.settings),
           ampSwitchWithText(
             Language.current.darkMode,
             Prefs.isDarkMode,

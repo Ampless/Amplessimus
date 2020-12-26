@@ -108,7 +108,7 @@ class AmpHomePageState extends State<AmpHomePage>
           key: refreshKey,
           child: ListView(
             children: [
-              ampAppBar(appTitle),
+              ampTitle(appTitle),
               dsbWidget,
               wpemailsave.isNotEmpty ? Divider(height: 20) : ampNull,
               wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
