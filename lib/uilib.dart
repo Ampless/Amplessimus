@@ -285,8 +285,8 @@ class AmpFormField {
   static AmpFormField get username => AmpFormField(
         prefs.username,
         labelText: Language.current.username,
-        keyboardType: TextInputType.emailAddress,
-        autofillHints: [AutofillHints.email],
+        keyboardType: TextInputType.visiblePassword,
+        autofillHints: [AutofillHints.username],
       );
 
   static AmpFormField get password => AmpFormField(
