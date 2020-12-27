@@ -80,8 +80,7 @@ Future main() async {
   await make.ci();
   await make.cleanup();
 
-//TODO: reimplement in dart
-  await make.system('mv -f bin $outputDir');
+  await Directory('bin').rename(outputDir);
 
   final altstore = updateAltstore();
   await githubRelease(commit, outputDir);

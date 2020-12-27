@@ -32,7 +32,6 @@ abstract class Language {
   String get noLogin;
   String get allClasses;
   String get empty;
-  String get widgetValidatorInvalid;
   String get done;
   String get timetable;
   String get setupTimetable;

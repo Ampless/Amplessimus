@@ -2,8 +2,8 @@ import 'dart:io';
 
 final majorMinorVersion = '3.2';
 
-var version;
-var commitNumber;
+String version;
+String commitNumber;
 
 String get flags => '--release '
     '--suppress-analytics '
@@ -21,7 +21,7 @@ String get webFlags => '$flags --csp';
 
 final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
-Future<String> system(cmd) async {
+Future<String> system(String cmd) async {
   stderr.writeln(cmd);
   final p = Platform.isWindows
       ? await Process.run('cmd', ['/c', cmd])
@@ -34,13 +34,13 @@ Future<String> system(cmd) async {
 Future<String> readfile(path) async => File(path).readAsString();
 Future writefile(path, content) async => File(path).writeAsString(content);
 
-Future rm(f) async {
+Future<void> rm(f) async {
   if (await File(f).exists()) {
     await File(f).delete();
   }
 }
 
-Future rmd(d) async {
+Future<void> rmd(d) async {
   if (await Directory(d).exists()) {
     await Directory(d).delete(recursive: true);
   }
@@ -53,13 +53,13 @@ Future mkdirs(d) => Directory(d).create(recursive: true);
 
 Future md5(path) => system("md5sum '$path' | cut -d' ' -f1");
 
-Future flutter(cmd) => system('flutter $cmd');
-Future build(cmd, flags) => flutter('build $cmd $flags');
+Future<void> flutter(String cmd) => system('flutter $cmd');
+Future build(String cmd, String flags) => flutter('build $cmd $flags');
 
-Future hdiutil(cmd) => system('hdiutil $cmd');
-Future strip(files) => system('strip -u -r $files');
+Future hdiutil(String cmd) => system('hdiutil $cmd');
+Future strip(String files) => system('strip -u -r $files');
 
-Future iosapp(buildDir) async {
+Future<void> iosapp(buildDir) async {
   await build('ios', iosFlags);
   await system(
       'xcrun bitcode_strip $buildDir/Frameworks/Flutter.framework/Flutter -r -o tmpfltr');
@@ -68,54 +68,54 @@ Future iosapp(buildDir) async {
   await strip('$buildDir/Runner $buildDir/Frameworks/*.framework/*');
 }
 
-Future ipa(buildDir) async {
+Future<void> ipa(buildDir) async {
   //await flutter('build ipa $iosFlags');
   await system('cp -rp $buildDir tmp/Payload');
   await rm('bin/$version.ipa');
   await system('cd tmp && zip -r -9 ../bin/$version.ipa Payload');
 }
 
-Future apk() async {
+Future<void> apk() async {
   await build('apk', apkFlags);
   await mv('build/app/outputs/flutter-apk/app-release.apk', 'bin/$version.apk');
 }
 
-Future aab() async {
+Future<void> aab() async {
   await build('appbundle', aabFlags);
   await mv(
       'build/app/outputs/bundle/release/app-release.aab', 'bin/$version.aab');
 }
 
-Future test() async {
+Future<void> test() async {
   await flutter('test $testFlags');
   await system('genhtml -o coverage/html coverage/lcov.info');
   await system('lcov -l coverage/lcov.info');
 }
 
-Future ios() async {
+Future<void> ios() async {
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app');
-  //deb
+  //TODO: deb
 }
 
-Future android() async {
+Future<void> android() async {
   await apk();
   await aab();
 }
 
-Future web() async {
+Future<void> web() async {
   await flutter('config --enable-web');
   await build('web', webFlags);
   await mvd('build/web', 'bin/$version.web');
 }
 
-Future win() async {
+Future<void> win() async {
   await flutter('config --enable-windows-desktop');
   await build('windows', winFlags);
   await mvd('build/windows/runner/Release', 'bin/$version.win');
 }
 
-Future mac() async {
+Future<void> mac() async {
   await flutter('config --enable-macos-desktop');
   await build('macos', macFlags);
   const bld = 'build/macos/Build/Products/Release/Amplessimus.app';
@@ -133,29 +133,29 @@ Future mac() async {
   await hdiutil('convert tmp/tmp.dmg -ov -format UDBZ -o bin/$version.dmg');
 }
 
-Future linux() async {
+Future<void> linux() async {
   await flutter('config --enable-linux-desktop');
   await build('linux', gtkFlags);
   await mvd('build/linux/release/bundle', 'bin/$version.linux');
 }
 
-Future ci() async {
+Future<void> ci() async {
   await apk();
   await iosapp('build/ios/Release-iphoneos/Runner.app');
   await ipa('build/ios/Release-iphoneos/Runner.app');
 }
 
-Future ver() async {
+Future<void> ver() async {
   print(version);
 }
 
-Future clean() async {
+Future<void> clean() async {
   await rmd('tmp');
   await rmd('build');
   await rmd('bin');
 }
 
-Future init() async {
+Future<void> init() async {
   commitNumber = await system('echo \$((\$(git rev-list @ --count) - 1148))');
   version = '$majorMinorVersion.$commitNumber';
   await mkdirs('bin');
@@ -165,12 +165,25 @@ Future init() async {
   await mkdirs('tmp/dmg');
 }
 
-Future cleanup() async {
+Future<void> cleanup() async {
   await rmd('tmp');
   await rmd('build');
 }
 
-Future main(List<String> argv) async {
+const targets = {
+  'ci': ci,
+  'ios': ios,
+  'android': android,
+  'test': test,
+  'web': web,
+  'win': win,
+  'mac': mac,
+  'linux': linux,
+  'ver': ver,
+  'clean': clean,
+};
+
+Future<void> main(List<String> argv) async {
   try {
     await flutter('config --no-analytics');
     await flutter('channel master');
@@ -178,18 +191,6 @@ Future main(List<String> argv) async {
     await flutter('config --no-analytics');
     await init();
     for (final target in argv) {
-      const targets = {
-        'ci': ci,
-        'ios': ios,
-        'android': android,
-        'test': test,
-        'web': web,
-        'win': win,
-        'mac': mac,
-        'linux': linux,
-        'ver': ver,
-        'clean': clean,
-      };
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
       await targets[target]();
     }

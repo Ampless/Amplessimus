@@ -75,9 +75,6 @@ class English extends Language {
   String get allClasses => 'All classes';
 
   @override
-  String get widgetValidatorInvalid => 'Invalid input!';
-
-  @override
   String get changeLanguage => 'Change language';
 
   @override

@@ -84,9 +84,6 @@ class German extends Language {
   String get allClasses => 'Alle Klassen';
 
   @override
-  String get widgetValidatorInvalid => 'Ungültige Eingabe!';
-
-  @override
   String get changeLanguage => 'Sprache ändern';
 
   @override

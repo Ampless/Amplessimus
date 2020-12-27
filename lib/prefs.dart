@@ -10,9 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences _prefs;
 
-T _get<T>(String key, T dflt, Function(String) f) {
+T _get<T>(String key, T dflt, T Function(String) f) {
   if (_prefs == null) {
-    ampErr('PrefCache', 'Getting $key before initialization is done.');
+    ampErr('PrefCache', 'Tried getting $key before initialization is done.');
     throw 'u tried to get $key ($dflt) before init was done wtf is wrong with u';
   }
 
@@ -168,7 +168,7 @@ void _updateUpdateTimer(int i) {
   _updateTimer = Timer.periodic(Duration(minutes: i), (_) => _timerFunction());
 }
 
-Future<Null> load() async {
+Future<void> load() async {
   ampInfo('Prefs', 'Loading SharedPreferences...');
   _prefs = await SharedPreferences.getInstance();
   ampInfo('Prefs', 'SharedPreferences (hopefully successfully) loaded.');

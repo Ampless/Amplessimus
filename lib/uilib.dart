@@ -231,14 +231,12 @@ class AmpFormField {
   final TextEditingController controller;
   final List<String> autofillHints;
   final TextInputType keyboardType;
-  final String Function(String) validator;
   final String labelText;
 
   AmpFormField(
     Object initialValue, {
     this.autofillHints = const [],
     this.keyboardType = TextInputType.text,
-    this.validator,
     this.labelText = '',
   }) : controller = TextEditingController(text: initialValue.toString());
 
@@ -255,7 +253,6 @@ class AmpFormField {
             obscureText: obscureText,
             controller: controller,
             key: key,
-            validator: validator,
             keyboardType: keyboardType,
             autofillHints: autofillHints,
             decoration: InputDecoration(
@@ -280,7 +277,6 @@ class AmpFormField {
     );
   }
 
-  bool Function() get validate => key.currentState.validate;
   String get text => controller.text;
 
   static AmpFormField get username => AmpFormField(
