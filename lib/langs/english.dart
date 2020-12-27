@@ -31,9 +31,6 @@ class English extends Language {
   String get changeLogin => 'Login data';
 
   @override
-  String get changeLoginPopup => 'DSBMobile Login';
-
-  @override
   String get selectClass => 'Select class';
 
   @override

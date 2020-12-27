@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:amplessimus/ui/settings.dart';
 
 import 'first_login.dart';
-import '../langs/language.dart';
 import '../logging.dart';
 // ignore: library_prefixes
 import '../prefs.dart' as Prefs;
@@ -12,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DevOptions extends StatefulWidget {
-  DevOptions(this.parent);
-  final SettingsState parent;
   @override
   State<StatefulWidget> createState() => DevOptionsState();
 }

@@ -29,7 +29,6 @@ class SettingsState extends State<Settings> {
     var hide = true;
     return ampDialog(
       context: context,
-      title: Language.current.changeLoginPopup,
       children: (context, setAlState) => [
         AutofillGroup(
           child: ampColumn([
@@ -214,7 +213,7 @@ class SettingsState extends State<Settings> {
             ],
             mainAxisAlignment: MainAxisAlignment.spaceAround,
           ),
-          DevOptions(this),
+          DevOptions(),
         ],
         scrollDirection: Axis.vertical,
       ),

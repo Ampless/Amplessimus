@@ -19,7 +19,6 @@ abstract class Language {
   String get changeLanguage;
   String get parseSubjects;
   String get changeLogin;
-  String get changeLoginPopup;
   String get username;
   String get password;
   String get save;
