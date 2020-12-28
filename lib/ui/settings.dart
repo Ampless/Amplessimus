@@ -84,13 +84,19 @@ class SettingsState extends State<Settings> {
                 ampDropdownButton(
                   value: Prefs.classGrade,
                   items: dsbGrades,
-                  onChanged: (v) => setState(Prefs.setClassGrade(v)),
+                  onChanged: (v) {
+                    setState(Prefs.setClassGrade(v));
+                    dsbUpdateWidget(true);
+                  },
                 ),
                 ampPadding(8),
                 ampDropdownButton(
                   value: Prefs.classLetter,
                   items: dsbLetters,
-                  onChanged: (v) => setState(() => Prefs.classLetter = v),
+                  onChanged: (v) {
+                    setState(() => Prefs.classLetter = v);
+                    dsbUpdateWidget(true);
+                  },
                 ),
               ],
             ),
