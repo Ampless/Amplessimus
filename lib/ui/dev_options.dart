@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:amplessimus/ui/settings.dart';
-
 import 'first_login.dart';
 import '../logging.dart';
 // ignore: library_prefixes
@@ -12,11 +10,10 @@ import 'package:flutter/services.dart';
 
 class DevOptions extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => DevOptionsState();
+  _DevOptionsState createState() => _DevOptionsState();
 }
 
-class DevOptionsState extends State<DevOptions>
-    with SingleTickerProviderStateMixin {
+class _DevOptionsState extends State<DevOptions> {
   @override
   Widget build(BuildContext context) {
     if (!Prefs.devOptionsEnabled) return ampNull;
@@ -89,10 +86,9 @@ class DevOptionsState extends State<DevOptions>
   }
 
   void _cacheDialog(BuildContext context) {
-    final cacheFormField = AmpFormField(Prefs.dsbJsonCache);
+    final cacheFormField = AmpFormField(Prefs.dsbJsonCache, labelText: 'Cache');
     ampDialog(
       context: context,
-      title: 'Cache',
       children: (_, __) => [cacheFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
@@ -106,12 +102,14 @@ class DevOptionsState extends State<DevOptions>
   }
 
   void _inputTimerDialog(BuildContext context) {
-    final timerFormField =
-        AmpFormField(Prefs.timer, keyboardType: TextInputType.number);
+    final timerFormField = AmpFormField(
+      Prefs.timer,
+      keyboardType: TextInputType.number,
+      labelText: 'Timer (Minuten)',
+    );
     ampDialog(
       context: context,
-      title: 'Timer (Minuten)',
-      children: (context, setAlState) => [timerFormField.flutter()],
+      children: (_, __) => [timerFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () {

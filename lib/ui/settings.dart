@@ -1,6 +1,6 @@
 import 'package:amplessimus/main.dart';
 
-import '../dsbapi.dart';
+import '../dsbapi.dart' as dsb;
 import '../langs/language.dart';
 import '../logging.dart';
 import 'dev_options.dart';
@@ -19,10 +19,10 @@ class Settings extends StatefulWidget {
   Settings(this.parent);
 
   @override
-  State<StatefulWidget> createState() => SettingsState();
+  _SettingsState createState() => _SettingsState();
 }
 
-class SettingsState extends State<Settings> {
+class _SettingsState extends State<Settings> {
   Future<Null> credentialDialog() {
     final usernameFormField = AmpFormField.username;
     final passwordFormField = AmpFormField.password;
@@ -83,19 +83,19 @@ class SettingsState extends State<Settings> {
               [
                 ampDropdownButton(
                   value: Prefs.classGrade,
-                  items: dsbGrades,
+                  items: dsb.grades,
                   onChanged: (v) {
                     setState(Prefs.setClassGrade(v));
-                    dsbUpdateWidget(true);
+                    dsb.updateWidget(true);
                   },
                 ),
                 ampPadding(8),
                 ampDropdownButton(
                   value: Prefs.classLetter,
-                  items: dsbLetters,
+                  items: dsb.letters,
                   onChanged: (v) {
                     setState(() => Prefs.classLetter = v);
-                    dsbUpdateWidget(true);
+                    dsb.updateWidget(true);
                   },
                 ),
               ],
@@ -128,7 +128,7 @@ class SettingsState extends State<Settings> {
                 Prefs.useSystemTheme = false;
                 Prefs.isDarkMode = v;
               });
-              await dsbUpdateWidget();
+              await dsb.updateWidget();
               Future.delayed(
                 Duration(milliseconds: 150),
                 widget.parent.rebuild,
@@ -153,7 +153,7 @@ class SettingsState extends State<Settings> {
             (v) async {
               ampInfo('Settings', 'switching design mode');
               setState(() => Prefs.highContrast = v);
-              await dsbUpdateWidget(true);
+              await dsb.updateWidget(true);
               widget.parent.rebuild();
             },
           ),

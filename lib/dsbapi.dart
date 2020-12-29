@@ -56,10 +56,10 @@ Widget _renderPlans(List<Plan> plans) {
   return ampColumn(widgets);
 }
 
-List<Plan> dsbPlans;
-Widget dsbWidget;
+List<Plan> plans;
+Widget widget;
 
-Future<Null> dsbUpdateWidget([bool useJsonCache]) async {
+Future<Null> updateWidget([bool useJsonCache]) async {
   useJsonCache ??= Prefs.useJsonCache;
   try {
     var plans = useJsonCache && Prefs.dsbJsonCache != null
@@ -74,16 +74,16 @@ Future<Null> dsbUpdateWidget([bool useJsonCache]) async {
     for (final plan in plans) {
       plan.subs.sort();
     }
-    dsbWidget = _renderPlans(plans);
-    dsbPlans = plans;
+    widget = _renderPlans(plans);
+    plans = plans;
   } catch (e) {
     ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
-    dsbWidget = ampList([ampErrorText(e)]);
+    widget = ampList([ampErrorText(e)]);
   }
 }
 
 //this is a really bad place to put this and
 //some bad prefixes, but we can fix that later
 
-List<String> get dsbGrades => ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
-List<String> get dsbLetters => ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];
+List<String> get grades => ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
+List<String> get letters => ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];

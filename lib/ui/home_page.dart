@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:update/update.dart';
 import '../appinfo.dart';
-import '../dsbapi.dart';
+import '../dsbapi.dart' as dsb;
 import '../logging.dart';
 import '../prefs.dart' as prefs;
 import '../uilib.dart';
@@ -84,9 +84,9 @@ class AmpHomePageState extends State<AmpHomePage>
 
   Future<Null> rebuildDragDown() async {
     unawaited(refreshKey.currentState?.show());
-    final dsb = dsbUpdateWidget();
+    final d = dsb.updateWidget();
     await wpemailUpdate();
-    await dsb;
+    await d;
     rebuild();
   }
 
@@ -109,7 +109,7 @@ class AmpHomePageState extends State<AmpHomePage>
           child: ListView(
             children: [
               ampTitle(appTitle),
-              dsbWidget,
+              dsb.widget,
               wpemailsave.isNotEmpty ? Divider(height: 20) : ampNull,
               wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
             ],

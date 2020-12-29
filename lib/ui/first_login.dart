@@ -1,4 +1,4 @@
-import '../dsbapi.dart';
+import '../dsbapi.dart' as dsb;
 import '../langs/language.dart';
 import '../uilib.dart';
 import '../prefs.dart' as prefs;
@@ -12,11 +12,10 @@ import 'home_page.dart';
 class FirstLogin extends StatefulWidget {
   FirstLogin();
   @override
-  State<StatefulWidget> createState() => FirstLoginState();
+  _FirstLoginState createState() => _FirstLoginState();
 }
 
-class FirstLoginState extends State<FirstLogin>
-    with SingleTickerProviderStateMixin {
+class _FirstLoginState extends State<FirstLogin> {
   bool _loading = false;
   String _error = '';
   bool _hide = true;
@@ -25,8 +24,8 @@ class FirstLoginState extends State<FirstLogin>
 
   @override
   Widget build(BuildContext context) {
-    if (prefs.classLetter.isEmpty) prefs.classLetter = dsbLetters.first;
-    if (prefs.classGrade.isEmpty) prefs.classGrade = dsbGrades.first;
+    if (prefs.classLetter.isEmpty) prefs.classLetter = dsb.letters.first;
+    if (prefs.classGrade.isEmpty) prefs.classGrade = dsb.grades.first;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -63,13 +62,13 @@ class FirstLoginState extends State<FirstLogin>
                       [
                         ampDropdownButton(
                           value: prefs.classGrade,
-                          items: dsbGrades,
+                          items: dsb.grades,
                           onChanged: (v) => setState(prefs.setClassGrade(v)),
                         ),
                         ampPadding(8),
                         ampDropdownButton(
                           value: prefs.classLetter,
-                          items: dsbLetters,
+                          items: dsb.letters,
                           onChanged: (v) =>
                               setState(() => prefs.classLetter = v),
                         ),
@@ -97,7 +96,7 @@ class FirstLoginState extends State<FirstLogin>
               final error = await checkCredentials(user, pass, http.post);
               if (error != null) throw Language.current.dsbError(error);
 
-              await dsbUpdateWidget();
+              await dsb.updateWidget();
 
               setState(() {
                 _loading = false;

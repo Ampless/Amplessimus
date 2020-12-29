@@ -4,13 +4,11 @@ description: A good way of looking at Untis substitution plans using DSBMobile.
 # Don't publish to pub.
 publish_to: 'none'
 
-# A version number is sth like 1.2.3+4. (a.b.c+build_number)
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
+# a.b.c+build_number
+# Overridden in flutter build by --build-name and --build-number.
+# Android: build-name = versionName, build-number = versionCode.
+# https://developer.android.com/studio/publish/versioning
+# iOS: build-name = CFBundleShortVersionString, build-number = CFBundleVersion.
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 0.0.0-1
 

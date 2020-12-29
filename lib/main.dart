@@ -2,7 +2,7 @@ import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
 import 'appinfo.dart';
-import 'dsbapi.dart';
+import 'dsbapi.dart' as dsb;
 import 'logging.dart';
 import 'ui/error_screen.dart';
 import 'ui/first_login.dart';
@@ -42,14 +42,14 @@ void main() async {
   await prefs.load().then((_) async {
     try {
       if (!prefs.firstLogin) {
-        final dsb = dsbUpdateWidget(true);
+        final d = dsb.updateWidget(true);
         await wpemailUpdate();
-        await dsb;
+        await d;
       }
       runApp(_App());
     } catch (e) {
       ampErr('Splash.initState', errorString(e));
-      await runApp(ErrorScreenPage());
+      await runApp(ErrorScreen());
     }
   });
 }
