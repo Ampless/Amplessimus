@@ -176,9 +176,10 @@ Widget ampList(List<Widget> children) {
     return Container(
       margin: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(),
+        border: Border.all(
+          color: prefs.isDarkMode ? Colors.white : Colors.black,
+        ),
         borderRadius: BorderRadius.circular(8),
-        color: prefs.isDarkMode ? Colors.white : Colors.black,
       ),
       child: ampColumn(children),
     );
