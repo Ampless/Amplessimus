@@ -198,4 +198,8 @@ class English extends Language {
 
   @override
   String get parseSubjects => 'Parse subjects';
+
+  @override
+  String warnWrongDate(String date) =>
+      'It seems that this substitution plan is outdated. (date: "$date")';
 }

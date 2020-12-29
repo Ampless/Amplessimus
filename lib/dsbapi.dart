@@ -38,7 +38,10 @@ Widget _renderPlans(List<Plan> plans) {
             ? IconButton(
                 icon: ampIcon(Icons.warning, Icons.warning_outlined),
                 //TODO:
-                onPressed: () {},
+                tooltip: 'lol',
+                onPressed: () => scaffoldMessanger.showSnackBar(
+                    ampSnackBar(Language.current.warnWrongDate(plan.date))),
+                padding: EdgeInsets.zero,
               )
             : ampNull,
         ampText(' ${Language.current.dayToString(plan.day)}', size: 24),

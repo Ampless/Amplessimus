@@ -197,4 +197,8 @@ class German extends Language {
 
   @override
   String get parseSubjects => 'Fächer parsen';
+
+  @override
+  String warnWrongDate(String date) =>
+      'Es scheint, als wäre dieser Vertretungsplan veraltet. (Datum: "$date")';
 }

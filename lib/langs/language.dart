@@ -53,6 +53,7 @@ abstract class Language {
   String get wpemailDomain;
   String get openPlanInBrowser;
   String plsUpdate(String oldVersion, String newVersion);
+  String warnWrongDate(String date);
   String dsbSubtoSubtitle(Substitution sub);
   String dayToString(Day day);
   String dsbError(String e);
