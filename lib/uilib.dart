@@ -2,7 +2,7 @@ import 'langs/language.dart';
 import 'prefs.dart' as prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 Future<Null> ampDialog({
   String title,
@@ -178,6 +178,7 @@ Widget ampList(List<Widget> children) {
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(8),
+        color: prefs.isDarkMode ? Colors.white : Colors.black,
       ),
       child: ampColumn(children),
     );
@@ -213,8 +214,8 @@ TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
       unselectedLabelColor: prefs.themeData.unselectedWidgetColor,
     );
 
-Future<Null> ampOpenUrl(String url) => canLaunch(url).then((value) {
-      if (value) launch(url);
+Future<Null> ampOpenUrl(String url) => url_launcher.canLaunch(url).then((b) {
+      if (b) url_launcher.launch(url);
     });
 
 Widget ampErrorText(dynamic e) => ampPadding(
