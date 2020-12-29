@@ -171,10 +171,17 @@ Future ampChangeScreen(
 
 Widget ampList(List<Widget> children) {
   if (!prefs.highContrast) {
-    return Card(elevation: 0, child: ampColumn(children));
+    return Card(
+      elevation: 0,
+      child: ampColumn(children),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      margin: EdgeInsets.all(4),
+    );
   } else {
     return Container(
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
         border: Border.all(
           color: prefs.isDarkMode ? Colors.white : Colors.black,
