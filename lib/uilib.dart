@@ -4,11 +4,11 @@ import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-Future<Null> ampDialog({
+Future<Null> ampDialog(
+  BuildContext context, {
   String title,
   @required List<Widget> Function(BuildContext, StateSetter) children,
   @required List<Widget> Function(BuildContext) actions,
-  @required BuildContext context,
   @required Widget Function(List<Widget>) widgetBuilder,
   bool barrierDismissible = true,
 }) {
@@ -87,7 +87,7 @@ Widget ampBigButton(
         onTap: onTap,
         child: ampColumn(
           [
-            ampIcon(iconDefault, iconOutlined, size: 50),
+            ampIcon(iconDefault, iconOutlined, 50),
             ampPadding(4),
             Text(text, textAlign: TextAlign.center),
           ],
@@ -98,10 +98,8 @@ Widget ampBigButton(
 RaisedButton ampRaisedButton(String text, void Function() onPressed) =>
     RaisedButton(child: Text(text), onPressed: onPressed);
 
-Padding ampPadding(double value, [Widget child]) => Padding(
-      padding: EdgeInsets.all(value),
-      child: child,
-    );
+Padding ampPadding(double value, [Widget child]) =>
+    Padding(padding: EdgeInsets.all(value), child: child);
 
 Text ampText<T>(
   T text, {
@@ -127,7 +125,7 @@ Text ampText<T>(
 Widget ampTitle(String text) =>
     ampPadding(16, ampText(text, size: 36, weight: FontWeight.bold));
 
-Icon ampIcon(IconData dataDefault, IconData dataOutlined, {double size}) =>
+Icon ampIcon(IconData dataDefault, IconData dataOutlined, [double size]) =>
     Icon(prefs.highContrast ? dataOutlined : dataDefault, size: size);
 
 IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(

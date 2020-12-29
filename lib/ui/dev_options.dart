@@ -66,8 +66,8 @@ class _DevOptionsState extends State<DevOptions> {
           'App-Daten löschen',
           () {
             ampDialog(
+              context,
               title: 'App-Daten löschen',
-              context: context,
               widgetBuilder: ampRow,
               children: (_, __) => [ampText('Sicher?')],
               actions: (context) => ampDialogButtonsSaveAndCancel(
@@ -88,7 +88,7 @@ class _DevOptionsState extends State<DevOptions> {
   void _cacheDialog(BuildContext context) {
     final cacheFormField = AmpFormField(Prefs.dsbJsonCache, labelText: 'Cache');
     ampDialog(
-      context: context,
+      context,
       children: (_, __) => [cacheFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
@@ -108,7 +108,7 @@ class _DevOptionsState extends State<DevOptions> {
       labelText: 'Timer (Minuten)',
     );
     ampDialog(
-      context: context,
+      context,
       children: (_, __) => [timerFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,

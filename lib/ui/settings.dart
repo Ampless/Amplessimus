@@ -28,8 +28,8 @@ class _SettingsState extends State<Settings> {
     final passwordFormField = AmpFormField.password;
     var hide = true;
     return ampDialog(
-      context: context,
-      children: (context, setAlState) => [
+      context,
+      children: (_, setAlState) => [
         AutofillGroup(
           child: ampColumn([
             usernameFormField.flutter(),
@@ -61,7 +61,7 @@ class _SettingsState extends State<Settings> {
       keyboardType: TextInputType.url,
     );
     return ampDialog(
-      context: context,
+      context,
       children: (context, setAlState) => [domainFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
