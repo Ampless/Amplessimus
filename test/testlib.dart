@@ -4,13 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 typedef testCase = Future<Null> Function();
 
-testCase expectTestCase(
-  Future<dynamic> Function() tfunc,
-  dynamic expct,
+testCase expectTestCase<T>(
+  Future<T> Function() tfunc,
+  T expct,
   bool error,
 ) =>
     () async {
-      dynamic res;
+      T res;
       try {
         res = await tfunc();
       } catch (e) {

@@ -34,6 +34,13 @@ Widget _renderPlans(List<Plan> plans) {
     }
     widgets.add(ListTile(
       title: ampRow([
+        outdated(plan.date, DateTime.now())
+            ? IconButton(
+                icon: ampIcon(Icons.warning, Icons.warning_outlined),
+                //TODO:
+                onPressed: () {},
+              )
+            : ampNull,
         ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
         IconButton(
           icon: ampIcon(Icons.info, Icons.info_outline),
@@ -77,13 +84,24 @@ Future<Null> updateWidget([bool useJsonCache]) async {
     widget = _renderPlans(plans);
     plans = plans;
   } catch (e) {
-    ampErr(['DSB', 'dsbUpdateWidget'], errorString(e));
+    ampErr(['DSB', 'updateWidget'], errorString(e));
     widget = ampList([ampErrorText(e)]);
   }
 }
 
-//this is a really bad place to put this and
-//some bad prefixes, but we can fix that later
+bool outdated(String date, DateTime now) {
+  try {
+    final raw = date.split(' ').first.split('.');
+    return now.isAfter(DateTime(
+      int.parse(raw[2]),
+      int.parse(raw[1]),
+      int.parse(raw[0]),
+    ).add(Duration(days: 3)));
+  } catch (e) {
+    return false;
+  }
+}
 
+//this is a really bad place to put this, but we can fix that later
 List<String> get grades => ['5', '6', '7', '8', '9', '10', '11', '12', '13'];
 List<String> get letters => ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];
