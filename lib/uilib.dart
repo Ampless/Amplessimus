@@ -145,6 +145,7 @@ SnackBar ampSnackBar(
     SnackBar(
       content: Text(content),
       action: label != null ? SnackBarAction(label: label, onPressed: f) : null,
+      backgroundColor: prefs.isDarkMode ? Colors.black : Colors.white,
     );
 
 FloatingActionButton ampFab({
@@ -192,27 +193,6 @@ Widget ampList(List<Widget> children) {
     );
   }
 }
-
-ListTile ampLessonTile({
-  @required String subject,
-  @required String lesson,
-  @required String orgTeacher,
-  @required String subtitle,
-  @required String affClass,
-}) =>
-    ListTile(
-      //somehow this improved/"fixed" the spacing, idk how
-      horizontalTitleGap: 4,
-      title: ampText(
-        orgTeacher == null || orgTeacher.isEmpty
-            ? subject
-            : '$subject ($orgTeacher)',
-        size: 18,
-      ),
-      leading: ampText(lesson, weight: FontWeight.bold, size: 36),
-      subtitle: ampText(subtitle, size: 16),
-      trailing: ampText(affClass, weight: FontWeight.bold, size: 20),
-    );
 
 TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
       controller: controller,

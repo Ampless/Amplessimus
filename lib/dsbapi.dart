@@ -20,16 +20,24 @@ Widget _renderPlans(List<Plan> plans) {
       dayWidgets.add(ListTile(title: ampText(Language.current.noSubs)));
     }
     for (final sub in plan.subs) {
-      dayWidgets.add(ampLessonTile(
-        subject: Prefs.parseSubjects ? parseSubject(sub.subject) : sub.subject,
-        orgTeacher: sub.orgTeacher,
-        lesson: sub.lesson.toString(),
-        subtitle: Language.current.dsbSubtoSubtitle(sub),
-        affClass: (Prefs.classGrade.isEmpty ||
-                Prefs.classLetter.isEmpty ||
-                !Prefs.oneClassOnly)
-            ? sub.affectedClass
-            : '',
+      final subject = parseSubject(sub.subject);
+      final title = sub.orgTeacher == null || sub.orgTeacher.isEmpty
+          ? subject
+          : '$subject (${sub.orgTeacher})';
+
+      final trailing = (Prefs.classGrade.isEmpty ||
+              Prefs.classLetter.isEmpty ||
+              !Prefs.oneClassOnly)
+          ? sub.affectedClass
+          : '';
+
+      dayWidgets.add(ListTile(
+        //somehow this improved/"fixed" the spacing, idk how
+        horizontalTitleGap: 4,
+        title: ampText(title, size: 18),
+        leading: ampText(sub.lesson, weight: FontWeight.bold, size: 36),
+        subtitle: ampText(Language.current.dsbSubtoSubtitle(sub), size: 16),
+        trailing: ampText(trailing, weight: FontWeight.bold, size: 20),
       ));
     }
     widgets.add(ListTile(

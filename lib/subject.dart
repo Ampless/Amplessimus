@@ -1,4 +1,5 @@
 import 'langs/language.dart';
+import 'prefs.dart' as prefs;
 
 const fullAbbreviations = {
   'spo': 'sport',
@@ -38,6 +39,7 @@ bool abbreviationValid(String abbr, String sub) {
 
 String parseSubject(String subject) {
   if (subject == null) return null;
+  if (!prefs.parseSubjects) return subject;
 
   if (RegExp('[a-zA-Z]').allMatches(subject).length < subject.length) {
     final letters = RegExp('[a-zA-Z]+').allMatches(subject);
