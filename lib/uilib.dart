@@ -219,12 +219,14 @@ class AmpFormField {
   final List<String> autofillHints;
   final TextInputType keyboardType;
   final String labelText;
+  final void Function(AmpFormField) onEditingComplete;
 
   AmpFormField(
     Object initialValue, {
     this.autofillHints = const [],
     this.keyboardType = TextInputType.text,
     this.labelText = '',
+    this.onEditingComplete,
   }) : controller = TextEditingController(text: initialValue.toString());
 
   Widget flutter({
@@ -237,6 +239,7 @@ class AmpFormField {
         ampPadding(
           2,
           TextFormField(
+            onEditingComplete: () => onEditingComplete(this),
             obscureText: obscureText,
             controller: controller,
             key: key,
@@ -266,17 +269,25 @@ class AmpFormField {
 
   String get text => controller.text;
 
-  static AmpFormField get username => AmpFormField(
+  static AmpFormField username([Function() rebuild]) => AmpFormField(
         prefs.username,
         labelText: Language.current.username,
         keyboardType: TextInputType.number,
         autofillHints: [AutofillHints.username],
+        onEditingComplete: (field) {
+          prefs.username = field.text.trim();
+          if (rebuild != null) rebuild();
+        },
       );
 
-  static AmpFormField get password => AmpFormField(
+  static AmpFormField password([Function() rebuild]) => AmpFormField(
         prefs.password,
         labelText: Language.current.password,
         keyboardType: TextInputType.visiblePassword,
         autofillHints: [AutofillHints.password],
+        onEditingComplete: (field) {
+          prefs.password = field.text.trim();
+          if (rebuild != null) rebuild();
+        },
       );
 }

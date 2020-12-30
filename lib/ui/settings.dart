@@ -23,36 +23,9 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  Future<Null> credentialDialog() {
-    final usernameFormField = AmpFormField.username;
-    final passwordFormField = AmpFormField.password;
-    var hide = true;
-    return ampDialog(
-      context,
-      children: (_, setAlState) => [
-        AutofillGroup(
-          child: ampColumn([
-            usernameFormField.flutter(),
-            passwordFormField.flutter(
-              suffixIcon:
-                  ampHidePwdBtn(hide, () => setAlState(() => hide = !hide)),
-              obscureText: hide,
-            )
-          ]),
-        ),
-      ],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
-        context,
-        save: () async {
-          Prefs.username = usernameFormField.text.trim();
-          Prefs.password = passwordFormField.text.trim();
-          unawaited(widget.parent.rebuildDragDown());
-          Navigator.pop(context);
-        },
-      ),
-      widgetBuilder: ampColumn,
-    );
-  }
+  final _usernameFormField = AmpFormField.username();
+  final _passwordFormField = AmpFormField.password();
+  var _hide = true;
 
   Future<Null> wpemailDomainPopup() {
     final domainFormField = AmpFormField(
@@ -189,14 +162,18 @@ class _SettingsState extends State<Settings> {
             },
           ),
           Divider(),
+          AutofillGroup(
+            child: ampColumn([
+              _usernameFormField.flutter(),
+              _passwordFormField.flutter(
+                suffixIcon:
+                    ampHidePwdBtn(_hide, () => setState(() => _hide = !_hide)),
+                obscureText: _hide,
+              )
+            ]),
+          ),
           Row(
             children: [
-              ampBigButton(
-                Language.current.changeLogin,
-                Icons.vpn_key,
-                Icons.vpn_key_outlined,
-                () => credentialDialog(),
-              ),
               ampBigButton(
                 Language.current.wpemailDomain,
                 Icons.cloud,

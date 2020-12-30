@@ -19,8 +19,8 @@ class _FirstLoginState extends State<FirstLogin> {
   bool _loading = false;
   String _error = '';
   bool _hide = true;
-  final _usernameFormField = AmpFormField.username;
-  final _passwordFormField = AmpFormField.password;
+  final _usernameFormField = AmpFormField.username();
+  final _passwordFormField = AmpFormField.password();
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +89,11 @@ class _FirstLoginState extends State<FirstLogin> {
           onPressed: () async {
             setState(() => _loading = true);
             try {
-              final user = _usernameFormField.text.trim();
-              final pass = _passwordFormField.text.trim();
-              prefs.username = user;
-              prefs.password = pass;
-              final error = await checkCredentials(user, pass, http.post);
+              final error = await checkCredentials(
+                prefs.username,
+                prefs.password,
+                http.post,
+              );
               if (error != null) throw Language.current.dsbError(error);
 
               await dsb.updateWidget();
