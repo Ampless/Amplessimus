@@ -67,7 +67,7 @@ class AmpHomePageState extends State<AmpHomePage>
             ampDialogButton(
                 Language.current.open, () => ampOpenUrl(update.url)),
           ],
-          widgetBuilder: ampRow,
+          widgetBuilder: ampColumn,
         );
       }
     })();

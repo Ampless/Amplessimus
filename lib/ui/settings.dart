@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import '../prefs.dart' as Prefs;
 import '../appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pedantic/pedantic.dart';
 
 import 'home_page.dart';
 
@@ -29,16 +28,18 @@ class _SettingsState extends State<Settings> {
   AmpFormField _wpeFormField;
 
   _SettingsState() {
-    _passwordFormField = AmpFormField.password(widget.parent.rebuildDragDown);
+    _passwordFormField =
+        AmpFormField.password(() => widget.parent.rebuildDragDown());
     _wpeFormField = AmpFormField(
       Prefs.wpeDomain,
       labelText: Language.current.wpemailDomain,
       keyboardType: TextInputType.url,
-      onEditingComplete: (field) {
+      onChanged: (field) {
         Prefs.wpeDomain = field.text.trim();
         widget.parent.rebuildDragDown();
       },
     );
+    ampInfo('Settings', 'Init done.');
   }
 
   Widget get changeSubVisibilityWidget => Stack(
