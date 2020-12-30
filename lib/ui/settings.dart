@@ -24,27 +24,20 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   final _usernameFormField = AmpFormField.username();
-  final _passwordFormField = AmpFormField.password();
+  AmpFormField _passwordFormField;
   var _hide = true;
+  AmpFormField _wpeFormField;
 
-  Future<Null> wpemailDomainPopup() {
-    final domainFormField = AmpFormField(
+  _SettingsState() {
+    _passwordFormField = AmpFormField.password(widget.parent.rebuildDragDown);
+    _wpeFormField = AmpFormField(
       Prefs.wpeDomain,
       labelText: Language.current.wpemailDomain,
       keyboardType: TextInputType.url,
-    );
-    return ampDialog(
-      context,
-      children: (context, setAlState) => [domainFormField.flutter()],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
-        context,
-        save: () async {
-          Prefs.wpeDomain = domainFormField.text.trim();
-          unawaited(widget.parent.rebuildDragDown());
-          Navigator.pop(context);
-        },
-      ),
-      widgetBuilder: ampColumn,
+      onEditingComplete: (field) {
+        Prefs.wpeDomain = field.text.trim();
+        widget.parent.rebuildDragDown();
+      },
     );
   }
 
@@ -172,14 +165,11 @@ class _SettingsState extends State<Settings> {
               )
             ]),
           ),
+          Divider(),
+          _wpeFormField.flutter(),
+          Divider(),
           Row(
             children: [
-              ampBigButton(
-                Language.current.wpemailDomain,
-                Icons.cloud,
-                Icons.cloud_outlined,
-                () => wpemailDomainPopup(),
-              ),
               ampBigButton(
                 Language.current.settingsAppInfo,
                 Icons.info,
