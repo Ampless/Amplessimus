@@ -248,17 +248,17 @@ class AmpFormField {
             decoration: InputDecoration(
               suffixIcon: suffixIcon,
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1.0, prefs.isDarkMode ? Colors.black : Colors.white),
+                borderSide: BorderSide(width: 1.0, color: prefs.isDarkMode ? Colors.black : Colors.white),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2.0, prefs.isDarkMode ? Colors.black : Colors.white),
+                borderSide: BorderSide(width: 2.0, color: prefs.isDarkMode ? Colors.black : Colors.white),
                 borderRadius: BorderRadius.circular(10),
               ),
               labelText: labelText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(prefs.isDarkMode ? Colors.black : Colors.white),
+                borderSide: BorderSide(color: prefs.isDarkMode ? Colors.black : Colors.white),
               ),
             ),
           ),
