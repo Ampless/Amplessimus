@@ -171,23 +171,24 @@ Future ampChangeScreen(
 Widget ampList(List<Widget> children) {
   if (!prefs.highContrast) {
     return Card(
-      elevation: 0,
+      margin: EdgeInsets.all(4),
       child: ampColumn(children),
+      elevation: 0,
+      color: Color(prefs.isDarkMode ? 0xff101010 : 0xffefefef),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
-      margin: EdgeInsets.all(4),
     );
   } else {
     return Container(
       margin: EdgeInsets.all(4),
+      child: ampColumn(children),
       decoration: BoxDecoration(
         border: Border.all(
           color: prefs.isDarkMode ? Colors.white : Colors.black,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: ampColumn(children),
     );
   }
 }
@@ -248,17 +249,25 @@ class AmpFormField {
             decoration: InputDecoration(
               suffixIcon: suffixIcon,
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1.0, color: prefs.isDarkMode ? Colors.white : Colors.black),
+                borderSide: BorderSide(
+                  width: 1.0,
+                  color: prefs.isDarkMode ? Colors.white : Colors.black,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2.0, color: prefs.isDarkMode ? Colors.white : Colors.black),
+                borderSide: BorderSide(
+                  width: 2.0,
+                  color: prefs.isDarkMode ? Colors.white : Colors.black,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               labelText: labelText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: prefs.isDarkMode ? Colors.white : Colors.black),
+                borderSide: BorderSide(
+                  color: prefs.isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ),
