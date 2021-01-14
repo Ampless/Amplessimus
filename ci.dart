@@ -1,3 +1,5 @@
+#!/usr/bin/env dart run
+
 import 'dart:io';
 
 import 'package:github/github.dart';
@@ -92,7 +94,7 @@ Future updateAltstore() async {
   await make.system('git push');
 }
 
-Future main() async {
+Future<void> main() async {
   await make.system('git pull');
 
   await Directory('bin').create(recursive: true);
