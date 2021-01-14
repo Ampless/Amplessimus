@@ -1,6 +1,9 @@
+#!/usr/bin/env dart run
+
 import 'dart:io';
 
-final majorMinorVersion = '3.2';
+//TODO: should this be 4.0?
+final majorMinorVersion = '3.3';
 
 String version;
 String commitNumber;
