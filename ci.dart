@@ -63,7 +63,6 @@ Future updateAltstore() async {
 }
 
 Future main() async {
-  await make.system('git stash');
   await make.system('git pull');
 
   await Directory('bin').create(recursive: true);
@@ -72,6 +71,7 @@ Future main() async {
 
   await make.init();
 
+  await Directory('/usr/local/var/www/amplessimus').create(recursive: true);
   final outputDir = '/usr/local/var/www/amplessimus/${make.version}';
 
   final date = await make.system('date');
