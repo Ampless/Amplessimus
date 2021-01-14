@@ -11,4 +11,4 @@ PRODUCT_NAME = Amplessimus
 PRODUCT_BUNDLE_IDENTIFIER = de.ampless.amplessimus
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 Ampless. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2021 de.ampless. All rights reserved.
