@@ -55,16 +55,16 @@ String sed(String input, String regex, String replace) {
 }
 
 Future updateAltstore() async {
-  if (!(await Directory('~/ampless.chrissx.de').exists())) {
+  if (!(await Directory('../ampless.chrissx.de').exists())) {
     await make.system(
-      'git clone https://github.com/Ampless/ampless.chrissx.de ~/ampless.chrissx.de',
+      'git clone https://github.com/Ampless/ampless.chrissx.de ../ampless.chrissx.de',
     );
   }
-  await make.system('cd ~/ampless.chrissx.de/altstore ; git pull');
+  Directory.current = '../ampless.chrissx.de/altstore';
+  await make.system('git pull');
   var versionDate = await make.system('date -u +%FT%T');
   versionDate += '+00:00';
   final versionDescription = await make.system("date '+%d.%m.%y %H:%M'");
-  Directory.current = '~/ampless.chrissx.de/altstore';
   var json = await make.readfile('alpha.json');
   json = sed(
     json,
