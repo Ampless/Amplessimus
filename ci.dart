@@ -5,7 +5,11 @@ import 'package:path/path.dart';
 
 import 'make.dart' as make;
 
-Future githubRelease(String commit, String dir) async {
+const releaseInfo = 'This is an automatic release by the ci.\n\n'
+    '###### Changelog\n\n\n'
+    '###### Known Problems\n\n';
+
+Future<void> githubRelease(String commit, String dir) async {
   print('Creating release...');
   final github = GitHub(
     auth: Authentication.withToken(
@@ -20,8 +24,7 @@ Future githubRelease(String commit, String dir) async {
       targetCommitish: commit,
       isDraft: false,
       isPrerelease: true,
-      body:
-          'This is an automatic release by the ci.\n\n###### Changelog\n\n\n###### Known Problems\n\n',
+      body: releaseInfo,
     ),
   );
   print('Uploading assets...');
@@ -35,10 +38,18 @@ Future githubRelease(String commit, String dir) async {
             name: basename(event.path),
             contentType: 'application/octet-stream',
             assetData: await (event as File).readAsBytes()))
-        .where((event) => event != null)
-        .toList(),
+        .where((event) {
+      if (event == null) {
+        print('WTF THERE IS A NULL EVENT JUST HOW');
+      }
+      return event != null;
+    }).toList(),
   );
   print('Done uploading.');
+}
+
+String sed(String input, String regex, String replace) {
+  return input.replaceAll(RegExp(regex), replace);
 }
 
 Future updateAltstore() async {
@@ -51,15 +62,34 @@ Future updateAltstore() async {
   var versionDate = await make.system('date -u +%FT%T');
   versionDate += '+00:00';
   final versionDescription = await make.system("date '+%d.%m.%y %H:%M'");
-  await make.system('cd ~/ampless.chrissx.de/altstore;'
-      'sed -E \'s/^ *"version": ".*",\$/      "version": "${make.version}",/\' alpha.json |'
-      'sed -E \'s/^ *"versionDate": ".*",\$/      "versionDate": "$versionDate",/\' |'
-      'sed -E \'s/^ *"versionDescription": ".*",\$/      "versionDescription": "$versionDescription",/\' |'
-      'sed -E \'s/^ *"downloadURL": ".*",\$/      "downloadURL": "https:\\/\\/github.com\\/Ampless\\/Amplessimus\\/releases\\/download\\/${make.version}\\/${make.version}.ipa",/\' > temp.json;'
-      'mv temp.json alpha.json;'
-      'git add alpha.json;'
-      'git commit -m "automatic ci update to amplessimus ios alpha ${make.version}";'
-      'git push');
+  Directory.current = '~/ampless.chrissx.de/altstore';
+  var json = await make.readfile('alpha.json');
+  json = sed(
+    json,
+    '^ *"version": ".*",\$',
+    '      "version": "${make.version}",',
+  );
+  json = sed(
+    json,
+    '^ *"versionDate": ".*",\$',
+    '      "versionDate": "$versionDate",',
+  );
+  json = sed(
+    json,
+    '^ *"versionDescription": ".*",\$',
+    '      "versionDescription": "$versionDescription",',
+  );
+  json = sed(
+    json,
+    '^ *"downloadURL": ".*",\$',
+    '      "downloadURL": "https://github.com/Ampless/Amplessimus/releases/download/${make.version}/${make.version}.ipa",',
+  );
+  await make.writefile('alpha.json', json);
+  await make.system('git add alpha.json;');
+  await make.system(
+    'git commit -m "automatic ci update to amplessimus ios alpha ${make.version}";',
+  );
+  await make.system('git push');
 }
 
 Future main() async {
