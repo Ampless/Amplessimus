@@ -38,8 +38,8 @@ Row ampRow(List<Widget> children) =>
 Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
     Tab(icon: ampIcon(iconDefault, iconOutlined), text: text);
 
-FlatButton ampDialogButton(String text, Function() onPressed) =>
-    FlatButton(onPressed: onPressed, child: Text(text));
+TextButton ampDialogButton(String text, Function() onPressed) =>
+    TextButton(onPressed: onPressed, child: Text(text));
 
 DropdownButton ampDropdownButton<T>({
   @required T value,
@@ -95,8 +95,8 @@ Widget ampBigButton(
       ),
     );
 
-RaisedButton ampRaisedButton(String text, void Function() onPressed) =>
-    RaisedButton(child: Text(text), onPressed: onPressed);
+ElevatedButton ampRaisedButton(String text, void Function() onPressed) =>
+    ElevatedButton(child: Text(text), onPressed: onPressed);
 
 Padding ampPadding(double value, [Widget child]) =>
     Padding(padding: EdgeInsets.all(value), child: child);
