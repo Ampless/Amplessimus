@@ -82,7 +82,6 @@ Widget ampBigButton(
 ) =>
     Card(
       elevation: 0,
-      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         child: ampColumn(
@@ -143,7 +142,6 @@ SnackBar ampSnackBar(
     SnackBar(
       content: Text(content),
       action: label != null ? SnackBarAction(label: label, onPressed: f) : null,
-      backgroundColor: prefs.isDarkMode ? Colors.black : Colors.white,
     );
 
 FloatingActionButton ampFab({

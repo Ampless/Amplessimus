@@ -200,14 +200,46 @@ set isDarkMode(bool b) {
 
 ThemeData get themeData {
   if (isDarkMode) {
-    return ThemeData.from(
-      colorScheme: ColorScheme.highContrastDark(
-        background: Colors.black,
+    return ThemeData(
+      colorScheme: ColorScheme.highContrastDark(),
+      backgroundColor: Colors.black,
+      cardColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: Colors.black,
+        contentTextStyle: TextStyle(color: Colors.white),
+        actionTextColor: Colors.white,
+        disabledActionTextColor: Colors.white30,
       ),
+      dividerColor: Colors.white38,
+      hoverColor: Colors.transparent,
+      dialogBackgroundColor: Colors.black,
+      scaffoldBackgroundColor: Colors.black,
+      highlightColor: Colors.transparent,
+      indicatorColor: Colors.transparent,
+      focusColor: Colors.transparent,
     );
   } else {
-    return ThemeData.from(
+    return ThemeData(
       colorScheme: ColorScheme.highContrastLight(),
+      backgroundColor: Colors.white,
+      cardColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: Colors.white,
+        contentTextStyle: TextStyle(color: Colors.black),
+        actionTextColor: Colors.black,
+        disabledActionTextColor: Colors.black38,
+      ),
+      dividerColor: Colors.black38,
+      hoverColor: Colors.transparent,
+      dialogBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white,
+      highlightColor: Colors.transparent,
+      indicatorColor: Colors.transparent,
+      focusColor: Colors.transparent,
     );
   }
 }
