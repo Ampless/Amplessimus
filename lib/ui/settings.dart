@@ -6,8 +6,6 @@ import '../logging.dart';
 import 'dev_options.dart';
 import '../uilib.dart';
 import 'package:flutter/material.dart';
-// ignore: library_prefixes
-import '../prefs.dart' as Prefs;
 import '../appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,19 +21,19 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   final _usernameFormField = AmpFormField.username();
-  AmpFormField _passwordFormField;
+  late AmpFormField _passwordFormField;
   var _hide = true;
-  AmpFormField _wpeFormField;
+  late AmpFormField _wpeFormField;
 
   _SettingsState() {
     _passwordFormField =
         AmpFormField.password(() => widget.parent.rebuildDragDown());
     _wpeFormField = AmpFormField(
-      Prefs.wpeDomain,
+      prefs.wpeDomain,
       labelText: Language.current.wpemailDomain,
       keyboardType: TextInputType.url,
       onChanged: (field) {
-        Prefs.wpeDomain = field.text.trim();
+        prefs.wpeDomain = field.text.trim();
         widget.parent.rebuildDragDown();
       },
     );
@@ -48,20 +46,21 @@ class _SettingsState extends State<Settings> {
             title: ampText(Language.current.allClasses),
             trailing: ampRow(
               [
-                ampDropdownButton(
-                  value: Prefs.classGrade,
+                ampDropdownButton<String>(
+                  value: prefs.classGrade,
                   items: dsb.grades,
                   onChanged: (v) {
-                    setState(Prefs.setClassGrade(v));
+                    setState(prefs.setClassGrade(v));
                     dsb.updateWidget(true);
                   },
                 ),
                 ampPadding(8),
-                ampDropdownButton(
-                  value: Prefs.classLetter,
+                ampDropdownButton<String>(
+                  value: prefs.classLetter,
                   items: dsb.letters,
                   onChanged: (v) {
-                    setState(() => Prefs.classLetter = v);
+                    if (v == null) return;
+                    setState(() => prefs.classLetter = v);
                     dsb.updateWidget(true);
                   },
                 ),
@@ -70,9 +69,9 @@ class _SettingsState extends State<Settings> {
           ),
           Center(
             child: ampSwitch(
-              Prefs.oneClassOnly,
+              prefs.oneClassOnly,
               (value) {
-                setState(() => Prefs.oneClassOnly = value);
+                setState(() => prefs.oneClassOnly = value);
                 widget.parent.rebuildDragDown();
               },
             ),
@@ -88,12 +87,12 @@ class _SettingsState extends State<Settings> {
           ampTitle(Language.current.settings),
           ampSwitchWithText(
             Language.current.darkMode,
-            Prefs.isDarkMode,
+            prefs.isDarkMode,
             (v) async {
-              Prefs.toggleDarkModePressed();
+              prefs.toggleDarkModePressed();
               setState(() {
-                Prefs.useSystemTheme = false;
-                Prefs.isDarkMode = v;
+                prefs.useSystemTheme = false;
+                prefs.isDarkMode = v;
               });
               await dsb.updateWidget();
               Future.delayed(
@@ -108,18 +107,18 @@ class _SettingsState extends State<Settings> {
           ),
           ampSwitchWithText(
             Language.current.useSystemTheme,
-            Prefs.useSystemTheme,
+            prefs.useSystemTheme,
             (v) {
-              Prefs.useSystemTheme = v;
+              prefs.useSystemTheme = v;
               widget.parent.checkBrightness();
             },
           ),
           ampSwitchWithText(
             Language.current.highContrastMode,
-            Prefs.highContrast,
+            prefs.highContrast,
             (v) async {
               ampInfo('Settings', 'switching design mode');
-              setState(() => Prefs.highContrast = v);
+              setState(() => prefs.highContrast = v);
               await dsb.updateWidget(true);
               widget.parent.rebuild();
             },
@@ -127,11 +126,12 @@ class _SettingsState extends State<Settings> {
           Divider(),
           ampWidgetWithText(
             Language.current.changeLanguage,
-            ampDropdownButton(
+            ampDropdownButton<Language>(
               value: Language.current,
               itemToDropdownChild: (i) => ampText(i.name),
               items: Language.all,
               onChanged: (v) {
+                if (v == null) return;
                 setState(() => Language.current = v);
                 widget.parent.rebuildDragDown();
               },
@@ -139,9 +139,9 @@ class _SettingsState extends State<Settings> {
           ),
           ampSwitchWithText(
             Language.current.useForDsb,
-            Prefs.dsbUseLanguage,
+            prefs.dsbUseLanguage,
             (v) {
-              setState(() => Prefs.dsbUseLanguage = v);
+              setState(() => prefs.dsbUseLanguage = v);
               widget.parent.rebuildDragDown();
             },
           ),
@@ -149,9 +149,9 @@ class _SettingsState extends State<Settings> {
           changeSubVisibilityWidget,
           ampSwitchWithText(
             Language.current.parseSubjects,
-            Prefs.parseSubjects,
+            prefs.parseSubjects,
             (v) {
-              setState(() => Prefs.parseSubjects = v);
+              setState(() => prefs.parseSubjects = v);
               widget.parent.rebuildDragDown();
             },
           ),

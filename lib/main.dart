@@ -1,5 +1,6 @@
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appinfo.dart';
 import 'dsbapi.dart' as dsb;
@@ -8,7 +9,7 @@ import 'ui/error_screen.dart';
 import 'ui/first_login.dart';
 import 'ui/home_page.dart';
 import 'wpemails.dart';
-import 'prefs.dart' as prefs;
+import 'prefs.dart';
 
 class _Behavior extends ScrollBehavior {
   @override
@@ -25,31 +26,34 @@ class _AppState extends State<_App> {
   Widget build(BuildContext context) {
     rebuildWholeApp = () => setState(() {});
     return MaterialApp(
-      builder: (_, child) =>
-          ScrollConfiguration(behavior: _Behavior(), child: child),
       title: appTitle,
       debugShowCheckedModeBanner: false,
       theme: prefs.themeData,
-      home: prefs.firstLogin ? FirstLogin() : AmpHomePage(0),
+      home: ScrollConfiguration(
+        behavior: _Behavior(),
+        child: prefs.firstLogin ? FirstLogin() : AmpHomePage(0),
+      ),
     );
   }
 }
 
 var rebuildWholeApp;
+FakePrefs prefs = FakePrefs();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await prefs.load().then((_) async {
-    try {
-      if (!prefs.firstLogin) {
-        final d = dsb.updateWidget(true);
-        await wpemailUpdate();
-        await d;
-      }
-      runApp(_App());
-    } catch (e) {
-      ampErr('Splash.initState', errorString(e));
-      await runApp(ErrorScreen());
+  ampInfo('prefs', 'Loading SharedPreferences...');
+  prefs = Prefs(await SharedPreferences.getInstance());
+  ampInfo('prefs', 'SharedPreferences (hopefully successfully) loaded.');
+  try {
+    if (!prefs.firstLogin) {
+      final d = dsb.updateWidget(true);
+      await wpemailUpdate();
+      await d;
     }
-  });
+    runApp(_App());
+  } catch (e) {
+    ampErr('Splash.initState', errorString(e));
+    runApp(ErrorScreen());
+  }
 }

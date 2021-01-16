@@ -1,7 +1,7 @@
 import '../dsbapi.dart' as dsb;
 import '../langs/language.dart';
+import '../main.dart';
 import '../uilib.dart';
-import '../prefs.dart' as prefs;
 import '../appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
@@ -48,11 +48,14 @@ class _FirstLoginState extends State<FirstLogin> {
                   Divider(),
                   ampWidgetWithText(
                     Language.current.changeLanguage,
-                    ampDropdownButton(
+                    ampDropdownButton<Language>(
                       value: Language.current,
                       itemToDropdownChild: (i) => ampText(i.name),
                       items: Language.all,
-                      onChanged: (v) => setState(() => Language.current = v),
+                      onChanged: (v) => setState(() {
+                        if (v == null) return;
+                        Language.current = v;
+                      }),
                     ),
                   ),
                   Divider(),
@@ -60,17 +63,21 @@ class _FirstLoginState extends State<FirstLogin> {
                     Language.current.selectClass,
                     ampRow(
                       [
-                        ampDropdownButton(
+                        ampDropdownButton<String>(
                           value: prefs.classGrade,
                           items: dsb.grades,
-                          onChanged: (v) => setState(prefs.setClassGrade(v)),
+                          onChanged: (v) {
+                            setState(prefs.setClassGrade(v));
+                          },
                         ),
                         ampPadding(8),
-                        ampDropdownButton(
+                        ampDropdownButton<String>(
                           value: prefs.classLetter,
                           items: dsb.letters,
-                          onChanged: (v) =>
-                              setState(() => prefs.classLetter = v),
+                          onChanged: (v) => setState(() {
+                            if (v == null) return;
+                            prefs.classLetter = v;
+                          }),
                         ),
                       ],
                     ),
@@ -108,7 +115,7 @@ class _FirstLoginState extends State<FirstLogin> {
             } catch (e) {
               setState(() {
                 _loading = false;
-                _error = e;
+                _error = e.toString();
               });
             }
           },

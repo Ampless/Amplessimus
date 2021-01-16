@@ -1,10 +1,9 @@
 import 'dart:collection';
 
 import 'package:dsbuntis/dsbuntis.dart';
+import '../main.dart';
 import 'english.dart';
 import 'german.dart';
-// ignore: library_prefixes
-import '../prefs.dart' as Prefs;
 
 abstract class Language {
   String get code;
@@ -60,10 +59,10 @@ abstract class Language {
   LinkedHashMap<String, String> get subjectLut;
 
   //why tf doesnt this break?!
-  static Language _current = fromCode(Prefs.savedLangCode);
+  static Language _current = fromCode(prefs.savedLangCode);
   static Language get current => _current;
   static set current(Language l) {
-    Prefs.savedLangCode = l.code;
+    prefs.savedLangCode = l.code;
     _current = l;
   }
 
@@ -71,7 +70,6 @@ abstract class Language {
   static List<Language> get all => _langs;
 
   static Language fromCode(String code) {
-    if (code == null) return _langs[0];
     for (final lang in _langs) {
       if (strcontain(code, lang.code)) return lang;
     }

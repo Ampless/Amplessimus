@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import 'main.dart';
 import 'ui/first_login.dart';
 import 'langs/language.dart';
 import 'logging.dart';
-// ignore: library_prefixes
-import 'prefs.dart' as Prefs;
 import 'subject.dart';
 import 'ui/home_page.dart';
 import 'uilib.dart';
@@ -25,9 +24,9 @@ Widget _renderPlans(List<Plan> plans) {
           ? subject
           : '$subject (${sub.orgTeacher})';
 
-      final trailing = (Prefs.classGrade.isEmpty ||
-              Prefs.classLetter.isEmpty ||
-              !Prefs.oneClassOnly)
+      final trailing = (prefs.classGrade.isEmpty ||
+              prefs.classLetter.isEmpty ||
+              !prefs.oneClassOnly)
           ? sub.affectedClass
           : '';
 
@@ -47,7 +46,7 @@ Widget _renderPlans(List<Plan> plans) {
                 icon: ampIcon(Icons.warning, Icons.warning_outlined),
                 //TODO: better tooltip
                 tooltip: Language.current.warnWrongDate(plan.date),
-                onPressed: () => scaffoldMessanger.showSnackBar(
+                onPressed: () => scaffoldMessanger?.showSnackBar(
                     ampSnackBar(Language.current.warnWrongDate(plan.date))),
                 padding: EdgeInsets.zero,
               )
@@ -57,7 +56,7 @@ Widget _renderPlans(List<Plan> plans) {
           icon: ampIcon(Icons.info, Icons.info_outline),
           tooltip: plan.date.split(' ').first,
           onPressed: () =>
-              scaffoldMessanger.showSnackBar(ampSnackBar(plan.date)),
+              scaffoldMessanger?.showSnackBar(ampSnackBar(plan.date)),
           padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
         ),
         IconButton(
@@ -74,20 +73,20 @@ Widget _renderPlans(List<Plan> plans) {
   return ampColumn(widgets);
 }
 
-List<Plan> plans;
-Widget widget;
+List<Plan>? plans;
+Widget widget = ampNull;
 
-Future<Null> updateWidget([bool useJsonCache]) async {
-  useJsonCache ??= Prefs.useJsonCache;
+Future<Null> updateWidget([bool? useJsonCache]) async {
+  useJsonCache ??= prefs.useJsonCache;
   try {
-    var plans = useJsonCache && Prefs.dsbJsonCache != null
-        ? Plan.plansFromJson(Prefs.dsbJsonCache)
+    var plans = useJsonCache && prefs.dsbJsonCache != ''
+        ? Plan.plansFromJson(prefs.dsbJsonCache)
         : await getAllSubs(
-            Prefs.username, Prefs.password, cachedHttpGet, http.post,
-            language: Prefs.dsbLanguage);
-    Prefs.dsbJsonCache = Plan.plansToJson(plans);
-    if (Prefs.oneClassOnly) {
-      plans = searchClass(plans, Prefs.classGrade, Prefs.classLetter);
+            prefs.username, prefs.password, cachedHttpGet, http.post,
+            language: prefs.dsbLanguage);
+    prefs.dsbJsonCache = Plan.plansToJson(plans);
+    if (prefs.oneClassOnly) {
+      plans = searchClass(plans, prefs.classGrade, prefs.classLetter);
     }
     for (final plan in plans) {
       plan.subs.sort();

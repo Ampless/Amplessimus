@@ -5,8 +5,8 @@ import 'dart:io';
 //TODO: should this be 4.0?
 final majorMinorVersion = '3.3';
 
-String version;
-String commitNumber;
+String? version;
+String? commitNumber;
 
 String get flags => '--release '
     '--suppress-analytics '
@@ -195,7 +195,7 @@ Future<void> main(List<String> argv) async {
     await init();
     for (final target in argv) {
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
-      await targets[target]();
+      await targets[target]!();
     }
   } catch (e) {
     stderr.writeln(e);

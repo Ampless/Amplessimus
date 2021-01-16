@@ -6,7 +6,7 @@ import 'package:update/update.dart';
 import '../appinfo.dart';
 import '../dsbapi.dart' as dsb;
 import '../logging.dart';
-import '../prefs.dart' as prefs;
+import '../main.dart';
 import '../uilib.dart';
 import '../wpemails.dart';
 import '../langs/language.dart';
@@ -14,32 +14,32 @@ import 'first_login.dart';
 import 'settings.dart';
 
 class AmpHomePage extends StatefulWidget {
-  AmpHomePage(this.initialIndex, {Key key}) : super(key: key);
+  AmpHomePage(this.initialIndex, {Key? key}) : super(key: key);
   final int initialIndex;
   @override
   AmpHomePageState createState() => AmpHomePageState();
 }
 
-ScaffoldMessengerState scaffoldMessanger;
+ScaffoldMessengerState? scaffoldMessanger;
 final refreshKey = GlobalKey<RefreshIndicatorState>();
 
 var checkForUpdates = true;
 
 class AmpHomePageState extends State<AmpHomePage>
     with SingleTickerProviderStateMixin {
-  TabController tabController;
+  TabController? tabController;
 
   void checkBrightness() {
     if (!prefs.useSystemTheme) return;
-    prefs.brightness = SchedulerBinding.instance.window.platformBrightness;
+    prefs.brightness = SchedulerBinding.instance!.window.platformBrightness;
     Future.delayed(Duration(milliseconds: 150), rebuild);
   }
 
   @override
   void initState() {
     ampInfo('AmpHomePageState', 'initState()');
-    checkBrightness();
-    SchedulerBinding.instance.window.onPlatformBrightnessChanged =
+    if (SchedulerBinding.instance != null) checkBrightness();
+    SchedulerBinding.instance?.window.onPlatformBrightnessChanged =
         checkBrightness;
     super.initState();
     tabController = TabController(

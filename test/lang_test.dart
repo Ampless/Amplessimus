@@ -20,13 +20,7 @@ List<testCase> languageTestCases = [
     }
   }),
   languageTestCase((lang) {
-    lang.dayToString(null);
-  }),
-  languageTestCase((lang) {
     assert(Language.fromCode(lang.code) == lang);
-  }),
-  languageTestCase((lang) {
-    lang.dsbSubtoSubtitle(null);
   }),
   languageTestCase((lang) {
     lang.dsbSubtoSubtitle(
@@ -43,7 +37,6 @@ List<testCase> languageTestCases = [
 ];
 
 List<testCase> languageCodeTestCases = [
-  languageCodeTestCase(null),
   languageCodeTestCase('none'),
 ];
 

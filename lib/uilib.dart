@@ -1,15 +1,16 @@
 import 'langs/language.dart';
-import 'prefs.dart' as prefs;
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
+import 'main.dart';
+
 Future<Null> ampDialog(
   BuildContext context, {
-  String title,
-  @required List<Widget> Function(BuildContext, StateSetter) children,
-  @required List<Widget> Function(BuildContext) actions,
-  @required Widget Function(List<Widget>) widgetBuilder,
+  String? title,
+  required List<Widget> Function(BuildContext, StateSetter) children,
+  required List<Widget> Function(BuildContext) actions,
+  required Widget Function(List<Widget>) widgetBuilder,
   bool barrierDismissible = true,
 }) {
   return showDialog(
@@ -41,17 +42,16 @@ Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
 TextButton ampDialogButton(String text, Function() onPressed) =>
     TextButton(onPressed: onPressed, child: Text(text));
 
-DropdownButton ampDropdownButton<T>({
-  @required T value,
-  @required List<T> items,
-  @required void Function(T) onChanged,
-  Widget Function(T) itemToDropdownChild,
+DropdownButton<T> ampDropdownButton<T>({
+  required T value,
+  required List<T> items,
+  required void Function(T?) onChanged,
+  Widget Function(T)? itemToDropdownChild,
 }) {
-  itemToDropdownChild ??= ampText;
-  return DropdownButton(
+  return DropdownButton<T>(
     value: value,
     items: items
-        .map((e) => DropdownMenuItem(child: itemToDropdownChild(e), value: e))
+        .map((e) => DropdownMenuItem(child: itemToDropdownChild!(e), value: e))
         .toList(),
     onChanged: onChanged,
   );
@@ -67,7 +67,7 @@ ListTile ampWidgetWithText(String text, Widget w) =>
     ListTile(title: Text(text), trailing: w);
 
 List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
-    {@required Function() save}) {
+    {required Function() save}) {
   return [
     ampDialogButton(Language.current.cancel, Navigator.of(context).pop),
     ampDialogButton(Language.current.save, save),
@@ -97,17 +97,17 @@ Widget ampBigButton(
 ElevatedButton ampRaisedButton(String text, void Function() onPressed) =>
     ElevatedButton(child: Text(text), onPressed: onPressed);
 
-Padding ampPadding(double value, [Widget child]) =>
+Padding ampPadding(double value, [Widget? child]) =>
     Padding(padding: EdgeInsets.all(value), child: child);
 
 Text ampText<T>(
   T text, {
-  double size,
-  TextAlign align,
-  FontWeight weight,
-  Color color,
-  String Function(T) toString,
-  List<String> font,
+  double? size,
+  TextAlign? align,
+  FontWeight? weight,
+  Color? color,
+  String Function(T)? toString,
+  List<String>? font,
 }) {
   toString ??= (o) => o.toString();
   font ??= [];
@@ -124,7 +124,7 @@ Text ampText<T>(
 Widget ampTitle(String text) =>
     ampPadding(16, ampText(text, size: 36, weight: FontWeight.bold));
 
-Icon ampIcon(IconData dataDefault, IconData dataOutlined, [double size]) =>
+Icon ampIcon(IconData dataDefault, IconData dataOutlined, [double? size]) =>
     Icon(prefs.highContrast ? dataOutlined : dataDefault, size: size);
 
 IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
@@ -136,19 +136,21 @@ IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
 
 SnackBar ampSnackBar(
   String content, [
-  String label,
-  Function() f,
+  String? label,
+  Function()? f,
 ]) =>
     SnackBar(
       content: Text(content),
-      action: label != null ? SnackBarAction(label: label, onPressed: f) : null,
+      action: label != null && f != null
+          ? SnackBarAction(label: label, onPressed: f)
+          : null,
     );
 
 FloatingActionButton ampFab({
-  @required String label,
-  @required IconData iconDefault,
-  @required IconData iconOutlined,
-  @required void Function() onPressed,
+  required String label,
+  required IconData iconDefault,
+  required IconData iconOutlined,
+  required void Function() onPressed,
 }) {
   return FloatingActionButton.extended(
     elevation: 0,
@@ -191,7 +193,7 @@ Widget ampList(List<Widget> children) {
   }
 }
 
-TabBar ampTabBar(TabController controller, List<Tab> tabs) => TabBar(
+TabBar ampTabBar(TabController? controller, List<Tab> tabs) => TabBar(
       controller: controller,
       tabs: tabs,
       indicatorColor: prefs.themeData.accentColor,
@@ -218,7 +220,7 @@ class AmpFormField {
   final List<String> autofillHints;
   final TextInputType keyboardType;
   final String labelText;
-  final void Function(AmpFormField) onChanged;
+  final void Function(AmpFormField)? onChanged;
 
   AmpFormField(
     Object initialValue, {
@@ -229,16 +231,17 @@ class AmpFormField {
   }) : controller = TextEditingController(text: initialValue.toString());
 
   Widget flutter({
-    Widget suffixIcon,
+    Widget? suffixIcon,
     bool obscureText = false,
   }) {
-    suffixIcon ??= ampNull;
     return ampColumn(
       [
         ampPadding(
           2,
           TextFormField(
-            onChanged: (_) => onChanged(this),
+            onChanged: (_) {
+              (onChanged ?? (_) {})(this);
+            },
             obscureText: obscureText,
             controller: controller,
             key: key,
@@ -276,7 +279,7 @@ class AmpFormField {
 
   String get text => controller.text;
 
-  static AmpFormField username([Function() rebuild]) => AmpFormField(
+  static AmpFormField username([Function()? rebuild]) => AmpFormField(
         prefs.username,
         labelText: Language.current.username,
         keyboardType: TextInputType.number,
@@ -287,7 +290,7 @@ class AmpFormField {
         },
       );
 
-  static AmpFormField password([Function() rebuild]) => AmpFormField(
+  static AmpFormField password([Function()? rebuild]) => AmpFormField(
         prefs.password,
         labelText: Language.current.password,
         keyboardType: TextInputType.visiblePassword,

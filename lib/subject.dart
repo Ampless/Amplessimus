@@ -1,5 +1,5 @@
 import 'langs/language.dart';
-import 'prefs.dart' as prefs;
+import 'main.dart';
 
 const fullAbbreviations = {
   'spo': 'sport',
@@ -32,13 +32,12 @@ const fullAbbreviations = {
 
 bool abbreviationValid(String abbr, String sub) {
   if (!sub.startsWith(abbr)) return false;
-  if (!fullAbbreviations.containsKey(abbr)) return true;
   final fa = fullAbbreviations[abbr];
+  if (fa == null) return true;
   return fa.length >= sub.length && fa.startsWith(sub);
 }
 
 String parseSubject(String subject) {
-  if (subject == null) return null;
   if (!prefs.parseSubjects) return subject;
 
   if (RegExp('[a-zA-Z]').allMatches(subject).length < subject.length) {
@@ -53,9 +52,9 @@ String parseSubject(String subject) {
   final sub = subject.toLowerCase();
   var s = subject;
   final lut = Language.current.subjectLut;
-  for (final key in lut.keys) {
-    if (abbreviationValid(key, sub)) {
-      s = lut[key];
+  for (final entry in lut.entries) {
+    if (abbreviationValid(entry.key, sub)) {
+      s = entry.value;
     }
   }
 

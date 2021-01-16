@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import '../main.dart';
 import 'first_login.dart';
 import '../logging.dart';
-// ignore: library_prefixes
-import '../prefs.dart' as Prefs;
 import '../uilib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,38 +15,38 @@ class DevOptions extends StatefulWidget {
 class _DevOptionsState extends State<DevOptions> {
   @override
   Widget build(BuildContext context) {
-    if (!Prefs.devOptionsEnabled) return ampNull;
+    if (!prefs.devOptionsEnabled) return ampNull;
     return ampColumn(
       [
         Divider(),
         ampSwitchWithText(
           'Entwickleroptionen aktiviert',
-          Prefs.devOptionsEnabled,
-          (v) => setState(() => Prefs.devOptionsEnabled = v),
+          prefs.devOptionsEnabled,
+          (v) => setState(() => prefs.devOptionsEnabled = v),
         ),
         ampSwitchWithText(
           'JSON Cache benutzen',
-          Prefs.useJsonCache,
-          (v) => setState(() => Prefs.useJsonCache = v),
+          prefs.useJsonCache,
+          (v) => setState(() => prefs.useJsonCache = v),
         ),
         ampSwitchWithText(
           'Update Notifier',
-          Prefs.updatePopup,
-          (v) => setState(() => Prefs.updatePopup = v),
+          prefs.updatePopup,
+          (v) => setState(() => prefs.updatePopup = v),
         ),
         Divider(),
         ListTile(
           title: ampText('Refreshtimer (Minuten)'),
-          trailing: ampText('${Prefs.timer}'),
+          trailing: ampText('${prefs.timer}'),
           onTap: () => _inputTimerDialog(context),
         ),
         Divider(),
         ampPadding(5),
-        ampRaisedButton('Print Cache', Prefs.listCache),
-        ampRaisedButton('Clear Cache', Prefs.clearCache),
+        ampRaisedButton('Print Cache', prefs.listCache),
+        ampRaisedButton('Clear Cache', prefs.clearCache),
         ampRaisedButton(
           'Set Cache to Kekw',
-          () => Prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"4.12.2020 Freitag\",\"subs\":['
+          () => prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"4.12.2020 Freitag\",\"subs\":['
               '{\"class\":\"5c\",\"lesson\":3,\"sub_teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"free\":false},'
               '{\"class\":\"9b\",\"lesson\":6,\"sub_teacher\":\"---\",\"subject\":\"Bio\",\"notes\":\"\",\"free\":true}]},'
               '{\"day\":0,\"date\":\"7.12.2020 Montag\",\"subs\":['
@@ -73,7 +72,7 @@ class _DevOptionsState extends State<DevOptions> {
               actions: (context) => ampDialogButtonsSaveAndCancel(
                 context,
                 save: () async {
-                  await Prefs.clear();
+                  await prefs.clear();
                   exit(0);
                 },
               ),
@@ -86,14 +85,14 @@ class _DevOptionsState extends State<DevOptions> {
   }
 
   void _cacheDialog(BuildContext context) {
-    final cacheFormField = AmpFormField(Prefs.dsbJsonCache, labelText: 'Cache');
+    final cacheFormField = AmpFormField(prefs.dsbJsonCache, labelText: 'Cache');
     ampDialog(
       context,
       children: (_, __) => [cacheFormField.flutter()],
       actions: (context) => ampDialogButtonsSaveAndCancel(
         context,
         save: () {
-          Prefs.dsbJsonCache = cacheFormField.text.trim();
+          prefs.dsbJsonCache = cacheFormField.text.trim();
           Navigator.pop(context);
         },
       ),
@@ -103,7 +102,7 @@ class _DevOptionsState extends State<DevOptions> {
 
   void _inputTimerDialog(BuildContext context) {
     final timerFormField = AmpFormField(
-      Prefs.timer,
+      prefs.timer,
       keyboardType: TextInputType.number,
       labelText: 'Timer (Minuten)',
     );
@@ -114,7 +113,7 @@ class _DevOptionsState extends State<DevOptions> {
         context,
         save: () {
           try {
-            setState(() => Prefs.timer = int.parse(timerFormField.text.trim()));
+            setState(() => prefs.timer = int.parse(timerFormField.text.trim()));
           } catch (e) {
             return;
           }
