@@ -1,4 +1,4 @@
-#!/usr/bin/env dart run
+#!/usr/bin/env dart --no-sound-null-safety run
 
 import 'dart:io';
 
