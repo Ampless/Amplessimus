@@ -35,8 +35,8 @@ class FakePrefs {
   set devOptionsEnabled(bool b) => _();
   bool get firstLogin => _();
   set firstLogin(bool b) => _();
-  bool get useJsonCache => _();
-  set useJsonCache(bool b) => _();
+  bool get forceJsonCache => _();
+  set forceJsonCache(bool b) => _();
   bool get useSystemTheme => _();
   set useSystemTheme(bool b) => _();
   String get dsbJsonCache => _();
@@ -185,8 +185,8 @@ class Prefs extends FakePrefs {
   set devOptionsEnabled(bool b) => _prefs.setBool('devoptions', b);
   bool get firstLogin => _getBool('firstlogin', true);
   set firstLogin(bool b) => _prefs.setBool('firstlogin', b);
-  bool get useJsonCache => _getBool('alwaysjsoncache', false);
-  set useJsonCache(bool b) => _prefs.setBool('alwaysjsoncache', b);
+  bool get forceJsonCache => _getBool('alwaysjsoncache', false);
+  set forceJsonCache(bool b) => _prefs.setBool('alwaysjsoncache', b);
   bool get useSystemTheme => _getBool('systheme', false);
   set useSystemTheme(bool b) => _prefs.setBool('systheme', b);
   String get dsbJsonCache => _getString('jsoncache', '');

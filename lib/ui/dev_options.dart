@@ -25,9 +25,9 @@ class _DevOptionsState extends State<DevOptions> {
           (v) => setState(() => prefs.devOptionsEnabled = v),
         ),
         ampSwitchWithText(
-          'JSON Cache benutzen',
-          prefs.useJsonCache,
-          (v) => setState(() => prefs.useJsonCache = v),
+          'JSON Cache erzwingen',
+          prefs.forceJsonCache,
+          (v) => setState(() => prefs.forceJsonCache = v),
         ),
         ampSwitchWithText(
           'Update Notifier',

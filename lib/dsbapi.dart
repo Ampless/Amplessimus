@@ -77,7 +77,7 @@ List<Plan>? plans;
 Widget widget = ampNull;
 
 Future<Null> updateWidget([bool? useJsonCache]) async {
-  useJsonCache ??= prefs.useJsonCache;
+  useJsonCache ??= prefs.forceJsonCache;
   try {
     var plans = useJsonCache && prefs.dsbJsonCache != ''
         ? Plan.plansFromJson(prefs.dsbJsonCache)
