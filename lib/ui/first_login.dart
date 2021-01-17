@@ -96,7 +96,7 @@ class _FirstLoginState extends State<FirstLogin> {
           onPressed: () async {
             setState(() => _loading = true);
             try {
-              final error = await checkCredentials(
+              final String? error = await checkCredentials(
                 prefs.username,
                 prefs.password,
                 http.post,

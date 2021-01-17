@@ -49,7 +49,7 @@ class AmpHomePageState extends State<AmpHomePage>
       if (!checkForUpdates || !prefs.updatePopup) return;
       ampInfo('UN', 'Searching for updates...');
       checkForUpdates = false;
-      final update = await UpdateInfo.getFromGitHub(
+      final UpdateInfo? update = await UpdateInfo.getFromGitHub(
         'Ampless/Amplessimus',
         await appVersion,
         http.get,

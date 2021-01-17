@@ -40,12 +40,7 @@ Future<void> githubRelease(String commit, String dir) async {
             name: basename(event.path),
             contentType: 'application/octet-stream',
             assetData: await (event as File).readAsBytes()))
-        .where((event) {
-      if (event == null) {
-        print('WTF THERE IS A NULL EVENT JUST HOW');
-      }
-      return event != null;
-    }).toList(),
+        .toList(),
   );
   print('Done uploading.');
 }

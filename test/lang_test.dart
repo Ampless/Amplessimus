@@ -9,10 +9,6 @@ testCase languageTestCase(void Function(Language) func) => () async {
       }
     };
 
-testCase languageCodeTestCase(String code) => () async {
-      assert(Language.fromCode(code) != null);
-    };
-
 List<testCase> languageTestCases = [
   languageTestCase((lang) {
     for (final day in Day.values) {
@@ -36,11 +32,6 @@ List<testCase> languageTestCases = [
   }),
 ];
 
-List<testCase> languageCodeTestCases = [
-  languageCodeTestCase('none'),
-];
-
 void main() {
   tests(languageTestCases, 'lang');
-  tests(languageCodeTestCases, 'lang code');
 }

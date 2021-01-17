@@ -96,7 +96,7 @@ class Prefs extends FakePrefs {
     }
     final ttl = _getInt('CACHE_TTL_$hash', 0);
     if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) {
-      if (_prefs == null || !_prefs.containsKey('CACHE_VAL_$hash')) return null;
+      if (!_prefs.containsKey('CACHE_VAL_$hash')) return null;
       return _prefs.getString('CACHE_VAL_$hash');
     }
     _prefs.setString('CACHE_VAL_$hash', null);
@@ -213,7 +213,6 @@ class Prefs extends FakePrefs {
 
   int get timer => _getInt('timer', 15);
   set timer(int i) {
-    if (_prefs == null) throw '_prefs=null';
     _prefs.setInt('timer', i);
     _updateUpdateTimer(i);
   }

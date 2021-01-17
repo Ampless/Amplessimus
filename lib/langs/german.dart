@@ -47,7 +47,6 @@ class German extends Language {
 
   @override
   String dsbSubtoSubtitle(Substitution sub) {
-    if (sub == null) return 'null';
     final notesaddon =
         sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
@@ -145,7 +144,6 @@ class German extends Language {
 
   @override
   String dayToString(Day day) {
-    if (day == null) return '';
     switch (day) {
       case Day.Null:
         return '';
