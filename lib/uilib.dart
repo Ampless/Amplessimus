@@ -48,6 +48,7 @@ DropdownButton<T> ampDropdownButton<T>({
   required void Function(T?) onChanged,
   Widget Function(T)? itemToDropdownChild,
 }) {
+  itemToDropdownChild ??= ampText;
   return DropdownButton<T>(
     value: value,
     items: items
