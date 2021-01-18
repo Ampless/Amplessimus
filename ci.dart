@@ -1,5 +1,6 @@
 #!/usr/bin/env dart --no-sound-null-safety run
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:github/github.dart';
@@ -60,28 +61,14 @@ Future updateAltstore() async {
   var versionDate = await make.system('date -u +%FT%T');
   versionDate += '+00:00';
   final versionDescription = await make.system("date '+%d.%m.%y %H:%M'");
-  var json = await make.readfile('alpha.json');
-  json = sed(
-    json,
-    '^ *"version": ".*",\$',
-    '      "version": "${make.version}",',
-  );
-  json = sed(
-    json,
-    '^ *"versionDate": ".*",\$',
-    '      "versionDate": "$versionDate",',
-  );
-  json = sed(
-    json,
-    '^ *"versionDescription": ".*",\$',
-    '      "versionDescription": "$versionDescription",',
-  );
-  json = sed(
-    json,
-    '^ *"downloadURL": ".*",\$',
-    '      "downloadURL": "https://github.com/Ampless/Amplessimus/releases/download/${make.version}/${make.version}.ipa",',
-  );
-  await make.writefile('alpha.json', json);
+  final json = jsonDecode(await make.readfile('alpha.json'));
+  final app = json['apps'].first;
+  app['version'] = make.version;
+  app['versionDate'] = versionDate;
+  app['versionDescription'] = versionDescription;
+  app['downloadURL'] =
+      'https://github.com/Ampless/Amplessimus/releases/download/${make.version}/${make.version}.ipa';
+  await make.writefile('alpha.json', jsonEncode(json));
   await make.system('git add alpha.json;');
   await make.system(
     'git commit -m "automatic ci update to amplessimus ios alpha ${make.version}";',
