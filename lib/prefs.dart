@@ -8,61 +8,7 @@ import 'logging.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FakePrefs {
-  dynamic _() {
-    throw 'nope, this is about as fake as life.';
-  }
-
-  String? getCache(String url) => _();
-  void setCache(String url, String html, Duration ttl) => _();
-  void clearCache() => _();
-  void listCache() => _();
-  void toggleDarkModePressed() => _();
-  bool get highContrast => _();
-  set highContrast(bool i) => _();
-  String get username => _();
-  set username(String s) => _();
-  String get password => _();
-  set password(String s) => _();
-  String get classGrade => _();
-  set classGrade(String s) => _();
-  void Function() setClassGrade(String? v) => _();
-  String get classLetter => _();
-  set classLetter(String s) => _();
-  bool get oneClassOnly => _();
-  set oneClassOnly(bool b) => _();
-  bool get devOptionsEnabled => _();
-  set devOptionsEnabled(bool b) => _();
-  bool get firstLogin => _();
-  set firstLogin(bool b) => _();
-  bool get forceJsonCache => _();
-  set forceJsonCache(bool b) => _();
-  bool get useSystemTheme => _();
-  set useSystemTheme(bool b) => _();
-  String get dsbJsonCache => _();
-  set dsbJsonCache(String s) => _();
-  String get wpeDomain => _();
-  set wpeDomain(String s) => _();
-  String get savedLangCode => _();
-  set savedLangCode(String s) => _();
-  bool get updatePopup => _();
-  set updatePopup(bool b) => _();
-  bool get dsbUseLanguage => _();
-  set dsbUseLanguage(bool b) => _();
-  bool get parseSubjects => _();
-  set parseSubjects(bool b) => _();
-  String get dsbLanguage => _();
-  void timerInit(Function() f) => _();
-  int get timer => _();
-  set timer(int i) => _();
-  Future<bool> clear() => _();
-  set brightness(Brightness b) => _();
-  bool get isDarkMode => _();
-  set isDarkMode(bool b) => _();
-  ThemeData get themeData => _();
-}
-
-class Prefs extends FakePrefs {
+class Prefs {
   final SharedPreferences _prefs;
 
   Prefs(this._prefs);

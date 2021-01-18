@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-//TODO: should this be 4.0?
 final majorMinorVersion = '3.3';
 
 String? version;
@@ -25,13 +24,21 @@ String get webFlags => '$flags --csp';
 
 final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
 
-Future<String> system(String cmd) async {
-  stderr.writeln(cmd);
+Future<String> system(
+  String cmd, {
+  bool throwOnFail = false,
+  bool printInput = true,
+  bool printOutput = true,
+}) async {
+  if (printInput) stderr.writeln(cmd);
   final p = Platform.isWindows
       ? await Process.run('cmd', ['/c', cmd])
       : await Process.run('sh', ['-c', cmd]);
-  stderr.write(p.stderr);
-  stderr.write(p.stdout);
+  if (printOutput) {
+    stderr.write(p.stderr);
+    stderr.write(p.stdout);
+  }
+  if (p.exitCode != 0 && throwOnFail) throw p.exitCode;
   return p.stdout.trimRight();
 }
 
@@ -55,9 +62,10 @@ Future mvd(from, to) => Directory(from).rename(to);
 
 Future mkdirs(d) => Directory(d).create(recursive: true);
 
-Future md5(path) => system("md5sum '$path' | cut -d' ' -f1");
+Future<String> md5(String path) =>
+    system("md5sum '$path' | cut -d' ' -f1", printOutput: false);
 
-Future<void> flutter(String cmd) => system('flutter $cmd');
+Future<void> flutter(String cmd) => system('flutter $cmd', throwOnFail: true);
 Future build(String cmd, String flags) => flutter('build $cmd $flags');
 
 Future hdiutil(String cmd) => system('hdiutil $cmd');

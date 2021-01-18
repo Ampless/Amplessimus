@@ -38,12 +38,17 @@ class _AppState extends State<_App> {
 }
 
 var rebuildWholeApp;
-FakePrefs prefs = FakePrefs();
+Prefs? _prefs;
+Prefs get prefs => _prefs!;
+
+Future<void> loadPrefs() async {
+  _prefs = Prefs(await SharedPreferences.getInstance());
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   ampInfo('prefs', 'Loading SharedPreferences...');
-  prefs = Prefs(await SharedPreferences.getInstance());
+  await loadPrefs();
   ampInfo('prefs', 'SharedPreferences (hopefully successfully) loaded.');
   try {
     if (!prefs.firstLogin) {
