@@ -95,21 +95,17 @@ class _SettingsState extends State<Settings> {
                 prefs.isDarkMode = v;
               });
               await dsb.updateWidget();
-              Future.delayed(
-                Duration(milliseconds: 150),
-                widget.parent.rebuild,
-              );
-              Future.delayed(
-                Duration(milliseconds: 150),
-                () => rebuildWholeApp(),
-              );
+              //kind of a work-around for not going over column 80
+              final d = Duration(milliseconds: 150);
+              Future.delayed(d, widget.parent.rebuild);
+              Future.delayed(d, rebuildWholeApp);
             },
           ),
           ampSwitchWithText(
             Language.current.useSystemTheme,
             prefs.useSystemTheme,
             (v) {
-              prefs.useSystemTheme = v;
+              setState(() => prefs.useSystemTheme = v);
               widget.parent.checkBrightness();
             },
           ),

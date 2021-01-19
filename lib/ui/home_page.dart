@@ -33,6 +33,7 @@ class AmpHomePageState extends State<AmpHomePage>
     if (!prefs.useSystemTheme) return;
     prefs.brightness = SchedulerBinding.instance!.window.platformBrightness;
     Future.delayed(Duration(milliseconds: 150), rebuild);
+    Future.delayed(Duration(milliseconds: 150), rebuildWholeApp);
   }
 
   @override
