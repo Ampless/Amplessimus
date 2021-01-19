@@ -43,7 +43,7 @@ Widget _renderPlans(List<Plan> plans) {
       title: ampRow([
         outdated(plan.date, DateTime.now())
             ? IconButton(
-                icon: ampIcon(Icons.warning, Icons.warning_outlined),
+                icon: ampIcon(Icons.warning, Icons.warning_amber_outlined),
                 //TODO: better tooltip
                 tooltip: Language.current.warnWrongDate(plan.date),
                 onPressed: () => scaffoldMessanger?.showSnackBar(
