@@ -71,8 +71,11 @@ Future build(String cmd, String flags) => flutter('build $cmd $flags');
 Future hdiutil(String cmd) => system('hdiutil $cmd');
 Future strip(String files) => system('strip -u -r $files');
 
+Future unsign(String app) => system('codesign --remove-signature \'$app\'');
+
 Future<void> iosapp(buildDir) async {
   await build('ios', iosFlags);
+  await unsign(buildDir);
   await system(
       'xcrun bitcode_strip $buildDir/Frameworks/Flutter.framework/Flutter -r -o tmpfltr');
   await mv('tmpfltr', '$buildDir/Frameworks/Flutter.framework/Flutter');
@@ -131,15 +134,13 @@ Future<void> mac() async {
   await flutter('config --enable-macos-desktop');
   await build('macos', macFlags);
   const bld = 'build/macos/Build/Products/Release/Amplessimus.app';
+  await unsign(bld);
   const contents = '$bld/Contents';
-  await strip('$contents/Contents/Runner '
-      '$contents/Contents/Frameworks/App.framework/Versions/A/App '
-      '$contents/Contents/Frameworks/FlutterMacOS.framework/Versions/A/FlutterMacOS '
-      '$contents/Contents/Frameworks/shared_preferences_macos.framework/Versions/A/shared_preferences_macos '
-      '$contents/Contents/Frameworks/*.dylib');
+  const frameworks = '$contents/Frameworks';
+  await system('rm -f $frameworks/libswift*');
 
   await system('cp -rf $bld tmp/dmg');
-  await system('ln -s /Applications $bld/Applications');
+  await system('ln -s /Applications tmp/dmg/Applications');
   await hdiutil(
       'create tmp/tmp.dmg -ov -srcfolder tmp/dmg -fs APFS -volname "Install Amplessimus"');
   await hdiutil('convert tmp/tmp.dmg -ov -format UDBZ -o bin/$version.dmg');
