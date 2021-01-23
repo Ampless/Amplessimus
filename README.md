@@ -1,15 +1,18 @@
 # Amplessimus
 Amplessimus is an app that tries to be what the 'DSBMobile' app could
 have been. It currently supports Android, iOS, Linux, macOS and
-Windows. We could theoretically build a webapp version of this with
+Windows.
+
+## Why not the browser?
+We could theoretically build a webapp version of this with
 almost no effort, BUT it would require a proxy server of some kind as
 all mainstream browsers try to block, what is called CSRF: You open up
 evil.com and in JavaScript it makes a request to bank.com that tells
 it to send me $1000. Of course we, as well as the browser vendors
 should, know that making requests to DSBMobile probably cannot ever
 be abused in a relevant way, but that doesn't fix the problem. Proxy
-servers are a solution for this and there will probably be one, but
-that makes it a bit harder to run this as a webapp.
+servers are a solution for this and, while we might one day make one,
+that makes it quite a bit harder to run this as a webapp.
 
 ## Installing
 Just take the binary and install it in your OS's standard way.
@@ -51,23 +54,20 @@ really hard to learn it. If you know, how to build Flutter apps for
 Cydia, please contact us at `ampless@chrissx.de`.
 
 ## <a name="build"></a> Building
-_This section is heavily broken, because we are right now replacing
-the oldschool Makefile with a new and better build system._
-
 Compiling for everything except Windows will assume you are running
 macOS or Linux, but nowadays Windows should work, too. However, for
 all build targets a recent version of
 [Flutter](https://flutter.dev/docs/get-started/install) is required.
 In the Output sections `$VERSION` means "the full name of the version
-you are building". All of the outputs are placed in the `bin/` folder,
-which is created automatically.
+you are building". (e.g. 3.3.89) All of the outputs are placed in the
+`bin/` folder, which is created automatically.
 
 ### Android
 #### Prepare
 * The [Android SDK](https://developer.android.com/studio)
 #### Compile
 ```
-dart run make.dart android
+./make.dart android
 ```
 #### Output
 * `$VERSION.aab` an application bundle
@@ -86,7 +86,7 @@ dart run make.dart android
 `clang cmake libgtk-3-dev ninja-build pkg-config`)
 #### Compile
 ```
-dart run make.dart linux
+./make.dart linux
 ```
 #### Output
 * `$VERSION.linux/` a folder containing the Amplessimus binary and all deps
@@ -97,7 +97,7 @@ dart run make.dart linux
 * Xcode
 #### Compile
 ```
-dart run make.dart ios
+./make.dart ios
 ```
 #### Output
 * `$VERSION.deb` a cydia package (probably broken)
@@ -114,21 +114,10 @@ flutter create .
 * macOS
 * Xcode
 ```
-dart run make.dart mac
+./make.dart mac
 ```
 #### Output
-* `$VERSION.dmg` an installer image for macOS 10.13+
-
-### Web
-#### Compile
-```
-dart run make.dart web
-```
-#### Output
-* `$VERSION.web/` a folder containing your `/var/www/html/*` basically
-#### Notes
-It won't work, because browsers like "security". (CSRF is a serious security
-problem, but it also makes web Amplessimus impossible right now)
+* `$VERSION.dmg` an installer image for macOS 10.14.4+
 
 ### Windows
 #### Prepare
@@ -140,3 +129,14 @@ dart run make.dart win
 ```
 #### Output
 * `$VERSION.win/`
+
+### Web
+#### Compile
+```
+./make.dart web
+```
+#### Output
+* `$VERSION.web/` a folder containing your `/var/www/html/*` basically
+#### Notes
+It won't work, because browsers like "security". (CSRF is a serious security
+problem, but it also makes web Amplessimus impossible right now)
