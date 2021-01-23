@@ -20,7 +20,7 @@ Widget _renderPlans(List<Plan> plans) {
     }
     for (final sub in plan.subs) {
       final subject = parseSubject(sub.subject);
-      final title = sub.orgTeacher == null || sub.orgTeacher.isEmpty
+      final title = sub.orgTeacher == null || sub.orgTeacher!.isEmpty
           ? subject
           : '$subject (${sub.orgTeacher})';
 
@@ -81,12 +81,15 @@ Future<Null> updateWidget([bool? useJsonCache]) async {
   try {
     var plans = useJsonCache && prefs.dsbJsonCache != ''
         ? Plan.plansFromJson(prefs.dsbJsonCache)
-        : await getAllSubs(
-            prefs.username, prefs.password, cachedHttpGet, http.post,
+        : await getAllSubs(prefs.username, prefs.password, cachedHttp,
             language: prefs.dsbLanguage);
     prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (prefs.oneClassOnly) {
-      plans = searchClass(plans, prefs.classGrade, prefs.classLetter);
+      plans = Plan.searchInPlans(
+          plans,
+          (sub) =>
+              sub.affectedClass.contains(prefs.classGrade) &&
+              sub.affectedClass.contains(prefs.classLetter));
     }
     for (final plan in plans) {
       plan.subs.sort();

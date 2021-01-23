@@ -16,10 +16,10 @@ Future<Map<String, String>> wpemails(String domain) async {
   try {
     final result = <String, String>{};
 
-    var html = htmlParse(await cachedHttpGet(
+    var html = htmlParse(await cachedHttp.get(
       Uri.parse('https://$domain/schulfamilie/lehrkraefte/'),
     ));
-    html = htmlSearchByClass(html, 'entry-content').children;
+    html = htmlSearchByClass(html, 'entry-content')!.children;
     html = htmlSearchAllByPredicate(
         html,
         (e) =>

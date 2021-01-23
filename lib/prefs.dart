@@ -109,7 +109,6 @@ class Prefs {
   String get password => _getString('dsbpass', '');
   set password(String s) => _prefs.setString('dsbpass', s);
 
-//TODO: find a better way to do
   String get classGrade => _getString('grade', '5').trim().toLowerCase();
   set classGrade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
   void Function() setClassGrade(String? v) => () {

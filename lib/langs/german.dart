@@ -47,8 +47,7 @@ class German extends Language {
 
   @override
   String dsbSubtoSubtitle(Substitution sub) {
-    final notesaddon =
-        sub.notes != null && sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
+    final notesaddon = sub.notes.isNotEmpty ? ' (${sub.notes})' : '';
     return sub.isFree
         ? 'Freistunde$notesaddon'
         : 'Vertreten durch ${sub.subTeacher}$notesaddon';

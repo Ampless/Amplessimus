@@ -96,10 +96,10 @@ class _FirstLoginState extends State<FirstLogin> {
           onPressed: () async {
             setState(() => _loading = true);
             try {
-              final String? error = await checkCredentials(
+              final error = await checkCredentials(
                 prefs.username,
                 prefs.password,
-                http.post,
+                http,
               );
               if (error != null) throw Language.current.dsbError(error);
 
@@ -128,5 +128,5 @@ class _FirstLoginState extends State<FirstLogin> {
   }
 }
 
-final cachedHttpGet = ScHttpClient(prefs.getCache, prefs.setCache).get;
+final cachedHttp = ScHttpClient(prefs.getCache, prefs.setCache);
 final http = ScHttpClient();
