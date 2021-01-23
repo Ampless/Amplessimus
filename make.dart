@@ -68,7 +68,6 @@ Future<String> md5(String path) =>
 Future<void> flutter(String cmd) => system('flutter $cmd', throwOnFail: true);
 Future build(String cmd, String flags) => flutter('build $cmd $flags');
 
-Future hdiutil(String cmd) => system('hdiutil $cmd');
 Future strip(String files) => system('strip -u -r $files');
 
 Future unsign(String app) => system('codesign --remove-signature \'$app\'');
@@ -141,9 +140,10 @@ Future<void> mac() async {
 
   await system('cp -rf $bld tmp/dmg');
   await system('ln -s /Applications tmp/dmg/Applications');
-  await hdiutil(
-      'create tmp/tmp.dmg -ov -srcfolder tmp/dmg -fs APFS -volname "Install Amplessimus"');
-  await hdiutil('convert tmp/tmp.dmg -ov -format UDBZ -o bin/$version.dmg');
+  await system('hdiutil create bin/$version.dmg -ov '
+      '-srcfolder tmp/dmg -volname "Amplessimus" '
+      // TODO: drop macOS 10.14 support (bump to 10.15), change -format to ULMO (LZMA)
+      '-fs APFS -format UDBZ');
 }
 
 Future<void> linux() async {
