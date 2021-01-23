@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-final majorMinorVersion = '3.3';
+final majorMinorVersion = '3.4';
 
 String? version;
 String? commitNumber;
