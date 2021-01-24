@@ -1,4 +1,5 @@
 import 'package:amplessimus/main.dart';
+import 'package:amplessimus/touch_bar.dart';
 
 import '../dsbapi.dart' as dsb;
 import '../langs/language.dart';
@@ -27,6 +28,7 @@ class _SettingsState extends State<Settings> {
 
   _SettingsState() {
     _passwordFormField =
+        //this code has to be this bad, because widget.parent might be null at ctor call
         AmpFormField.password(() => widget.parent.rebuildDragDown());
     _wpeFormField = AmpFormField(
       prefs.wpeDomain,
@@ -37,7 +39,6 @@ class _SettingsState extends State<Settings> {
         widget.parent.rebuildDragDown();
       },
     );
-    ampInfo('Settings', 'Init done.');
   }
 
   Widget get changeSubVisibilityWidget => Stack(
@@ -130,6 +131,7 @@ class _SettingsState extends State<Settings> {
                 if (v == null) return;
                 setState(() => Language.current = v);
                 widget.parent.rebuildDragDown();
+                initTouchBar(widget.parent.tabController);
               },
             ),
           ),
