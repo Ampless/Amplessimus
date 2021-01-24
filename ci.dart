@@ -91,7 +91,10 @@ Future<void> main() async {
   final date = await make.system('date');
   print('[AmpCI][$date] Running the Dart build system for ${make.version}.');
 
-  await make.ci();
+  await make.apk();
+  await make.iosapp();
+  await make.ipa();
+  await make.mac();
   await make.cleanup();
 
   await Directory('bin').rename(outputDir);

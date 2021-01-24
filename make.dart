@@ -72,7 +72,8 @@ Future strip(String files) => system('strip -u -r $files');
 
 Future unsign(String app) => system('codesign --remove-signature \'$app\'');
 
-Future<void> iosapp(buildDir) async {
+Future<void> iosapp() async {
+  const buildDir = 'build/ios/Release-iphoneos/Runner.app';
   await build('ios', iosFlags);
   await unsign(buildDir);
   await system(
@@ -82,8 +83,9 @@ Future<void> iosapp(buildDir) async {
   await strip('$buildDir/Runner $buildDir/Frameworks/*.framework/*');
 }
 
-Future<void> ipa(buildDir) async {
+Future<void> ipa() async {
   //await flutter('build ipa $iosFlags');
+  const buildDir = 'build/ios/Release-iphoneos/Runner.app';
   await system('cp -rp $buildDir tmp/Payload');
   await rm('bin/$version.ipa');
   await system('cd tmp && zip -r -9 ../bin/$version.ipa Payload');
@@ -107,8 +109,8 @@ Future<void> test() async {
 }
 
 Future<void> ios() async {
-  await iosapp('build/ios/Release-iphoneos/Runner.app');
-  await ipa('build/ios/Release-iphoneos/Runner.app');
+  await iosapp();
+  await ipa();
   //TODO: deb
 }
 
@@ -152,12 +154,6 @@ Future<void> linux() async {
   await mvd('build/linux/release/bundle', 'bin/$version.linux');
 }
 
-Future<void> ci() async {
-  await apk();
-  await iosapp('build/ios/Release-iphoneos/Runner.app');
-  await ipa('build/ios/Release-iphoneos/Runner.app');
-}
-
 Future<void> ver() async {
   print(version);
 }
@@ -184,7 +180,6 @@ Future<void> cleanup() async {
 }
 
 const targets = {
-  'ci': ci,
   'ios': ios,
   'android': android,
   'test': test,
