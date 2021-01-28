@@ -27,9 +27,13 @@ dependencies:
   html_search: ^0.1.0-nullsafety.0
   flutter_svg: ^0.20.0-nullsafety.3
   package_info: '>=0.4.3 <2.0.0'
-  touch_bar: ^0.0.1-alpha.3
+  touch_bar: ^0.0.1-alpha.4
 
 dependency_overrides:
+  touch_bar:
+    git:
+      url: https://github.com/Ampless/touch_bar_flutter_plugin.git
+      path: touch_bar
   touch_bar_platform_interface:
     git:
       url: https://github.com/Ampless/touch_bar_flutter_plugin.git
