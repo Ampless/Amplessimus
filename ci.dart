@@ -54,6 +54,7 @@ Future updateAltstore() async {
   if (!(await Directory('../ampless.chrissx.de').exists())) {
     await make.system(
       'git clone https://github.com/Ampless/ampless.chrissx.de ../ampless.chrissx.de',
+      throwOnFail: true,
     );
   }
   Directory.current = '../ampless.chrissx.de/altstore';
@@ -69,11 +70,12 @@ Future updateAltstore() async {
   app['downloadURL'] =
       'https://github.com/Ampless/Amplessimus/releases/download/${make.version}/${make.version}.ipa';
   await make.writefile('alpha.json', jsonEncode(json));
-  await make.system('git add alpha.json;');
+  await make.system('git add alpha.json;', throwOnFail: true);
   await make.system(
-    'git commit -m "automatic ci update to amplessimus ios alpha ${make.version}";',
+    'git commit -m "automatic update to amplessimus ios alpha ${make.version}";',
+    throwOnFail: true,
   );
-  await make.system('git push');
+  await make.system('git push', throwOnFail: true);
 }
 
 Future<void> main() async {
@@ -88,18 +90,19 @@ Future<void> main() async {
   await Directory('/usr/local/var/www/amplessimus').create(recursive: true);
   final outputDir = '/usr/local/var/www/amplessimus/${make.version}';
 
-  final date = await make.system('date');
+  final date = await make.system('date', printInput: false, printOutput: false);
   print('[AmpCI][$date] Running the Dart build system for ${make.version}.');
 
   await make.apk();
   await make.iosapp();
   await make.ipa();
   await make.mac();
-  await make.cleanup();
 
   await Directory('bin').rename(outputDir);
 
   final altstore = updateAltstore();
   await githubRelease(commit, outputDir);
   await altstore;
+
+  await make.cleanup();
 }
