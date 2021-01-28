@@ -4,15 +4,14 @@ import 'dart:io';
 
 final majorMinorVersion = '3.4';
 
-String? version;
-String? commitNumber;
+late String version;
+late String buildNumber;
 
 String get flags => '--release '
     '--suppress-analytics '
     '--no-sound-null-safety '
     '--build-name=$version '
-    //TODO: make this normal
-    '--build-number $commitNumber';
+    '--build-number $buildNumber';
 String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
 String get iosFlags => binFlags;
 //--target-platform android-arm,android-arm64,android-x64
@@ -69,7 +68,10 @@ Future<String> md5(String path) =>
 Future<void> flutter(String cmd) => system('flutter $cmd', throwOnFail: true);
 Future build(String cmd, String flags) => flutter('build $cmd $flags');
 
-Future strip(String files) => system('strip -u -r $files');
+Future<void> strip(String files) => system(
+      'strip -u -r $files',
+      printOutput: false,
+    );
 
 Future unsign(String app) => system('codesign --remove-signature \'$app\'');
 
@@ -86,8 +88,7 @@ Future<void> iosapp() async {
 
 Future<void> ipa() async {
   //await flutter('build ipa $iosFlags');
-  const buildDir = 'build/ios/Release-iphoneos/Runner.app';
-  await system('cp -rp $buildDir tmp/Payload');
+  await system('cp -rp build/ios/Release-iphoneos/Runner.app tmp/Payload');
   await rm('bin/$version.ipa');
   await system('cd tmp && zip -r -9 ../bin/$version.ipa Payload');
 }
@@ -166,8 +167,18 @@ Future<void> clean() async {
 }
 
 Future<void> init() async {
-  //TODO: dont print
-  commitNumber = await system('echo \$((\$(git rev-list @ --count) - 1148))');
+  buildNumber = await system(
+    'git rev-list @ --count',
+    printInput: false,
+    printOutput: false,
+    throwOnFail: true,
+  );
+  final commitNumber = await system(
+    'echo \$(($buildNumber - 1150))',
+    printInput: false,
+    printOutput: false,
+    throwOnFail: true,
+  );
   version = '$majorMinorVersion.$commitNumber';
   await mkdirs('bin');
   await mkdirs('tmp/Payload');
