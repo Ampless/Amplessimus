@@ -29,6 +29,16 @@ dependencies:
   package_info: '>=0.4.3 <2.0.0'
   touch_bar: ^0.0.1-alpha.3
 
+dependency_overrides:
+  touch_bar_platform_interface:
+    git:
+      url: https://github.com/Ampless/touch_bar_flutter_plugin.git
+      path: touch_bar_platform_interface
+  touch_bar_macos:
+    git:
+      url: https://github.com/Ampless/touch_bar_flutter_plugin.git
+      path: touch_bar_macos
+
 dev_dependencies:
   #flutter_launcher_icons: ^0.8.0
   flutter_test:
