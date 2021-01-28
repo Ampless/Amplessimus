@@ -11,6 +11,7 @@ String get flags => '--release '
     '--suppress-analytics '
     '--no-sound-null-safety '
     '--build-name=$version '
+    //TODO: make this normal
     '--build-number $commitNumber';
 String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
 String get iosFlags => binFlags;
@@ -165,6 +166,7 @@ Future<void> clean() async {
 }
 
 Future<void> init() async {
+  //TODO: dont print
   commitNumber = await system('echo \$((\$(git rev-list @ --count) - 1148))');
   version = '$majorMinorVersion.$commitNumber';
   await mkdirs('bin');
