@@ -39,24 +39,20 @@ Widget _renderPlans(List<Plan> plans) {
         trailing: ampText(trailing, weight: FontWeight.bold, size: 20),
       ));
     }
+    final warn = outdated(plan.date, DateTime.now());
     widgets.add(ListTile(
       title: ampRow([
-        outdated(plan.date, DateTime.now())
-            ? IconButton(
-                icon: ampIcon(Icons.warning, Icons.warning_amber_outlined),
-                //TODO: better tooltip
-                tooltip: Language.current.warnWrongDate(plan.date),
-                onPressed: () => scaffoldMessanger?.showSnackBar(
-                    ampSnackBar(Language.current.warnWrongDate(plan.date))),
-                padding: EdgeInsets.zero,
-              )
-            : ampNull,
         ampText(' ${Language.current.dayToString(plan.day)}', size: 24),
         IconButton(
-          icon: ampIcon(Icons.info, Icons.info_outline),
-          tooltip: plan.date.split(' ').first,
-          onPressed: () =>
-              scaffoldMessanger?.showSnackBar(ampSnackBar(plan.date)),
+          icon: warn
+              ? ampIcon(Icons.warning, Icons.warning_amber_outlined)
+              : ampIcon(Icons.info, Icons.info_outline),
+          tooltip: warn
+              //TODO: better warning tooltip
+              ? Language.current.warnWrongDate(plan.date)
+              : plan.date.split(' ').first,
+          onPressed: () => scaffoldMessanger?.showSnackBar(ampSnackBar(
+              warn ? Language.current.warnWrongDate(plan.date) : plan.date)),
           padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
         ),
         IconButton(
