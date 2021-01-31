@@ -6,7 +6,8 @@ import '../langs/language.dart';
 import '../logging.dart';
 import 'dev_options.dart';
 import '../uilib.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' as material;
 import '../appinfo.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -43,7 +44,7 @@ class _SettingsState extends State<Settings> {
 
   Widget get changeSubVisibilityWidget => Stack(
         children: [
-          ListTile(
+          material.ListTile(
             title: ampText(Language.current.allClasses),
             trailing: ampRow(
               [
@@ -120,7 +121,7 @@ class _SettingsState extends State<Settings> {
               widget.parent.rebuild();
             },
           ),
-          Divider(),
+          material.Divider(),
           ampWidgetWithText(
             Language.current.changeLanguage,
             ampDropdownButton<Language>(
@@ -143,7 +144,7 @@ class _SettingsState extends State<Settings> {
               widget.parent.rebuildDragDown();
             },
           ),
-          Divider(),
+          material.Divider(),
           changeSubVisibilityWidget,
           ampSwitchWithText(
             Language.current.parseSubjects,
@@ -153,27 +154,27 @@ class _SettingsState extends State<Settings> {
               widget.parent.rebuildDragDown();
             },
           ),
-          Divider(),
+          material.Divider(),
           AutofillGroup(
             child: ampColumn([
               _usernameFormField.flutter(),
               _passwordFormField.flutter(
-                suffixIcon:
+                suffix:
                     ampHidePwdBtn(_hide, () => setState(() => _hide = !_hide)),
                 obscureText: _hide,
               )
             ]),
           ),
-          Divider(),
+          material.Divider(),
           _wpeFormField.flutter(),
-          Divider(),
+          material.Divider(),
           Row(
             children: [
               ampBigButton(
                 Language.current.settingsAppInfo,
-                Icons.info,
-                Icons.info_outline,
-                () async => showAboutDialog(
+                material.Icons.info,
+                material.Icons.info_outline,
+                () async => material.showAboutDialog(
                   context: context,
                   applicationName: appTitle,
                   applicationVersion: await appVersion,

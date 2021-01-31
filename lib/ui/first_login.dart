@@ -4,7 +4,8 @@ import '../main.dart';
 import '../uilib.dart';
 import '../appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:schttp/schttp.dart';
 
 import 'home_page.dart';
@@ -27,7 +28,7 @@ class _FirstLoginState extends State<FirstLogin> {
     if (prefs.classLetter.isEmpty) prefs.classLetter = dsb.letters.first;
     if (prefs.classGrade.isEmpty) prefs.classGrade = dsb.grades.first;
     return SafeArea(
-      child: Scaffold(
+      child: material.Scaffold(
         body: Container(
           child: ListView(
             children: [
@@ -39,13 +40,13 @@ class _FirstLoginState extends State<FirstLogin> {
                     child: ampColumn([
                       _usernameFormField.flutter(),
                       _passwordFormField.flutter(
-                        suffixIcon: ampHidePwdBtn(
+                        suffix: ampHidePwdBtn(
                             _hide, () => setState(() => _hide = !_hide)),
                         obscureText: _hide,
                       ),
                     ]),
                   ),
-                  Divider(),
+                  material.Divider(),
                   ampWidgetWithText(
                     Language.current.changeLanguage,
                     ampDropdownButton<Language>(
@@ -58,7 +59,7 @@ class _FirstLoginState extends State<FirstLogin> {
                       }),
                     ),
                   ),
-                  Divider(),
+                  material.Divider(),
                   ampWidgetWithText(
                     Language.current.selectClass,
                     ampRow(
@@ -82,7 +83,7 @@ class _FirstLoginState extends State<FirstLogin> {
                       ],
                     ),
                   ),
-                  Divider(),
+                  material.Divider(),
                   ampErrorText(_error),
                 ]),
               )
@@ -90,7 +91,7 @@ class _FirstLoginState extends State<FirstLogin> {
           ),
         ),
         bottomSheet: _loading
-            ? LinearProgressIndicator(semanticsLabel: 'Loading')
+            ? material.LinearProgressIndicator(semanticsLabel: 'Loading')
             : ampNull,
         floatingActionButton: ampFab(
           onPressed: () async {
@@ -120,8 +121,6 @@ class _FirstLoginState extends State<FirstLogin> {
             }
           },
           label: Language.current.save,
-          iconDefault: Icons.save,
-          iconOutlined: Icons.save_outlined,
         ),
       ),
     );

@@ -4,6 +4,7 @@ import '../main.dart';
 import 'first_login.dart';
 import '../logging.dart';
 import '../uilib.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -42,9 +43,9 @@ class _DevOptionsState extends State<DevOptions> {
         ),
         Divider(),
         ampPadding(5),
-        ampRaisedButton('Print Cache', prefs.listCache),
-        ampRaisedButton('Clear Cache', prefs.clearCache),
-        ampRaisedButton(
+        ampButton('Print Cache', prefs.listCache),
+        ampButton('Clear Cache', prefs.clearCache),
+        ampButton(
           'Set Cache to Kekw',
           () => prefs.dsbJsonCache = '[{\"day\":4,\"date\":\"4.12.2020 Freitag\",\"subs\":['
               '{\"class\":\"5c\",\"lesson\":3,\"sub_teacher\":\"Häußler\",\"subject\":\"D\",\"notes\":\"\",\"free\":false},'
@@ -57,11 +58,10 @@ class _DevOptionsState extends State<DevOptions> {
               '{\"class\":\"6c\",\"lesson\":6,\"sub_teacher\":\"---\",\"subject\":\"Frz\",\"notes\":\"\",\"free\":true},'
               '{\"class\":\"9c\",\"lesson\":6,\"sub_teacher\":\"---\",\"subject\":\"E\",\"notes\":\"\",\"free\":true}]}]',
         ),
-        ampRaisedButton('Set Cache to Input', () => _cacheDialog(context)),
-        ampRaisedButton('Log leeeeeEHREn', () => setState(ampClearLog)),
-        ampRaisedButton(
-            'först lockin', () => ampChangeScreen(FirstLogin(), context)),
-        ampRaisedButton(
+        ampButton('Set Cache to Input', () => _cacheDialog(context)),
+        ampButton('Log leeeeeEHREn', () => setState(ampClearLog)),
+        ampButton('först lockin', () => ampChangeScreen(FirstLogin(), context)),
+        ampButton(
           'App-Daten löschen',
           () {
             ampDialog(
@@ -69,7 +69,7 @@ class _DevOptionsState extends State<DevOptions> {
               title: 'App-Daten löschen',
               widgetBuilder: ampRow,
               children: (_, __) => [ampText('Sicher?')],
-              actions: (context) => ampDialogButtonsSaveAndCancel(
+              actions: (context) => ampButtonsSaveAndCancel(
                 context,
                 save: () async {
                   await prefs.clear();
@@ -89,7 +89,7 @@ class _DevOptionsState extends State<DevOptions> {
     ampDialog(
       context,
       children: (_, __) => [cacheFormField.flutter()],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
+      actions: (context) => ampButtonsSaveAndCancel(
         context,
         save: () {
           prefs.dsbJsonCache = cacheFormField.text.trim();
@@ -109,7 +109,7 @@ class _DevOptionsState extends State<DevOptions> {
     ampDialog(
       context,
       children: (_, __) => [timerFormField.flutter()],
-      actions: (context) => ampDialogButtonsSaveAndCancel(
+      actions: (context) => ampButtonsSaveAndCancel(
         context,
         save: () {
           try {

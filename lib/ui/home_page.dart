@@ -1,3 +1,4 @@
+import 'package:amplessimus/ui/error_screen.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -66,9 +67,8 @@ class AmpHomePageState extends State<AmpHomePage>
           children: (_, __) =>
               [ampText(Language.current.plsUpdate(old, update.version))],
           actions: (alCtx) => [
-            ampDialogButton(Language.current.dismiss, Navigator.of(alCtx).pop),
-            ampDialogButton(
-                Language.current.open, () => ampOpenUrl(update.url)),
+            ampButton(Language.current.dismiss, Navigator.of(alCtx).pop),
+            ampButton(Language.current.open, () => ampOpenUrl(update.url)),
           ],
           widgetBuilder: ampColumn,
         );
@@ -136,6 +136,7 @@ class AmpHomePageState extends State<AmpHomePage>
       ));
     } catch (e) {
       ampErr('AmpHomePageState', errorString(e));
+      ampChangeScreen(ErrorScreen(), context);
       return ampText(errorString(e));
     }
   }

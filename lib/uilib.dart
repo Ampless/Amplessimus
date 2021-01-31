@@ -1,8 +1,9 @@
-import 'langs/language.dart';
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
+import 'langs/language.dart';
 import 'main.dart';
 
 Future<Null> ampDialog(
@@ -13,10 +14,10 @@ Future<Null> ampDialog(
   required Widget Function(List<Widget>) widgetBuilder,
   bool barrierDismissible = true,
 }) {
-  return showDialog(
+  return showCupertinoDialog(
     context: context,
     barrierDismissible: barrierDismissible,
-    builder: (context) => AlertDialog(
+    builder: (context) => CupertinoAlertDialog(
       title: title != null ? Text(title) : null,
       content: StatefulBuilder(
         builder: (alertContext, setAlState) => widgetBuilder(
@@ -36,42 +37,43 @@ Column ampColumn(List<Widget> children) =>
 Row ampRow(List<Widget> children) =>
     Row(mainAxisSize: MainAxisSize.min, children: children);
 
-Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
-    Tab(icon: ampIcon(iconDefault, iconOutlined), text: text);
+material.Tab ampTab(IconData iconDefault, IconData iconOutlined, String text) =>
+    material.Tab(icon: ampIcon(iconDefault, iconOutlined), text: text);
 
-TextButton ampDialogButton(String text, Function() onPressed) =>
-    TextButton(onPressed: onPressed, child: Text(text));
+CupertinoButton ampButton(String text, Function() onPressed) =>
+    CupertinoButton(onPressed: onPressed, child: Text(text));
 
-DropdownButton<T> ampDropdownButton<T>({
+material.DropdownButton<T> ampDropdownButton<T>({
   required T value,
   required List<T> items,
   required void Function(T?) onChanged,
   Widget Function(T)? itemToDropdownChild,
 }) {
   itemToDropdownChild ??= ampText;
-  return DropdownButton<T>(
+  return material.DropdownButton<T>(
     value: value,
     items: items
-        .map((e) => DropdownMenuItem(child: itemToDropdownChild!(e), value: e))
+        .map((e) =>
+            material.DropdownMenuItem(child: itemToDropdownChild!(e), value: e))
         .toList(),
     onChanged: onChanged,
   );
 }
 
-Switch ampSwitch(bool value, Function(bool) onChanged) =>
-    Switch(value: value, onChanged: onChanged);
+CupertinoSwitch ampSwitch(bool value, Function(bool) onChanged) =>
+    CupertinoSwitch(value: value, onChanged: onChanged);
 
-ListTile ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
+Widget ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
     ampWidgetWithText(text, ampSwitch(value, onChanged));
 
-ListTile ampWidgetWithText(String text, Widget w) =>
-    ListTile(title: Text(text), trailing: w);
+Widget ampWidgetWithText(String text, Widget w) =>
+    material.ListTile(title: Text(text), trailing: w);
 
-List<Widget> ampDialogButtonsSaveAndCancel(BuildContext context,
+List<Widget> ampButtonsSaveAndCancel(BuildContext context,
     {required Function() save}) {
   return [
-    ampDialogButton(Language.current.cancel, Navigator.of(context).pop),
-    ampDialogButton(Language.current.save, save),
+    ampButton(Language.current.cancel, Navigator.of(context).pop),
+    ampButton(Language.current.save, save),
   ];
 }
 
@@ -81,9 +83,9 @@ Widget ampBigButton(
   IconData iconOutlined,
   void Function() onTap,
 ) =>
-    Card(
+    material.Card(
       elevation: 0,
-      child: InkWell(
+      child: material.InkWell(
         onTap: onTap,
         child: ampColumn(
           [
@@ -94,9 +96,6 @@ Widget ampBigButton(
         ),
       ),
     );
-
-ElevatedButton ampRaisedButton(String text, void Function() onPressed) =>
-    ElevatedButton(child: Text(text), onPressed: onPressed);
 
 Padding ampPadding(double value, [Widget? child]) =>
     Padding(padding: EdgeInsets.all(value), child: child);
@@ -128,37 +127,35 @@ Widget ampTitle(String text) =>
 Icon ampIcon(IconData dataDefault, IconData dataOutlined, [double? size]) =>
     Icon(prefs.highContrast ? dataOutlined : dataDefault, size: size);
 
-IconButton ampHidePwdBtn(bool hidden, Function() setHidden) => IconButton(
+CupertinoButton ampHidePwdBtn(bool hidden, Function() setHidden) =>
+    CupertinoButton(
       onPressed: setHidden,
-      icon: hidden
-          ? ampIcon(Icons.visibility_off, Icons.visibility_off_outlined)
-          : ampIcon(Icons.visibility, Icons.visibility_outlined),
+      child: hidden
+          ? ampIcon(material.Icons.visibility_off,
+              material.Icons.visibility_off_outlined)
+          : ampIcon(
+              material.Icons.visibility, material.Icons.visibility_outlined),
     );
 
-SnackBar ampSnackBar(
+material.SnackBar ampSnackBar(
   String content, [
   String? label,
   Function()? f,
 ]) =>
-    SnackBar(
+    material.SnackBar(
       content: Text(content),
       action: label != null && f != null
-          ? SnackBarAction(label: label, onPressed: f)
+          ? material.SnackBarAction(label: label, onPressed: f)
           : null,
     );
 
-FloatingActionButton ampFab({
+CupertinoButton ampFab({
   required String label,
-  required IconData iconDefault,
-  required IconData iconOutlined,
   required void Function() onPressed,
 }) {
-  return FloatingActionButton.extended(
-    elevation: 0,
+  return CupertinoButton.filled(
     onPressed: onPressed,
-    highlightElevation: 0,
-    label: Text(label),
-    icon: ampIcon(iconDefault, iconOutlined),
+    child: Text(label),
   );
 }
 
@@ -167,11 +164,11 @@ Future ampChangeScreen(
   BuildContext context, [
   Future Function(BuildContext, Route) push = Navigator.pushReplacement,
 ]) =>
-    push(context, MaterialPageRoute(builder: (_) => w));
+    push(context, CupertinoPageRoute(builder: (_) => w));
 
 Widget ampList(List<Widget> children) {
   if (!prefs.highContrast) {
-    return Card(
+    return material.Card(
       margin: EdgeInsets.all(4),
       child: ampColumn(children),
       elevation: 0,
@@ -186,7 +183,8 @@ Widget ampList(List<Widget> children) {
       child: ampColumn(children),
       decoration: BoxDecoration(
         border: Border.all(
-          color: prefs.isDarkMode ? Colors.white : Colors.black,
+          color:
+              prefs.isDarkMode ? CupertinoColors.white : CupertinoColors.black,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -194,12 +192,11 @@ Widget ampList(List<Widget> children) {
   }
 }
 
-TabBar ampTabBar(TabController? controller, List<Tab> tabs) => TabBar(
+material.TabBar ampTabBar(
+        material.TabController? controller, List<material.Tab> tabs) =>
+    material.TabBar(
       controller: controller,
       tabs: tabs,
-      indicatorColor: prefs.themeData.accentColor,
-      labelColor: prefs.themeData.colorScheme.onSurface,
-      unselectedLabelColor: prefs.themeData.unselectedWidgetColor,
     );
 
 Future<Null> ampOpenUrl(String url) => url_launcher.canLaunch(url).then((b) {
@@ -210,7 +207,7 @@ Widget ampErrorText(dynamic e) => ampPadding(
     8,
     ampText(
       errorString(e),
-      color: Colors.red,
+      color: CupertinoColors.systemRed,
       weight: FontWeight.bold,
       size: 20,
     ));
@@ -232,44 +229,32 @@ class AmpFormField {
   }) : controller = TextEditingController(text: initialValue.toString());
 
   Widget flutter({
-    Widget? suffixIcon,
+    Widget? suffix,
     bool obscureText = false,
   }) {
     return ampColumn(
       [
         ampPadding(
           2,
-          TextFormField(
+          CupertinoTextField(
             onChanged: (_) {
               (onChanged ?? (_) {})(this);
             },
+            obscuringCharacter: 'x',
             obscureText: obscureText,
             controller: controller,
             key: key,
             keyboardType: keyboardType,
             autofillHints: autofillHints,
-            decoration: InputDecoration(
-              suffixIcon: suffixIcon,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 1.0,
-                  color: prefs.isDarkMode ? Colors.white : Colors.black,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2.0,
-                  color: prefs.isDarkMode ? Colors.white : Colors.black,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelText: labelText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: prefs.isDarkMode ? Colors.white : Colors.black,
-                ),
+            suffix: suffix,
+            placeholder: labelText,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: prefs.isDarkMode
+                    ? CupertinoColors.white
+                    : CupertinoColors.black,
+                //radius: BorderRadius.circular(10),
               ),
             ),
           ),
