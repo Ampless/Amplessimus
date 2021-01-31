@@ -1,5 +1,5 @@
 import 'package:dsbuntis/dsbuntis.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appinfo.dart';
@@ -25,10 +25,10 @@ class _AppState extends State<_App> {
   @override
   Widget build(BuildContext context) {
     rebuildWholeApp = () => setState(() {});
-    return MaterialApp(
+    return CupertinoApp(
       title: appTitle,
       debugShowCheckedModeBanner: false,
-      theme: prefs.themeData,
+      //theme: prefs.themeData,
       home: ScrollConfiguration(
         behavior: _Behavior(),
         child: prefs.firstLogin ? FirstLogin() : AmpHomePage(0),
