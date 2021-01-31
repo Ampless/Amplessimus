@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-final majorMinorVersion = '3.4';
+final majorMinorVersion = '4.0';
 
 late String version;
 late String buildNumber;
