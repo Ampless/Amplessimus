@@ -117,7 +117,7 @@ flutter create .
 ./make.dart mac
 ```
 #### Output
-* `$VERSION.dmg` an installer image for macOS 10.14.4+
+* `$VERSION.dmg` an installer image for macOS 10.15+
 
 ### Windows
 #### Prepare

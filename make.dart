@@ -146,8 +146,7 @@ Future<void> mac() async {
   await system('ln -s /Applications tmp/dmg/Applications');
   await system('hdiutil create bin/$version.dmg -ov '
       '-srcfolder tmp/dmg -volname "Amplessimus" '
-      // TODO: drop macOS 10.14 support (bump to 10.15), change -format to ULMO (LZMA)
-      '-fs APFS -format UDBZ');
+      '-fs APFS -format ULMO');
 }
 
 Future<void> linux() async {
