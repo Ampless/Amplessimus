@@ -26,7 +26,7 @@ dependencies:
   update: ^0.1.1-nullsafety.0
   html_search: ^0.1.0-nullsafety.0
   flutter_svg: ^0.20.0-nullsafety.3
-  package_info: '>=0.4.3 <2.0.0'
+  package_info: '>=0.5.0-nullsafety.0 <2.0.0'
   touch_bar: ^0.0.1-alpha.4
 
 dependency_overrides:
@@ -42,18 +42,28 @@ dependency_overrides:
     git:
       url: https://github.com/Ampless/touch_bar_flutter_plugin.git
       path: touch_bar_macos
+  package_info:
+    git:
+      url: https://github.com/bparrishMines/plugins.git
+      ref: package_info_nnbd
+      path: packages/package_info
+  shared_preferences_platform_interface:
+    git:
+      url: https://github.com/bparrishMines/plugins.git
+      ref: shared_preferences_platform_interface_nnbd
+      path: packages/shared_preferences/shared_preferences_platform_interface
 
 dev_dependencies:
-  #flutter_launcher_icons: ^0.8.0
   flutter_test:
     sdk: flutter
+  #flutter_launcher_icons: ^0.8.1
   pedantic: ^1.10.0-nullsafety.3
   github: ^7.0.3
   path: ^1.8.0-nullsafety.3
 
 flutter_icons:
-  #ios: true
-  #android: true
+  ios: true
+  android: true
   image_path: "assets/images/logo.svg"
 
 flutter:
@@ -69,13 +79,4 @@ flutter:
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #       - asset: fonts/Schyler-Bold.ttf
-  #         weight: 700
-  #
   # https://flutter.dev/custom-fonts/#from-packages

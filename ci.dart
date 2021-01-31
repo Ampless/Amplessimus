@@ -31,7 +31,6 @@ Future<void> githubRelease(String commit, String dir) async {
     ),
   );
   print('Uploading assets...');
-  //TODO: return url to ipa and use it for altstore
   await github.repositories.uploadReleaseAssets(
     release,
     await Directory(dir)
