@@ -19,7 +19,6 @@ class _ErrorScreenState extends State<ErrorScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
         body: Column(children: [
           ampErrorText(
             'Amplessimus stopped working.\n'

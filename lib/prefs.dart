@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' as material;
 
 import 'logging.dart';
 import 'package:crypto/crypto.dart';
@@ -190,48 +191,56 @@ class Prefs {
     ampInfo('AmpColors', 'set isDarkMode = $isDarkMode');
   }
 
+  material.ThemeData get themeData {
+    if (isDarkMode) {
+      return material.ThemeData(
+        colorScheme: material.ColorScheme.highContrastDark(),
+        backgroundColor: material.Colors.black,
+        cardColor: material.Colors.transparent,
+        shadowColor: material.Colors.transparent,
+        splashColor: material.Colors.transparent,
+        dividerColor: material.Colors.white38,
+        hoverColor: material.Colors.transparent,
+        dialogBackgroundColor: material.Colors.black,
+        scaffoldBackgroundColor: material.Colors.black,
+        highlightColor: material.Colors.transparent,
+        indicatorColor: material.Colors.transparent,
+        focusColor: material.Colors.transparent,
+      );
+    } else {
+      return material.ThemeData(
+        colorScheme: material.ColorScheme.highContrastLight(),
+        backgroundColor: material.Colors.white,
+        cardColor: material.Colors.transparent,
+        shadowColor: material.Colors.transparent,
+        splashColor: material.Colors.transparent,
+        dividerColor: material.Colors.black38,
+        hoverColor: material.Colors.transparent,
+        dialogBackgroundColor: material.Colors.white,
+        scaffoldBackgroundColor: material.Colors.white,
+        highlightColor: material.Colors.transparent,
+        indicatorColor: material.Colors.transparent,
+        focusColor: material.Colors.transparent,
+      );
+    }
+  }
+
   //CupertinoThemeData get themeData {
   //  if (isDarkMode) {
   //    return CupertinoThemeData(
-  //      colorScheme: ColorScheme.highContrastDark(),
-  //      backgroundColor: Colors.black,
-  //      cardColor: Colors.transparent,
-  //      shadowColor: Colors.transparent,
-  //      splashColor: Colors.transparent,
-  //      snackBarTheme: SnackBarThemeData(
-  //        backgroundColor: Colors.black,
-  //        contentTextStyle: TextStyle(color: Colors.white),
-  //        actionTextColor: Colors.white,
-  //        disabledActionTextColor: Colors.white30,
-  //      ),
-  //      dividerColor: Colors.white38,
-  //      hoverColor: Colors.transparent,
-  //      dialogBackgroundColor: Colors.black,
-  //      scaffoldBackgroundColor: Colors.black,
-  //      highlightColor: Colors.transparent,
-  //      indicatorColor: Colors.transparent,
-  //      focusColor: Colors.transparent,
+  //      brightness: Brightness.dark,
+  //      barBackgroundColor: Color(0xff000000),
+  //      primaryColor: CupertinoColors.systemRed,
+  //      primaryContrastingColor: CupertinoColors.systemBlue,
+  //      scaffoldBackgroundColor: CupertinoColors.activeGreen,
   //    );
   //  } else {
   //    return CupertinoThemeData(
-  //      colorScheme: ColorScheme.highContrastLight(),
-  //      backgroundColor: Colors.white,
-  //      cardColor: Colors.transparent,
-  //      shadowColor: Colors.transparent,
-  //      splashColor: Colors.transparent,
-  //      snackBarTheme: SnackBarThemeData(
-  //        backgroundColor: Colors.white,
-  //        contentTextStyle: TextStyle(color: Colors.black),
-  //        actionTextColor: Colors.black,
-  //        disabledActionTextColor: Colors.black38,
-  //      ),
-  //      dividerColor: Colors.black38,
-  //      hoverColor: Colors.transparent,
-  //      dialogBackgroundColor: Colors.white,
-  //      scaffoldBackgroundColor: Colors.white,
-  //      highlightColor: Colors.transparent,
-  //      indicatorColor: Colors.transparent,
-  //      focusColor: Colors.transparent,
+  //      brightness: Brightness.light,
+  //      barBackgroundColor: Color(0xffffffff),
+  //      primaryColor: CupertinoColors.systemRed,
+  //      primaryContrastingColor: CupertinoColors.systemBlue,
+  //      scaffoldBackgroundColor: CupertinoColors.activeGreen,
   //    );
   //  }
   //}

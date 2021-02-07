@@ -5,12 +5,11 @@ import 'ui/first_login.dart';
 import 'langs/language.dart';
 import 'logging.dart';
 import 'subject.dart';
-import 'ui/home_page.dart';
 import 'uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
-Widget _renderPlans(List<Plan> plans) {
+Widget _renderPlans(BuildContext context, List<Plan> plans) {
   ampInfo('DSB', 'Rendering plans: $plans');
   final widgets = <Widget>[];
   for (final plan in plans) {
@@ -51,8 +50,15 @@ Widget _renderPlans(List<Plan> plans) {
               //TODO: better warning tooltip
               ? Language.current.warnWrongDate(plan.date)
               : plan.date.split(' ').first,
-          onPressed: () => scaffoldMessanger?.showSnackBar(ampSnackBar(
-              warn ? Language.current.warnWrongDate(plan.date) : plan.date)),
+          onPressed: () => ampDialog(
+            context,
+            widgetBuilder: ampRow,
+            children: (_, __) => [
+              ampText(
+                  warn ? Language.current.warnWrongDate(plan.date) : plan.date)
+            ],
+            actions: ampButtonOk,
+          ),
           padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
         ),
         IconButton(
@@ -69,8 +75,11 @@ Widget _renderPlans(List<Plan> plans) {
   return ampColumn(widgets);
 }
 
-List<Plan>? plans;
-Widget widget = ampNull;
+List<Plan>? _plans;
+String? _err = 'Uninitialized';
+Widget widget(BuildContext context) => _err != null
+    ? ampList([ampErrorText(_err)])
+    : _renderPlans(context, _plans!);
 
 Future<Null> updateWidget([bool? useJsonCache]) async {
   useJsonCache ??= prefs.forceJsonCache;
@@ -90,11 +99,11 @@ Future<Null> updateWidget([bool? useJsonCache]) async {
     for (final plan in plans) {
       plan.subs.sort();
     }
-    widget = _renderPlans(plans);
-    plans = plans;
+    _plans = plans;
+    _err = null;
   } catch (e) {
     ampErr(['DSB', 'updateWidget'], errorString(e));
-    widget = ampList([ampErrorText(e)]);
+    _err = e.toString();
   }
 }
 

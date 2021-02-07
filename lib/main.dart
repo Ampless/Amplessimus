@@ -28,7 +28,7 @@ class _AppState extends State<_App> {
     return MaterialApp(
       title: appTitle,
       debugShowCheckedModeBanner: false,
-      //theme: prefs.themeData,
+      theme: prefs.themeData,
       home: ScrollConfiguration(
         behavior: _Behavior(),
         child: prefs.firstLogin ? FirstLogin() : AmpHomePage(0),

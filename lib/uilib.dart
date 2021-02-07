@@ -60,8 +60,8 @@ material.DropdownButton<T> ampDropdownButton<T>({
   );
 }
 
-CupertinoSwitch ampSwitch(bool value, Function(bool) onChanged) =>
-    CupertinoSwitch(value: value, onChanged: onChanged);
+material.Switch ampSwitch(bool value, Function(bool) onChanged) =>
+    material.Switch(value: value, onChanged: onChanged);
 
 Widget ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
     ampWidgetWithText(text, ampSwitch(value, onChanged));
@@ -76,6 +76,11 @@ List<Widget> ampButtonsSaveAndCancel(BuildContext context,
     ampButton(Language.current.save, save),
   ];
 }
+
+List<Widget> ampButtonOk(
+  BuildContext context,
+) =>
+    [ampButton('OK', Navigator.of(context).pop)];
 
 Widget ampBigButton(
   String text,
@@ -135,18 +140,6 @@ CupertinoButton ampHidePwdBtn(bool hidden, Function() setHidden) =>
               material.Icons.visibility_off_outlined)
           : ampIcon(
               material.Icons.visibility, material.Icons.visibility_outlined),
-    );
-
-material.SnackBar ampSnackBar(
-  String content, [
-  String? label,
-  Function()? f,
-]) =>
-    material.SnackBar(
-      content: Text(content),
-      action: label != null && f != null
-          ? material.SnackBarAction(label: label, onPressed: f)
-          : null,
     );
 
 CupertinoButton ampFab({

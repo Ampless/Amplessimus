@@ -22,7 +22,6 @@ class AmpHomePage extends StatefulWidget {
   AmpHomePageState createState() => AmpHomePageState();
 }
 
-ScaffoldMessengerState? scaffoldMessanger;
 final refreshKey = GlobalKey<RefreshIndicatorState>();
 
 var checkForUpdates = true;
@@ -98,7 +97,6 @@ class AmpHomePageState extends State<AmpHomePage>
   Widget build(BuildContext context) {
     try {
       ampInfo('AmpHomePageState', 'Building HomePage...');
-      scaffoldMessanger = ScaffoldMessenger.of(context);
       if (_lastUpdate <
           DateTime.now()
               .subtract(Duration(minutes: prefs.timer))
@@ -112,7 +110,7 @@ class AmpHomePageState extends State<AmpHomePage>
           child: ListView(
             children: [
               ampTitle(appTitle),
-              dsb.widget,
+              dsb.widget(context),
               wpemailsave.isNotEmpty ? Divider(height: 20) : ampNull,
               wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
             ],
