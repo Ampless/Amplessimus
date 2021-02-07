@@ -69,18 +69,33 @@ Widget ampSwitchWithText(String text, bool value, Function(bool) onChanged) =>
 Widget ampWidgetWithText(String text, Widget w) =>
     material.ListTile(title: Text(text), trailing: w);
 
+Widget ampDialogAction(String text, Function() f,
+        {bool isDefault = false, bool isDestructive = false}) =>
+    CupertinoDialogAction(
+      child: ampText(text),
+      onPressed: f,
+      isDefaultAction: isDefault,
+      isDestructiveAction: isDestructive,
+    );
+
 List<Widget> ampButtonsSaveAndCancel(BuildContext context,
     {required Function() save}) {
   return [
-    ampButton(Language.current.cancel, Navigator.of(context).pop),
-    ampButton(Language.current.save, save),
+    ampDialogAction(
+      Language.current.cancel,
+      Navigator.of(context).pop,
+      isDestructive: true,
+    ),
+    ampDialogAction(
+      Language.current.save,
+      save,
+      isDefault: true,
+    ),
   ];
 }
 
-List<Widget> ampButtonOk(
-  BuildContext context,
-) =>
-    [ampButton('OK', Navigator.of(context).pop)];
+List<Widget> ampButtonOk(BuildContext context) =>
+    [ampDialogAction('OK', Navigator.of(context).pop)];
 
 Widget ampBigButton(
   String text,
@@ -241,6 +256,9 @@ class AmpFormField {
             autofillHints: autofillHints,
             suffix: suffix,
             placeholder: labelText,
+            style: TextStyle(
+              color: Color(prefs.isDarkMode ? 0xffffffff : 0xff000000),
+            ),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 1,
