@@ -44,21 +44,46 @@ dependency_overrides:
       path: touch_bar_macos
   package_info:
     git:
-      url: https://github.com/bparrishMines/plugins.git
-      ref: package_info_nnbd
+      url: https://github.com/flutter/plugins.git
+      ref: master
       path: packages/package_info
   shared_preferences_platform_interface:
     git:
-      url: https://github.com/bparrishMines/plugins.git
-      ref: shared_preferences_platform_interface_nnbd
+      url: https://github.com/flutter/plugins.git
+      ref: master
       path: packages/shared_preferences/shared_preferences_platform_interface
+  shared_preferences_linux:
+    git:
+      url: https://github.com/flutter/plugins.git
+      ref: master
+      path: packages/shared_preferences/shared_preferences_linux
+  shared_preferences_macos:
+    git:
+      url: https://github.com/flutter/plugins.git
+      ref: master
+      path: packages/shared_preferences/shared_preferences_macos
+  shared_preferences_windows:
+    git:
+      url: https://github.com/flutter/plugins.git
+      ref: master
+      path: packages/shared_preferences/shared_preferences_windows
+  shared_preferences_web:
+    git:
+      url: https://github.com/flutter/plugins.git
+      ref: master
+      path: packages/shared_preferences/shared_preferences_web
+  shared_preferences:
+    git:
+      url: https://github.com/flutter/plugins.git
+      ref: master
+      path: packages/shared_preferences/shared_preferences
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   #flutter_launcher_icons: ^0.8.1
   pedantic: ^1.10.0-nullsafety.3
-  github: ^7.0.3
+  github: ^7.0.4
   path: ^1.8.0-nullsafety.3
 
 flutter_icons:
