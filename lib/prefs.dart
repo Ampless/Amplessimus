@@ -13,8 +13,8 @@ class Prefs {
 
   Prefs(this._prefs);
 
-  T _get<T>(String key, T dflt, T Function(String) f) {
-    return _prefs.containsKey(key) ? f(key) : dflt;
+  T _get<T>(String key, T dflt, T? Function(String) f) {
+    return f(key) ?? dflt;
   }
 
   int _getInt(String k, int d) => _get(k, d, _prefs.getInt);
@@ -45,7 +45,7 @@ class Prefs {
       if (!_prefs.containsKey('CACHE_VAL_$hash')) return null;
       return _prefs.getString('CACHE_VAL_$hash');
     }
-    _prefs.setString('CACHE_VAL_$hash', null);
+    _prefs.remove('CACHE_VAL_$hash');
     ampInfo('prefs', 'HTTP Cache TTL reached: $url');
     return null;
   }
@@ -65,8 +65,8 @@ class Prefs {
     final cachedHashes = _getStringList('CACHE_URLS', []);
     if (cachedHashes.isEmpty) return;
     for (final hash in cachedHashes) {
-      _prefs.setString('CACHE_VAL_$hash', null);
-      _prefs.setInt('CACHE_TTL_$hash', null);
+      _prefs.remove('CACHE_VAL_$hash');
+      _prefs.remove('CACHE_TTL_$hash');
       ampInfo('CACHE', 'Removed $hash');
     }
     _prefs.setStringList('CACHE_URLS', []);
