@@ -100,7 +100,6 @@ you are building". (e.g. 3.3.89) All of the outputs are placed in the
 ./make.dart ios
 ```
 #### Output
-* `$VERSION.deb` a cydia package (probably broken)
 * `$VERSION.ipa` an unsigned app (works)
 
 ### macOS
