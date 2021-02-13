@@ -12,7 +12,7 @@ String get flags => '--release '
     '--no-sound-null-safety '
     '--build-name=$version '
     '--build-number $buildNumber';
-String get binFlags => '$flags --split-debug-info=/tmp --obfuscate';
+String get binFlags => '$flags --obfuscate';
 String get iosFlags => binFlags;
 //--target-platform android-arm,android-arm64,android-x64
 String get apkFlags => '$binFlags --shrink';
