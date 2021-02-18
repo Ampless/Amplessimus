@@ -26,7 +26,7 @@ dependencies:
   update: ^0.1.1-nullsafety.0
   html_search: ^0.1.0-nullsafety.0
   flutter_svg: ^0.20.0-nullsafety.3
-  package_info: '>=0.5.0-nullsafety.0 <2.0.0'
+  package_info: '>=0.5.0-nullsafety <2.0.0'
   touch_bar: ^0.0.1-alpha.4
 
 dependency_overrides:
@@ -42,18 +42,13 @@ dependency_overrides:
     git:
       url: https://github.com/Ampless/touch_bar_flutter_plugin.git
       path: touch_bar_macos
-  package_info:
-    git:
-      url: https://github.com/flutter/plugins.git
-      ref: master
-      path: packages/package_info
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   #flutter_launcher_icons: ^0.8.1
   pedantic: ^1.10.0-nullsafety.3
-  github: ^7.0.4
+  github: ^7.1.0-nullsafe.0
   path: ^1.8.0-nullsafety.3
 
 flutter_icons:
