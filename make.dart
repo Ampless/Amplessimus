@@ -206,7 +206,6 @@ const targets = {
 Future<void> main(List<String> argv) async {
   try {
     await flutter('config --no-analytics');
-    await flutter('channel master');
     await flutter('upgrade');
     await flutter('config --no-analytics');
     await init();
