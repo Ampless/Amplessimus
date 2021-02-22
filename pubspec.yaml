@@ -42,6 +42,8 @@ dependency_overrides:
     git:
       url: https://github.com/Ampless/touch_bar_flutter_plugin.git
       path: touch_bar_macos
+  html: ^0.15.0
+  csslib: ^0.17.0
 
 dev_dependencies:
   flutter_test:
