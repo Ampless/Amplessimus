@@ -67,7 +67,7 @@ class German extends Language {
   String get password => 'Passwort';
 
   @override
-  String get username => 'Benutzername';
+  String get username => 'DSBMobile-ID';
 
   @override
   String get save => 'Speichern';
