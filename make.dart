@@ -9,7 +9,6 @@ late String buildNumber;
 
 String get flags => '--release '
     '--suppress-analytics '
-    '--no-sound-null-safety '
     '--build-name=$version '
     '--build-number $buildNumber';
 String get binFlags => flags;

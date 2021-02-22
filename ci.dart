@@ -1,4 +1,4 @@
-#!/usr/bin/env dart --no-sound-null-safety run
+#!/usr/bin/env dart run
 
 import 'dart:convert';
 import 'dart:io';
