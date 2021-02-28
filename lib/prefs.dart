@@ -146,6 +146,8 @@ class Prefs {
   set dsbUseLanguage(bool b) => _prefs.setBool('usedsblang', b);
   bool get parseSubjects => _getBool('parsesubs', true);
   set parseSubjects(bool b) => _prefs.setBool('parsesubs', b);
+  bool get groupByClass => _getBool('groupbyclass', true);
+  set groupByClass(bool b) => _prefs.setBool('groupbyclass', b);
 
   String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 

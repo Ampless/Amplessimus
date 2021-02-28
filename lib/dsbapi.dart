@@ -10,35 +10,29 @@ import 'uilib.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 
-Widget _renderPlans(List<Plan> plans) {
+Widget _renderPlans(List<Plan> plans, bool oneClassOnly) {
   ampInfo('DSB', 'Rendering plans: $plans');
   final widgets = <Widget>[];
   for (final plan in plans) {
-    final dayWidgets = <Widget>[];
-    if (plan.subs.isEmpty) {
-      dayWidgets.add(ListTile(title: ampText(Language.current.noSubs)));
-    }
-    for (final sub in plan.subs) {
-      final subject = parseSubject(sub.subject);
-      final title = sub.orgTeacher == null || sub.orgTeacher!.isEmpty
-          ? subject
-          : '$subject (${sub.orgTeacher})';
+    final dayWidgets = plan.subs.isEmpty
+        ? [ListTile(title: ampText(Language.current.noSubs))]
+        : plan.subs.map((sub) {
+            final subject = parseSubject(sub.subject);
+            final title = sub.orgTeacher == null || sub.orgTeacher!.isEmpty
+                ? subject
+                : '$subject (${sub.orgTeacher})';
 
-      final trailing = (prefs.classGrade.isEmpty ||
-              prefs.classLetter.isEmpty ||
-              !prefs.oneClassOnly)
-          ? sub.affectedClass
-          : '';
+            final trailing = oneClassOnly ? '' : sub.affectedClass;
 
-      dayWidgets.add(ListTile(
-        //somehow this improved/"fixed" the spacing, idk how
-        horizontalTitleGap: 4,
-        title: ampText(title, size: 18),
-        leading: ampText(sub.lesson, weight: FontWeight.bold, size: 36),
-        subtitle: ampText(Language.current.dsbSubtoSubtitle(sub), size: 16),
-        trailing: ampText(trailing, weight: FontWeight.bold, size: 20),
-      ));
-    }
+            return ListTile(
+              horizontalTitleGap: 4,
+              title: ampText(title, size: 18),
+              leading: ampText(sub.lesson, weight: FontWeight.bold, size: 36),
+              subtitle:
+                  ampText(Language.current.dsbSubtoSubtitle(sub), size: 16),
+              trailing: ampText(trailing, weight: FontWeight.bold, size: 20),
+            );
+          }).toList();
     final warn = outdated(plan.date, DateTime.now());
     widgets.add(ListTile(
       title: ampRow([
@@ -90,7 +84,11 @@ Future<Null> updateWidget([bool? useJsonCache]) async {
     for (final plan in plans) {
       plan.subs.sort();
     }
-    widget = _renderPlans(plans);
+    widget = _renderPlans(
+      plans,
+      prefs.oneClassOnly &&
+          (prefs.classGrade.isNotEmpty || prefs.classLetter.isNotEmpty),
+    );
     plans = plans;
   } catch (e) {
     ampErr(['DSB', 'updateWidget'], errorString(e));

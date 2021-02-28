@@ -199,4 +199,7 @@ class English extends Language {
   @override
   String warnWrongDate(String date) =>
       'It seems that this substitution plan is outdated. (date: "$date")';
+
+  @override
+  String get groupByClass => 'Group by class';
 }

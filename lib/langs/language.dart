@@ -51,6 +51,7 @@ abstract class Language {
   String get update;
   String get wpemailDomain;
   String get openPlanInBrowser;
+  String get groupByClass;
   String plsUpdate(String oldVersion, String newVersion);
   String warnWrongDate(String date);
   String dsbSubtoSubtitle(Substitution sub);
