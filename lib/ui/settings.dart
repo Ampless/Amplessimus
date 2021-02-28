@@ -184,7 +184,8 @@ class _SettingsState extends State<Settings> {
                 () async => showAboutDialog(
                   context: context,
                   applicationName: appTitle,
-                  applicationVersion: await appVersion,
+                  applicationVersion:
+                      await appVersion + ' (' + await buildNumber + ')',
                   applicationIcon:
                       SvgPicture.asset('assets/logo.svg', height: 40),
                   children: [Text(Language.current.appInfo)],
