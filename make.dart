@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-final majorMinorVersion = '3.4';
+final majorMinorVersion = '4.0';
 
 late String version;
 late String buildNumber;
@@ -172,7 +172,7 @@ Future<void> init() async {
     throwOnFail: true,
   );
   final commitNumber = await system(
-    'echo \$(($buildNumber - 1150))',
+    'echo \$(($buildNumber - 1265))',
     printInput: false,
     printOutput: false,
     throwOnFail: true,
