@@ -19,14 +19,14 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.0.1
-  crypto: ^3.0.0-nullsafety.0
-  url_launcher: ^6.0.0-nullsafety.4
-  dsbuntis: ^2.0.0-nullsafety.0
+  crypto: ^3.0.0
+  url_launcher: ^6.0.1
+  dsbuntis: ^2.0.1
   schttp: ^1.0.0-nullsafety.0
   update: ^0.1.1-nullsafety.0
-  html_search: ^0.1.0-nullsafety.0
-  flutter_svg: ^0.20.0-nullsafety.3
-  package_info: '>=0.5.0-nullsafety <2.0.0'
+  html_search: ^0.1.1
+  flutter_svg: ^0.21.0-nullsafety.0
+  package_info: ^2.0.0
   touch_bar: ^0.0.1-alpha.4
 
 dependency_overrides:
@@ -42,8 +42,8 @@ dependency_overrides:
     git:
       url: https://github.com/Ampless/touch_bar_flutter_plugin.git
       path: touch_bar_macos
-  html: ^0.15.0
-  csslib: ^0.17.0
+  #html: ^0.15.0
+  #csslib: ^0.17.0
 
 dev_dependencies:
   flutter_test:
