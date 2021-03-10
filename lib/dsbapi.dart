@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:url_launcher/link.dart';
+
 import 'main.dart';
 import 'ui/first_login.dart';
 import 'langs/language.dart';
@@ -49,11 +51,14 @@ Widget _renderPlans(List<Plan> plans, bool oneClassOnly) {
               warn ? Language.current.warnWrongDate(plan.date) : plan.date)),
           padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
         ),
-        IconButton(
-          icon: ampIcon(Icons.open_in_new, Icons.open_in_new_outlined),
-          tooltip: Language.current.openPlanInBrowser,
-          onPressed: () => ampOpenUrl(plan.url),
-          padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
+        Link(
+          uri: Uri.parse(plan.url),
+          builder: (BuildContext context, FollowLink? followLink) => IconButton(
+            icon: ampIcon(Icons.open_in_new, Icons.open_in_new_outlined),
+            tooltip: Language.current.openPlanInBrowser,
+            onPressed: followLink,
+            padding: EdgeInsets.fromLTRB(4, 4, 2, 4),
+          ),
         ),
       ]),
     ));
