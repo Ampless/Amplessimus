@@ -18,9 +18,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.1
+  shared_preferences: ^2.0.3
   crypto: ^3.0.0
-  url_launcher: ^6.0.1
+  url_launcher: ^6.0.2
   dsbuntis: ^2.0.1
   schttp: ^1.0.0-nullsafety.0
   update: ^0.1.1-nullsafety.0
@@ -47,8 +47,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   #flutter_launcher_icons: ^0.8.1
-  pedantic: ^1.10.0-nullsafety.3
-  github: ^7.1.0-nullsafe.0
+  pedantic: ^1.11.0
+  github: ^8.0.1
   path: ^1.8.0-nullsafety.3
 
 flutter_icons:
