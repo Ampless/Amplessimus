@@ -84,6 +84,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
+        scrollDirection: Axis.vertical,
         children: [
           ampTitle(Language.current.settings),
           ampSwitchWithText(
@@ -176,6 +177,7 @@ class _SettingsState extends State<Settings> {
           _wpeFormField.flutter(),
           Divider(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ampBigButton(
                 Language.current.settingsAppInfo,
@@ -192,11 +194,9 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
             ],
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
           ),
           DevOptions(),
         ],
-        scrollDirection: Axis.vertical,
       ),
     );
   }

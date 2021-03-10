@@ -52,7 +52,7 @@ DropdownButton<T> ampDropdownButton<T>({
   return DropdownButton<T>(
     value: value,
     items: items
-        .map((e) => DropdownMenuItem(child: itemToDropdownChild!(e), value: e))
+        .map((e) => DropdownMenuItem(value: e, child: itemToDropdownChild!(e)))
         .toList(),
     onChanged: onChanged,
   );
@@ -96,7 +96,7 @@ Widget ampBigButton(
     );
 
 ElevatedButton ampRaisedButton(String text, void Function() onPressed) =>
-    ElevatedButton(child: Text(text), onPressed: onPressed);
+    ElevatedButton(onPressed: onPressed, child: Text(text));
 
 Padding ampPadding(double value, [Widget? child]) =>
     Padding(padding: EdgeInsets.all(value), child: child);
@@ -173,23 +173,23 @@ Widget ampList(List<Widget> children) {
   if (!prefs.highContrast) {
     return Card(
       margin: EdgeInsets.all(4),
-      child: ampColumn(children),
       elevation: 0,
       color: Color(prefs.isDarkMode ? 0xff101010 : 0xffefefef),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+      child: ampColumn(children),
     );
   } else {
     return Container(
       margin: EdgeInsets.all(4),
-      child: ampColumn(children),
       decoration: BoxDecoration(
         border: Border.all(
           color: prefs.isDarkMode ? Colors.white : Colors.black,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
+      child: ampColumn(children),
     );
   }
 }

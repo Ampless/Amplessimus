@@ -109,6 +109,7 @@ class AmpHomePageState extends State<AmpHomePage>
       final tabs = [
         RefreshIndicator(
           key: refreshKey,
+          onRefresh: rebuildDragDown,
           child: ListView(
             children: [
               ampTitle(appTitle),
@@ -117,7 +118,6 @@ class AmpHomePageState extends State<AmpHomePage>
               wpemailsave.isNotEmpty ? wpemailWidget() : ampNull,
             ],
           ),
-          onRefresh: rebuildDragDown,
         ),
         Settings(this),
       ];
