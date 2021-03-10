@@ -45,8 +45,8 @@ class English extends Language {
   }
 
   @override
-  String dsbError(String e) =>
-      'Please check your internet connection. (Error: $e)';
+  String get dsbError =>
+      'Please check your internet connection and make sure that your credentials are correct.';
 
   @override
   String get noLogin => 'No login data entered.';

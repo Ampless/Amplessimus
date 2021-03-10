@@ -96,12 +96,12 @@ class _FirstLoginState extends State<FirstLogin> {
           onPressed: () async {
             setState(() => _loading = true);
             try {
-              final error = await checkCredentials(
+              final token = await getAuthToken(
                 prefs.username,
                 prefs.password,
                 http,
               );
-              if (error != null) throw Language.current.dsbError(error);
+              if (token == null) throw Language.current.dsbError;
 
               await dsb.updateWidget();
 
@@ -128,5 +128,7 @@ class _FirstLoginState extends State<FirstLogin> {
   }
 }
 
-final cachedHttp = ScHttpClient(prefs.getCache, prefs.setCache);
+//TODO: move these somewhere else
+//TODO: get caching back
+final cachedHttp = ScHttpClient();
 final http = ScHttpClient();

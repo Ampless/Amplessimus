@@ -142,14 +142,10 @@ class Prefs {
   set savedLangCode(String s) => _prefs.setString('lang', s);
   bool get updatePopup => _getBool('update', true);
   set updatePopup(bool b) => _prefs.setBool('update', b);
-  bool get dsbUseLanguage => _getBool('usedsblang', false);
-  set dsbUseLanguage(bool b) => _prefs.setBool('usedsblang', b);
   bool get parseSubjects => _getBool('parsesubs', true);
   set parseSubjects(bool b) => _prefs.setBool('parsesubs', b);
   bool get groupByClass => _getBool('groupbyclass', true);
   set groupByClass(bool b) => _prefs.setBool('groupbyclass', b);
-
-  String get dsbLanguage => dsbUseLanguage ? savedLangCode : 'de';
 
   Timer? _updateTimer;
   Function()? _timerFunction;

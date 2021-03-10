@@ -136,14 +136,6 @@ class _SettingsState extends State<Settings> {
               },
             ),
           ),
-          ampSwitchWithText(
-            Language.current.useForDsb,
-            prefs.dsbUseLanguage,
-            (v) {
-              setState(() => prefs.dsbUseLanguage = v);
-              widget.parent.rebuildDragDown();
-            },
-          ),
           Divider(),
           changeSubVisibilityWidget,
           ampSwitchWithText(

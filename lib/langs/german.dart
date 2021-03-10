@@ -54,8 +54,8 @@ class German extends Language {
   }
 
   @override
-  String dsbError(String e) =>
-      'Bitte überprüfen Sie Ihre Internetverbindung. (Fehler: $e)';
+  String get dsbError =>
+      'Bitte überprüfen Sie Ihre Internetverbindung und stellen Sie sicher, dass die Logindaten richtig sind.';
 
   @override
   String get noLogin => 'Keine Login-Daten eingetragen.';

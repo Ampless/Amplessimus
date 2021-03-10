@@ -76,8 +76,7 @@ Future<Null> updateWidget([bool? useJsonCache]) async {
   try {
     var plans = useJsonCache && prefs.dsbJsonCache != ''
         ? Plan.plansFromJson(prefs.dsbJsonCache)
-        : await getAllSubs(prefs.username, prefs.password, cachedHttp,
-            language: prefs.dsbLanguage);
+        : await getAllSubs(prefs.username, prefs.password, cachedHttp);
     prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (prefs.oneClassOnly) {
       plans = Plan.searchInPlans(

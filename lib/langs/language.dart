@@ -56,7 +56,7 @@ abstract class Language {
   String warnWrongDate(String date);
   String dsbSubtoSubtitle(Substitution sub);
   String dayToString(Day day);
-  String dsbError(String e);
+  String get dsbError;
   LinkedHashMap<String, String> get subjectLut;
 
   //why tf doesnt this break?!
