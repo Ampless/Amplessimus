@@ -154,14 +154,6 @@ class _SettingsState extends State<Settings> {
               widget.parent.rebuildDragDown();
             },
           ),
-          ampSwitchWithText(
-            Language.current.groupByClass,
-            prefs.groupByClass,
-            (v) {
-              setState(() => prefs.groupByClass = v);
-              widget.parent.rebuildDragDown();
-            },
-          ),
           Divider(),
           AutofillGroup(
             child: ampColumn([

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../langs/language.dart';
+
 import '../main.dart';
 import 'first_login.dart';
 import '../logging.dart';
@@ -33,6 +35,14 @@ class _DevOptionsState extends State<DevOptions> {
           'Update Notifier',
           prefs.updatePopup,
           (v) => setState(() => prefs.updatePopup = v),
+        ),
+        ampSwitchWithText(
+          Language.current.groupByClass,
+          prefs.groupByClass,
+          (v) {
+            setState(() => prefs.groupByClass = v);
+            //widget.parent.rebuildDragDown();
+          },
         ),
         Divider(),
         ListTile(
