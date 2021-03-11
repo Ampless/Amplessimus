@@ -42,14 +42,18 @@ Prefs? _prefs;
 Prefs get prefs => _prefs!;
 
 Future<void> loadPrefs() async {
+  ampInfo('prefs', 'Loading SharedPreferences...');
   _prefs = Prefs(await SharedPreferences.getInstance());
+  ampInfo('prefs', 'SharedPreferences (hopefully successfully) loaded.');
+}
+
+Future<void> mockPrefs() async {
+  _prefs = Prefs(null);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ampInfo('prefs', 'Loading SharedPreferences...');
   await loadPrefs();
-  ampInfo('prefs', 'SharedPreferences (hopefully successfully) loaded.');
   try {
     if (!prefs.firstLogin) {
       final d = dsb.updateWidget(true);

@@ -9,19 +9,27 @@ import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
-  final SharedPreferences _prefs;
+  final SharedPreferences? _prefs;
 
   Prefs(this._prefs);
 
-  T _get<T>(String key, T dflt, T? Function(String) f) {
-    return f(key) ?? dflt;
+  T _get<T>(String key, T dflt, T? Function(String)? f) {
+    return (_prefs != null) ? (f!(key) ?? dflt) : dflt;
   }
 
-  int _getInt(String k, int d) => _get(k, d, _prefs.getInt);
-  String _getString(String k, String d) => _get(k, d, _prefs.getString);
-  bool _getBool(String k, bool d) => _get(k, d, _prefs.getBool);
+  int _getInt(String k, int d) => _get(k, d, _prefs?.getInt);
+  String _getString(String k, String d) => _get(k, d, _prefs?.getString);
+  bool _getBool(String k, bool d) => _get(k, d, _prefs?.getBool);
   List<String> _getStringList(String k, List<String> d) =>
-      _get(k, d, _prefs.getStringList);
+      _get(k, d, _prefs?.getStringList);
+
+  void _set<T>(String key, T value, Function(String, T)? f) {
+    if (_prefs != null) f!(key, value);
+  }
+
+  void _setInt(String k, int v) => _set(k, v, _prefs?.setInt);
+  void _setString(String k, String v) => _set(k, v, _prefs?.setString);
+  void _setBool(String k, bool v) => _set(k, v, _prefs?.setBool);
 
   //this is just a checksum basically so sha1 is fine (collisions are next to impossible)
   //but because it is only 160 bits, it saves 96 bits compared to sha256,
@@ -34,6 +42,7 @@ class Prefs {
   String _hashCache(String s) => sha1.convert(utf8.encode(s)).toString();
 
   String? getCache(String url) {
+    if (_prefs == null) return null;
     final hash = _hashCache(url);
     final cachedHashes = _getStringList('CACHE_URLS', []);
     if (!cachedHashes.contains(hash)) {
@@ -42,34 +51,36 @@ class Prefs {
     }
     final ttl = _getInt('CACHE_TTL_$hash', 0);
     if (ttl == 0 || ttl > DateTime.now().millisecondsSinceEpoch) {
-      if (!_prefs.containsKey('CACHE_VAL_$hash')) return null;
-      return _prefs.getString('CACHE_VAL_$hash');
+      if (!_prefs!.containsKey('CACHE_VAL_$hash')) return null;
+      return _prefs!.getString('CACHE_VAL_$hash');
     }
-    _prefs.remove('CACHE_VAL_$hash');
+    _prefs!.remove('CACHE_VAL_$hash');
     ampInfo('prefs', 'HTTP Cache TTL reached: $url');
     return null;
   }
 
   void setCache(String url, String html, Duration ttl) {
+    if (_prefs == null) return;
     final hash = _hashCache(url);
     final cachedHashes = _getStringList('CACHE_URLS', []);
     if (!cachedHashes.contains(hash)) cachedHashes.add(hash);
-    _prefs.setStringList('CACHE_URLS', cachedHashes);
-    _prefs.setString('CACHE_VAL_$hash', html);
-    _prefs.setInt(
+    _prefs!.setStringList('CACHE_URLS', cachedHashes);
+    _prefs!.setString('CACHE_VAL_$hash', html);
+    _prefs!.setInt(
         'CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
   }
 
   //TODO: garbage collect regularly
   void clearCache() {
+    if (_prefs == null) return;
     final cachedHashes = _getStringList('CACHE_URLS', []);
     if (cachedHashes.isEmpty) return;
     for (final hash in cachedHashes) {
-      _prefs.remove('CACHE_VAL_$hash');
-      _prefs.remove('CACHE_TTL_$hash');
+      _prefs!.remove('CACHE_VAL_$hash');
+      _prefs!.remove('CACHE_TTL_$hash');
       ampInfo('CACHE', 'Removed $hash');
     }
-    _prefs.setStringList('CACHE_URLS', []);
+    _prefs!.setStringList('CACHE_URLS', []);
   }
 
   void listCache() {
@@ -103,14 +114,14 @@ class Prefs {
   }
 
   bool get highContrast => _getBool('alttheme', false);
-  set highContrast(bool i) => _prefs.setBool('alttheme', i);
+  set highContrast(bool i) => _setBool('alttheme', i);
   String get username => _getString('dsbuser', '');
-  set username(String s) => _prefs.setString('dsbuser', s);
+  set username(String s) => _setString('dsbuser', s);
   String get password => _getString('dsbpass', '');
-  set password(String s) => _prefs.setString('dsbpass', s);
+  set password(String s) => _setString('dsbpass', s);
 
   String get classGrade => _getString('grade', '5').trim().toLowerCase();
-  set classGrade(String s) => _prefs.setString('grade', s.trim().toLowerCase());
+  set classGrade(String s) => _setString('grade', s.trim().toLowerCase());
   void Function() setClassGrade(String? v) => () {
         if (v == null) return;
         classGrade = v;
@@ -122,30 +133,30 @@ class Prefs {
         } catch (e) {}
       };
   String get classLetter => _getString('char', 'a').trim().toLowerCase();
-  set classLetter(String s) => _prefs.setString('char', s.trim().toLowerCase());
+  set classLetter(String s) => _setString('char', s.trim().toLowerCase());
 
   bool get oneClassOnly => _getBool('oneclass', false);
-  set oneClassOnly(bool b) => _prefs.setBool('oneclass', b);
+  set oneClassOnly(bool b) => _setBool('oneclass', b);
   bool get devOptionsEnabled => _getBool('devoptions', false);
-  set devOptionsEnabled(bool b) => _prefs.setBool('devoptions', b);
+  set devOptionsEnabled(bool b) => _setBool('devoptions', b);
   bool get firstLogin => _getBool('firstlogin', true);
-  set firstLogin(bool b) => _prefs.setBool('firstlogin', b);
+  set firstLogin(bool b) => _setBool('firstlogin', b);
   bool get forceJsonCache => _getBool('alwaysjsoncache', false);
-  set forceJsonCache(bool b) => _prefs.setBool('alwaysjsoncache', b);
+  set forceJsonCache(bool b) => _setBool('alwaysjsoncache', b);
   bool get useSystemTheme => _getBool('systheme', false);
-  set useSystemTheme(bool b) => _prefs.setBool('systheme', b);
+  set useSystemTheme(bool b) => _setBool('systheme', b);
   String get dsbJsonCache => _getString('jsoncache', '');
-  set dsbJsonCache(String s) => _prefs.setString('jsoncache', s);
+  set dsbJsonCache(String s) => _setString('jsoncache', s);
   String get wpeDomain => _getString('wpedomain', '');
-  set wpeDomain(String s) => _prefs.setString('wpedomain', s);
+  set wpeDomain(String s) => _setString('wpedomain', s);
   String get savedLangCode => _getString('lang', Platform.localeName);
-  set savedLangCode(String s) => _prefs.setString('lang', s);
+  set savedLangCode(String s) => _setString('lang', s);
   bool get updatePopup => _getBool('update', true);
-  set updatePopup(bool b) => _prefs.setBool('update', b);
+  set updatePopup(bool b) => _setBool('update', b);
   bool get parseSubjects => _getBool('parsesubs', true);
-  set parseSubjects(bool b) => _prefs.setBool('parsesubs', b);
+  set parseSubjects(bool b) => _setBool('parsesubs', b);
   bool get groupByClass => _getBool('groupbyclass', true);
-  set groupByClass(bool b) => _prefs.setBool('groupbyclass', b);
+  set groupByClass(bool b) => _setBool('groupbyclass', b);
 
   Timer? _updateTimer;
   Function()? _timerFunction;
@@ -156,7 +167,7 @@ class Prefs {
 
   int get timer => _getInt('timer', 15);
   set timer(int i) {
-    _prefs.setInt('timer', i);
+    _setInt('timer', i);
     _updateUpdateTimer(i);
   }
 
@@ -167,7 +178,8 @@ class Prefs {
   }
 
   Future<bool> clear() async {
-    final success = await _prefs.clear();
+    if (_prefs == null) return false;
+    final success = await _prefs!.clear();
     if (success) ampInfo('prefs', 'Cleared SharedPreferences.');
     return success;
   }
@@ -184,7 +196,7 @@ class Prefs {
 
   bool get isDarkMode => _getBool('darkmode', true);
   set isDarkMode(bool b) {
-    _prefs.setBool('darkmode', b);
+    _setBool('darkmode', b);
     ampInfo('AmpColors', 'set isDarkMode = $isDarkMode');
   }
 

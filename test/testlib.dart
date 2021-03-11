@@ -26,7 +26,7 @@ testCase expectTestCase<T>(
 
 Future<Null> testInit() async {
   ampDisableLogging();
-  await loadPrefs();
+  await mockPrefs();
 }
 
 void tests(List<testCase> testCases, String groupName) {
