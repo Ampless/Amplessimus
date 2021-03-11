@@ -37,18 +37,7 @@ bool abbreviationValid(String abbr, String sub) {
   return fa.length >= sub.length && fa.startsWith(sub);
 }
 
-String parseSubject(String subject) {
-  if (!prefs.parseSubjects) return subject;
-
-  if (RegExp('[a-zA-Z]').allMatches(subject).length < subject.length) {
-    final letters = RegExp('[a-zA-Z]+').allMatches(subject);
-    final start = letters.first.start;
-    final end = letters.last.end;
-    return subject.substring(0, start) +
-        parseSubject(subject.substring(start, end)) +
-        subject.substring(end);
-  }
-
+String lookupSubject(String subject) {
   final sub = subject.toLowerCase();
   var s = subject;
   final lut = Language.current.subjectLut;
@@ -59,4 +48,20 @@ String parseSubject(String subject) {
   }
 
   return s;
+}
+
+String parseSubject(String subject) {
+  if (!prefs.parseSubjects) return subject;
+
+  var offset = 0;
+  for (final match in RegExp('[a-zA-Z]+').allMatches(subject)) {
+    final start = match.start + offset;
+    final end = match.end + offset;
+    final res = lookupSubject(subject.substring(start, end));
+    subject = subject.substring(0, start) + res + subject.substring(end);
+    offset -= end - start;
+    offset += res.length;
+  }
+
+  return subject;
 }
