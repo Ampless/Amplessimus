@@ -130,5 +130,6 @@ class _FirstLoginState extends State<FirstLogin> {
 
 //TODO: move these somewhere else
 //TODO: get caching back
+//TODO: remove one
 final cachedHttp = ScHttpClient();
 final http = ScHttpClient();

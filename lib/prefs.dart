@@ -31,14 +31,10 @@ class Prefs {
   void _setString(String k, String v) => _set(k, v, _prefs?.setString);
   void _setBool(String k, bool v) => _set(k, v, _prefs?.setBool);
 
-  //this is just a checksum basically so sha1 is fine (collisions are next to impossible)
-  //but because it is only 160 bits, it saves 96 bits compared to sha256,
-  //which translates to 288 bits / 36 bytes saved per cached url
-  //(and also it saves quite a bit of cpu)
-  //still there is one consideration: if a school wanted to break this app, they
-  //would just have to create collisions. (sha1 makes this a bit harder than md5
-  //does) we will switch to something better, once we notice something like that
-  //happening.
+  //if a school wanted to break this app,
+  //they would just have to create collisions.
+  //TODO: evaluate better hashing algorithms
+  //      (xxh3 sounds interesting but is too weak)
   String _hashCache(String s) => sha1.convert(utf8.encode(s)).toString();
 
   String? getCache(String url) {
