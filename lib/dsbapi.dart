@@ -68,15 +68,23 @@ Widget _renderPlans(List<Plan> plans, bool oneClassOnly) {
   return ampColumn(widgets);
 }
 
-List<Plan>? plans;
 Widget widget = ampNull;
 
-Future<Null> updateWidget([bool? useJsonCache]) async {
-  useJsonCache ??= prefs.forceJsonCache;
+Future<Null> updateWidget([bool useJsonCache = false]) async {
   try {
-    var plans = useJsonCache && prefs.dsbJsonCache != ''
-        ? Plan.plansFromJson(prefs.dsbJsonCache)
-        : await getAllSubs(prefs.username, prefs.password, cachedHttp);
+    List<Plan> plans;
+    if (prefs.forceJsonCache) {
+      plans = Plan.plansFromJson(prefs.dsbJsonCache);
+    } else if (useJsonCache && prefs.dsbJsonCache != '') {
+      try {
+        plans = Plan.plansFromJson(prefs.dsbJsonCache);
+      } catch (e) {
+        plans = await getAllSubs(prefs.username, prefs.password, cachedHttp);
+      }
+    } else {
+      plans = await getAllSubs(prefs.username, prefs.password, cachedHttp);
+    }
+
     prefs.dsbJsonCache = Plan.plansToJson(plans);
     if (prefs.oneClassOnly) {
       plans = Plan.searchInPlans(
@@ -93,7 +101,6 @@ Future<Null> updateWidget([bool? useJsonCache]) async {
       prefs.oneClassOnly &&
           (prefs.classGrade.isNotEmpty || prefs.classLetter.isNotEmpty),
     );
-    plans = plans;
   } catch (e) {
     ampErr(['DSB', 'updateWidget'], errorString(e));
     widget = ampList([ampErrorText(e)]);
