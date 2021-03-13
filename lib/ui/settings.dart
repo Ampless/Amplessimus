@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
         AmpFormField.password(() => widget.parent.rebuildDragDown());
     _wpeFormField = AmpFormField(
       prefs.wpeDomain,
-      labelText: Language.current.wpemailDomain,
+      label: () => Language.current.wpemailDomain,
       keyboardType: TextInputType.url,
       onChanged: (field) {
         prefs.wpeDomain = field.text.trim();
@@ -266,7 +266,7 @@ class _SettingsState extends State<Settings> {
   }
 
   void _cacheDialog(BuildContext context) {
-    final cacheFormField = AmpFormField(prefs.dsbJsonCache, labelText: 'Cache');
+    final cacheFormField = AmpFormField(prefs.dsbJsonCache, label: ()=>'Cache');
     ampDialog(
       context,
       children: (_, __) => [cacheFormField.flutter()],
@@ -285,7 +285,7 @@ class _SettingsState extends State<Settings> {
     final timerFormField = AmpFormField(
       prefs.timer,
       keyboardType: TextInputType.number,
-      labelText: 'Timer (Minuten)',
+      label: () => 'Timer (Minuten)',
     );
     ampDialog(
       context,

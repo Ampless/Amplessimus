@@ -220,14 +220,16 @@ class AmpFormField {
   final TextEditingController controller;
   final List<String> autofillHints;
   final TextInputType keyboardType;
-  final String labelText;
+  final String Function() label;
   final void Function(AmpFormField)? onChanged;
+
+  static String _noLabel() => '';
 
   AmpFormField(
     Object initialValue, {
     this.autofillHints = const [],
     this.keyboardType = TextInputType.text,
-    this.labelText = '',
+    this.label = _noLabel,
     this.onChanged,
   }) : controller = TextEditingController(text: initialValue.toString());
 
@@ -264,7 +266,7 @@ class AmpFormField {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              labelText: labelText,
+              labelText: label(),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
@@ -282,7 +284,7 @@ class AmpFormField {
 
   static AmpFormField username([Function()? rebuild]) => AmpFormField(
         prefs.username,
-        labelText: Language.current.username,
+        label: () => Language.current.username,
         keyboardType: TextInputType.number,
         autofillHints: [AutofillHints.username],
         onChanged: (field) {
@@ -293,7 +295,7 @@ class AmpFormField {
 
   static AmpFormField password([Function()? rebuild]) => AmpFormField(
         prefs.password,
-        labelText: Language.current.password,
+        label: () => Language.current.password,
         keyboardType: TextInputType.visiblePassword,
         autofillHints: [AutofillHints.password],
         onChanged: (field) {
