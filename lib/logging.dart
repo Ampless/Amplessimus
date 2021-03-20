@@ -36,6 +36,11 @@ void ampRawLog(Object msg) {
   print(msg);
 }
 
-void ampErr(Object ctx, Object msg) => ampLog('Error', ctx, msg);
+String errorString(dynamic e) {
+  if (e is Error) return '$e\n${e.stackTrace}';
+  return e.toString();
+}
+
+void ampErr(Object ctx, Object msg) => ampLog('Error', ctx, errorString(msg));
 void ampWarn(Object ctx, Object msg) => ampLog('Warning', ctx, msg);
 void ampInfo(Object ctx, Object msg) => ampLog('Info', ctx, msg);

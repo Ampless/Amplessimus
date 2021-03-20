@@ -1,9 +1,9 @@
 import 'langs/language.dart';
-import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import 'main.dart';
+import 'logging.dart';
 
 Future<Null> ampDialog(
   BuildContext context, {

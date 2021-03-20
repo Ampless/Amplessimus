@@ -79,10 +79,10 @@ Future<Null> updateWidget([bool useJsonCache = false]) async {
       try {
         plans = Plan.plansFromJson(prefs.dsbJsonCache);
       } catch (e) {
-        plans = await getAllSubs(prefs.username, prefs.password, cachedHttp);
+        plans = await getAllSubs(prefs.username, prefs.password, http);
       }
     } else {
-      plans = await getAllSubs(prefs.username, prefs.password, cachedHttp);
+      plans = await getAllSubs(prefs.username, prefs.password, http);
     }
 
     prefs.dsbJsonCache = Plan.plansToJson(plans);
@@ -102,7 +102,7 @@ Future<Null> updateWidget([bool useJsonCache = false]) async {
           (prefs.classGrade.isNotEmpty || prefs.classLetter.isNotEmpty),
     );
   } catch (e) {
-    ampErr(['DSB', 'updateWidget'], errorString(e));
+    ampErr(['DSB', 'updateWidget'], e);
     widget = ampList([ampErrorText(e)]);
   }
 }

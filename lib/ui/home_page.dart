@@ -1,4 +1,3 @@
-import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pedantic/pedantic.dart';
@@ -140,7 +139,7 @@ class AmpHomePageState extends State<AmpHomePage>
         ]),
       ));
     } catch (e) {
-      ampErr('AmpHomePageState', errorString(e));
+      ampErr('AmpHomePageState', e);
       return ampText(errorString(e));
     }
   }

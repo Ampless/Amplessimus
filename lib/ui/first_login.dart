@@ -128,8 +128,5 @@ class _FirstLoginState extends State<FirstLogin> {
   }
 }
 
-//TODO: move these somewhere else
-//TODO: get caching back
-//TODO: remove one
-final cachedHttp = ScHttpClient();
-final http = ScHttpClient();
+//TODO: move this somewhere else
+final http = ScHttpClient(prefs.getCache, prefs.setCache);

@@ -1,4 +1,3 @@
-import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,7 +61,7 @@ void main() async {
     }
     runApp(_App());
   } catch (e) {
-    ampErr('Splash.initState', errorString(e));
+    ampErr('Splash.initState', e);
     runApp(ErrorScreen());
   }
 }
