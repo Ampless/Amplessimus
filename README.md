@@ -21,19 +21,19 @@ Download the APK and click `Install`.
 ### Linux, Windows
 Flutter doesn't cross-compile at the moment. Goto [`Building`](#build).
 ### macOS
-We try to build for it, but there are weird problems. Goto [`Building`](#build).
+Download and mount the DMG and drag-and-drop Amplessimus into the Applications.
 ### iOS
 iOS installation is interesting, because, to run on iOS "officially",
 we would have to pay Apple $99/year.
 #### Filza (jailbroken)
 The easiest way to install any IPA is to just open Filza, go to the
 Downloads folder, click the file and then on `Install`.
-#### AltStore 1.4+
+#### Current AltStore Beta
 In Beta 5 of AltStore 1.4 a new feature was added: You can add the Amplessimus
 source by clicking
 [this link](altstore://source?url=https://ampless.chrissx.de/altstore/stable.json).
-#### AltStore 1.4 beta 1-4
-AltStore 1.4 (currently in beta) allows you to add custom software
+#### AltStore 1.4 Beta 1-4
+Some AltStore Betas allowed you to add custom software
 repositories. Go to `Browse` → `Sources` → `+` and enter:
 ```
 https://ampless.chrissx.de/altstore/stable.json
@@ -42,16 +42,6 @@ and you can install Amplessimus like you would install Riley's apps.
 #### AltStore 1.3 and older
 AltStore allows you to install IPAs. Download the IPA and install it,
 either with the `+` button in AltStore or by using `open in` AltStore.
-#### Cydia (broken, help needed)
-There is an apt repo at
-```
-https://apt.chrissx.de/cydia
-```
-containing a build that is broken and outdated. Making
-Cydia-compatible builds is hard. Many older Cydia apps are broken in
-similar ways and since there is not a lot of documentation it is
-really hard to learn it. If you know, how to build Flutter apps for
-Cydia, please contact us at `ampless@chrissx.de`.
 
 ## <a name="build"></a> Building
 Compiling for everything except Windows will assume you are running
@@ -59,19 +49,19 @@ macOS or Linux, but nowadays Windows should work, too. However, for
 all build targets a recent version of
 [Flutter](https://flutter.dev/docs/get-started/install) is required.
 In the Output sections `$VERSION` means "the full name of the version
-you are building". (e.g. 3.3.89) All of the outputs are placed in the
+you are building". (e.g. 3.6.22) All of the outputs are placed in the
 `bin/` folder, which is created automatically.
 
 ### Android
 #### Prepare
-* The [Android SDK](https://developer.android.com/studio)
+* [Android SDK](https://developer.android.com/studio)
 #### Compile
 ```
 ./make.dart android
 ```
 #### Output
 * `$VERSION.aab` an application bundle
-* `$VERSION.apk` an application bundle
+* `$VERSION.apk` an application package
 
 ### Linux
 #### Prepare
@@ -81,8 +71,9 @@ you are building". (e.g. 3.3.89) All of the outputs are placed in the
 * GTK3 headers
 * Ninja
 * pkg-config
+
 (pre-installed if you installed Flutter through snap)
-(if you use Debian/Ubuntu/PopOS/…, you can apt install:
+(if you use Debian\*, you can apt install:
 `clang cmake libgtk-3-dev ninja-build pkg-config`)
 #### Compile
 ```
@@ -100,18 +91,13 @@ you are building". (e.g. 3.3.89) All of the outputs are placed in the
 ./make.dart ios
 ```
 #### Output
-* `$VERSION.ipa` an unsigned app (works)
+* `$VERSION.ipa` an unsigned iOS 12.2+ app
 
 ### macOS
-#### Notes
-Due to weird problems you might want to run these commands first:
-```
-rm -rf macos
-flutter create .
-```
 #### Prepare
 * macOS
 * Xcode
+#### Compile
 ```
 ./make.dart mac
 ```
@@ -128,14 +114,3 @@ dart run make.dart win
 ```
 #### Output
 * `$VERSION.win/`
-
-### Web
-#### Compile
-```
-./make.dart web
-```
-#### Output
-* `$VERSION.web/` a folder containing your `/var/www/html/*` basically
-#### Notes
-It won't work, because browsers like "security". (CSRF is a serious security
-problem, but it also makes web Amplessimus impossible right now)
