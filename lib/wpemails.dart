@@ -34,7 +34,7 @@ Future<Map<String, String>> wpemails(String domain) async {
           .replaceAll(RegExp('&.+?;'), '')
           .split(',');
       final fn = raw[1].split('.').first, ln = raw[0].split('.').last;
-      result['$ln $fn.'] = '$fn.$ln@gympeg.de'.toLowerCase();
+      result['$ln $fn.'] = '$fn.$ln@$domain'.toLowerCase();
     }
 
     return result;
