@@ -80,7 +80,8 @@ you are building". (e.g. 3.6.22) All of the outputs are placed in the
 ./make.dart linux
 ```
 #### Output
-* `$VERSION.linux/` a folder containing the Amplessimus binary and all deps
+* `$VERSION-linux-x86_64/` a folder containing Amplessimus and all deps for x86
+* `$VERSION-linux-arm64/` a folder containing Amplessimus and all deps for ARM
 
 ### iOS
 #### Prepare
