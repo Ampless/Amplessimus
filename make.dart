@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-final majorMinorVersion = '3.6';
+final shortVersion = '3.7';
 
 late String version;
 late String buildNumber;
@@ -64,7 +64,8 @@ Future mkdirs(d) => Directory(d).create(recursive: true);
 Future<String> md5(String path) =>
     system("md5sum '$path' | cut -d' ' -f1", printOutput: false);
 
-Future<void> flutter(String cmd) => system('flutter $cmd', throwOnFail: true);
+Future<void> flutter(String cmd, {bool throwOnFail = true}) =>
+    system('flutter $cmd', throwOnFail: throwOnFail);
 Future build(String cmd, String flags) => flutter('build $cmd $flags');
 
 Future<void> strip(String files) => system(
@@ -112,18 +113,11 @@ Future<void> test() async {
 Future<void> ios() async {
   await iosapp();
   await ipa();
-  //TODO: deb
 }
 
 Future<void> android() async {
   await apk();
   await aab();
-}
-
-Future<void> web() async {
-  await flutter('config --enable-web');
-  await build('web', webFlags);
-  await mvd('build/web', 'bin/$version.web');
 }
 
 Future<void> win() async {
@@ -142,9 +136,17 @@ Future<void> mac() async {
   await system('rm -f $frameworks/libswift*');
 
   await system('cp -rf $bld tmp/dmg');
-  await system('ln -s /Applications tmp/dmg/Applications');
+  await system('ln -s /Applications "tmp/dmg/drop here (Applications)"');
   await system('hdiutil create bin/$version.dmg -ov '
-      '-srcfolder tmp/dmg -volname "Amplessimus" '
+      '-srcfolder tmp/dmg -volname "Amplessimus $shortVersion" '
+      // 106M UDRW
+      // 106M UFBI
+      //  86M UDRO
+      //  39M UDCO
+      //  34M UDZO
+      //  31M ULFO
+      //  29M UDBZ
+      //  25M ULMO
       '-fs APFS -format ULMO');
 }
 
@@ -177,7 +179,7 @@ Future<void> init() async {
     printOutput: false,
     throwOnFail: true,
   );
-  version = '$majorMinorVersion.$commitNumber';
+  version = '$shortVersion.$commitNumber';
   await mkdirs('bin');
   await mkdirs('tmp/Payload');
   await mkdirs('tmp/deb/DEBIAN');
@@ -194,7 +196,6 @@ const targets = {
   'ios': ios,
   'android': android,
   'test': test,
-  'web': web,
   'win': win,
   'mac': mac,
   'linux': linux,
@@ -205,7 +206,7 @@ const targets = {
 Future<void> main(List<String> argv) async {
   try {
     await flutter('config --no-analytics');
-    await flutter('upgrade');
+    await flutter('upgrade', throwOnFail: false);
     await flutter('config --no-analytics');
     await init();
     for (final target in argv) {
