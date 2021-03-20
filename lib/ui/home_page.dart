@@ -52,18 +52,16 @@ class AmpHomePageState extends State<AmpHomePage>
       if (!checkForUpdates || !prefs.updatePopup) return;
       ampInfo('UN', 'Searching for updates...');
       checkForUpdates = false;
-      var update = await UpdateInfo.getFromGitHub(
-        'Ampless/Amplessimus',
-        await appVersion,
-        http.get,
-      );
-      if (update == null) {
-        update = await UpdateInfo.getFromGitHub(
-          'Amplus2/Amplissimus',
-          await appVersion,
-          http.get,
-        );
-      }
+      final update = await UpdateInfo.getFromGitHub(
+            'Ampless/Amplessimus',
+            await appVersion,
+            http.get,
+          ) ??
+          await UpdateInfo.getFromGitHub(
+            'Amplus2/Amplissimus',
+            await appVersion,
+            http.get,
+          );
       if (update != null) {
         ampInfo('UN', 'Found an update, displaying the dialog.');
         final old = await appVersion;
