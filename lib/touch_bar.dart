@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:touch_bar/touch_bar.dart';
 
 import 'langs/language.dart';
 
 void initTouchBar(TabController tabController) async {
+  if (!Platform.isMacOS) return;
   await setTouchBar(TouchBar(children: [
     TouchBarButton(
       label: Language.current.start,
