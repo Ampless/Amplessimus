@@ -57,7 +57,7 @@ you are building". (e.g. 3.6.22) All of the outputs are placed in the
 * [Android SDK](https://developer.android.com/studio)
 #### Compile
 ```
-./make.dart android
+./make android
 ```
 #### Output
 * `$VERSION.aab` an application bundle
@@ -77,7 +77,7 @@ you are building". (e.g. 3.6.22) All of the outputs are placed in the
 `clang cmake libgtk-3-dev ninja-build pkg-config`)
 #### Compile
 ```
-./make.dart linux
+./make linux
 ```
 #### Output
 * `$VERSION-linux-x86_64/` a folder containing Amplessimus and all deps for x86
@@ -89,7 +89,7 @@ you are building". (e.g. 3.6.22) All of the outputs are placed in the
 * Xcode
 #### Compile
 ```
-./make.dart ios
+./make ios
 ```
 #### Output
 * `$VERSION.ipa` an unsigned iOS 12.2+ app
@@ -100,7 +100,7 @@ you are building". (e.g. 3.6.22) All of the outputs are placed in the
 * Xcode
 #### Compile
 ```
-./make.dart mac
+./make mac
 ```
 #### Output
 * `$VERSION.dmg` an installer image for macOS 10.15+
@@ -111,6 +111,10 @@ you are building". (e.g. 3.6.22) All of the outputs are placed in the
 * Visual Studio
 #### Compile
 ```
+flutter upgrade
+flutter config --no-analytics
+flutter clean
+flutter pub get
 dart run make.dart win
 ```
 #### Output

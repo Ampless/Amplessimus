@@ -1,5 +1,3 @@
-#!/usr/bin/env dart run
-
 import 'dart:convert';
 import 'dart:io';
 

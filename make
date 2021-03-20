@@ -3,4 +3,4 @@ flutter upgrade
 flutter config --no-analytics && \
 flutter clean && \
 flutter pub get && \
-dart run ci.dart
+dart run make.dart $@

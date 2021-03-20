@@ -1,5 +1,3 @@
-#!/usr/bin/env dart run
-
 import 'dart:io';
 
 final shortVersion = '3.7';
@@ -175,7 +173,7 @@ Future<void> init() async {
     throwOnFail: true,
   );
   final commitNumber = await system(
-    'echo \$(($buildNumber - 1265))',
+    'echo \$(($buildNumber - 1290))',
     printInput: false,
     printOutput: false,
     throwOnFail: true,
@@ -206,9 +204,6 @@ const targets = {
 
 Future<void> main(List<String> argv) async {
   try {
-    await flutter('config --no-analytics');
-    await flutter('upgrade', throwOnFail: false);
-    await flutter('config --no-analytics');
     await init();
     for (final target in argv) {
       if (!targets.containsKey(target)) throw 'Target $target doesn\'t exist.';
