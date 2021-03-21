@@ -17,7 +17,8 @@ String get linuxX86Flags => '$flags --target-platform linux-x64';
 String get linuxARMFlags => '$flags --target-platform linux-arm64';
 String get macFlags => binFlags;
 
-final testFlags = '--coverage -j 100 --test-randomize-ordering-seed random';
+final testFlags =
+    '--coverage -j 100 --test-randomize-ordering-seed random -r expanded';
 
 Future<String> system(
   String cmd, {
