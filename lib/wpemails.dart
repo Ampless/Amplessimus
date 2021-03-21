@@ -16,9 +16,9 @@ Future<Map<String, String>> wpemails(String domain) async {
   try {
     final result = <String, String>{};
 
-    var html = htmlParse(await http.get(
-      Uri.parse('https://$domain/schulfamilie/lehrkraefte/'),
-    ));
+    var html = htmlParse(
+      await http.get('https://$domain/schulfamilie/lehrkraefte/'),
+    );
     html = htmlSearchByClass(html, 'entry-content')!.children;
     html = htmlSearchAllByPredicate(
         html,
