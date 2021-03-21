@@ -1,16 +1,15 @@
 import 'package:amplessimus/wpemails.dart';
+import 'package:schttp/schttp.dart';
 
 import 'testlib.dart';
 
-void main() {
-  tests([
-    () async {
-      final emails = await wpemails('gympeg.de');
-      for (final e in emails.values) {
-        if (!RegExp('.+?\\..+?@gympeg\\.de').hasMatch(e)) {
-          throw 'Not a valid email: $e';
-        }
-      }
-    }
-  ], 'wpemails');
+void main() async {
+  final wpe = await wpemails('gympeg.de', ScHttpClient());
+  tests([testAssert(wpe.length > 50)], 'wpemails length');
+  tests(
+    wpe.values.map(
+      (e) => testAssert(RegExp('.+?\\..+?@gympeg\\.de').hasMatch(e)),
+    ),
+    'wpemails',
+  );
 }

@@ -24,12 +24,16 @@ testCase expectTestCase<T>(
       expect(res, expct);
     };
 
+testCase testAssert(bool b) => () async {
+      assert(b);
+    };
+
 Future<Null> testInit() async {
   ampDisableLogging();
   await mockPrefs();
 }
 
-void tests(List<testCase> testCases, String groupName) {
+void tests(Iterable<testCase> testCases, String groupName) {
   group(groupName, () {
     var i = 1;
     for (final testCase in testCases) {
