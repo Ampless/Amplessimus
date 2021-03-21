@@ -5,7 +5,6 @@ import '../uilib.dart';
 import '../appinfo.dart';
 import 'package:dsbuntis/dsbuntis.dart';
 import 'package:flutter/material.dart';
-import 'package:schttp/schttp.dart';
 
 import 'home_page.dart';
 
@@ -127,6 +126,3 @@ class _FirstLoginState extends State<FirstLogin> {
     );
   }
 }
-
-//TODO: move this somewhere else
-final http = ScHttpClient(prefs.getCache, prefs.setCache);

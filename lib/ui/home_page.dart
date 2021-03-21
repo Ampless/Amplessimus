@@ -10,7 +10,6 @@ import '../touch_bar.dart';
 import '../uilib.dart';
 import '../wpemails.dart';
 import '../langs/language.dart';
-import 'first_login.dart';
 import 'settings.dart';
 
 class AmpHomePage extends StatefulWidget {

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:url_launcher/link.dart';
 
 import 'main.dart';
-import 'ui/first_login.dart';
 import 'langs/language.dart';
 import 'logging.dart';
 import 'subject.dart';
@@ -44,7 +43,6 @@ Widget _renderPlans(List<Plan> plans, bool oneClassOnly) {
               ? ampIcon(Icons.warning, Icons.warning_amber_outlined)
               : ampIcon(Icons.info, Icons.info_outline),
           tooltip: warn
-              //TODO: better warning tooltip
               ? Language.current.warnWrongDate(plan.date)
               : plan.date.split(' ').first,
           onPressed: () => scaffoldMessanger?.showSnackBar(ampSnackBar(

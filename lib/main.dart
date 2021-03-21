@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schttp/schttp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appinfo.dart';
@@ -39,6 +40,7 @@ class _AppState extends State<_App> {
 var rebuildWholeApp;
 Prefs? _prefs;
 Prefs get prefs => _prefs!;
+final http = ScHttpClient(prefs.getCache, prefs.setCache);
 
 Future<void> loadPrefs() async {
   ampInfo('prefs', 'Loading SharedPreferences...');

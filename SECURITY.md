@@ -7,8 +7,8 @@ security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| ≥ 3.3   | :white_check_mark: |
-| < 3.3   | :x:                |
+| ≥ 3.6   | :white_check_mark: |
+| < 3.6   | :x:                |
 
 ## Reporting a Vulnerability
 
