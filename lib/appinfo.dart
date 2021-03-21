@@ -1,12 +1,14 @@
-import 'dart:io';
-
+import 'package:amplessimus/logging.dart';
 import 'package:package_info/package_info.dart';
 
 const String appTitle = 'Amplessimus';
 Future<String> get appVersion async {
-  //TODO: someone with windows test if we have to do this
-  if (Platform.isWindows) return '0.0.0-1';
-  return (await PackageInfo.fromPlatform()).version;
+  try {
+    return (await PackageInfo.fromPlatform()).version;
+  } catch (e) {
+    ampErr('AppVersion', e);
+    return '0.0.0-1';
+  }
 }
 
 Future<String> get buildNumber async =>

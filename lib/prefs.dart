@@ -63,17 +63,18 @@ class Prefs {
         'CACHE_TTL_$hash', DateTime.now().add(ttl).millisecondsSinceEpoch);
   }
 
-  //TODO: garbage collect regularly
-  void clearCache() {
+  void deleteCache(bool Function(String, String, int) isToBeDeleted) {
     if (_prefs == null) return;
     final cachedHashes = _getStringList('CACHE_URLS', []);
-    if (cachedHashes.isEmpty) return;
     for (final hash in cachedHashes) {
+      if (!isToBeDeleted(hash, _prefs!.getString('CACHE_VAL_$hash')!,
+          _prefs!.getInt('CACHE_TTL_$hash')!)) continue;
+      cachedHashes.remove(hash);
       _prefs!.remove('CACHE_VAL_$hash');
       _prefs!.remove('CACHE_TTL_$hash');
       ampInfo('CACHE', 'Removed $hash');
     }
-    _prefs!.setStringList('CACHE_URLS', []);
+    _prefs!.setStringList('CACHE_URLS', cachedHashes);
   }
 
   void listCache() {

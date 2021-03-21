@@ -56,11 +56,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await loadPrefs();
   try {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    prefs.deleteCache((hash, val, ttl) => now > ttl);
+
     if (!prefs.firstLogin) {
       final d = dsb.updateWidget(true);
       await wpemailUpdate();
       await d;
     }
+
     runApp(_App());
   } catch (e) {
     ampErr('Splash.initState', e);
