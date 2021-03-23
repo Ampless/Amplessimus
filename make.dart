@@ -173,13 +173,7 @@ Future<void> init() async {
     printOutput: false,
     throwOnFail: true,
   );
-  final commitNumber = await system(
-    'echo \$(($buildNumber - 1290))',
-    printInput: false,
-    printOutput: false,
-    throwOnFail: true,
-  );
-  version = '$shortVersion.$commitNumber';
+  version = '$shortVersion.${int.parse(buildNumber) - 1310}';
   await mkdirs('bin');
   await mkdirs('tmp/Payload');
   await mkdirs('tmp/deb/DEBIAN');
