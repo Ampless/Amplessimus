@@ -60,7 +60,7 @@ void main() async {
       final now = DateTime.now().millisecondsSinceEpoch;
       prefs.deleteCache((hash, val, ttl) => now > ttl);
     } catch (e) {
-      ampErr('CacheFlush', e);
+      ampErr('CacheGC', e);
     }
 
     if (!prefs.firstLogin) {
