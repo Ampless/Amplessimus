@@ -133,7 +133,7 @@ Future<void> mac() async {
   await system('rm -f $frameworks/libswift*');
 
   await system('cp -rf $bld tmp/dmg');
-  await system('ln -s /Applications "tmp/dmg/drop here (Applications)"');
+  await system('ln -s /Applications "tmp/dmg/Applications"');
   await system('hdiutil create bin/$version.dmg -ov '
       '-srcfolder tmp/dmg -volname "Amplessimus $shortVersion" '
       // 106M UDRW
