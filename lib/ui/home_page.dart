@@ -51,15 +51,10 @@ class AmpHomePageState extends State<AmpHomePage>
       ampInfo('UN', 'Searching for updates...');
       checkForUpdates = false;
       final update = await UpdateInfo.getFromGitHub(
-            'Ampless/Amplessimus',
-            await appVersion,
-            http.get,
-          ) ??
-          await UpdateInfo.getFromGitHub(
-            'Amplus2/Amplissimus',
-            await appVersion,
-            http.get,
-          );
+        'Amplus2/Amplissimus',
+        await appVersion,
+        http.get,
+      );
       if (update != null) {
         ampInfo('UN', 'Found an update, displaying the dialog.');
         final old = await appVersion;
