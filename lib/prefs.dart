@@ -66,9 +66,11 @@ class Prefs {
   void deleteCache(bool Function(String, String, int) isToBeDeleted) {
     if (_prefs == null) return;
     final cachedHashes = _getStringList('CACHE_URLS', []);
-    for (final hash in cachedHashes) {
-      if (!isToBeDeleted(hash, _prefs!.getString('CACHE_VAL_$hash')!,
-          _prefs!.getInt('CACHE_TTL_$hash')!)) continue;
+    final toRemove = cachedHashes.where((hash) => isToBeDeleted(
+        hash,
+        _prefs!.getString('CACHE_VAL_$hash')!,
+        _prefs!.getInt('CACHE_TTL_$hash')!));
+    for (final hash in toRemove) {
       cachedHashes.remove(hash);
       _prefs!.remove('CACHE_VAL_$hash');
       _prefs!.remove('CACHE_TTL_$hash');
