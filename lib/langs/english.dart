@@ -134,6 +134,8 @@ class English extends Language {
     'p': 'Physics',
     'ps': 'Psychology',
     'w': 'Economics/Law',
+    'w/r': 'Economics/Law',
+    'w&r': 'Economics/Law',
     'nut': '"Nature and Technology"',
     'spr': 'Consultation Hour',
   });

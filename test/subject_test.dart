@@ -20,6 +20,7 @@ List<testCase> languageTestCases = [
   subParseTestCase(German(), 'psy_2_69', 'Psychologie_2_69'),
   subParseTestCase(German(), 'Kath', 'Katholische Religion'),
   subParseTestCase(German(), '1337etH', '1337Ethik'),
+  subParseTestCase(German(), 'W/R', 'Wirtschaft/Recht'),
   subParseTestCase(English(), '1e d3ku_che5mu9L',
       '1English German3Art_Chemistry5Music9Latin'),
 ];

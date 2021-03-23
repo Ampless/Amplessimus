@@ -25,6 +25,8 @@ const fullAbbreviations = {
   'ka': 'katholisch',
   'p': 'physik',
   'ps': 'psychologie',
+  'w/r': 'w/r',
+  'w&r': 'w&r',
   'w': 'wirtschaft',
   'nut': 'nut',
   'spr': 'sprechstunde',
@@ -54,7 +56,7 @@ String parseSubject(String subject) {
   if (!prefs.parseSubjects) return subject;
 
   var offset = 0;
-  for (final match in RegExp('[a-zA-Z]+').allMatches(subject)) {
+  for (final match in RegExp('[a-zA-Z\/&]+').allMatches(subject)) {
     final start = match.start + offset;
     final end = match.end + offset;
     final res = lookupSubject(subject.substring(start, end));
